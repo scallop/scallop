@@ -1,5 +1,5 @@
-package org.rogach
-package object scrollop {
+package org.rogach.scrollop
+object `package` {
   implicit val flagConverter = new ValueConverter[Boolean] {
     def parse(s:List[List[String]]) = s match {
       case Nil :: Nil => Right(Some(true))
