@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name := "scrollop"
 
-version := "0.1.11"
+version := "0.1.13"
 
 scalaVersion := "2.9.1"
 
