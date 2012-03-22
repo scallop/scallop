@@ -22,15 +22,20 @@ Examples
 ```scala
 import org.rogach.scrollop._;
 val opts = Scrollop(args)
-  .version("test 1.2.3 (c) 2012 Mr Placeholder") // --version option is provided for you, in "verify" stage it would print this message and exit
+  .version("test 1.2.3 (c) 2012 Mr S") // --version option is provided for you
+                                       // in "verify" stage it would print this message and exit
   .banner("""Usage: test [OPTION]...
             |test is an awesome program, which does something funny      
             |Options:
-            |""".stripMargin) // --help is also provided, will also exit after printing version, banner, and options usage
+            |""".stripMargin) // --help is also provided
+                              //  will also exit after printing version, banner, and options usage
   .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
-  .opt("monkey", descr = "monkey mode", default = Some(true)) // you can add the default option, and the type will be inferred
-  .opt[Int]("num-limbs", 'k', "number of libms", required = true) // you can override the default short-option character
-  .opt[List[Double]]("params") // default converters are provided for all primitives, and for lists of primitives
+  .opt("monkey", descr = "monkey mode", default = Some(true)) // you can add the default option
+                                                              // the type will be inferred
+  .opt[Int]("num-limbs", 'k',
+      "number of libms", required = true) // you can override the default short-option character
+  .opt[List[Double]]("params") // default converters are provided for all primitives
+                               // and for lists of primitives
   .opt[Double]("alpha", arg = "value") // you can change the name of the argument in "help" output
   .verify
 
