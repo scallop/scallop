@@ -5,20 +5,6 @@ import scala.reflect.Manifest
 // TODO: property args
 
 object Scrollop {
-  def main(args:Array[String]) {
-    val opts = apply(List("--help"))
-      .version("test 1.2.3 (c) 2012 Mr Placeholder") // --version option is provided for you, in "verify" stage it would print this message and exit
-      .banner("""Usage: test [OPTION]...
-                |test is an awesome program, which does something funny      
-                |Options:
-                |""".stripMargin) // --help is also provided, will also exit after printing version, banner, and options usage
-      .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
-      .opt("monkey", descr = "monkey mode", default = Some(true)) // you can add the default option, and the type will be inferred
-      .opt[Int]("num-limbs", 'k', "number of libms", required = true) // you can override the default short-option character
-      .opt[List[Double]]("params") // default converters are provided for all primitives, and for lists of primitives
-      .opt[Double]("alpha", arg = "value") // you can change the name of the argument in "help" output
-      .verify
-  }
   def apply(args:Seq[String]):Scrollop = new Scrollop(args,List(),None,None)
   def apply():Scrollop = apply(List())
   
