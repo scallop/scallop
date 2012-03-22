@@ -3,6 +3,8 @@ Scrollop
 
 A simple CLI parsing library for Scala, written in spirit of Ruby's [Trollop](http://trollop.rubyforge.org/). Works on Scala 2.9.x.
 
+It supports POSIX-style long (--opt) and short (-a, -abc) options.
+
 Installation
 ============
 
