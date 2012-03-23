@@ -128,5 +128,13 @@ class NormalTest extends FunSuite with ShouldMatchers {
       .verify
     opts[Int]("ang") should equal (42)
   }
+  
+  test ("additional args") {
+    val opts = Scrollop(List("-a","5"))
+      .opt[List[Int]]("ang")
+      .args(List("-a","10"))
+      .verify
+    opts[List[Int]]("ang") should equal (List(5,10))
+  }
 //  test("") { Thread.sleep(10) }
 }

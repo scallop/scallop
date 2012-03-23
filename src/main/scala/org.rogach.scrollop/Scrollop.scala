@@ -23,8 +23,8 @@ object Scrollop {
   }
   
 }
-case class Scrollop(_args:Seq[String], opts:Seq[OptDef], vers:Option[String], bann:Option[String]) {
-  lazy val pargs = Scrollop.parse(_args)
+case class Scrollop(args:Seq[String], opts:Seq[OptDef], vers:Option[String], bann:Option[String]) {
+  lazy val pargs = Scrollop.parse(args)
   def opt[A](name:String, short:Char = 0.toChar, descr:String = "", default:Option[A] = None, required:Boolean = false, arg:String = "arg")(implicit conv:ValueConverter[A], m:Manifest[A]):Scrollop = {
     val eShort = if (short == 0.toChar) None else Some(short)
     val argType =
@@ -36,7 +36,7 @@ case class Scrollop(_args:Seq[String], opts:Seq[OptDef], vers:Option[String], ba
   def version(v:String) = this.copy(vers = Some(v))
   def banner(b:String) = this.copy(bann = Some(b))
   def help:String = opts.sortBy(_.name).map(o => o.help(getOptShortName(o))).mkString("\n")
-  def args(a:Seq[String]) = this.copy(_args = _args ++ a)
+  def args(a:Seq[String]) = this.copy(args = args ++ a)
   def get[A](name:String)(implicit m:Manifest[A]):Option[A] = {
     val opt = opts.find(_.name == name).get
     val sh = getOptShortName(opt)
