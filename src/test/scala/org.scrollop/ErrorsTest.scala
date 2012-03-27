@@ -13,6 +13,15 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
       opts.get[Double]("angels") should equal (Some(42))
     }
   }
+
+  test("wrong arg type 2") {
+    val opts = Scrollop(List("--angels","42"))
+      .opt[Int]("angels")
+      .verify
+    intercept[WrongTypeRequest] {
+      opts[Double]("angels") should equal (42)
+    }
+  }
   
   test ("options parse failure") {
     intercept[OptionParseException] { 
@@ -67,6 +76,40 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
         .opt[Int]("ang", required = true)
         .verify
     }
+  }
+  
+  test ("props name clash") {
+    intercept[IdenticalOptionNames] {
+      val opts = Scrollop()
+        .props('E')
+        .props('E')
+        .verify
+    }
+  }
+
+  test ("opts & props name clash") {
+    intercept[IdenticalOptionNames] {
+      val opts = Scrollop()
+        .props('E')
+        .opt[Int]("eng", short = 'E')
+        .verify
+    }
+  }
+
+  test ("unknown prop name") {
+    intercept[UnknownOption] {
+      val opts = Scrollop(List("-Eaoeu=aoeu"))
+      .verify
+    }
+  }
+  
+  test ("unknown option requested") {
+    intercept[UnknownOption] {
+      val opts = Scrollop()
+        .verify
+      opts[Int]("aoeu")
+    }
+
   }
   
 }

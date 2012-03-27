@@ -13,7 +13,7 @@ Add following to your build.sbt:
 ```scala
 resolvers += "Rogach's maven repo" at "https://github.com/Rogach/org.rogach/raw/master/"
 
-libraryDependencies += "org.rogach" %% "scrollop" % "0.1.13"
+libraryDependencies += "org.rogach" %% "scrollop" % "0.1.15"
 ```
 
 Examples
@@ -21,7 +21,8 @@ Examples
 
 ```scala
 import org.rogach.scrollop._;
-val opts = Scrollop(args)
+
+val opts = Scrollop(List("-d","--num-limbs","1"))
   .version("test 1.2.3 (c) 2012 Mr S") // --version option is provided for you
                                        // in "verify" stage it would print this message and exit
   .banner("""Usage: test [OPTION]...
@@ -30,19 +31,25 @@ val opts = Scrollop(args)
             |""".stripMargin) // --help is also provided
                               //  will also exit after printing version, banner, and options usage
   .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
-  .opt("monkey", descr = "monkey mode", default = Some(true)) // you can add the default option
-                                                              // the type will be inferred
-  .opt[Int]("num-limbs", 'k',
-      "number of libms", required = true) // you can override the default short-option character
+  .opt("monkeys", default = Some(2), short = 'm') // you can add the default option
+                                                  // the type will be inferred
+  .opt[Int]("num-limbs", 'k', 
+    "number of libms", required = true) // you can override the default short-option character
   .opt[List[Double]]("params") // default converters are provided for all primitives
-                               // and for lists of primitives
-  .opt[Double]("alpha", arg = "value") // you can change the name of the argument in "help" output
+                               //and for lists of primitives
+  .props('D',"some key-value pairs")
+  .args(List("-Dalpha=1","-D","betta=2","gamma=3")) // you can add parameters a bit later
   .verify
-
-// option retreiving
-opts[Boolean]("donkey")
-opts[Double]("monkey") // this will throw an exception at runtime, since the wrong type is requested
-opts.get[List[Double]]("params") // Option[List[Double]]
+  
+opts.get[Boolean]("donkey") should equal (Some(true))
+opts[Int]("monkeys") should equal (2)
+opts[Int]("num-limbs") should equal (1)
+opts.prop('D',"alpha") should equal (Some("1"))
+opts.prop('E',"gamma") should equal (None)
+intercept[WrongTypeRequest] {
+  opts[Double]("monkeys") // this will throw an exception at runtime
+                          // because the wrong type is requested
+}
 ```
 
 If you will run this with "--help" option, you would see:

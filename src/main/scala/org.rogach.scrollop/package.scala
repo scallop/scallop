@@ -25,7 +25,7 @@ object `package` {
   implicit val floatConverter = singleArgConverter[Float](_.toFloat)
   implicit val doubleConverter = singleArgConverter[Double](_.toDouble)
   implicit val charConverter = singleArgConverter[Char](_.head)
-  implicit val stringConverter = singleArgConverter[String](_)
+  implicit val stringConverter = singleArgConverter[String](a=>a)
   
   def listArgConverter[A](conv: String => A) = new ValueConverter[List[A]] {
     def parse(s:List[List[String]]) = {
@@ -42,5 +42,5 @@ object `package` {
   implicit val floatListConverter = listArgConverter[Float](_.toFloat)
   implicit val doubleListConverter = listArgConverter[Double](_.toDouble)
   implicit val stringListConverter = listArgConverter[String](_)
-  implicit val charListConverter = listArgConverter[Char](_.head)
+  
 }

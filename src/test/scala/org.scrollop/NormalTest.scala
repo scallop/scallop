@@ -7,18 +7,34 @@ import org.rogach.scrollop._
 class NormalTest extends FunSuite with ShouldMatchers {
   
   test ("main") {
-    val opts = Scrollop(List("-d","--num-limbs","1"))
-      .version("test 1.2.3 (c) 2012 Mr Placeholder") // --version option is provided for you, in "verify" stage it would print this message and exit
-      .banner("""Usage: test [OPTION]...
-                |test is an awesome program, which does something funny      
-                |Options:
-                |""".stripMargin) // --help is also provided, will also exit after printing version, banner, and options usage
-      .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
-      .opt("monkey", default = Some(true)) // you can add the default option, and the type will be inferred
-      .opt[Int]("num-limbs", 'k', "number of libms", required = true) // you can override the default short-option character
-      .opt[List[Double]]("params") // default converters are provided for all primitives, and for lists of primitives
-      .verify
-
+val opts = Scrollop(List("-d","--num-limbs","1"))
+  .version("test 1.2.3 (c) 2012 Mr S") // --version option is provided for you
+                                       // in "verify" stage it would print this message and exit
+  .banner("""Usage: test [OPTION]...
+            |test is an awesome program, which does something funny      
+            |Options:
+            |""".stripMargin) // --help is also provided
+                              //  will also exit after printing version, banner, and options usage
+  .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
+  .opt("monkeys", default = Some(2), short = 'm') // you can add the default option
+                                                  // the type will be inferred
+  .opt[Int]("num-limbs", 'k', 
+    "number of libms", required = true) // you can override the default short-option character
+  .opt[List[Double]]("params") // default converters are provided for all primitives
+                               //and for lists of primitives
+  .props('D',"some key-value pairs")
+  .args(List("-Dalpha=1","-D","betta=2","gamma=3")) // you can add parameters a bit later
+  .verify
+  
+opts.get[Boolean]("donkey") should equal (Some(true))
+opts[Int]("monkeys") should equal (2)
+opts[Int]("num-limbs") should equal (1)
+opts.prop('D',"alpha") should equal (Some("1"))
+opts.prop('E',"gamma") should equal (None)
+intercept[WrongTypeRequest] {
+  opts[Double]("monkeys") // this will throw an exception at runtime
+                          // because the wrong type is requested
+}
   }
   
   test ("no values") {
@@ -108,6 +124,14 @@ class NormalTest extends FunSuite with ShouldMatchers {
     opts.get[Double]("angels") should equal (Some(42))
   }
 
+  test ("one string, long opt") {
+    val opts = Scrollop(List("--angels","aoeu"))
+      .opt[String]("angels")(stringConverter, implicitly[Manifest[String]])
+      .verify
+    opts.get[String]("angels") should equal (Some("aoeu"))
+  }
+
+  
   test ("list of ints, long opt") {
     val opts = Scrollop(List("--angels","42","12","345"))
       .opt[List[Int]]("angels")
@@ -128,7 +152,7 @@ class NormalTest extends FunSuite with ShouldMatchers {
       .verify
     opts[Int]("ang") should equal (42)
   }
-  
+
   test ("additional args") {
     val opts = Scrollop(List("-a","5"))
       .opt[List[Int]]("ang")
@@ -136,5 +160,44 @@ class NormalTest extends FunSuite with ShouldMatchers {
       .verify
     opts[List[Int]]("ang") should equal (List(5,10))
   }
-//  test("") { Thread.sleep(10) }
+  
+  // properties testing
+  
+  test ("no value") {
+    val opts = Scrollop()
+      .props('D')
+      .verify
+    opts.prop('D',"aoeu") should equal (None)
+  }
+
+  test ("simle value") {
+    val opts = Scrollop(List("-Daoeu=htns"))
+      .props('D')
+      .verify
+    opts.prop('D',"aoeu") should equal (Some("htns"))
+  }
+
+  test ("one plain prop") {
+    val opts = Scrollop(List("-D","aoeu=htns"))
+      .props('D')
+      .verify
+    opts.prop('D',"aoeu") should equal (Some("htns"))
+  }
+
+  test ("two plain props") {
+    val opts = Scrollop(List("-D", "aoeu=htns", "qjk=gcr"))
+      .props('D')
+      .verify
+    opts.prop('D',"aoeu") should equal (Some("htns"))
+    opts.prop('D',"qjk") should equal (Some("gcr"))
+  }
+  
+  test ("opt implicit name clash with prop name") {
+    val opts = Scrollop(List("-D", "aoeu=htn"))
+      .props('D')
+      .opt[String]("Dark")
+      .verify
+    opts.get[String]("Dark") should equal (None)
+  }
+  
 }
