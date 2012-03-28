@@ -1,6 +1,6 @@
 import AssemblyKeys._
 
-name := "scaollop"
+name := "scallop"
 
 version := "0.2.0"
 
