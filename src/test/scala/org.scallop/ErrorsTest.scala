@@ -1,12 +1,12 @@
-package org.rogach.scrollop
+package org.rogach.scallop
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
-import org.rogach.scrollop._
+import org.rogach.scallop._
 
 class ErrorsTest extends FunSuite with ShouldMatchers {
   test("wrong arg type") {
-    val opts = Scrollop(List("--angels","42"))
+    val opts = Scallop(List("--angels","42"))
       .opt[Int]("angels")
       .verify
     intercept[WrongTypeRequest] {
@@ -15,7 +15,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
 
   test("wrong arg type 2") {
-    val opts = Scrollop(List("--angels","42"))
+    val opts = Scallop(List("--angels","42"))
       .opt[Int]("angels")
       .verify
     intercept[WrongTypeRequest] {
@@ -25,14 +25,14 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   
   test ("options parse failure") {
     intercept[OptionParseException] { 
-      val opts = Scrollop(List("42"))
+      val opts = Scallop(List("42"))
         .verify
     }
   }
   
   test ("long option clash") {
     intercept[IdenticalOptionNames] {
-      val opts = Scrollop()
+      val opts = Scallop()
         .opt[Int]("ang")
         .opt[Int]("ang")
         .verify
@@ -41,7 +41,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
 
   test ("short option clash") {
     intercept[IdenticalOptionNames] {
-      val opts = Scrollop()
+      val opts = Scallop()
         .opt[Int]("opt1", short = 'o')
         .opt[Int]("opt2", short = 'o')
         .verify
@@ -50,21 +50,21 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
 
   test ("unknown short option") {
     intercept[UnknownOption] {
-      val opts = Scrollop(List("-a"))
+      val opts = Scallop(List("-a"))
         .verify
     }
   }
 
   test ("unknown long option") {
     intercept[UnknownOption] {
-      val opts = Scrollop(List("--ang"))
+      val opts = Scallop(List("--ang"))
         .verify
     }
   }
   
   test ("option verification failure") {
     intercept[WrongOptionFormat] {
-      val opts = Scrollop(List("-a","1.2"))
+      val opts = Scallop(List("-a","1.2"))
         .opt[Int]("ang")
         .verify
     }
@@ -72,7 +72,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
 
   test ("required option missing") {
     intercept[RequiredOptionNotFound] {
-      val opts = Scrollop(List())
+      val opts = Scallop(List())
         .opt[Int]("ang", required = true)
         .verify
     }
@@ -80,7 +80,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   
   test ("props name clash") {
     intercept[IdenticalOptionNames] {
-      val opts = Scrollop()
+      val opts = Scallop()
         .props('E')
         .props('E')
         .verify
@@ -89,7 +89,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
 
   test ("opts & props name clash") {
     intercept[IdenticalOptionNames] {
-      val opts = Scrollop()
+      val opts = Scallop()
         .props('E')
         .opt[Int]("eng", short = 'E')
         .verify
@@ -98,14 +98,14 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
 
   test ("unknown prop name") {
     intercept[UnknownOption] {
-      val opts = Scrollop(List("-Eaoeu=aoeu"))
+      val opts = Scallop(List("-Eaoeu=aoeu"))
       .verify
     }
   }
   
   test ("unknown option requested") {
     intercept[UnknownOption] {
-      val opts = Scrollop()
+      val opts = Scallop()
         .verify
       opts[Int]("aoeu")
     }

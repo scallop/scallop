@@ -1,9 +1,9 @@
-Scrollop
+Scallop
 ========
 
 A simple CLI parsing library for Scala, written in spirit of Ruby's [Trollop](http://trollop.rubyforge.org/). Works on Scala 2.9.x.
 
-It supports POSIX-style long (--opt) and short (-a, -abc) options.
+It supports POSIX-style long (--opt) and short (-a, -abc) options, and property args (-Dkey=value, -D key1=value key2=value).
 
 Installation
 ============
@@ -13,16 +13,16 @@ Add following to your build.sbt:
 ```scala
 resolvers += "Rogach's maven repo" at "https://github.com/Rogach/org.rogach/raw/master/"
 
-libraryDependencies += "org.rogach" %% "scrollop" % "0.1.15"
+libraryDependencies += "org.rogach" %% "scallop" % "0.2.0"
 ```
 
 Examples
 ========
 
 ```scala
-import org.rogach.scrollop._;
+import org.rogach.scallop._;
 
-val opts = Scrollop(List("-d","--num-limbs","1"))
+val opts = Scallop(List("-d","--num-limbs","1"))
   .version("test 1.2.3 (c) 2012 Mr S") // --version option is provided for you
                                        // in "verify" stage it would print this message and exit
   .banner("""Usage: test [OPTION]...
@@ -60,11 +60,11 @@ Usage: test [OPTION]...
 test is an awesome program, which does something funny      
 Options:
 
--a, --alpha  <value>
+-Dkey=value [key=value]...
+    some key-value pairs
 -d, --donkey  
     use donkey mode
--m, --monkey  
-    monkey mode
+-m, --monkeys  <arg>
 -k, --num-limbs  <arg>
     number of libms
 -p, --params  <arg>...

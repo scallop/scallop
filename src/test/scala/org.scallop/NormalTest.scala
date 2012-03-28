@@ -1,13 +1,13 @@
-package org.rogach.scrollop
+package org.rogach.scallop
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
-import org.rogach.scrollop._
+import org.rogach.scallop._
 
 class NormalTest extends FunSuite with ShouldMatchers {
   
   test ("main") {
-val opts = Scrollop(List("-d","--num-limbs","1"))
+val opts = Scallop(List("-d","--num-limbs","1"))
   .version("test 1.2.3 (c) 2012 Mr S") // --version option is provided for you
                                        // in "verify" stage it would print this message and exit
   .banner("""Usage: test [OPTION]...
@@ -35,37 +35,39 @@ intercept[WrongTypeRequest] {
   opts[Double]("monkeys") // this will throw an exception at runtime
                           // because the wrong type is requested
 }
+
+//opts.args(List("--help")).verify
   }
   
   test ("no values") {
-    Scrollop().verify
-    Scrollop(Array[String]()).verify
-    Scrollop(List()).verify
+    Scallop().verify
+    Scallop(Array[String]()).verify
+    Scallop(List()).verify
   }
   
   test ("long flag") {
-    val opts = Scrollop(List("--angel"))
+    val opts = Scallop(List("--angel"))
       .opt[Boolean]("angel")
       .verify
     opts[Boolean]("angel") should equal (true)
   }
   
   test ("short flag, explicit name") {
-    val opts = Scrollop(List("-a"))
+    val opts = Scallop(List("-a"))
       .opt[Boolean]("angel", short = 'a')
       .verify
     opts[Boolean]("angel") should equal (true)
   }
 
   test ("short flag, implicit name") {
-    val opts = Scrollop(List("-a"))
+    val opts = Scallop(List("-a"))
       .opt[Boolean]("angel")
       .verify
     opts[Boolean]("angel") should equal (true)
   }
   
   test ("two short flags, implicit name") {
-    val opts = Scrollop(List("-a"))
+    val opts = Scallop(List("-a"))
       .opt[Boolean]("angel")
       .opt[Boolean]("baboon")
       .verify
@@ -74,7 +76,7 @@ intercept[WrongTypeRequest] {
   }
   
   test ("two short flags, implicit name, required value") {
-    val opts = Scrollop(List("-a"))
+    val opts = Scallop(List("-a"))
       .opt[Boolean]("angel", required = true)
       .opt[Boolean]("baboon")
       .verify
@@ -83,49 +85,49 @@ intercept[WrongTypeRequest] {
   }
  
   test ("one missing int, short opt") {
-    val opts = Scrollop(List())
+    val opts = Scallop(List())
       .opt[Int]("angels")
       .verify
     opts.get[Int]("angels") should equal (None)
   }
 
   test ("one int, short opt") {
-    val opts = Scrollop(List("-a","42"))
+    val opts = Scallop(List("-a","42"))
       .opt[Int]("angels")
       .verify
     opts.get[Int]("angels") should equal (Some(42))
   }
 
   test ("one int, long opt") {
-    val opts = Scrollop(List("--angels","42"))
+    val opts = Scallop(List("--angels","42"))
       .opt[Int]("angels")
       .verify
     opts.get[Int]("angels") should equal (Some(42))
   }
 
   test ("one short, long opt") {
-    val opts = Scrollop(List("--angels","42"))
+    val opts = Scallop(List("--angels","42"))
       .opt[Short]("angels")
       .verify
     opts.get[Short]("angels") should equal (Some(42))
   }
 
   test ("one byte, long opt") {
-    val opts = Scrollop(List("--angels","42"))
+    val opts = Scallop(List("--angels","42"))
       .opt[Byte]("angels")
       .verify
     opts.get[Byte]("angels") should equal (Some(42))
   }
   
   test ("one double, long opt") {
-    val opts = Scrollop(List("--angels","42"))
+    val opts = Scallop(List("--angels","42"))
       .opt[Double]("angels")
       .verify
     opts.get[Double]("angels") should equal (Some(42))
   }
 
   test ("one string, long opt") {
-    val opts = Scrollop(List("--angels","aoeu"))
+    val opts = Scallop(List("--angels","aoeu"))
       .opt[String]("angels")(stringConverter, implicitly[Manifest[String]])
       .verify
     opts.get[String]("angels") should equal (Some("aoeu"))
@@ -133,28 +135,28 @@ intercept[WrongTypeRequest] {
 
   
   test ("list of ints, long opt") {
-    val opts = Scrollop(List("--angels","42","12","345"))
+    val opts = Scallop(List("--angels","42","12","345"))
       .opt[List[Int]]("angels")
       .verify
     opts.get[List[Int]]("angels") should equal (Some(List(42,12,345)))
   }
 
   test ("list of doubles, long opt") {
-    val opts = Scrollop(List("--angels","42.0","12","345e0"))
+    val opts = Scallop(List("--angels","42.0","12","345e0"))
       .opt[List[Double]]("angels")
       .verify
     opts.get[List[Double]]("angels") should equal (Some(List(42.0,12.0,345.0)))
   }
 
   test ("default value") {
-    val opts = Scrollop(List())
+    val opts = Scallop(List())
       .opt("ang", default = Some(42), required = true)
       .verify
     opts[Int]("ang") should equal (42)
   }
 
   test ("additional args") {
-    val opts = Scrollop(List("-a","5"))
+    val opts = Scallop(List("-a","5"))
       .opt[List[Int]]("ang")
       .args(List("-a","10"))
       .verify
@@ -164,28 +166,28 @@ intercept[WrongTypeRequest] {
   // properties testing
   
   test ("no value") {
-    val opts = Scrollop()
+    val opts = Scallop()
       .props('D')
       .verify
     opts.prop('D',"aoeu") should equal (None)
   }
 
   test ("simle value") {
-    val opts = Scrollop(List("-Daoeu=htns"))
+    val opts = Scallop(List("-Daoeu=htns"))
       .props('D')
       .verify
     opts.prop('D',"aoeu") should equal (Some("htns"))
   }
 
   test ("one plain prop") {
-    val opts = Scrollop(List("-D","aoeu=htns"))
+    val opts = Scallop(List("-D","aoeu=htns"))
       .props('D')
       .verify
     opts.prop('D',"aoeu") should equal (Some("htns"))
   }
 
   test ("two plain props") {
-    val opts = Scrollop(List("-D", "aoeu=htns", "qjk=gcr"))
+    val opts = Scallop(List("-D", "aoeu=htns", "qjk=gcr"))
       .props('D')
       .verify
     opts.prop('D',"aoeu") should equal (Some("htns"))
@@ -193,7 +195,7 @@ intercept[WrongTypeRequest] {
   }
   
   test ("opt implicit name clash with prop name") {
-    val opts = Scrollop(List("-D", "aoeu=htn"))
+    val opts = Scallop(List("-D", "aoeu=htn"))
       .props('D')
       .opt[String]("Dark")
       .verify
