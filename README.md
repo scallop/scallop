@@ -1,6 +1,10 @@
 Scallop
 ========
 
+<div style="text-align: right;">
+<span>We parse your command line so you can focus on your buisness</span>
+</div>
+
 A simple CLI parsing library for Scala, written in spirit of Ruby's [Trollop](http://trollop.rubyforge.org/). Works on Scala 2.9.x.
 
 It supports POSIX-style long (--opt) and short (-a, -abc) options, and property args (-Dkey=value, -D key1=value key2=value).
