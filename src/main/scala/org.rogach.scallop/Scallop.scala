@@ -40,7 +40,7 @@ case class Scallop(args:Seq[String], opts:Seq[OptDef], propts:Seq[PropDef], vers
   }
   def version(v:String) = this.copy(vers = Some(v))
   def banner(b:String) = this.copy(bann = Some(b))
-  def help:String = (opts ++ propts).sortBy(_._name).map{ 
+  def help:String = (opts ++ propts).sortBy(_._name.toLowerCase).map{ 
     case o:OptDef => o.help(getOptShortName(o))
     case o:PropDef => o.help(Some(o.char))
   }.mkString("\n")

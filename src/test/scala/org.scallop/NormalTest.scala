@@ -36,6 +36,7 @@ intercept[WrongTypeRequest] {
                           // because the wrong type is requested
 }
 
+println(opts.help)
 //opts.args(List("--help")).verify
   }
   
