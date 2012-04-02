@@ -10,7 +10,7 @@ class NormalTest extends FunSuite with ShouldMatchers {
 val opts = Scallop(List("-d","--num-limbs","1"))
   .version("test 1.2.3 (c) 2012 Mr S") // --version option is provided for you
                                        // in "verify" stage it would print this message and exit
-  .banner("""Usage: test [OPTION]...
+  .banner("""Usage: test [OPTION]... [pet-name]
             |test is an awesome program, which does something funny      
             |Options:
             |""".stripMargin) // --help is also provided
@@ -23,7 +23,7 @@ val opts = Scallop(List("-d","--num-limbs","1"))
   .opt[List[Double]]("params") // default converters are provided for all primitives
                                //and for lists of primitives
   .props('D',"some key-value pairs")
-  .args(List("-Dalpha=1","-D","betta=2","gamma=3")) // you can add parameters a bit later
+  .args(List("-Dalpha=1","-D","betta=2","gamma=3", "Pigeon")) // you can add parameters a bit later
   .verify
   
 opts.get[Boolean]("donkey") should equal (Some(true))
@@ -31,6 +31,7 @@ opts[Int]("monkeys") should equal (2)
 opts[Int]("num-limbs") should equal (1)
 opts.prop('D',"alpha") should equal (Some("1"))
 opts.prop('E',"gamma") should equal (None)
+opts.rest should equal (List("Pigeon")) // returns the non-argument related part of args
 intercept[WrongTypeRequest] {
   opts[Double]("monkeys") // this will throw an exception at runtime
                           // because the wrong type is requested
@@ -195,6 +196,14 @@ println(opts.help)
     opts.prop('D',"qjk") should equal (Some("gcr"))
   }
   
+  test ("two plain props to a map") {
+    val opts = Scallop(List("-D", "aoeu=htns", "qjk=gcr"))
+      .props('D')
+      .verify
+    opts.propMap('D') should equal (Map("aoeu" -> "htns", "qjk" -> "gcr"))
+  }
+
+  
   test ("opt implicit name clash with prop name") {
     val opts = Scallop(List("-D", "aoeu=htn"))
       .props('D')
@@ -202,5 +211,57 @@ println(opts.help)
       .verify
     opts.get[String]("Dark") should equal (None)
   }
+  
+  test ("rest options - after single long-named argument") {
+    val opts = Scallop(List("--echo", "42", "rabbit"))
+      .opt[Int]("echo")
+      .verify
+    opts.get[Int]("echo") should equal ((Some(42)))
+    opts.rest should equal (List("rabbit"))
+  }
+
+  test ("rest options - after single short-named argument") {
+    val opts = Scallop(List("-e", "42", "rabbit"))
+      .opt[Int]("echo")
+      .verify
+    opts.get[Int]("echo") should equal ((Some(42)))
+    opts.rest should equal (List("rabbit"))
+  }
+
+  test ("rest options - after two arguments") {
+    val opts = Scallop(List("-d","--num-limbs","1","Pigeon"))
+      .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
+      .opt[Int]("num-limbs", 'k', 
+        "number of libms", required = true) // you can override the default short-option character
+      .verify
+    opts[Boolean]("donkey") should equal (true)
+    opts.get[Int]("num-limbs") should equal ((Some(1)))
+    opts.rest should equal (List("Pigeon"))
+  }
+
+  test ("rest options - after single property argument") {
+    val opts = Scallop(List("-E", "key=value", "rabbit"))
+      .props('E')
+      .verify
+    opts.prop('E',"key") should equal ((Some("value")))
+    opts.rest should equal (List("rabbit"))
+  }
+
+  test ("rest options - after single property argument (2)") {
+    val opts = Scallop(List("-E", "key=value", "rabbit", "key2=value2"))
+      .props('E')
+      .verify
+    opts.prop('E',"key") should equal ((Some("value")))
+    opts.rest should equal (List("rabbit", "key2=value2"))
+  }
+  
+  test ("rest options - after list argument") {
+    val opts = Scallop(List("--echo","42","43"))
+      .opt[List[Int]]("echo")
+      .verify
+    opts.get("echo") should equal (Some(List(42,43)))
+    opts.rest should equal (Nil)
+  }
+
   
 }

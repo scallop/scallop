@@ -8,12 +8,44 @@ object Scallop {
 }
 
 case class Scallop(args:Seq[String], opts:Seq[OptDef], propts:Seq[PropDef], vers:Option[String], bann:Option[String]) {
-  lazy val pargs = parse(args)
-  def parse(args:Seq[String]):List[(Option[String],Option[String],List[String])] = {
+  lazy val (pargs,rest) = parseWithRest(args)
+  type ArgParsed = (Option[String],Option[String],List[String])
+  def parseWithRest(args:Seq[String]):(List[ArgParsed],Seq[String]) = {
+    val (tail, init) = args.reverse.span(!_.startsWith("-"))
+    if (init.isEmpty) (parse(args),Nil)
+    else if (init.head.startsWith("--")) {
+      opts.find(_.name == init.head.drop(2)) match {
+        case Some(opt) =>
+          opt.argType match {
+            case ArgType.FLAG => (parse(args.reverse.drop(tail.length).reverse), tail.reverse)
+            case ArgType.SINGLE => (parse(args.reverse.drop(tail.length - 1).reverse), tail.reverse.drop(1))
+            case ArgType.LIST => (parse(args), Nil)
+          }
+        case None => (parse(args), Nil) // let's throw all errors in verify stage
+      }
+    } else {
+      opts.map(a => (a,getOptShortName(a))).filter(_._2.isDefined).find(_._2.get == init.head.last) match {
+        case Some((opt, char)) =>
+          opt.argType match {
+            case ArgType.FLAG => (parse(args.reverse.drop(tail.length).reverse), tail.reverse)
+            case ArgType.SINGLE => (parse(args.reverse.drop(tail.length - 1).reverse), tail.reverse.drop(1))
+            case ArgType.LIST => (parse(args), Nil)
+          }
+        case None => // maybe it's a property?
+          propts.find(_.char == init.head(1)) match {
+            case Some(prop) =>
+              val restSize = tail.size - tail.reverse.takeWhile(_.contains('=')).size
+              (parse(args.reverse.drop(restSize).reverse), tail.take(restSize).reverse)
+            case None => (parse(args), Nil) // let's throw all errors in verify stage
+          }
+      }
+    }
+  }
+  def parse(args:Seq[String]):List[ArgParsed] = {
     args.toList match {
       case a :: rest if a.startsWith("--") =>
         (None,Some(a.drop(2)),rest.takeWhile(!_.startsWith("-"))) :: 
-        parse(rest.dropWhile(!_.startsWith("-")))
+          parse(rest.dropWhile(!_.startsWith("-")))
       case a :: rest if a.startsWith("-") =>
         if (propts.find(_.char == a(1)).isDefined) {
           (Some(a(1).toString), None, (a.drop(2) +: rest.takeWhile(!_.startsWith("-"))).filter(_.size > 0)) ::
@@ -63,6 +95,15 @@ case class Scallop(args:Seq[String], opts:Seq[OptDef], propts:Seq[PropDef], vers
       }
     }.find(_._1 == key).map(_._2)
   }
+  def propMap(name:Char):Map[String,String] = {
+    pargs.filter(_._1 == Some(name.toString)).flatMap { p =>
+      val rgx = """([^=]+)=(.*)""".r
+      p._3.collect {
+        case rgx(key, value) => (key, value)
+      }
+    }.toMap
+  }
+
   def apply[A](name:String)(implicit m:Manifest[A]):A = get(name)(m).get
   private def getOptShortName(o:OptDef):Option[Char] =
     o.short.orElse {
@@ -101,7 +142,7 @@ case class Scallop(args:Seq[String], opts:Seq[OptDef], propts:Seq[PropDef], vers
       val sh = getOptShortName(o)
       val params = pargs.filter(a => a._2.map(o.name ==).getOrElse(sh.map(a._1.get.head == _).getOrElse(false))).map(_._3)
       val res = o.conv.parse(params)
-      if (res.isLeft) throw new WrongOptionFormat("Wrong format for option '%s': %s" format (o.name, params.map(_.mkString).mkString))
+      if (res.isLeft) throw new WrongOptionFormat("Wrong format for option '%s': %s" format (o.name, params.map(_.mkString).mkString(" ")))
       if (o.required && !res.right.get.isDefined && !o.default.isDefined) throw new RequiredOptionNotFound("Required option '%s' not found" format o.name)
     }
     this
