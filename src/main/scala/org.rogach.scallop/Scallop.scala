@@ -183,6 +183,13 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
     }
     this
   }
+  
+  def summary:String = {
+    ("Scallop(%s)" format args.mkString(", ")) + "\n" +
+    opts.map(o => "  %s => %s" format (o.name, get(o.name)(o.conv.manifest).getOrElse("$None$"))).mkString("\n") + "\n" +
+    propts.map(p => "  props %s => %s" format (p.char, propMap(p.char))).mkString("\n") + "\n" + 
+    trail.map(t => "  %s => %s" format (t.name, get(t.name)(t.conv.manifest).getOrElse("$None$"))).mkString("\n")
+  }
 }
 
 abstract class ArgDef(val _name:String,_short:Option[Char], _descr:String, val _conv:ValueConverter[_]) {

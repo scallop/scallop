@@ -37,7 +37,10 @@ intercept[WrongTypeRequest] {
                           // because the wrong type is requested
 }
 
-println(opts.help)
+println(opts.help) // returns options description
+println
+println(opts.summary) // returns summary of parser status (with current arg values)
+
 //opts.args(List("--help")).verify
   }
   
@@ -275,7 +278,7 @@ println(opts.help)
       .trailArg[List[Int]]("numbers", required = false)
       .verify
     opts.get[List[Int]]("echo") should equal (Some(List(42,43)))
-    opts[List[Int]]("numbers") should equal (Nil)
+    opts.get[List[Int]]("numbers") should equal (None)
   }
 
   test ("trail options - after list argument, single optional value") {
@@ -352,12 +355,18 @@ println(opts.help)
     val personConverter = new ValueConverter[Person] {
       val nameRgx = """([A-Za-z]*)""".r
       val phoneRgx = """([0-9\-]*)""".r
-      def parse(s:List[List[String]]):Either[Unit,Option[Person]] = s match {
-        case ((nameRgx(name) :: phoneRgx(phone) :: Nil) :: Nil) => 
-          Right(Some(Person(name,phone))) // successfully found our person
-        case Nil => Right(None) // no person found
-        case _ => Left(Unit) // error when parsing
-      }
+      // parse is a method, that takes a list of arguments to all option invokations:
+      // for example, "-a 1 2 -a 3 4 5" would produce List(List(1,2),List(3,4,5)).
+      // parse returns Left, if there was an error while parsing
+      // if no option was found, it returns Right(None)
+      // and if option was found, it returns Right(...)
+      def parse(s:List[List[String]]):Either[Unit,Option[Person]] = 
+        s match {
+          case ((nameRgx(name) :: phoneRgx(phone) :: Nil) :: Nil) => 
+            Right(Some(Person(name,phone))) // successfully found our person
+          case Nil => Right(None) // no person found
+          case _ => Left(Unit) // error when parsing
+        }
       val manifest = implicitly[Manifest[Person]] // some magic to make typing work
       val argType = org.rogach.scallop.ArgType.LIST
     }
@@ -366,5 +375,5 @@ println(opts.help)
       .verify
     opts[Person]("person") should equal (Person("Pete", "123-45"))
   }
-
+  
 }

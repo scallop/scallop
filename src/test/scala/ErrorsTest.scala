@@ -120,4 +120,12 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
     }
   }
   
+  test ("excess arguments") {
+    intercept[OptionParseException] {
+      val opts = Scallop(List("1","2"))
+        .trailArg[Int]("first")
+        .verify
+    }
+  }
+  
 }
