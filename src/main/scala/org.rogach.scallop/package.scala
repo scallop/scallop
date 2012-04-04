@@ -1,4 +1,5 @@
 package org.rogach.scallop
+
 object `package` {
   implicit val flagConverter = new ValueConverter[Boolean] {
     def parse(s:List[List[String]]) = s match {
