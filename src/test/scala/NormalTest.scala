@@ -1,5 +1,3 @@
-package org.rogach.scallop
-
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
@@ -24,6 +22,8 @@ val opts = Scallop(List("-d","--num-limbs","1"))
                                //and for lists of primitives
   .props('D',"some key-value pairs")
   .args(List("-Dalpha=1","-D","betta=2","gamma=3", "Pigeon")) // you can add parameters a bit later
+  .trailArg[String]("pet name") // you can specify what do you want to get from the end of 
+                                // args list
   .verify
   
 opts.get[Boolean]("donkey") should equal (Some(true))
@@ -31,7 +31,7 @@ opts[Int]("monkeys") should equal (2)
 opts[Int]("num-limbs") should equal (1)
 opts.prop('D',"alpha") should equal (Some("1"))
 opts.prop('E',"gamma") should equal (None)
-opts.rest should equal (List("Pigeon")) // returns the non-argument related part of args
+opts[String]("pet name") should equal ("Pigeon")
 intercept[WrongTypeRequest] {
   opts[Double]("monkeys") // this will throw an exception at runtime
                           // because the wrong type is requested
@@ -130,7 +130,7 @@ println(opts.help)
 
   test ("one string, long opt") {
     val opts = Scallop(List("--angels","aoeu"))
-      .opt[String]("angels")(stringConverter, implicitly[Manifest[String]])
+      .opt[String]("angels")(stringConverter)
       .verify
     opts.get[String]("angels") should equal (Some("aoeu"))
   }
@@ -212,56 +212,139 @@ println(opts.help)
     opts.get[String]("Dark") should equal (None)
   }
   
-  test ("rest options - after single long-named argument") {
+  test ("trail options - after single long-named argument") {
     val opts = Scallop(List("--echo", "42", "rabbit"))
       .opt[Int]("echo")
+      .trailArg[String]("animal")
       .verify
     opts.get[Int]("echo") should equal ((Some(42)))
-    opts.rest should equal (List("rabbit"))
+    opts[String]("animal") should equal ("rabbit")
   }
 
-  test ("rest options - after single short-named argument") {
+  test ("trail options - after single short-named argument") {
     val opts = Scallop(List("-e", "42", "rabbit"))
       .opt[Int]("echo")
+      .trailArg[String]("animal")
       .verify
     opts.get[Int]("echo") should equal ((Some(42)))
-    opts.rest should equal (List("rabbit"))
+    opts[String]("animal") should equal ("rabbit")
   }
 
-  test ("rest options - after two arguments") {
+  test ("trail options - after two arguments") {
     val opts = Scallop(List("-d","--num-limbs","1","Pigeon"))
       .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
       .opt[Int]("num-limbs", 'k', 
         "number of libms", required = true) // you can override the default short-option character
+      .trailArg[String]("pet-name")
       .verify
     opts[Boolean]("donkey") should equal (true)
     opts.get[Int]("num-limbs") should equal ((Some(1)))
-    opts.rest should equal (List("Pigeon"))
+    opts[String]("pet-name") should equal ("Pigeon")
   }
 
-  test ("rest options - after single property argument") {
+  test ("trail options - after single property argument") {
     val opts = Scallop(List("-E", "key=value", "rabbit"))
       .props('E')
+      .trailArg[String]("animal")
       .verify
     opts.prop('E',"key") should equal ((Some("value")))
-    opts.rest should equal (List("rabbit"))
+    opts[String]("animal") should equal ("rabbit")
   }
 
-  test ("rest options - after single property argument (2)") {
+  test ("trail options - after single property argument (2)") {
     val opts = Scallop(List("-E", "key=value", "rabbit", "key2=value2"))
       .props('E')
+      .trailArg[List[String]]("rubbish")
       .verify
     opts.prop('E',"key") should equal ((Some("value")))
-    opts.rest should equal (List("rabbit", "key2=value2"))
+    opts[List[String]]("rubbish") should equal (List("rabbit", "key2=value2"))
   }
   
-  test ("rest options - after list argument") {
+  test ("trail options - after list argument") {
     val opts = Scallop(List("--echo","42","43"))
       .opt[List[Int]]("echo")
+      .trailArg[List[Int]]("numbers")
+      .verify
+    opts.get("echo") should equal (Some(List(42)))
+    opts[List[Int]]("numbers") should equal (List(43))
+  }
+  
+  test ("trail options - after list argument, optional") {
+    val opts = Scallop(List("--echo","42","43"))
+      .opt[List[Int]]("echo")
+      .trailArg[List[Int]]("numbers", required = false)
       .verify
     opts.get("echo") should equal (Some(List(42,43)))
-    opts.rest should equal (Nil)
+    opts[List[Int]]("numbers") should equal (Nil)
   }
 
+  test ("trail options - after list argument, single optional value") {
+    val opts = Scallop(List("--echo","42","43"))
+      .opt[List[Int]]("echo")
+      .trailArg[Int]("numbers", required = false)
+      .verify
+    opts.get[List[Int]]("echo") should equal (Some(List(42,43)))
+    opts.get[Int]("numbers") should equal (None)
+  }
+
+  test ("trail options - after flag argument, single optional value") {
+    val opts = Scallop(List("--echo","42","43"))
+      .opt[Boolean]("echo")
+      .trailArg[List[Int]]("numbers", required = false)
+      .verify
+    opts.get[List[Int]]("numbers") should equal (Some(List(42,43)))
+    opts[Boolean]("echo") should equal (true)
+  }
   
+  test ("trail options - one required, one optional - both provided") {
+    val opts = Scallop(List("first","second"))
+      .trailArg[String]("name")
+      .trailArg[String]("surname", required = false)
+      .verify
+    opts[String]("name") should equal ("first")
+    opts.get[String]("surname") should equal (Some("second"))
+  }
+  
+  test ("trail options - one required, one optional - one provided") {
+    val opts = Scallop(List("first"))
+      .trailArg[String]("name")
+      .trailArg[String]("surname", required = false)
+      .verify
+    opts[String]("name") should equal ("first")
+    opts.get[String]("surname") should equal (None)
+  }
+  
+  test ("trail options - tricky case") {
+    val opts = Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3", 
+                            "first", "1","2","3","second","4","5","6"))
+      .props('E')
+      .trailArg[String]("first list name")
+      .trailArg[List[Int]]("first list values")
+      .trailArg[String]("second list name")
+      .trailArg[List[Double]]("second list values")
+      .verify
+    opts.propMap('E') should equal ((1 to 3).map(i => ("key"+i,"value"+i)).toMap)
+    opts[String]("first list name") should equal ("first")
+    opts[String]("second list name") should equal ("second")
+    opts[List[Int]]("first list values") should equal (List(1,2,3))
+    opts[List[Double]]("second list values") should equal (List[Double](4,5,6))
+  }
+  
+  test ("trail options - load-test") {
+    val start = System.currentTimeMillis
+    val opts = Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3"))
+      .props('E')
+      .trailArg[String]("first list name")
+      .trailArg[List[Int]]("first list values")
+      .trailArg[String]("second list name")
+      .trailArg[List[Double]]("second list values")
+      .args(List("first"))
+      .args((1 to 100).map(_.toString))
+      .args(List("second"))
+      .args((1 to 100).map(_.toString))
+      .verify
+    val end = System.currentTimeMillis
+    assert (end - start < 10, "Time bound broken: %d ms" format (end - start))
+  }
+
 }

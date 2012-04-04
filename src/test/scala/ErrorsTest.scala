@@ -1,5 +1,3 @@
-package org.rogach.scallop
-
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
@@ -64,8 +62,9 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   
   test ("option verification failure") {
     intercept[WrongOptionFormat] {
-      val opts = Scallop(List("-a","1.2"))
+      val opts = Scallop(List("-a","1.2", "-b"))
         .opt[Int]("ang")
+        .opt[Boolean]("bang")
         .verify
     }
   }

@@ -3,42 +3,34 @@ package org.rogach.scallop
 import scala.reflect.Manifest
 
 object Scallop {
-  def apply(args:Seq[String]):Scallop = new Scallop(args,List(),List(),None,None)
+  def apply(args:Seq[String]):Scallop = new Scallop(args,Nil,Nil,Nil,None,None)
   def apply():Scallop = apply(List())
 }
 
-case class Scallop(args:Seq[String], opts:Seq[OptDef], propts:Seq[PropDef], vers:Option[String], bann:Option[String]) {
+case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], trail:List[TrailDef], vers:Option[String], bann:Option[String]) {
   lazy val (pargs,rest) = parseWithRest(args)
-  type ArgParsed = (Option[String],Option[String],List[String])
-  def parseWithRest(args:Seq[String]):(List[ArgParsed],Seq[String]) = {
-    val (tail, init) = args.reverse.span(!_.startsWith("-"))
-    if (init.isEmpty) (parse(args),Nil)
-    else if (init.head.startsWith("--")) {
-      opts.find(_.name == init.head.drop(2)) match {
-        case Some(opt) =>
-          opt.argType match {
-            case ArgType.FLAG => (parse(args.reverse.drop(tail.length).reverse), tail.reverse)
-            case ArgType.SINGLE => (parse(args.reverse.drop(tail.length - 1).reverse), tail.reverse.drop(1))
-            case ArgType.LIST => (parse(args), Nil)
-          }
-        case None => (parse(args), Nil) // let's throw all errors in verify stage
-      }
-    } else {
-      opts.map(a => (a,getOptShortName(a))).filter(_._2.isDefined).find(_._2.get == init.head.last) match {
-        case Some((opt, char)) =>
-          opt.argType match {
-            case ArgType.FLAG => (parse(args.reverse.drop(tail.length).reverse), tail.reverse)
-            case ArgType.SINGLE => (parse(args.reverse.drop(tail.length - 1).reverse), tail.reverse.drop(1))
-            case ArgType.LIST => (parse(args), Nil)
-          }
-        case None => // maybe it's a property?
-          propts.find(_.char == init.head(1)) match {
-            case Some(prop) =>
-              val restSize = tail.size - tail.reverse.takeWhile(_.contains('=')).size
-              (parse(args.reverse.drop(restSize).reverse), tail.take(restSize).reverse)
-            case None => (parse(args), Nil) // let's throw all errors in verify stage
-          }
-      }
+  
+  type ArgParsed = (Option[String],Option[String],List[String]) // (short, long, args)
+  def parseWithRest(args:Seq[String]):(List[ArgParsed], List[List[String]]) = {
+    val trailArgs = args.reverse.takeWhile(!_.startsWith("-")).reverse
+    val optsRaw = if (trailArgs.size != args.size) parse(args) else Nil
+    val optNam = args.reverse.drop(trailArgs.size).headOption 
+    optNam match {
+      case Some(optName) =>
+        val (optConv,required) = if (optName.startsWith("--")) {
+          (opts ++ propts).find(_._name == optName.drop(2)).map {o => (o._conv, true)}
+          .getOrElse(throw new UnknownOption("Unknown option '%s'" format optName.drop(2)))
+        } else {
+          propts.find(_.char == optName(1)).map {o => (o._conv, false)}
+          .getOrElse(
+            opts.map(a => (a,getOptShortName(a))).filter(_._2.isDefined).find(_._2.get == optName.last).map {o => (o._1._conv, true)}
+              .getOrElse(throw new UnknownOption("Unknown option '%s'" format optName.drop(1))))
+        }
+        val rest = parseRest(trailArgs.toList, (optConv, required) :: trail.map(t => (t.conv, t.required))).getOrElse(throw new OptionParseException("Failed to parse the trailing argument list"))
+        (parse(args.reverse.drop(trailArgs.size - rest.headOption.map(_.size).getOrElse(0)).reverse), rest.tail)
+      case None =>
+        val rest = parseRest(trailArgs.toList, trail.map(t => (t.conv, t.required))).getOrElse(throw new OptionParseException("Failed to parse the trailing argument list"))
+        (Nil, rest)
     }
   }
   def parse(args:Seq[String]):List[ArgParsed] = {
@@ -59,17 +51,52 @@ case class Scallop(args:Seq[String], opts:Seq[OptDef], propts:Seq[PropDef], vers
       case a => throw new OptionParseException("Failed to parse options: " + a.mkString(" "))// there should be options!
     }
   }
-  def opt[A](name:String, short:Char = 0.toChar, descr:String = "", default:Option[A] = None, required:Boolean = false, arg:String = "arg")(implicit conv:ValueConverter[A], m:Manifest[A]):Scallop = {
+  def parseRest(args:List[String], convs:List[(ValueConverter[_], Boolean)]):Option[List[List[String]]] = {
+    if (convs.isEmpty) {
+      if (args.isEmpty) Some(Nil)
+      else None
+    } else {
+      val remainders = convs.head._1.argType match {
+        case ArgType.FLAG => List(args)
+        case ArgType.SINGLE =>
+          if (convs.head._2) if (args.isEmpty) List(Nil) else List(args.tail)
+          else if (args.isEmpty) List(Nil) else List(args.tail, args)
+        case ArgType.LIST =>
+          if (convs.head._2) args.tails.toList.reverse.init
+          else args.tails.toList.reverse
+      }
+      remainders.view.map { rem =>
+        val p = args.take(args.size - rem.size)
+        if (p.isEmpty && !convs.head._2) {
+            val next = parseRest(rem, convs.tail)
+            if (next.isDefined) {
+              Some(p :: next.get)
+            } else None
+        } else {
+          convs.head._1.parse(List(p)) match {
+            case Right(a) if a.isDefined => 
+              val next = parseRest(rem, convs.tail)
+              if (next.isDefined) {
+                Some(p :: next.get)
+              } else None
+            case _ => None
+          }
+        }
+      }.find(_.isDefined).getOrElse(None)
+    }
+  }
+  
+  def opt[A](name:String, short:Char = 0.toChar, descr:String = "", default:Option[A] = None, required:Boolean = false, arg:String = "arg")(implicit conv:ValueConverter[A]):Scallop = {
     val eShort = if (short == 0.toChar) None else Some(short)
-    val argType =
-      if (m <:< implicitly[Manifest[Boolean]]) ArgType.FLAG
-      else if (m <:< implicitly[Manifest[List[_]]]) ArgType.LIST
-      else ArgType.SINGLE
-    this.copy(opts = opts :+ new OptDef(name,eShort,descr,conv,m,default,required,arg, argType))
+    this.copy(opts = opts :+ new OptDef(name, eShort, descr, conv, default, required, arg))
   }
   def props(name:Char,descr:String = "", keyName:String = "key", valueName:String = "value"):Scallop = {
     this.copy(propts = propts :+ new PropDef(name,descr,keyName, valueName))
   }
+  def trailArg[A](name:String, required:Boolean = true)(implicit conv:ValueConverter[A]):Scallop = {
+    this.copy(trail = trail :+ new TrailDef(name, required, conv))
+  }
+  
   def version(v:String) = this.copy(vers = Some(v))
   def banner(b:String) = this.copy(bann = Some(b))
   def help:String = (opts ++ propts).sortBy(_._name.toLowerCase).map{ 
@@ -77,16 +104,26 @@ case class Scallop(args:Seq[String], opts:Seq[OptDef], propts:Seq[PropDef], vers
     case o:PropDef => o.help(Some(o.char))
   }.mkString("\n")
   def args(a:Seq[String]) = this.copy(args = args ++ a)
+  
   def get[A](name:String)(implicit m:Manifest[A]):Option[A] = {
-    val opt = opts.find(_.name == name).getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name))
-    val sh = getOptShortName(opt)
-    if (!(m <:< opt.m)) {
-      throw new WrongTypeRequest("")
+    opts.find(_.name == name).map { opt =>
+      val sh = getOptShortName(opt)
+      if (!(m <:< opt.conv.manifest)) {
+        throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, opt.conv.manifest))
+      }
+      opt.conv.parse(pargs.filter(a => a._2.map(opt.name ==)
+      .getOrElse(sh.map(a._1.get.head == _).getOrElse(false))).map(_._3)).right.get
+      .orElse(opt.default).asInstanceOf[Option[A]]
+    }.getOrElse{
+      trail.zipWithIndex.find(_._1.name == name).map { case (tr, idx) =>
+        if (!(m <:< tr.conv.manifest)) {
+          throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, tr.conv.manifest))
+        }
+        tr.conv.parse(List(rest(idx))).right.getOrElse(if (tr.required) throw new MajorInternalException else None).asInstanceOf[Option[A]]
+      }.getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name))
     }
-    opt.conv.parse(pargs.filter(a => a._2.map(opt.name ==)
-    .getOrElse(sh.map(a._1.get.head == _).getOrElse(false))).map(_._3)).right.get
-    .orElse(opt.default).asInstanceOf[Option[A]]
   }
+  def apply[A](name:String)(implicit m:Manifest[A]):A = get(name)(m).get
   def prop(name:Char, key:String):Option[String] = {
     pargs.filter(_._1 == Some(name.toString)).flatMap { p =>
       val rgx = """([^=]+)=(.*)""".r
@@ -104,7 +141,6 @@ case class Scallop(args:Seq[String], opts:Seq[OptDef], propts:Seq[PropDef], vers
     }.toMap
   }
 
-  def apply[A](name:String)(implicit m:Manifest[A]):A = get(name)(m).get
   private def getOptShortName(o:OptDef):Option[Char] =
     o.short.orElse {
       val sh = o.name.head
@@ -115,7 +151,7 @@ case class Scallop(args:Seq[String], opts:Seq[OptDef], propts:Seq[PropDef], vers
 
   def verify = {
     // long options must not clash
-    opts.groupBy(_.name).filter(_._2.size > 1)
+    (opts.map(_.name) ++ trail.map(_.name)).groupBy(a=>a).filter(_._2.size > 1)
     .foreach(a => throw new IdenticalOptionNames("Long option name '%s' is not unique" format a._1))
     // short options must not clash
     (opts.map(_.short).flatten ++ propts.map(_.char)).groupBy(a=>a).filter(_._2.size > 1)
@@ -149,7 +185,7 @@ case class Scallop(args:Seq[String], opts:Seq[OptDef], propts:Seq[PropDef], vers
   }
 }
 
-abstract class ArgDef(val _name:String,_short:Option[Char], _descr:String) {
+abstract class ArgDef(val _name:String,_short:Option[Char], _descr:String, val _conv:ValueConverter[_]) {
   def argLine(sh:Option[Char]):String
   def help(sh:Option[Char]):String = {
     var text = List[String]("")
@@ -164,13 +200,13 @@ abstract class ArgDef(val _name:String,_short:Option[Char], _descr:String) {
   }
   
 }
-case class OptDef(name:String, short:Option[Char], descr:String, conv:ValueConverter[_],m:Manifest[_], default:Option[Any], required:Boolean, arg:String, argType:ArgType.V) extends ArgDef(name, short, descr) {
-  def argLine(sh:Option[Char]):String = List[Option[String]](sh.map("-" +),Some("--" + name)).flatten.mkString(", ") + "  " + argType.fn(arg)
+case class OptDef(name:String, short:Option[Char], descr:String, conv:ValueConverter[_], default:Option[Any], required:Boolean, arg:String) extends ArgDef(name, short, descr, conv) {
+  def argLine(sh:Option[Char]):String = List[Option[String]](sh.map("-" +),Some("--" + name)).flatten.mkString(", ") + "  " + conv.argType.fn(arg)
 }
-
-case class PropDef(char:Char, descr:String, keyName:String, valueName:String) extends ArgDef(char.toString, Some(char), descr) {
+case class PropDef(char:Char, descr:String, keyName:String, valueName:String) extends ArgDef(char.toString, Some(char), descr, propsConverter) {
   def argLine(sh:Option[Char]) = "-%1$s%2$s=%3$s [%2$s=%3$s]..." format (char, keyName, valueName)
 }
+case class TrailDef(name:String, required:Boolean, conv:ValueConverter[_])
 
 object ArgType extends Enumeration {
   case class V(fn: String => String) extends Val

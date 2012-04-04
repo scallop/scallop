@@ -6,9 +6,11 @@ object `package` {
       case Nil => Right(Some(false))
       case _ => Left(Unit)
     }
+    val manifest = implicitly[Manifest[Boolean]]
+    val argType = ArgType.FLAG
   }
   
-  def singleArgConverter[A](conv: String => A) = new ValueConverter[A] {
+  def singleArgConverter[A](conv: String => A)(implicit m:Manifest[A]) = new ValueConverter[A] {
     def parse(s:List[List[String]]) = {
       s match {
         case (i :: Nil) :: Nil => 
@@ -17,6 +19,8 @@ object `package` {
         case _ => Left(Unit)
       }
     }
+    val manifest = m
+    val argType = ArgType.SINGLE
   }
   implicit val byteConverter = singleArgConverter[Byte](_.toByte)
   implicit val shortConverter = singleArgConverter[Short](_.toShort)
@@ -27,13 +31,15 @@ object `package` {
   implicit val charConverter = singleArgConverter[Char](_.head)
   implicit val stringConverter = singleArgConverter[String](a=>a)
   
-  def listArgConverter[A](conv: String => A) = new ValueConverter[List[A]] {
+  def listArgConverter[A](conv: String => A)(implicit m:Manifest[List[A]])  = new ValueConverter[List[A]] {
     def parse(s:List[List[String]]) = {
       s.flatten.map(i => try { Right(Some(conv(i))) } catch { case _ => Left(Unit) }).partition(_.isLeft) match {
         case (Nil, res) => Right(Some(res.map(_.right.get.get)))
         case _ => Left(Unit)
       }
     }
+    val manifest = m
+    val argType = ArgType.LIST
   }
   implicit val byteListConverter = listArgConverter[Byte](_.toByte)
   implicit val shortListConverter = listArgConverter[Short](_.toShort)
@@ -41,6 +47,13 @@ object `package` {
   implicit val longListConverter = listArgConverter[Long](_.toLong)
   implicit val floatListConverter = listArgConverter[Float](_.toFloat)
   implicit val doubleListConverter = listArgConverter[Double](_.toDouble)
-  implicit val stringListConverter = listArgConverter[String](_)
+  implicit val stringListConverter = listArgConverter[String](a => a)
   
+  implicit val propsConverter = listArgConverter[(String,String)] { a =>
+    val rgx = """([^=]+)=(.*)""".r
+    a match {
+      case rgx(key,value) => (key,value)
+    }
+  }.map(_.toMap)
+
 }

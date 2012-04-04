@@ -2,8 +2,11 @@ Scallop
 ========
 A simple CLI parsing library for Scala, written in spirit of Ruby's [Trollop](http://trollop.rubyforge.org/). Works on Scala 2.9.x.
 
-It supports POSIX-style long (--opt) and short (-a, -abc) options, and property args (-Dkey=value, -D key1=value key2=value).
-Also it supports extracting the un-parsed ending of options.
+Scallop supports POSIX-style long (--opt) and short (-a, -abc) options, and property args (-Dkey=value, -D key1=value key2=value), 
+extracting lists of argumets to option, and matching on trailing arguments.
+
+It should be noted that the whole option builder is completely immutable (thus thread-safe), so you can reuse it, delegate
+argument construction to sub-modules, etc. 
 
 Installation
 ============
@@ -39,6 +42,8 @@ val opts = Scallop(List("-d","--num-limbs","1"))
                                //and for lists of primitives
   .props('D',"some key-value pairs")
   .args(List("-Dalpha=1","-D","betta=2","gamma=3", "Pigeon")) // you can add parameters a bit later
+  .trailArg[String]("pet name") // you can specify what do you want to get from the end of 
+                                // args list
   .verify
   
 opts.get[Boolean]("donkey") should equal (Some(true))
@@ -46,11 +51,13 @@ opts[Int]("monkeys") should equal (2)
 opts[Int]("num-limbs") should equal (1)
 opts.prop('D',"alpha") should equal (Some("1"))
 opts.prop('E',"gamma") should equal (None)
-opts.rest should equal (List("Pigeon")) // returns the non-argument related part of args
+opts[String]("pet name") should equal ("Pigeon")
 intercept[WrongTypeRequest] {
   opts[Double]("monkeys") // this will throw an exception at runtime
                           // because the wrong type is requested
 }
+
+println(opts.help) // returns options description
 ```
 
 If you will run this option setup with "--help" option, you would see:
@@ -70,3 +77,30 @@ Options:
     number of libms
 -p, --params  <arg>...
 ```
+
+Matching on the trailing arguments can get quite fancy thanks to Scallop's backtracking parser
+- for example, it correctly handles the following case:
+
+```
+val opts = Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3", 
+                        "first", "1","2","3","second","4","5","6"))
+  .props('E')
+  .trailArg[String]("first list name")
+  .trailArg[List[Int]]("first list values")
+  .trailArg[String]("second list name")
+  .trailArg[List[Double]]("second list values")
+  .verify
+opts.propMap('E') should equal ((1 to 3).map(i => ("key"+i,"value"+i)).toMap)
+opts[String]("first list name") should equal ("first")
+opts[String]("second list name") should equal ("second")
+opts[List[Int]]("first list values") should equal (List(1,2,3))
+opts[List[Double]]("second list values") should equal (List[Double](4,5,6))
+```
+
+For more examples, you can consult Scallop's [test suite](https://github.com/Rogach/scallop/tree/master/src/test).
+
+Thanks
+------
+* [Alexy Khrabrov](https://github.com/alexy)
+
+... and the whole Scala community for help and explanations.
