@@ -104,7 +104,7 @@ case class Person(name:String, phone:String)
 val personConverter = new ValueConverter[Person] {
   val nameRgx = """([A-Za-z]*)""".r
   val phoneRgx = """([0-9\-]*)""".r
-  // parse is a method, that takes a list of arguments to all option invokations:
+  // parse is a method, that takes a list of arguments to all option invocations:
   // for example, "-a 1 2 -a 3 4 5" would produce List(List(1,2),List(3,4,5)).
   // parse returns Left, if there was an error while parsing
   // if no option was found, it returns Right(None)
