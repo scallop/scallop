@@ -111,4 +111,13 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
 
   }
   
+  test ("no option type provided") {
+    val opts = Scallop(List("--angels","42"))
+      .opt[Int]("angels")
+      .verify
+    intercept[WrongTypeRequest] {
+      opts.get("angels") should equal (Some(42))
+    }
+  }
+  
 }

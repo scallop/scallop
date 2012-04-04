@@ -265,7 +265,7 @@ println(opts.help)
       .opt[List[Int]]("echo")
       .trailArg[List[Int]]("numbers")
       .verify
-    opts.get("echo") should equal (Some(List(42)))
+    opts.get[List[Int]]("echo") should equal (Some(List(42)))
     opts[List[Int]]("numbers") should equal (List(43))
   }
   
@@ -274,7 +274,7 @@ println(opts.help)
       .opt[List[Int]]("echo")
       .trailArg[List[Int]]("numbers", required = false)
       .verify
-    opts.get("echo") should equal (Some(List(42,43)))
+    opts.get[List[Int]]("echo") should equal (Some(List(42,43)))
     opts[List[Int]]("numbers") should equal (Nil)
   }
 

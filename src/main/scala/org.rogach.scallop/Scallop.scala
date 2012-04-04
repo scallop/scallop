@@ -108,7 +108,7 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
   def get[A](name:String)(implicit m:Manifest[A]):Option[A] = {
     opts.find(_.name == name).map { opt =>
       val sh = getOptShortName(opt)
-      if (!(m <:< opt.conv.manifest)) {
+      if (!(opt.conv.manifest <:< m)) {
         throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, opt.conv.manifest))
       }
       opt.conv.parse(pargs.filter(a => a._2.map(opt.name ==)
@@ -116,7 +116,7 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
       .orElse(opt.default).asInstanceOf[Option[A]]
     }.getOrElse{
       trail.zipWithIndex.find(_._1.name == name).map { case (tr, idx) =>
-        if (!(m <:< tr.conv.manifest)) {
+        if (!(tr.conv.manifest <:< m)) {
           throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, tr.conv.manifest))
         }
         tr.conv.parse(List(rest(idx))).right.getOrElse(if (tr.required) throw new MajorInternalException else None).asInstanceOf[Option[A]]
