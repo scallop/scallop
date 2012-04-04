@@ -125,7 +125,7 @@ val opts = Scallop(List("--person", "Pete", "123-45"))
 opts[Person]("person") should equal (Person("Pete", "123-45"))
 ```
 
-For more examples, you can consult Scallop's [test suite](https://github.com/Rogach/scallop/tree/master/src/test/scala)
+For more examples, you can look at Scallop's [test suite](https://github.com/Rogach/scallop/tree/master/src/test/scala)
 or consult the [API docs](http://rogach.github.com/scallop/#org.rogach.scallop.package).
 
 Thanks
