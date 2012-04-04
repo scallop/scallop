@@ -58,6 +58,7 @@ intercept[WrongTypeRequest] {
 }
 
 println(opts.help) // returns options description
+println(opts.summary) // returns summary of parser status (with current arg values)
 ```
 
 If you will run this option setup with "--help" option, you would see:
