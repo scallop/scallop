@@ -81,7 +81,7 @@ Options:
 Matching on the trailing arguments can get quite fancy thanks to Scallop's backtracking parser
 - for example, it correctly handles the following case:
 
-```
+```scala
 val opts = Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3", 
                         "first", "1","2","3","second","4","5","6"))
   .props('E')
@@ -97,7 +97,7 @@ opts[List[Int]]("first list values") should equal (List(1,2,3))
 opts[List[Double]]("second list values") should equal (List[Double](4,5,6))
 ```
 
-For more examples, you can consult Scallop's [test suite](https://github.com/Rogach/scallop/tree/master/src/test).
+For more examples, you can consult Scallop's [test suite](https://github.com/Rogach/scallop/tree/master/src/test/scala).
 
 Thanks
 ------
