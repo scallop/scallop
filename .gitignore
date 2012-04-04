@@ -2,3 +2,4 @@ target/
 .bzr/
 .bzrignore
 *.~[0-9]~
+.#*

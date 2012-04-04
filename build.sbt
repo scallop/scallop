@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name := "scallop"
 
-version := "0.2.1"
+version := "0.2.2"
 
 scalaVersion := "2.9.1"
 

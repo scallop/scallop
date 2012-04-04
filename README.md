@@ -16,7 +16,7 @@ Add following to your build.sbt:
 ```scala
 resolvers += "Rogach's maven repo" at "https://github.com/Rogach/org.rogach/raw/master/"
 
-libraryDependencies += "org.rogach" %% "scallop" % "0.2.1"
+libraryDependencies += "org.rogach" %% "scallop" % "0.2.2"
 ```
 
 Examples
