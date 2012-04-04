@@ -346,5 +346,25 @@ println(opts.help)
     val end = System.currentTimeMillis
     assert (end - start < 10, "Time bound broken: %d ms" format (end - start))
   }
+  
+  test ("custom converter example") {
+    case class Person(name:String, phone:String)
+    val personConverter = new ValueConverter[Person] {
+      val nameRgx = """([A-Za-z]*)""".r
+      val phoneRgx = """([0-9\-]*)""".r
+      def parse(s:List[List[String]]):Either[Unit,Option[Person]] = s match {
+        case ((nameRgx(name) :: phoneRgx(phone) :: Nil) :: Nil) => 
+          Right(Some(Person(name,phone))) // successfully found our person
+        case Nil => Right(None) // no person found
+        case _ => Left(Unit) // error when parsing
+      }
+      val manifest = implicitly[Manifest[Person]] // some magic to make typing work
+      val argType = org.rogach.scallop.ArgType.LIST
+    }
+    val opts = Scallop(List("--person", "Pete", "123-45"))
+      .opt[Person]("person")(personConverter)
+      .verify
+    opts[Person]("person") should equal (Person("Pete", "123-45"))
+  }
 
 }

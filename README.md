@@ -97,6 +97,34 @@ opts[List[Int]]("first list values") should equal (List(1,2,3))
 opts[List[Double]]("second list values") should equal (List[Double](4,5,6))
 ```
 
+Also, you can define your own custom converter for options:
+
+```scala
+case class Person(name:String, phone:String)
+val personConverter = new ValueConverter[Person] {
+  val nameRgx = """([A-Za-z]*)""".r
+  val phoneRgx = """([0-9\-]*)""".r
+  // parse is a method, that takes a list of arguments to all option invokations:
+  // for example, "-a 1 2 -a 3 4 5" would produce List(List(1,2),List(3,4,5)).
+  // parse returns Left, if there was an error while parsing
+  // if no option was found, it returns Right(None)
+  // and if option was found, it returns Right(...)
+  def parse(s:List[List[String]]):Either[Unit,Option[Person]] = 
+    s match {
+      case ((nameRgx(name) :: phoneRgx(phone) :: Nil) :: Nil) => 
+        Right(Some(Person(name,phone))) // successfully found our person
+      case Nil => Right(None) // no person found
+      case _ => Left(Unit) // error when parsing
+    }
+  val manifest = implicitly[Manifest[Person]] // some magic to make typing work
+  val argType = org.rogach.scallop.ArgType.LIST
+}
+val opts = Scallop(List("--person", "Pete", "123-45"))
+  .opt[Person]("person")(personConverter)
+  .verify
+opts[Person]("person") should equal (Person("Pete", "123-45"))
+```
+
 For more examples, you can consult Scallop's [test suite](https://github.com/Rogach/scallop/tree/master/src/test/scala).
 
 Thanks
