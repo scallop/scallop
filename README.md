@@ -16,11 +16,41 @@ Add following to your build.sbt:
 ```scala
 resolvers += "Rogach's maven repo" at "https://github.com/Rogach/org.rogach/raw/master/"
 
-libraryDependencies += "org.rogach" %% "scallop" % "0.2.3"
+libraryDependencies += "org.rogach" %% "scallop" % "0.3.0"
 ```
 
 Examples
 ========
+
+Using the Conf class
+--------------------
+
+Advantages of using ScallopConf include complete type-safety (thus less explicit types) and ability to pass the resulting object into other functions.
+
+```scala
+object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
+  // all options that are applicable to builder (like description, default, etc) 
+  // are applicable here as well
+  val count = opt[Int]("count", descr = "count the trees", required = true) 
+  val properties = props('E')
+  val size = trailArg[Double](required = false)
+  verify
+}
+// that's it. Completely type-safe and convenient.
+Conf.count() should equal (3)
+Conf.properties("fruit") should equal (Some("apple"))
+Conf.size.get should equal (Some(7.2))
+// passing into other functions
+def someInternalFunc(conf:Conf.type) {
+  conf.count() should equal (3)
+}
+someInternalFunc(Conf)
+```
+
+Using the builder
+-----------------
+
+Using the builder is more flexible choice, since you can pass the builder around and even add arguments after you defined all options. On the other side, type-safety is a bit relaxed - if you request the wrong type, there is no way to protect you at compile-time (but there is indeed some protection in run-time).
 
 ```scala
 import org.rogach.scallop._;
@@ -78,6 +108,11 @@ Options:
     number of libms
 -p, --params  <arg>...
 ```
+
+Misc
+----
+
+The following examples can be used with both ScallopConf and with builder.
 
 Matching on the trailing arguments can get quite fancy thanks to Scallop's backtracking parser
 - for example, it correctly handles the following case:
