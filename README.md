@@ -31,18 +31,20 @@ Advantages of using ScallopConf include complete type-safety (thus less explicit
 object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
   // all options that are applicable to builder (like description, default, etc) 
   // are applicable here as well
-  val count = opt[Int]("count", descr = "count the trees", required = true) 
+  val count = opt[Int]("count", descr = "count the trees", required = true)
+                .map(1+) // also here work all standard Option methods -
+                         // evaluation is deferred to after option construcnion
   val properties = props('E')
   val size = trailArg[Double](required = false)
   verify
 }
 // that's it. Completely type-safe and convenient.
-Conf.count() should equal (3)
+Conf.count() should equal (4)
 Conf.properties("fruit") should equal (Some("apple"))
 Conf.size.get should equal (Some(7.2))
 // passing into other functions
 def someInternalFunc(conf:Conf.type) {
-  conf.count() should equal (3)
+  conf.count() should equal (4)
 }
 someInternalFunc(Conf)
 ```

@@ -9,18 +9,20 @@ class ConfTest extends FunSuite with ShouldMatchers {
     object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
       // all options that are applicable to builder (like description, default, etc) 
       // are applicable here as well
-      val count = opt[Int]("count", descr = "count the trees", required = true) 
+      val count = opt[Int]("count", descr = "count the trees", required = true)
+                    .map(1+) // also here work all standard Option methods -
+                             // evaluation is deferred to after option construcnion
       val properties = props('E')
       val size = trailArg[Double](required = false)
       verify
     }
     // that's it. Completely type-safe and convenient.
-    Conf.count() should equal (3)
+    Conf.count() should equal (4)
     Conf.properties("fruit") should equal (Some("apple"))
     Conf.size.get should equal (Some(7.2))
     // passing into other functions
     def someInternalFunc(conf:Conf.type) {
-      conf.count() should equal (3)
+      conf.count() should equal (4)
     }
     someInternalFunc(Conf)
   }
@@ -74,4 +76,36 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
   }
   
+  test ("option operations - collect") {
+    object Conf extends ScallopConf(List("-a","3","-b","5")) {
+      val apples = opt[Int]("apples")
+      val applesCollect = apples.collect({case a:Int => a + 1})
+      val applesFilter1 = apples.filter(2<)
+      val applesFilter2 = apples.filter(5<)
+      val applesFilterNot = apples.filterNot(5<)
+      val applesMap1 = apples.map(2+)
+      val applesMap2 = apples.filter(5<).map(2+)
+      val applesOrElse1 = apples.orElse(Some(1))
+      val applesOrElse2 = apples.filter(5<).orElse(Some(1))
+      val bananas = opt[String]("bananas").collect({case b:Int => b + 1}:PartialFunction[Any,Int])
+      verify
+    }
+    Conf.applesCollect.get should equal (Some(4))
+    Conf.applesFilter1.get should equal (Some(3))
+    Conf.applesFilter2.get should equal (None)
+    Conf.applesFilterNot.get should equal (Some(3))
+    Conf.applesMap1.get should equal (Some(5))
+    Conf.applesMap2.get should equal (None)
+    Conf.applesOrElse1.get should equal (Some(3))
+    Conf.applesOrElse2.get should equal (Some(1))
+    Conf.bananas.get should equal (None)
+  }
+  
+  test ("printing ScallopOption") {
+    object Conf extends ScallopConf(List("-a","3")) {
+      val apples = opt[Int]("apples")
+      verify
+    }
+    Conf.apples.toString should equal ("ScallopSome(3)")
+  }
 }

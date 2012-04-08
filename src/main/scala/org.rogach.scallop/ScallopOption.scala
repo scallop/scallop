@@ -1,11 +1,58 @@
 package org.rogach.scallop
 
-/** A class to hold a reference to not-yet-computed option values
+/** A class to hold a reference to not-yet-computed option values.
+  * Basically, this is a lazy option - it batches up all operations,
+  * and evaluates the value only as the last resort.
   * @param fn source of the actual value 
   */
-class ScallopOption[A](fn: => Option[A]) {
+class ScallopOption[A](fn: => Option[A]) { opt => 
+  
   /** Retreive the underlying value as an option */
   def get = fn
+  
   /** Retreive the underlying value. Use only if you are completely sure that there is a value. */
   def apply() = fn.get
+  
+  /** Returns ScallopOption, that contains the result of applying ```pf```
+    * to the value, if this option is non-empty and pf is defined for that value.
+    * Returns empty ScallopOption otherwise.
+    * @param pf the partial function
+    */
+  def collect[B](pf: PartialFunction[A,B]) =
+    new ScallopOption(opt.get.collect(pf))
+  
+  /** Returns ScallopOption, that contains the value if applying
+    * predicate p to this value returned true. No value otherwise.
+    * @param p the predicate used for testing
+    */
+  def filter(p: A=>Boolean) =
+    new ScallopOption(opt.get.filter(p))
+
+  /** Returns ScallopOption, that contains the value if applying
+    * predicate p to this value returned false. No value otherwise.
+    * @param p the predicate used for testing
+    */
+  def filterNot(p: A=>Boolean) =
+    new ScallopOption(opt.get.filterNot(p))
+    
+  /** Returns ScallopOption, that contains the result of applying
+    * ```f``` to this option's value, if this option is non-empty.
+    * Returns ScallopOption with no value otherwise.
+    * @param f the function to apply
+    */
+  def map[B](f: A=>B) = 
+    new ScallopOption(opt.get.map(f))
+    
+  /** Returns ScallopOption with this value if it is non-empty,
+    * or with the value of the alternative option. If it is 
+    * empty too, the resulting ScallopOption will contain None.
+    * @param alternative the alternative expression
+    */
+  def orElse[B >: A](alternative: =>Option[B]) =
+    new ScallopOption(opt.get.orElse(alternative))
+    
+  override def toString = opt.get match {
+    case Some(x) => "ScallopSome(%s)" format x
+    case None => "ScallopNone"
+  }
 }

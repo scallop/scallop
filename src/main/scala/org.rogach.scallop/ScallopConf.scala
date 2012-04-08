@@ -66,7 +66,7 @@ abstract class ScallopConf(args:Seq[String]) {
   /** Checks that this Conf object is verified. If it is not, throws an exception. */
   def verified_? = {
     if (verified) true
-    else throw new IncompleteBuildException("It seems you tried to get option value before you constructed all options. Please, move all extraction of values to after 'verify' method in ScallopConf.")
+    else throw new IncompleteBuildException("It seems you tried to get option value before you constructed all options (maybe you forgot to call .verify method?). Please, move all extraction of values to after 'verify' method in ScallopConf.")
   }
   
   // === some getters for convenience ===
