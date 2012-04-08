@@ -64,4 +64,14 @@ class ConfTest extends FunSuite with ShouldMatchers {
     a(Conf)
   }
   
+  test ("extracting values before call to verify") {
+    intercept[IncompleteBuildException] {
+      object Conf extends ScallopConf(List("-a")) {
+        val apples = opt[Boolean]("apples").apply()
+        verify
+      }
+      Conf
+    }
+  }
+  
 }

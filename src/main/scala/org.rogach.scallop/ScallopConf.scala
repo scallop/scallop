@@ -1,7 +1,10 @@
 package org.rogach.scallop
 
+import exceptions._
+
 abstract class ScallopConf(args:Seq[String]) {
   var builder = Scallop(args)
+  private var verified = false
   
   /** Add a new option definition to this config and get a holder for the value.
     * @param name Name for new option, used as long option name in parsing, and for option identification.
@@ -23,7 +26,7 @@ abstract class ScallopConf(args:Seq[String]) {
             :ScallopOption[A] =
   {
     builder = builder.opt(name, short, descr, default, required, arg)(conv)
-    new ScallopOption[A](builder.get[A](name)(conv.manifest))
+    new ScallopOption[A]({verified_?; builder.get[A](name)(conv.manifest)})
   }              
 
   /** Add new property option definition to this config object, and get a handle for option retreiving.
@@ -40,7 +43,7 @@ abstract class ScallopConf(args:Seq[String]) {
            :(String => Option[String]) = 
   {
     builder = builder.props(name, descr, keyName, valueName)
-    (key:String) => builder.prop(name, key)
+    (key:String) => {verified_?; builder.prop(name, key)}
   }
   
   /** Add new trailing argument definition to this config, and get a holder for it's value.
@@ -51,11 +54,20 @@ abstract class ScallopConf(args:Seq[String]) {
     // here, we generate some random name, since it does not matter
     val name = "trailArg " + (1 to 10).map(_ => (97 to 122)(math.random * 26 toInt).toChar).mkString
     builder = builder.trailArg(name, required)(conv)
-    new ScallopOption[A](builder.get[A](name)(conv.manifest))
+    new ScallopOption[A]({verified_?; builder.get[A](name)(conv.manifest)})
   }
   
   /** Veryfy that this config object is properly configured. */
-  def verify = {builder.verify; ()}
+  def verify {
+    builder.verify
+    verified = true
+  }
+  
+  /** Checks that this Conf object is verified. If it is not, throws an exception. */
+  def verified_? = {
+    if (verified) true
+    else throw new IncompleteBuildException("It seems you tried to get option value before you constructed all options. Please, move all extraction of values to after 'verify' method in ScallopConf.")
+  }
   
   // === some getters for convenience ===
   
@@ -63,11 +75,17 @@ abstract class ScallopConf(args:Seq[String]) {
     * @param name Propety definition identifier.
     * @return All key-value pairs for this property in a map.
     */
-  def propMap(name:Char) = builder.propMap(name)
+  def propMap(name:Char) = {
+    verified_?
+    builder.propMap(name)
+  }
 
   /** Get summary of current parser state.
     * Returns a list of all options in the builder, and corresponding values for them.
     */
-  def summary = builder.summary
+  def summary = {
+    verified_?
+    builder.summary
+  }
   
 }
