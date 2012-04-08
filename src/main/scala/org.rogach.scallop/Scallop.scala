@@ -11,6 +11,7 @@ object Scallop {
   def apply(args:Seq[String]):Scallop = new Scallop(args,Nil,Nil,Nil,None,None)
   /** Create the default empty parser, fresh as mountain air. */
   def apply():Scallop = apply(List())
+
 }
 
 /** The main builder class.

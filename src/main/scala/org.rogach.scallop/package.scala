@@ -34,10 +34,12 @@ object `package` {
   
   def listArgConverter[A](conv: String => A)(implicit m:Manifest[List[A]])  = new ValueConverter[List[A]] {
     def parse(s:List[List[String]]) = {
-      s.flatten.map(i => try { Right(Some(conv(i))) } catch { case _ => Left(Unit) }).partition(_.isLeft) match {
-        case (Nil, Nil) => Right(None)
-        case (Nil, res) => Right(Some(res.map(_.right.get.get)))
-        case _ => Left(Unit)
+      try {
+        val l = s.flatten.map(i => conv(i))
+        if (l.isEmpty) Right(None)
+        else Right(Some(l))
+      } catch { case _ =>
+        Left(Unit)
       }
     }
     val manifest = m

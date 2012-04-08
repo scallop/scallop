@@ -348,7 +348,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       .args((1 to 100).map(_.toString))
       .verify
     val end = System.currentTimeMillis
-    assert (end - start < 10, "Time bound broken: %d ms" format (end - start))
+    assert (end - start < 100, "Time bound broken: %d ms" format (end - start))
   }
   
   test ("custom converter example") {
