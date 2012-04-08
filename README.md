@@ -166,7 +166,7 @@ opts[Person]("person") should equal (Person("Pete", "123-45"))
 For more examples, you can look at Scallop's [test suite](https://github.com/Rogach/scallop/tree/master/src/test/scala)
 or consult the [API docs](http://rogach.github.com/scallop/#org.rogach.scallop.package).
 
-Also, I wrote a [blog post](http://rogach-scala.blogspot.com/2012/04/better-cli-option-parsing-in-scala.html) about Scallop.
+Also, I wrote a [blog post](http://rogach-scala.blogspot.com/2012/04/better-cli-option-parsing-in-scala.html) and [another one](http://rogach-scala.blogspot.com/2012/04/configuration-objects-in-scallop.html) about Scallop.
 
 Thanks
 ------
