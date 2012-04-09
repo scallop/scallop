@@ -78,6 +78,7 @@ val opts = Scallop(List("-d","--num-limbs","1"))
     "number of libms", required = true) // you can override the default short-option character
   .opt[List[Double]]("params") // default converters are provided for all primitives
                                //and for lists of primitives
+  .opt[String]("debug", hidden = true) // hidden parameters are not printed in help
   .props('D',"some key-value pairs")
   .args(List("-Dalpha=1","-D","betta=2","gamma=3", "Pigeon")) // you can add parameters a bit later
   .trailArg[String]("pet name") // you can specify what do you want to get from the end of 
@@ -96,6 +97,7 @@ intercept[WrongTypeRequest] {
 }
 
 println(opts.help) // returns options description
+
 println(opts.summary) // returns summary of parser status (with current arg values)
 ```
 

@@ -130,9 +130,9 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
     * @param arg The name for this ortion argument, as it will appear in help. Defaults to "arg".
     * @param conv The converter for this option. Usually found implicitly.
     */
-  def opt[A](name:String, short:Char = 0.toChar, descr:String = "", default:Option[A] = None, required:Boolean = false, arg:String = "arg")(implicit conv:ValueConverter[A]):Scallop = {
+  def opt[A](name:String, short:Char = 0.toChar, descr:String = "", default:Option[A] = None, required:Boolean = false, arg:String = "arg", hidden:Boolean = false)(implicit conv:ValueConverter[A]):Scallop = {
     val eShort = if (short == 0.toChar) None else Some(short)
-    this.copy(opts = opts :+ new OptDef(name, eShort, descr, conv, default, required, arg))
+    this.copy(opts = opts :+ new OptDef(name, eShort, descr, conv, default, required, arg, hidden))
   }
   /** Add new property option definition to this builder.
     * @param name Char, that will be used as prefix for property arguments.
@@ -140,8 +140,8 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
     * @param keyName Name for 'key' part of this option arg name, as it will appear in help option definition. Defaults to "key".
     * @param valueName Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to "value".
     */
-  def props(name:Char,descr:String = "", keyName:String = "key", valueName:String = "value"):Scallop = {
-    this.copy(propts = propts :+ new PropDef(name,descr,keyName, valueName))
+  def props(name:Char,descr:String = "", keyName:String = "key", valueName:String = "value", hidden:Boolean = false):Scallop = {
+    this.copy(propts = propts :+ new PropDef(name,descr,keyName, valueName, hidden))
   }
   /** Add new trailing argument definition to this builder.
     * @param name Name for new definition, used for identification.
@@ -166,7 +166,7 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
   def help:String = (opts ++ propts).sortBy(_._name.toLowerCase).map{ 
     case o:OptDef => o.help(getOptShortName(o))
     case o:PropDef => o.help(Some(o.char))
-  }.mkString("\n")
+  }.filter(_.size > 0).mkString("\n")
   /** Add some more arguments to this builder. They are appended to the end of the original list.
     * @param a arg list to add
     */
@@ -289,20 +289,22 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
   * @param _name Name for this arg.
   * @param _conv Converter for this arg, holding manifest as well.
   */
-abstract class ArgDef(val _name:String,_short:Option[Char], _descr:String, val _conv:ValueConverter[_]) {
+abstract class ArgDef(val _name:String,_short:Option[Char], _descr:String, val _conv:ValueConverter[_], val _hidden:Boolean) {
   /** The line, that would be printed as definition of this arg in help. */
   def argLine(sh:Option[Char]):String
   /** The full text of definition+description for this arg, as it will appear in options help. */
   def help(sh:Option[Char]):String = {
-    var text = List[String]("")
-    _descr.split(" ").foreach { w =>
-      if (text.last.size + 1 + w.size <= 76) {
-        text = text.init :+ (text.last + w + " ")
-      } else if (text.last.size + w.size <= 76) {
-        text = text.init :+ (text.last + w)
-      } else text :+= w
-    }
-    (argLine(sh) + "\n" + text.map("    " +).mkString("\n")).trim
+    if (!_hidden) {
+      var text = List[String]("")
+      _descr.split(" ").foreach { w =>
+        if (text.last.size + 1 + w.size <= 76) {
+          text = text.init :+ (text.last + w + " ")
+        } else if (text.last.size + w.size <= 76) {
+          text = text.init :+ (text.last + w)
+        } else text :+= w
+      }
+      (argLine(sh) + "\n" + text.map("    " +).mkString("\n")).trim
+    } else ""
   }
   
 }
@@ -315,7 +317,7 @@ abstract class ArgDef(val _name:String,_short:Option[Char], _descr:String, val _
   * @param required Is this option required? Defaults to false. 
   * @param arg The name for this option argument in help definition.
   */
-case class OptDef(name:String, short:Option[Char], descr:String, conv:ValueConverter[_], default:Option[Any], required:Boolean, arg:String) extends ArgDef(name, short, descr, conv) {
+case class OptDef(name:String, short:Option[Char], descr:String, conv:ValueConverter[_], default:Option[Any], required:Boolean, arg:String, hidden:Boolean) extends ArgDef(name, short, descr, conv, hidden) {
   def argLine(sh:Option[Char]):String = List[Option[String]](sh.map("-" +),Some("--" + name)).flatten.mkString(", ") + "  " + conv.argType.fn(arg)
 }
 /** Holder for property option definition.
@@ -324,7 +326,7 @@ case class OptDef(name:String, short:Option[Char], descr:String, conv:ValueConve
   * @param keyName Name for the 'key' part of option argument, as will be printed in help description.
   * @param valueName Name for the 'value' part of option argument, as will be printed in help description.
   */
-case class PropDef(char:Char, descr:String, keyName:String, valueName:String) extends ArgDef(char.toString, Some(char), descr, propsConverter) {
+case class PropDef(char:Char, descr:String, keyName:String, valueName:String, hidden:Boolean) extends ArgDef(char.toString, Some(char), descr, propsConverter, hidden) {
   def argLine(sh:Option[Char]) = "-%1$s%2$s=%3$s [%2$s=%3$s]..." format (char, keyName, valueName)
 }
 /** Holder for trail argument definition.

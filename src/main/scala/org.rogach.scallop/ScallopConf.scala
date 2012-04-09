@@ -21,11 +21,12 @@ abstract class ScallopConf(args:Seq[String]) {
              descr:String = "",
              default:Option[A] = None,
              required:Boolean = false,
-             arg:String = "arg")
+             arg:String = "arg",
+             hidden:Boolean = false)
             (implicit conv:ValueConverter[A])
             :ScallopOption[A] =
   {
-    builder = builder.opt(name, short, descr, default, required, arg)(conv)
+    builder = builder.opt(name, short, descr, default, required, arg, hidden)(conv)
     new ScallopOption[A]({verified_?; builder.get[A](name)(conv.manifest)})
   }              
 
@@ -39,10 +40,11 @@ abstract class ScallopConf(args:Seq[String]) {
   def props(name:Char,
             descr:String = "",
             keyName:String = "key",
-            valueName:String = "value")
+            valueName:String = "value",
+            hidden:Boolean = false)
            :(String => Option[String]) = 
   {
-    builder = builder.props(name, descr, keyName, valueName)
+    builder = builder.props(name, descr, keyName, valueName, hidden)
     (key:String) => {verified_?; builder.prop(name, key)}
   }
   
