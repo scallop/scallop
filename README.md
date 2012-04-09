@@ -1,9 +1,15 @@
 Scallop
 ========
-A simple CLI parsing library for Scala, written in spirit of Ruby's [Trollop](http://trollop.rubyforge.org/). Works on Scala 2.9.x.
+A simple command-line arguments parsing library for Scala, written in spirit of Ruby's [Trollop](http://trollop.rubyforge.org/). Works on Scala 2.9.x.
 
-Scallop supports POSIX-style long (--opt) and short (-a, -abc) options, and property args (-Dkey=value, -D key1=value key2=value), 
-extracting lists of argumets to option, and matching on trailing arguments.
+Scallop supports:
+
+* flag, single-value and multiple value options
+* POSIX-style short option names (-a) with grouping (-abc)
+* GNU-style long option names (--opt)
+* Property arguments (-Dkey=value, -D key1=value key2=value)
+* Non-string types of options (with extendable converters)
+* Powerful matching on trailing args
 
 It should be noted that the whole option builder is completely immutable (thus thread-safe), so you can reuse it, delegate
 argument construction to sub-modules, etc. 
