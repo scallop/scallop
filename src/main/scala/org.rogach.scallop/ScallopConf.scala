@@ -37,15 +37,16 @@ abstract class ScallopConf(args:Seq[String]) {
     * @param valueName Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to "value".
     * @return A holder for retreival of the values.
     */
-  def props(name:Char,
+  def props[A](name:Char,
             descr:String = "",
             keyName:String = "key",
             valueName:String = "value",
             hidden:Boolean = false)
-           :(String => Option[String]) = 
+            (implicit conv:ValueConverter[Map[String,A]])
+           :(String => Option[A]) = 
   {
-    builder = builder.props(name, descr, keyName, valueName, hidden)
-    (key:String) => {verified_?; builder.prop(name, key)}
+    builder = builder.props(name, descr, keyName, valueName, hidden)(conv)
+    (key:String) => {verified_?; builder.prop(name, key)(conv.manifest)}
   }
   
   /** Add new trailing argument definition to this config, and get a holder for it's value.
@@ -77,9 +78,9 @@ abstract class ScallopConf(args:Seq[String]) {
     * @param name Propety definition identifier.
     * @return All key-value pairs for this property in a map.
     */
-  def propMap(name:Char) = {
+  def propMap[A](name:Char)(implicit m:Manifest[Map[String,A]]) = {
     verified_?
-    builder.propMap(name)
+    builder.propMap(name)(m)
   }
 
   /** Get summary of current parser state.

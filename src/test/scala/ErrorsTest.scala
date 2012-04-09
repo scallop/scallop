@@ -12,6 +12,24 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
       opts.get[Double]("angels") should equal (Some(42))
     }
   }
+  
+  test ("wrong arg type for prop") {
+    val opts = Scallop(List("-Ekey1=1"))
+      .props[Int]('E')
+      .verify
+    intercept[WrongTypeRequest] {
+      opts.prop[Double]('E',"key1")
+    }
+  }
+  
+  test ("wrong arg type for propMap") {
+    val opts = Scallop(List("-Ekey1=1"))
+      .props[Int]('E')
+      .verify
+    intercept[WrongTypeRequest] {
+      opts.propMap[Double]('E')
+    }
+  }
 
   test("wrong arg type 2") {
     val opts = Scallop(List("--angels","42"))
@@ -81,8 +99,8 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   test ("props name clash") {
     intercept[IdenticalOptionNames] {
       val opts = Scallop()
-        .props('E')
-        .props('E')
+        .props[String]('E')
+        .props[String]('E')
         .verify
     }
   }
@@ -90,7 +108,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   test ("opts & props name clash") {
     intercept[IdenticalOptionNames] {
       val opts = Scallop()
-        .props('E')
+        .props[String]('E')
         .opt[Int]("eng", short = 'E')
         .verify
     }

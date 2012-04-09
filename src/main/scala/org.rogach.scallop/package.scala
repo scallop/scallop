@@ -53,11 +53,27 @@ object `package` {
   implicit val doubleListConverter = listArgConverter[Double](_.toDouble)
   implicit val stringListConverter = listArgConverter[String](a => a)
   
-  implicit val propsConverter = listArgConverter[(String,String)] { a =>
+  def propsConverter[A](conv:ValueConverter[A])(implicit m:Manifest[Map[String,A]]):ValueConverter[Map[String,A]] = new ValueConverter[Map[String,A]] {
     val rgx = """([^=]+)=(.*)""".r
-    a match {
-      case rgx(key,value) => (key,value)
+    def parse(s:List[List[String]]) = {
+      try {
+        Right(Some(s.flatten.map {
+          case rgx(key,value) => (key, conv.parse(List(List(value))).right.get.get)
+        }.toMap))
+      } catch { case _ =>
+        Left(Unit)
+      }
     }
-  }.map(_.toMap)
-
+    val manifest = m
+    val argType = ArgType.LIST
+  }
+  implicit val bytePropsConverter = propsConverter[Byte](byteConverter)
+  implicit val shortPropsConverter = propsConverter[Short](shortConverter)
+  implicit val intPropsConverter = propsConverter[Int](intConverter)
+  implicit val longPropsConverter = propsConverter[Long](longConverter)
+  implicit val floatPropsConverter = propsConverter[Float](floatConverter)
+  implicit val doublePropsConverter = propsConverter[Double](doubleConverter)
+  implicit val charPropsConverter = propsConverter[Char](charConverter)
+  implicit val stringPropsConverter = propsConverter[String](stringConverter)
+  
 }

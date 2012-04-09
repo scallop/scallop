@@ -140,8 +140,8 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
     * @param keyName Name for 'key' part of this option arg name, as it will appear in help option definition. Defaults to "key".
     * @param valueName Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to "value".
     */
-  def props(name:Char,descr:String = "", keyName:String = "key", valueName:String = "value", hidden:Boolean = false):Scallop = {
-    this.copy(propts = propts :+ new PropDef(name,descr,keyName, valueName, hidden))
+  def props[A](name:Char,descr:String = "", keyName:String = "key", valueName:String = "value", hidden:Boolean = false)(implicit conv:ValueConverter[Map[String,A]]):Scallop = {
+    this.copy(propts = propts :+ new PropDef(name, descr, conv, keyName, valueName, hidden))
   }
   /** Add new trailing argument definition to this builder.
     * @param name Name for new definition, used for identification.
@@ -215,25 +215,35 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
     * @param key Name of the property to retreive.
     * @return Some(value) if property is found, None otherwise.
     */
-  def prop(name:Char, key:String):Option[String] = {
-    pargs.filter(_._1 == Some(name.toString)).flatMap { p =>
-      val rgx = """([^=]+)=(.*)""".r
-      p._3.collect {
-        case rgx(key, value) => (key, value)
+  def prop[A](name:Char, key:String)(implicit m:Manifest[Map[String,A]]):Option[A] = {
+    propts.find(_.char == name).map { popt =>
+      if (!(popt.conv.manifest <:< m)) {
+        throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, popt.conv.manifest))
       }
-    }.find(_._1 == key).map(_._2)
+      popt.conv.parse(pargs.filter(_._1 == Some(name.toString)).map(_._3)).right.get.get.asInstanceOf[Map[String,A]].get(key)
+    }.getOrElse(None)
+
+
   }
   /** Get all data for propety as Map.
     * @param name Propety definition identifier.
     * @return All key-value pairs for this property in a map.
     */
-  def propMap(name:Char):Map[String,String] = {
-    pargs.filter(_._1 == Some(name.toString)).flatMap { p =>
-      val rgx = """([^=]+)=(.*)""".r
-      p._3.collect {
-        case rgx(key, value) => (key, value)
+  def propMap[A](name:Char)(implicit m:Manifest[Map[String,A]]):Map[String,A] = {
+    propts.find(_.char == name).map { popt =>
+      if (!(popt.conv.manifest <:< m)) {
+        throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, popt.conv.manifest))
       }
-    }.toMap
+      popt.conv.parse(pargs.filter(_._1 == Some(name.toString)).map(_._3)).right.get.get.asInstanceOf[Map[String,A]]
+    }.getOrElse(Map())
+  }
+  /** Get all data for property as Map[String, String].
+    * This method is needed for summary generation - I do not know the exact types at that time.
+    */
+  private def propStringMap(name:Char):Map[String,String] = {
+    propts.find(_.char == name).map { popt =>
+      popt.conv.parse(pargs.filter(_._1 == Some(name.toString)).map(_._3)).right.get.get.asInstanceOf[Map[String,String]]
+    }.getOrElse(Map())
   }
 
   /** Determine the short name for the option (if available). */
@@ -289,7 +299,7 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
   def summary:String = {
     ("Scallop(%s)" format args.mkString(", ")) + "\n" +
     opts.map(o => "  %s => %s" format (o.name, get(o.name)(o.conv.manifest).getOrElse("$None$"))).mkString("\n") + "\n" +
-    propts.map(p => "  props %s => %s" format (p.char, propMap(p.char))).mkString("\n") + "\n" + 
+    propts.map(p => "  props %s => %s" format (p.char, propStringMap(p.char))).mkString("\n") + "\n" + 
     trail.map(t => "  %s => %s" format (t.name, get(t.name)(t.conv.manifest).getOrElse("$None$"))).mkString("\n")
   }
 }
@@ -335,7 +345,7 @@ case class OptDef(name:String, short:Option[Char], descr:String, conv:ValueConve
   * @param keyName Name for the 'key' part of option argument, as will be printed in help description.
   * @param valueName Name for the 'value' part of option argument, as will be printed in help description.
   */
-case class PropDef(char:Char, descr:String, keyName:String, valueName:String, hidden:Boolean) extends ArgDef(char.toString, Some(char), descr, propsConverter, hidden) {
+case class PropDef(char:Char, descr:String, conv:ValueConverter[_], keyName:String, valueName:String, hidden:Boolean) extends ArgDef(char.toString, Some(char), descr, conv, hidden) {
   def argLine(sh:Option[Char]) = "-%1$s%2$s=%3$s [%2$s=%3$s]..." format (char, keyName, valueName)
 }
 /** Holder for trail argument definition.

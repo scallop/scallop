@@ -8,7 +8,7 @@ Scallop supports:
 * POSIX-style short option names (-a) with grouping (-abc)
 * GNU-style long option names (--opt)
 * Property arguments (-Dkey=value, -D key1=value key2=value)
-* Non-string types of options (with extendable converters)
+* Non-string types of options and properties values (with extendable converters)
 * Powerful matching on trailing args
 
 It should be noted that the whole option builder is completely immutable (thus thread-safe), so you can reuse it, delegate
@@ -22,7 +22,7 @@ Add following to your build.sbt:
 ```scala
 resolvers += "Rogach's maven repo" at "https://github.com/Rogach/org.rogach/raw/master/"
 
-libraryDependencies += "org.rogach" %% "scallop" % "0.3.2"
+libraryDependencies += "org.rogach" %% "scallop" % "0.3.3"
 ```
 
 Examples
@@ -34,13 +34,15 @@ Using the Conf class
 Advantages of using ScallopConf include complete type-safety (thus less explicit types) and ability to pass the resulting object into other functions.
 
 ```scala
+import org.rogach.scallop._;
+
 object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
   // all options that are applicable to builder (like description, default, etc) 
   // are applicable here as well
   val count = opt[Int]("count", descr = "count the trees", required = true)
                 .map(1+) // also here work all standard Option methods -
                          // evaluation is deferred to after option construcnion
-  val properties = props('E')
+  val properties = props[String]('E')
   val size = trailArg[Double](required = false)
   verify
 }
@@ -80,7 +82,7 @@ val opts = Scallop(List("-d","--num-limbs","1"))
   .opt[List[Double]]("params") // default converters are provided for all primitives
                                //and for lists of primitives
   .opt[String]("debug", hidden = true) // hidden parameters are not printed in help
-  .props('D',"some key-value pairs")
+  .props[String]('D',"some key-value pairs") // yes, property args can have types on their values too
   .args(List("-Dalpha=1","-D","betta=2","gamma=3", "Pigeon")) // you can add parameters a bit later
   .trailArg[String]("pet name") // you can specify what do you want to get from the end of 
                                 // args list
@@ -89,8 +91,8 @@ val opts = Scallop(List("-d","--num-limbs","1"))
 opts.get[Boolean]("donkey") should equal (Some(true))
 opts[Int]("monkeys") should equal (2)
 opts[Int]("num-limbs") should equal (1)
-opts.prop('D',"alpha") should equal (Some("1"))
-opts.prop('E',"gamma") should equal (None)
+opts.prop[String]('D',"alpha") should equal (Some("1"))
+opts.prop[String]('E',"gamma") should equal (None)
 opts[String]("pet name") should equal ("Pigeon")
 intercept[WrongTypeRequest] {
   opts[Double]("monkeys") // this will throw an exception at runtime

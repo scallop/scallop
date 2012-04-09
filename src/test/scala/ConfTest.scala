@@ -12,7 +12,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
       val count = opt[Int]("count", descr = "count the trees", required = true)
                     .map(1+) // also here work all standard Option methods -
                              // evaluation is deferred to after option construcnion
-      val properties = props('E')
+      val properties = props[String]('E')
       val size = trailArg[Double](required = false)
       verify
     }
@@ -37,12 +37,12 @@ class ConfTest extends FunSuite with ShouldMatchers {
   
   test ("prorerty args") {
     object Conf extends ScallopConf(List("-Dkey1=value1", "key2=value2")) {
-      val properties = props('D')
+      val properties = props[String]('D')
       verify
     }
     Conf.properties("key1") should equal (Some("value1"))
     Conf.properties("key2") should equal (Some("value2"))
-    Conf.propMap('D') should equal (Map("key1" -> "value1", "key2" -> "value2"))
+    Conf.propMap[String]('D') should equal (Map("key1" -> "value1", "key2" -> "value2"))
   }
   
   test ("trailing args") {

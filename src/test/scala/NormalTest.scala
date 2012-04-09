@@ -23,7 +23,7 @@ val opts = Scallop(List("-d","--num-limbs","1"))
   .opt[List[Double]]("params") // default converters are provided for all primitives
                                //and for lists of primitives
   .opt[String]("debug", hidden = true) // hidden parameters are not printed in help
-  .props('D',"some key-value pairs")
+  .props[String]('D',"some key-value pairs") // yes, property args can have types on their values too
   .args(List("-Dalpha=1","-D","betta=2","gamma=3", "Pigeon")) // you can add parameters a bit later
   .trailArg[String]("pet name") // you can specify what do you want to get from the end of 
                                 // args list
@@ -32,8 +32,8 @@ val opts = Scallop(List("-d","--num-limbs","1"))
 opts.get[Boolean]("donkey") should equal (Some(true))
 opts[Int]("monkeys") should equal (2)
 opts[Int]("num-limbs") should equal (1)
-opts.prop('D',"alpha") should equal (Some("1"))
-opts.prop('E',"gamma") should equal (None)
+opts.prop[String]('D',"alpha") should equal (Some("1"))
+opts.prop[String]('E',"gamma") should equal (None)
 opts[String]("pet name") should equal ("Pigeon")
 intercept[WrongTypeRequest] {
   opts[Double]("monkeys") // this will throw an exception at runtime
@@ -177,44 +177,69 @@ opts.printHelp
   
   test ("no value") {
     val opts = Scallop()
-      .props('D')
+      .props[String]('D')
       .verify
-    opts.prop('D',"aoeu") should equal (None)
+    opts.prop[String]('D',"aoeu") should equal (None)
   }
 
   test ("simle value") {
     val opts = Scallop(List("-Daoeu=htns"))
-      .props('D')
+      .props[String]('D')
       .verify
-    opts.prop('D',"aoeu") should equal (Some("htns"))
+    opts.prop[String]('D',"aoeu") should equal (Some("htns"))
   }
 
   test ("one plain prop") {
     val opts = Scallop(List("-D","aoeu=htns"))
-      .props('D')
+      .props[String]('D')
       .verify
-    opts.prop('D',"aoeu") should equal (Some("htns"))
+    opts.prop[String]('D',"aoeu") should equal (Some("htns"))
   }
 
   test ("two plain props") {
     val opts = Scallop(List("-D", "aoeu=htns", "qjk=gcr"))
-      .props('D')
+      .props[String]('D')
       .verify
-    opts.prop('D',"aoeu") should equal (Some("htns"))
-    opts.prop('D',"qjk") should equal (Some("gcr"))
+    opts.prop[String]('D',"aoeu") should equal (Some("htns"))
+    opts.prop[String]('D',"qjk") should equal (Some("gcr"))
   }
   
   test ("two plain props to a map") {
     val opts = Scallop(List("-D", "aoeu=htns", "qjk=gcr"))
-      .props('D')
+      .props[String]('D')
       .verify
-    opts.propMap('D') should equal (Map("aoeu" -> "htns", "qjk" -> "gcr"))
+    opts.propMap[String]('D') should equal (Map("aoeu" -> "htns", "qjk" -> "gcr"))
   }
-
+  
+  test ("empty prop") {
+    val opts = Scallop(Nil)
+      .props[String]('E')
+      .verify
+    opts.prop[String]('E',"nokey") should equal (None)
+  }
+  
+  // --- typed props ---
+  
+  test ("typed int prop") {
+    val opts = Scallop(List("-Ekey1=1","key2=2"))
+      .props[Int]('E')
+      .verify
+    opts.prop[Int]('E',"key1") should equal (Some(1))
+    opts.prop[Int]('E',"key2") should equal (Some(2))
+    opts.propMap[Int]('E') should equal (Map("key1" -> 1, "key2" -> 2))
+  }
+  
+  test ("typed double prop") {
+    val opts = Scallop(List("-Ekey1=1.1","key2=2.3"))
+      .props[Double]('E')
+      .verify
+    opts.prop[Double]('E',"key1") should equal (Some(1.1))
+    opts.prop[Double]('E',"key2") should equal (Some(2.3))
+  }
   
   test ("opt implicit name clash with prop name") {
     val opts = Scallop(List("-D", "aoeu=htn"))
-      .props('D')
+      .props[String]('D')
       .opt[String]("Dark")
       .verify
     opts.get[String]("Dark") should equal (None)
@@ -252,19 +277,19 @@ opts.printHelp
 
   test ("trail options - after single property argument") {
     val opts = Scallop(List("-E", "key=value", "rabbit"))
-      .props('E')
+      .props[String]('E')
       .trailArg[String]("animal")
       .verify
-    opts.prop('E',"key") should equal ((Some("value")))
+    opts.prop[String]('E',"key") should equal ((Some("value")))
     opts[String]("animal") should equal ("rabbit")
   }
 
   test ("trail options - after single property argument (2)") {
     val opts = Scallop(List("-E", "key=value", "rabbit", "key2=value2"))
-      .props('E')
+      .props[String]('E')
       .trailArg[List[String]]("rubbish")
       .verify
-    opts.prop('E',"key") should equal ((Some("value")))
+    opts.prop[String]('E',"key") should equal ((Some("value")))
     opts[List[String]]("rubbish") should equal (List("rabbit", "key2=value2"))
   }
   
@@ -325,13 +350,13 @@ opts.printHelp
   test ("trail options - tricky case") {
     val opts = Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3", 
                             "first", "1","2","3","second","4","5","6"))
-      .props('E')
+      .props[String]('E')
       .trailArg[String]("first list name")
       .trailArg[List[Int]]("first list values")
       .trailArg[String]("second list name")
       .trailArg[List[Double]]("second list values")
       .verify
-    opts.propMap('E') should equal ((1 to 3).map(i => ("key"+i,"value"+i)).toMap)
+    opts.propMap[String]('E') should equal ((1 to 3).map(i => ("key"+i,"value"+i)).toMap)
     opts[String]("first list name") should equal ("first")
     opts[String]("second list name") should equal ("second")
     opts[List[Int]]("first list values") should equal (List(1,2,3))
@@ -341,7 +366,7 @@ opts.printHelp
   test ("trail options - load-test") {
     val start = System.currentTimeMillis
     val opts = Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3"))
-      .props('E')
+      .props[String]('E')
       .trailArg[String]("first list name")
       .trailArg[List[Int]]("first list values")
       .trailArg[String]("second list name")
