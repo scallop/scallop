@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">OptDef</span>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Char" class="extype">Char</span>]</span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="arg">arg: String</span>)</span><span class="result"> extends <a name="org.rogach.scallop.ArgDef" class="extype" href="ArgDef.html">ArgDef</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Char" class="extype">Char</span>]</span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="arg">arg: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result"> extends <a name="org.rogach.scallop.ArgDef" class="extype" href="ArgDef.html">ArgDef</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -64,7 +64,7 @@
       <span class="symbol"> 
         <span class="name">OptDef</span>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Char" class="extype">Char</span>]</span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="arg">arg: String</span>)</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Char" class="extype">Char</span>]</span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="arg">arg: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for this option, used for identification.</p></dd><dt class="param">short</dt><dd class="cmt"><p>Character for short name of this option, defaults to first character of option's name.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, used in help printing.</p></dd><dt class="param">conv</dt><dd class="cmt"><p>Converter for this options arguments.</p></dd><dt class="param">default</dt><dd class="cmt"><p>Default value for this option. Defaults to None.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this option required? Defaults to false.</p></dd><dt class="param">arg</dt><dd class="cmt"><p>The name for this option argument in help definition.
@@ -141,6 +141,17 @@
         <span class="name">_conv</span>
         
         <span class="result">: org.rogach.scallop.ValueConverter[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ArgDef" class="extype" href="ArgDef.html">ArgDef</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ArgDef#_hidden" data-isabs="false">
+      <a id="_hidden:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">_hidden</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ArgDef" class="extype" href="ArgDef.html">ArgDef</a></dd></dl></div>
@@ -315,6 +326,17 @@
       </span>
       </h4>
       <p class="shortcomment cmt">The full text of definition+description for this arg, as it will appear in options help.</p><div class="fullcomment"><div class="comment cmt"><p>The full text of definition+description for this arg, as it will appear in options help.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ArgDef" class="extype" href="ArgDef.html">ArgDef</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.OptDef#hidden" data-isabs="false">
+      <a id="hidden:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">hidden</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">

@@ -65,7 +65,7 @@
       <span class="symbol"> 
         <a href="OptDef.html"><span class="name">OptDef</span></a>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="short">short: Option[Char]</span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: Option[Any]</span>, <span name="required">required: Boolean</span>, <span name="arg">arg: String</span>)</span><span class="result"> extends ArgDef with Product with Serializable</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="short">short: Option[Char]</span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: Option[Any]</span>, <span name="required">required: Boolean</span>, <span name="arg">arg: String</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends ArgDef with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Holder for option definition.</p>
@@ -76,7 +76,7 @@
       <span class="symbol"> 
         <a href="PropDef.html"><span class="name">PropDef</span></a>
         
-        <span class="params">(<span name="char">char: Char</span>, <span name="descr">descr: String</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>)</span><span class="result"> extends ArgDef with Product with Serializable</span>
+        <span class="params">(<span name="char">char: Char</span>, <span name="descr">descr: String</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends ArgDef with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Holder for property option definition.</p>
@@ -87,7 +87,7 @@
       <span class="symbol"> 
         <a href="Scallop.html"><span class="name">Scallop</span></a>
         
-        <span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[OptDef]</span>, <span name="propts">propts: List[PropDef]</span>, <span name="trail">trail: List[TrailDef]</span>, <span name="vers">vers: Option[String]</span>, <span name="bann">bann: Option[String]</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[OptDef]</span>, <span name="propts">propts: List[PropDef]</span>, <span name="trail">trail: List[TrailDef]</span>, <span name="vers">vers: Option[String]</span>, <span name="bann">bann: Option[String]</span>, <span name="foot">foot: Option[String]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">The main builder class.</p>
