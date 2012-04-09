@@ -8,7 +8,7 @@ object Scallop {
   /** Create the new parser with some arguments already inserted.
     * @param args Args to pre-insert.
     */
-  def apply(args:Seq[String]):Scallop = new Scallop(args,Nil,Nil,Nil,None,None)
+  def apply(args:Seq[String]):Scallop = new Scallop(args,Nil,Nil,Nil,None,None,None)
   /** Create the default empty parser, fresh as mountain air. */
   def apply():Scallop = apply(List())
 
@@ -22,7 +22,7 @@ object Scallop {
   * @param vers Version string to display in help.
   * @param banner Banner (summary of this program and command-line usage) to display in help.
   */
-case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], trail:List[TrailDef], vers:Option[String], bann:Option[String]) {
+case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], trail:List[TrailDef], vers:Option[String], bann:Option[String], foot:Option[String]) {
   /** Options and trailing arguments. */
   private lazy val (pargs,rest) = parseWithRest(args)
   
@@ -160,6 +160,10 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
     * @param b Banner string, can contain multiple lines. Note this is not formatted to 80 characters!
     */
   def banner(b:String) = this.copy(bann = Some(b))
+  /** Add footer string to this builder. Footer will be printed in help after option definitions.
+    * @param f Footer string, can contain multiple lines. Note this is not formatted to 80 characters!
+    */
+  def footer(f:String) = this.copy(foot = Some(f))
   /** Get help on options from this builder. The resulting help is carefully formatted at 80 columns,
       and contains info on proporties and options. It does not contain info about trailing arguments.
     */
@@ -167,6 +171,13 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
     case o:OptDef => o.help(getOptShortName(o))
     case o:PropDef => o.help(Some(o.char))
   }.filter(_.size > 0).mkString("\n")
+  /** Print help message (with version, banner, option usage and footer) to stdout. */
+  def printHelp = {
+    vers.foreach(println)
+    bann.foreach(println)
+    println(help)
+    foot.foreach(println)
+  }
   /** Add some more arguments to this builder. They are appended to the end of the original list.
     * @param a arg list to add
     */
@@ -248,9 +259,7 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
     .foreach(a => throw new IdenticalOptionNames("Short option name '%s' is not unique" format a._1))
     
     if (pargs.find(_._2 == Some("help")).isDefined) {
-      vers.foreach(println)
-      bann.foreach(println)
-      println(help)
+      printHelp
       sys.exit(0)
     }
     if (vers.isDefined && pargs.find(_._2 == Some("version")).isDefined) {

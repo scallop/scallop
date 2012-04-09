@@ -90,4 +90,19 @@ abstract class ScallopConf(args:Seq[String]) {
     builder.summary
   }
   
+  /** Add a version string to option builder.
+    * @param v Version string.
+    */
+  def version(v:String) {builder = builder.version(v)}
+  
+  /** Add a banner string to option builder.
+    * @param b Banner string.
+    */
+  def banner(b:String) {builder = builder.banner(b)}
+  
+  /** Add a footer string to this builder.
+    * @param f footer string.
+    */
+  def footer(f:String) {builder = builder.footer(f)}
+  
 }

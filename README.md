@@ -64,13 +64,14 @@ Using the builder is more flexible choice, since you can pass the builder around
 import org.rogach.scallop._;
 
 val opts = Scallop(List("-d","--num-limbs","1"))
-  .version("test 1.2.3 (c) 2012 Mr S") // --version option is provided for you
+  .version("test 1.2.3 (c) 2012 Mr Placeholder") // --version option is provided for you
                                        // in "verify" stage it would print this message and exit
   .banner("""Usage: test [OPTION]... [pet-name]
             |test is an awesome program, which does something funny      
             |Options:
-            |""".stripMargin) // --help is also provided
-                              //  will also exit after printing version, banner, and options usage
+            |""".stripMargin) // --help is provided, will also exit after printing version,
+                              // banner, options usage, and footer
+  .footer("\nFor all other tricks, consult the documentation!")
   .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
   .opt("monkeys", default = Some(2), short = 'm') // you can add the default option
                                                   // the type will be inferred
@@ -105,7 +106,7 @@ If you will run this option setup with "--help" option, you would see:
 
 ```
 test 1.2.3 (c) 2012 Mr Placeholder
-Usage: test [OPTION]...
+Usage: test [OPTION]... [pet-name]
 test is an awesome program, which does something funny      
 Options:
 
@@ -117,6 +118,8 @@ Options:
 -k, --num-limbs  <arg>
     number of libms
 -p, --params  <arg>...
+
+For all other tricks, consult the documentation!
 ```
 
 Misc
