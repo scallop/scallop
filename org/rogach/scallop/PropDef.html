@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">PropDef</span>
         
-        <span class="params">(<span name="char">char: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result"> extends <a name="org.rogach.scallop.ArgDef" class="extype" href="ArgDef.html">ArgDef</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="char">char: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result"> extends <a name="org.rogach.scallop.ArgDef" class="extype" href="ArgDef.html">ArgDef</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -64,7 +64,7 @@
       <span class="symbol"> 
         <span class="name">PropDef</span>
         
-        <span class="params">(<span name="char">char: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
+        <span class="params">(<span name="char">char: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">char</dt><dd class="cmt"><p>The char that is used as prefix for property options, and for identification.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, used in help printing.</p></dd><dt class="param">keyName</dt><dd class="cmt"><p>Name for the 'key' part of option argument, as will be printed in help description.</p></dd><dt class="param">valueName</dt><dd class="cmt"><p>Name for the 'value' part of option argument, as will be printed in help description.
@@ -224,6 +224,17 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropDef#conv" data-isabs="false">
+      <a id="conv:org.rogach.scallop.ValueConverter[_]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">conv</span>
+        
+        <span class="result">: org.rogach.scallop.ValueConverter[_]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.rogach.scallop.PropDef#descr" data-isabs="false">
       <a id="descr:String"></a>
       <h4 class="signature">

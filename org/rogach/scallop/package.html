@@ -76,7 +76,7 @@
       <span class="symbol"> 
         <a href="PropDef.html"><span class="name">PropDef</span></a>
         
-        <span class="params">(<span name="char">char: Char</span>, <span name="descr">descr: String</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends ArgDef with Product with Serializable</span>
+        <span class="params">(<span name="char">char: Char</span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends ArgDef with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Holder for property option definition.</p>
@@ -186,6 +186,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.package#bytePropsConverter" data-isabs="false">
+      <a id="bytePropsConverter:ValueConverter[Map[String, Byte]]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit val</span>
+      <span class="symbol"> 
+        <span class="name">bytePropsConverter</span>
+        
+        <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, <span name="scala.Byte" class="extype">Byte</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.package#charConverter" data-isabs="false">
       <a id="charConverter:ValueConverter[Char]"></a>
       <h4 class="signature">
@@ -194,6 +205,17 @@
         <span class="name">charConverter</span>
         
         <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[<span name="scala.Char" class="extype">Char</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.package#charPropsConverter" data-isabs="false">
+      <a id="charPropsConverter:ValueConverter[Map[String, Char]]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit val</span>
+      <span class="symbol"> 
+        <span class="name">charPropsConverter</span>
+        
+        <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, <span name="scala.Char" class="extype">Char</span>]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
@@ -216,6 +238,17 @@
         <span class="name">doubleListConverter</span>
         
         <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[List[<span name="scala.Double" class="extype">Double</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.package#doublePropsConverter" data-isabs="false">
+      <a id="doublePropsConverter:ValueConverter[Map[String, Double]]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit val</span>
+      <span class="symbol"> 
+        <span class="name">doublePropsConverter</span>
+        
+        <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, <span name="scala.Double" class="extype">Double</span>]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
@@ -263,6 +296,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.package#floatPropsConverter" data-isabs="false">
+      <a id="floatPropsConverter:ValueConverter[Map[String, Float]]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit val</span>
+      <span class="symbol"> 
+        <span class="name">floatPropsConverter</span>
+        
+        <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, <span name="scala.Float" class="extype">Float</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.package#intConverter" data-isabs="false">
       <a id="intConverter:ValueConverter[Int]"></a>
       <h4 class="signature">
@@ -282,6 +326,17 @@
         <span class="name">intListConverter</span>
         
         <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[List[<span name="scala.Int" class="extype">Int</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.package#intPropsConverter" data-isabs="false">
+      <a id="intPropsConverter:ValueConverter[Map[String, Int]]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit val</span>
+      <span class="symbol"> 
+        <span class="name">intPropsConverter</span>
+        
+        <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, <span name="scala.Int" class="extype">Int</span>]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
@@ -318,17 +373,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.package#propsConverter" data-isabs="false">
-      <a id="propsConverter:ValueConverter[Map[String, String]]"></a>
+    </li><li visbl="pub" name="org.rogach.scallop.package#longPropsConverter" data-isabs="false">
+      <a id="longPropsConverter:ValueConverter[Map[String, Long]]"></a>
       <h4 class="signature">
       <span class="kind">implicit val</span>
       <span class="symbol"> 
-        <span class="name">propsConverter</span>
+        <span class="name">longPropsConverter</span>
         
-        <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[<span name="scala.collection.immutable.Map" class="extype">Map</span>[String, String]]</span>
+        <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, <span name="scala.Long" class="extype">Long</span>]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.package#propsConverter" data-isabs="false">
+      <a id="propsConverter[A](ValueConverter[A])(Manifest[Map[String, A]]):ValueConverter[Map[String, A]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">propsConverter</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: Manifest[Map[String, A]]</span>)</span><span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, A]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.package#shortConverter" data-isabs="false">
       <a id="shortConverter:ValueConverter[Short]"></a>
       <h4 class="signature">
@@ -348,6 +414,17 @@
         <span class="name">shortListConverter</span>
         
         <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[List[<span name="scala.Short" class="extype">Short</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.package#shortPropsConverter" data-isabs="false">
+      <a id="shortPropsConverter:ValueConverter[Map[String, Short]]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit val</span>
+      <span class="symbol"> 
+        <span class="name">shortPropsConverter</span>
+        
+        <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, <span name="scala.Short" class="extype">Short</span>]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
@@ -381,6 +458,17 @@
         <span class="name">stringListConverter</span>
         
         <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[List[String]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.package#stringPropsConverter" data-isabs="false">
+      <a id="stringPropsConverter:ValueConverter[Map[String, String]]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit val</span>
+      <span class="symbol"> 
+        <span class="name">stringPropsConverter</span>
+        
+        <span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, String]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.package" class="extype" href="package$.html">package</a></dd></dl></div>

@@ -306,25 +306,25 @@
       <p class="shortcomment cmt">Add a new option definition to this config and get a holder for the value.</p><div class="fullcomment"><div class="comment cmt"><p>Add a new option definition to this config and get a holder for the value.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new option, used as long option name in parsing, and for option identification.</p></dd><dt class="param">short</dt><dd class="cmt"><p>Overload the char that will be used as short option name. Defaults to first character of the name.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, for help description.</p></dd><dt class="param">default</dt><dd class="cmt"><p>Default value to use if option is not found in input arguments (if you provide this, you can omit the type on method).</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this option required? Defaults to false.</p></dd><dt class="param">arg</dt><dd class="cmt"><p>The name for this ortion argument, as it will appear in help. Defaults to &quot;arg&quot;.</p></dd><dt class="param">conv</dt><dd class="cmt"><p>The converter for this option. Usually found implicitly.</p></dd><dt>returns</dt><dd class="cmt"><p>A holder for parsed value
 </p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#propMap" data-isabs="false">
-      <a id="propMap(Char):Map[String, String]"></a>
+      <a id="propMap[A](Char)(Manifest[Map[String, A]]):Map[String, A]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">propMap</span>
-        
-        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>)</span><span class="result">: Map[String, String]</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: Manifest[Map[String, A]]</span>)</span><span class="result">: Map[String, A]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Get all data for propety as Map.</p><div class="fullcomment"><div class="comment cmt"><p>Get all data for propety as Map.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Propety definition identifier.</p></dd><dt>returns</dt><dd class="cmt"><p>All key-value pairs for this property in a map.
 </p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#props" data-isabs="false">
-      <a id="props(Char,String,String,String,Boolean):(String) ⇒ Option[String]"></a>
+      <a id="props[A](Char,String,String,String,Boolean)(ValueConverter[Map[String, A]]):(String) ⇒ Option[A]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">props</span>
-        
-        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String = <span class="symbol">&quot;&quot;</span></span>, <span name="keyName">keyName: String = <span class="symbol">&quot;key&quot;</span></span>, <span name="valueName">valueName: String = <span class="symbol">&quot;value&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: (String) ⇒ <span name="scala.Option" class="extype">Option</span>[String]</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String = <span class="symbol">&quot;&quot;</span></span>, <span name="keyName">keyName: String = <span class="symbol">&quot;key&quot;</span></span>, <span name="valueName">valueName: String = <span class="symbol">&quot;value&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, A]]</span>)</span><span class="result">: (String) ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add new property option definition to this config object, and get a handle for option retreiving.</p><div class="fullcomment"><div class="comment cmt"><p>Add new property option definition to this config object, and get a handle for option retreiving.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Char, that will be used as prefix for property arguments.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this property option, for help description.</p></dd><dt class="param">keyName</dt><dd class="cmt"><p>Name for 'key' part of this option arg name, as it will appear in help option definition. Defaults to &quot;key&quot;.</p></dd><dt class="param">valueName</dt><dd class="cmt"><p>Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to &quot;value&quot;.</p></dd><dt>returns</dt><dd class="cmt"><p>A holder for retreival of the values.

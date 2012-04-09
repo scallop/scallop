@@ -467,37 +467,37 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a> → Product</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#prop" data-isabs="false">
-      <a id="prop(Char,String):Option[String]"></a>
+      <a id="prop[A](Char,String)(Manifest[Map[String, A]]):Option[A]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">prop</span>
-        
-        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>, <span name="key">key: String</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[String]</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>, <span name="key">key: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[Map[String, A]]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[A]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Get the value of some prorerty</p><div class="fullcomment"><div class="comment cmt"><p>Get the value of some prorerty</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Property definition identifier.</p></dd><dt class="param">key</dt><dd class="cmt"><p>Name of the property to retreive.</p></dd><dt>returns</dt><dd class="cmt"><p>Some(value) if property is found, None otherwise.
 </p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#propMap" data-isabs="false">
-      <a id="propMap(Char):Map[String, String]"></a>
+      <a id="propMap[A](Char)(Manifest[Map[String, A]]):Map[String, A]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">propMap</span>
-        
-        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>)</span><span class="result">: Map[String, String]</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[Map[String, A]]</span>)</span><span class="result">: Map[String, A]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Get all data for propety as Map.</p><div class="fullcomment"><div class="comment cmt"><p>Get all data for propety as Map.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Propety definition identifier.</p></dd><dt>returns</dt><dd class="cmt"><p>All key-value pairs for this property in a map.
 </p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#props" data-isabs="false">
-      <a id="props(Char,String,String,String,Boolean):Scallop"></a>
+      <a id="props[A](Char,String,String,String,Boolean)(ValueConverter[Map[String, A]]):Scallop"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">props</span>
-        
-        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String = <span class="symbol">&quot;&quot;</span></span>, <span name="keyName">keyName: String = <span class="symbol">&quot;key&quot;</span></span>, <span name="valueName">valueName: String = <span class="symbol">&quot;value&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String = <span class="symbol">&quot;&quot;</span></span>, <span name="keyName">keyName: String = <span class="symbol">&quot;key&quot;</span></span>, <span name="valueName">valueName: String = <span class="symbol">&quot;value&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, A]]</span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add new property option definition to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add new property option definition to this builder.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Char, that will be used as prefix for property arguments.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this property option, for help description.</p></dd><dt class="param">keyName</dt><dd class="cmt"><p>Name for 'key' part of this option arg name, as it will appear in help option definition. Defaults to &quot;key&quot;.</p></dd><dt class="param">valueName</dt><dd class="cmt"><p>Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to &quot;value&quot;.
