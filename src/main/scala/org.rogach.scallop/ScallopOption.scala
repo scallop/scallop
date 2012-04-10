@@ -51,6 +51,11 @@ class ScallopOption[A](fn: => Option[A]) { opt =>
   def orElse[B >: A](alternative: =>Option[B]) =
     new ScallopOption(opt.get.orElse(alternative))
     
+  /** A convenience method to check whether the underlying option
+    * is defined. Just an alias for opt.get.isDefined.
+    */
+  def isDefined = get.isDefined
+    
   override def toString = opt.get match {
     case Some(x) => "ScallopSome(%s)" format x
     case None => "ScallopNone"

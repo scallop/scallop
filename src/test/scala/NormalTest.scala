@@ -347,6 +347,20 @@ opts.printHelp
     opts.get[String]("surname") should equal (None)
   }
   
+  test ("trail option - with default value, provided") {
+    val opts = Scallop(List("first"))
+      .trailArg[String]("name", required = false, default = Some("aoeu"))
+      .verify
+    opts[String]("name") should equal ("first")
+  }
+  
+  test ("trail option - with default value, not provided") {
+    val opts = Scallop(Nil)
+      .trailArg[String]("name", required = false, default = Some("aoeu"))
+      .verify
+    opts[String]("name") should equal ("aoeu")
+  }
+  
   test ("trail options - tricky case") {
     val opts = Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3", 
                             "first", "1","2","3","second","4","5","6"))

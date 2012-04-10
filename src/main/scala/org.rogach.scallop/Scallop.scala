@@ -146,9 +146,10 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
   /** Add new trailing argument definition to this builder.
     * @param name Name for new definition, used for identification.
     * @param required Is this trailing argument required? Defaults to true.
+    * @param default If this argument is not required and not found in the argument list, use this value.
     */
-  def trailArg[A](name:String, required:Boolean = true)(implicit conv:ValueConverter[A]):Scallop = {
-    this.copy(trail = trail :+ new TrailDef(name, required, conv))
+  def trailArg[A](name:String, required:Boolean = true, default:Option[A] = None)(implicit conv:ValueConverter[A]):Scallop = {
+    this.copy(trail = trail :+ new TrailDef(name, required, conv, default))
   }
   
   /** Add version string to this builder.
@@ -201,7 +202,7 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
         if (!(tr.conv.manifest <:< m)) {
           throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, tr.conv.manifest))
         }
-        tr.conv.parse(List(rest(idx))).right.getOrElse(if (tr.required) throw new MajorInternalException else None).asInstanceOf[Option[A]]
+        tr.conv.parse(List(rest(idx))).right.getOrElse(if (tr.required) throw new MajorInternalException else None).orElse(tr.default).asInstanceOf[Option[A]]
       }.getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name))
     }
   }
@@ -353,7 +354,7 @@ case class PropDef(char:Char, descr:String, conv:ValueConverter[_], keyName:Stri
   * @param required Is this arg required?
   * @param conv Converter for this argument.
   */
-case class TrailDef(name:String, required:Boolean, conv:ValueConverter[_])
+case class TrailDef(name:String, required:Boolean, conv:ValueConverter[_], default:Option[Any])
 
 /** An enumeration of possible arg types by number of arguments they can take. */
 object ArgType extends Enumeration {

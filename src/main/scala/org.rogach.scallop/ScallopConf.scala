@@ -52,12 +52,14 @@ abstract class ScallopConf(args:Seq[String]) {
   /** Add new trailing argument definition to this config, and get a holder for it's value.
     * @param name Name for new definition, used for identification.
     * @param required Is this trailing argument required? Defaults to true.
+    * @param default If this argument is not required and not found in the argument list, use this value.
     */
   def trailArg[A](name: => String = ("trailArg " + (1 to 10).map(_ => (97 to 122)(math.random * 26 toInt).toChar).mkString),
-                  required:Boolean = true)(implicit conv:ValueConverter[A]):ScallopOption[A] = {
+                  required:Boolean = true,
+                  default:Option[A] = None)(implicit conv:ValueConverter[A]):ScallopOption[A] = {
     // here, we generate some random name, since it does not matter
     val n = name
-    builder = builder.trailArg(n, required)(conv)
+    builder = builder.trailArg(n, required, default)(conv)
     new ScallopOption[A]({verified_?; builder.get[A](n)(conv.manifest)})
   }
   
