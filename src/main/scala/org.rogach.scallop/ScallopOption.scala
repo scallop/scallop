@@ -61,6 +61,11 @@ class ScallopOption[A](fn: => Option[A])(supplied: => Boolean) { opt =>
     * is defined. Just an alias for opt.get.isDefined.
     */
   def isDefined = get.isDefined
+  
+  /** A convenience method to check whether the underlying option is
+    * empty. Just an alias for !opt.isDefined.
+    */
+  def isEmpty = !isDefined
     
   override def toString = opt.get match {
     case Some(x) => "ScallopSome(%s)" format x
