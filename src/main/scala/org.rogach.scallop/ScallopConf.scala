@@ -53,11 +53,12 @@ abstract class ScallopConf(args:Seq[String]) {
     * @param name Name for new definition, used for identification.
     * @param required Is this trailing argument required? Defaults to true.
     */
-  def trailArg[A](required:Boolean = true)(implicit conv:ValueConverter[A]):ScallopOption[A] = {
+  def trailArg[A](name: => String = ("trailArg " + (1 to 10).map(_ => (97 to 122)(math.random * 26 toInt).toChar).mkString),
+                  required:Boolean = true)(implicit conv:ValueConverter[A]):ScallopOption[A] = {
     // here, we generate some random name, since it does not matter
-    val name = "trailArg " + (1 to 10).map(_ => (97 to 122)(math.random * 26 toInt).toChar).mkString
-    builder = builder.trailArg(name, required)(conv)
-    new ScallopOption[A]({verified_?; builder.get[A](name)(conv.manifest)})
+    val n = name
+    builder = builder.trailArg(n, required)(conv)
+    new ScallopOption[A]({verified_?; builder.get[A](n)(conv.manifest)})
   }
   
   /** Veryfy that this config object is properly configured. */
