@@ -377,23 +377,6 @@ opts.printHelp
     opts[List[Double]]("second list values") should equal (List[Double](4,5,6))
   }
   
-  test ("trail options - load-test") {
-    val start = System.currentTimeMillis
-    val opts = Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3"))
-      .props[String]('E')
-      .trailArg[String]("first list name")
-      .trailArg[List[Int]]("first list values")
-      .trailArg[String]("second list name")
-      .trailArg[List[Double]]("second list values")
-      .args(List("first"))
-      .args((1 to 100).map(_.toString))
-      .args(List("second"))
-      .args((1 to 100).map(_.toString))
-      .verify
-    val end = System.currentTimeMillis
-    assert (end - start < 100, "Time bound broken: %d ms" format (end - start))
-  }
-  
   test ("custom converter example") {
     case class Person(name:String, phone:String)
     val personConverter = new ValueConverter[Person] {

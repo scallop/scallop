@@ -199,27 +199,30 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
     }
   }
   
+  private var getCache = scala.collection.mutable.Map[(String,Manifest[_]),Any]()
   /** Get the value of option (or trailing arg) as Option.
     * @param name Name for option.
     * @param m Manifest for requested type. Usually found implicitly.
     */
   def get[A](name:String)(implicit m:Manifest[A]):Option[A] = {
-    opts.find(_.name == name).map { opt =>
-      val sh = getOptShortName(opt)
-      if (!(opt.conv.manifest <:< m)) {
-        throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, opt.conv.manifest))
-      }
-      opt.conv.parse(pargs.filter(a => a._2.map(opt.name ==)
-      .getOrElse(sh.map(a._1.get.head == _).getOrElse(false))).map(_._3)).right.get
-      .orElse(opt.default).asInstanceOf[Option[A]]
-    }.getOrElse{
-      trail.zipWithIndex.find(_._1.name == name).map { case (tr, idx) =>
-        if (!(tr.conv.manifest <:< m)) {
-          throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, tr.conv.manifest))
+    getCache.getOrElseUpdate((name,m),
+      (opts.find(_.name == name).map { opt =>
+        val sh = getOptShortName(opt)
+        if (!(opt.conv.manifest <:< m)) {
+          throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, opt.conv.manifest))
         }
-        tr.conv.parse(List(rest(idx))).right.getOrElse(if (tr.required) throw new MajorInternalException else None).orElse(tr.default).asInstanceOf[Option[A]]
-      }.getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name))
-    }
+        opt.conv.parse(pargs.filter(a => a._2.map(opt.name ==)
+        .getOrElse(sh.map(a._1.get.head == _).getOrElse(false))).map(_._3)).right.get
+        .orElse(opt.default).asInstanceOf[Option[A]]
+      }.getOrElse{
+        trail.zipWithIndex.find(_._1.name == name).map { case (tr, idx) =>
+          if (!(tr.conv.manifest <:< m)) {
+            throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, tr.conv.manifest))
+          }
+          tr.conv.parse(List(rest(idx))).right.getOrElse(if (tr.required) throw new MajorInternalException else None).orElse(tr.default).asInstanceOf[Option[A]]
+        }.getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name))
+      }, m)
+    ).asInstanceOf[(Option[A],Manifest[A])]._1
   }
   /** Get the value of option. If option is not found, this will throw an exception.
     * @param name Name for option.
