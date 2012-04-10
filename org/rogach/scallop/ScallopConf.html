@@ -365,16 +365,16 @@ Returns a list of all options in the builder, and corresponding values for them.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#trailArg" data-isabs="false">
-      <a id="trailArg[A](Boolean)(ValueConverter[A]):ScallopOption[A]"></a>
+      <a id="trailArg[A](⇒ String,Boolean,Option[A])(ValueConverter[A]):ScallopOption[A]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">trailArg</span>
         <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A]</span>
+        <span class="params">(<span name="name">name: ⇒ String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[A]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Add new trailing argument definition to this config, and get a holder for it's value.</p><div class="fullcomment"><div class="comment cmt"><p>Add new trailing argument definition to this config, and get a holder for it's value.</p></div><dl class="paramcmts block"><dt class="param">required</dt><dd class="cmt"><p>Is this trailing argument required? Defaults to true.
+      <p class="shortcomment cmt">Add new trailing argument definition to this config, and get a holder for it's value.</p><div class="fullcomment"><div class="comment cmt"><p>Add new trailing argument definition to this config, and get a holder for it's value.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new definition, used for identification.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this trailing argument required? Defaults to true.</p></dd><dt class="param">default</dt><dd class="cmt"><p>If this argument is not required and not found in the argument list, use this value.
 </p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#verified_?" data-isabs="false">
       <a id="verified_?:Boolean"></a>

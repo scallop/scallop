@@ -65,10 +65,11 @@ and evaluates the value only as the last resort.</p></div><dl class="attributes 
       <span class="symbol"> 
         <span class="name">ScallopOption</span>
         
-        <span class="params">(<span name="fn">fn: ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>)</span>
+        <span class="params">(<span name="fn">fn: ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>)</span><span class="params">(<span name="supplied">supplied: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">fn</dt><dd class="cmt"><p>source of the actual value
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">fn</dt><dd class="cmt"><p>source of the actual value</p></dd><dt class="param">supplied</dt><dd class="cmt"><p>function, that is capable of testing whether the value was explicitly
+                found in argument list.
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -282,6 +283,20 @@ predicate p to this value returned false. No value otherwise.</p></div><dl class
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#isDefined" data-isabs="false">
+      <a id="isDefined:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isDefined</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">A convenience method to check whether the underlying option
+is defined.</p><div class="fullcomment"><div class="comment cmt"><p>A convenience method to check whether the underlying option
+is defined. Just an alias for opt.get.isDefined.
+</p></div></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -293,6 +308,17 @@ predicate p to this value returned false. No value otherwise.</p></div><dl class
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#isSupplied" data-isabs="false">
+      <a id="isSupplied:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isSupplied</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Tests whether the underlying value was explicitly supplied by user.</p>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#map" data-isabs="false">
       <a id="map[B]((A) ⇒ B):ScallopOption[B]"></a>
       <h4 class="signature">

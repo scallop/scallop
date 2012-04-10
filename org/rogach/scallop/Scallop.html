@@ -343,6 +343,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#isSupplied" data-isabs="false">
+      <a id="isSupplied(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isSupplied</span>
+        
+        <span class="params">(<span name="name">name: String</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Tests if this option or trailing arg was explicitly provided by argument list (not from default).</p><div class="fullcomment"><div class="comment cmt"><p>Tests if this option or trailing arg was explicitly provided by argument list (not from default).</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Identifier of option or trailing arg definition
+</p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -560,16 +572,16 @@
       </h4>
       <p class="shortcomment cmt">Definitions for trailing arguments.</p>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#trailArg" data-isabs="false">
-      <a id="trailArg[A](String,Boolean)(ValueConverter[A]):Scallop"></a>
+      <a id="trailArg[A](String,Boolean,Option[A])(ValueConverter[A]):Scallop"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">trailArg</span>
         <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="name">name: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
+        <span class="params">(<span name="name">name: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[A]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Add new trailing argument definition to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add new trailing argument definition to this builder.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new definition, used for identification.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this trailing argument required? Defaults to true.
+      <p class="shortcomment cmt">Add new trailing argument definition to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add new trailing argument definition to this builder.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new definition, used for identification.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this trailing argument required? Defaults to true.</p></dd><dt class="param">default</dt><dd class="cmt"><p>If this argument is not required and not found in the argument list, use this value.
 </p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#verify" data-isabs="false">
       <a id="verify:Scallop"></a>

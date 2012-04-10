@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">TrailDef</span>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="name">name: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -64,7 +64,7 @@
       <span class="symbol"> 
         <span class="name">TrailDef</span>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>)</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for this definition, used for identification.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this arg required?</p></dd><dt class="param">conv</dt><dd class="cmt"><p>Converter for this argument.
@@ -180,6 +180,17 @@
       </span>
       </h4>
       <p class="shortcomment cmt">Converter for this argument.</p>
+    </li><li visbl="pub" name="org.rogach.scallop.TrailDef#default" data-isabs="false">
+      <a id="default:Option[Any]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">default</span>
+        
+        <span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
