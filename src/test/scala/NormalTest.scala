@@ -420,4 +420,46 @@ opts.printHelp
     opts[Person]("person") should equal (Person("Pete", "123-45"))
   }
   
+  test ("is supplied - option value was supplied") {
+    val opts = Scallop(List("-a", "1"))
+      .opt[Int]("apples")
+      .verify
+    opts.isSupplied("apples") should equal (true)
+  }
+
+  test ("is supplied - option value was not supplied, no default") {
+    val opts = Scallop(Nil)
+      .opt[Int]("apples")
+      .verify
+    opts.isSupplied("apples") should equal (false)
+  }
+
+  test ("is supplied - option value was not supplied, with default") {
+    val opts = Scallop(Nil)
+      .opt[Int]("apples", default = Some(7))
+      .verify
+    opts.isSupplied("apples") should equal (false)
+  }
+  
+  test ("is supplied - trail arg value was supplied") {
+    val opts = Scallop(List("first"))
+      .trailArg[String]("file", required = false)
+      .verify
+    opts.isSupplied("file") should equal (true)
+  }
+
+  test ("is supplied - trail arg value was not supplied, no default value") {
+    val opts = Scallop(Nil)
+      .trailArg[String]("file", required = false)
+      .verify
+    opts.isSupplied("file") should equal (false)
+  }
+
+  test ("is supplied - trail arg value was not supplied, with default value") {
+    val opts = Scallop(Nil)
+      .trailArg[String]("file", default = Some("second"), required = false)
+      .verify
+    opts.isSupplied("file") should equal (false)
+  }
+
 }

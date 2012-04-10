@@ -27,7 +27,7 @@ abstract class ScallopConf(args:Seq[String]) {
             :ScallopOption[A] =
   {
     builder = builder.opt(name, short, descr, default, required, arg, hidden)(conv)
-    new ScallopOption[A]({verified_?; builder.get[A](name)(conv.manifest)})
+    new ScallopOption[A]({verified_?; builder.get[A](name)(conv.manifest)})({verified_?; builder.isSupplied(name)})
   }              
 
   /** Add new property option definition to this config object, and get a handle for option retreiving.
@@ -60,7 +60,7 @@ abstract class ScallopConf(args:Seq[String]) {
     // here, we generate some random name, since it does not matter
     val n = name
     builder = builder.trailArg(n, required, default)(conv)
-    new ScallopOption[A]({verified_?; builder.get[A](n)(conv.manifest)})
+    new ScallopOption[A]({verified_?; builder.get[A](n)(conv.manifest)})({verified_?; builder.isSupplied(n)})
   }
   
   /** Veryfy that this config object is properly configured. */

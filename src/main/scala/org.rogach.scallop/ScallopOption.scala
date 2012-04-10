@@ -4,8 +4,10 @@ package org.rogach.scallop
   * Basically, this is a lazy option - it batches up all operations,
   * and evaluates the value only as the last resort.
   * @param fn source of the actual value 
+  * @param supplied function, that is capable of testing whether the value was explicitly
+  *                 found in argument list.
   */
-class ScallopOption[A](fn: => Option[A]) { opt => 
+class ScallopOption[A](fn: => Option[A])(supplied: => Boolean) { opt => 
   
   /** Retreive the underlying value as an option */
   def get = fn
@@ -13,27 +15,31 @@ class ScallopOption[A](fn: => Option[A]) { opt =>
   /** Retreive the underlying value. Use only if you are completely sure that there is a value. */
   def apply() = fn.get
   
+  /** Tests whether the underlying value was explicitly supplied by user.
+    */
+  def isSupplied = supplied
+  
   /** Returns ScallopOption, that contains the result of applying ```pf```
     * to the value, if this option is non-empty and pf is defined for that value.
     * Returns empty ScallopOption otherwise.
     * @param pf the partial function
     */
   def collect[B](pf: PartialFunction[A,B]) =
-    new ScallopOption(opt.get.collect(pf))
+    new ScallopOption(opt.get.collect(pf))(supplied)
   
   /** Returns ScallopOption, that contains the value if applying
     * predicate p to this value returned true. No value otherwise.
     * @param p the predicate used for testing
     */
   def filter(p: A=>Boolean) =
-    new ScallopOption(opt.get.filter(p))
+    new ScallopOption(opt.get.filter(p))(supplied)
 
   /** Returns ScallopOption, that contains the value if applying
     * predicate p to this value returned false. No value otherwise.
     * @param p the predicate used for testing
     */
   def filterNot(p: A=>Boolean) =
-    new ScallopOption(opt.get.filterNot(p))
+    new ScallopOption(opt.get.filterNot(p))(supplied)
     
   /** Returns ScallopOption, that contains the result of applying
     * ```f``` to this option's value, if this option is non-empty.
@@ -41,7 +47,7 @@ class ScallopOption[A](fn: => Option[A]) { opt =>
     * @param f the function to apply
     */
   def map[B](f: A=>B) = 
-    new ScallopOption(opt.get.map(f))
+    new ScallopOption(opt.get.map(f))(supplied)
     
   /** Returns ScallopOption with this value if it is non-empty,
     * or with the value of the alternative option. If it is 
@@ -49,7 +55,7 @@ class ScallopOption[A](fn: => Option[A]) { opt =>
     * @param alternative the alternative expression
     */
   def orElse[B >: A](alternative: =>Option[B]) =
-    new ScallopOption(opt.get.orElse(alternative))
+    new ScallopOption(opt.get.orElse(alternative))(supplied)
     
   /** A convenience method to check whether the underlying option
     * is defined. Just an alias for opt.get.isDefined.

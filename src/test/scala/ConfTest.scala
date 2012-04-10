@@ -109,4 +109,21 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     Conf.apples.toString should equal ("ScallopSome(3)")
   }
+  
+  test ("is supplied - option value was supplied") {
+    object Conf extends ScallopConf(List("-a","3")) {
+      val apples = opt[Int]("apples")
+      verify
+    }
+    Conf.apples.isSupplied should equal (true)
+  }
+  
+  test ("is supplied - option value was not supplied") {
+    object Conf extends ScallopConf(Nil) {
+      val apples = opt[Int]("apples")
+      verify
+    }
+    Conf.apples.isSupplied should equal (false)
+  }
+  
 }

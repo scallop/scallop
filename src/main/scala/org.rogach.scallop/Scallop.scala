@@ -183,6 +183,21 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
     * @param a arg list to add
     */
   def args(a:Seq[String]) = this.copy(args = args ++ a)
+
+  /** Tests if this option or trailing arg was explicitly provided by argument list (not from default).
+    * @param name Identifier of option or trailing arg definition
+    */
+  def isSupplied(name:String):Boolean = {
+    opts.find(_.name == name).map { opt =>
+      val sh = getOptShortName(opt)
+      opt.conv.parse(pargs.filter(a => a._2.map(opt.name ==)
+      .getOrElse(sh.map(a._1.get.head == _).getOrElse(false))).map(_._3)).right.get.isDefined
+    }.getOrElse {
+      trail.zipWithIndex.find(_._1.name == name).map { case (tr, idx) =>
+        tr.conv.parse(List(rest(idx))).right.getOrElse(if (tr.required) throw new MajorInternalException else None).isDefined
+      }.getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name))
+    }
+  }
   
   /** Get the value of option (or trailing arg) as Option.
     * @param name Name for option.
@@ -299,9 +314,9 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
     */
   def summary:String = {
     ("Scallop(%s)" format args.mkString(", ")) + "\n" +
-    opts.map(o => "  %s => %s" format (o.name, get(o.name)(o.conv.manifest).getOrElse("$None$"))).mkString("\n") + "\n" +
-    propts.map(p => "  props %s => %s" format (p.char, propStringMap(p.char))).mkString("\n") + "\n" + 
-    trail.map(t => "  %s => %s" format (t.name, get(t.name)(t.conv.manifest).getOrElse("$None$"))).mkString("\n")
+    opts.map(o => " %s  %s => %s" format ((if (isSupplied(o.name)) "*" else " "), o.name, get(o.name)(o.conv.manifest).getOrElse("$None$"))).mkString("\n") + "\n" +
+    propts.map(p => "    props %s => %s" format (p.char, propStringMap(p.char))).mkString("\n") + "\n" + 
+    trail.map(t => " %s  %s => %s" format ((if (isSupplied(t.name)) "*" else " "),t.name, get(t.name)(t.conv.manifest).getOrElse("$None$"))).mkString("\n")
   }
 }
 
@@ -309,7 +324,11 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
   * @param _name Name for this arg.
   * @param _conv Converter for this arg, holding manifest as well.
   */
-abstract class ArgDef(val _name:String,_short:Option[Char], _descr:String, val _conv:ValueConverter[_], val _hidden:Boolean) {
+abstract class ArgDef(val _name:String,
+                      val _short:Option[Char],
+                      val _descr:String,
+                      val _conv:ValueConverter[_],
+                      val _hidden:Boolean) {
   /** The line, that would be printed as definition of this arg in help. */
   def argLine(sh:Option[Char]):String
   /** The full text of definition+description for this arg, as it will appear in options help. */
