@@ -126,4 +126,14 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.apples.isSupplied should equal (false)
   }
   
+  test ("toggle flag option") {
+    object Conf extends ScallopConf(List("-a")) {
+      val apples = opt[Boolean]("apples").map(!_)
+      val bananas = opt[Boolean]("bananas").map(!_)
+      verify
+    }
+    Conf.apples() should equal (false)
+    Conf.bananas() should equal (true)
+  }
+  
 }
