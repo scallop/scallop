@@ -13,6 +13,7 @@ abstract class ScallopConf(args:Seq[String]) {
     * @param default Default value to use if option is not found in input arguments (if you provide this, you can omit the type on method).
     * @param required Is this option required? Defaults to false.
     * @param arg The name for this ortion argument, as it will appear in help. Defaults to "arg".
+    * @param noshort If set to true, then this option does not have any short name.
     * @param conv The converter for this option. Usually found implicitly.
     * @return A holder for parsed value
     */
@@ -22,11 +23,12 @@ abstract class ScallopConf(args:Seq[String]) {
              default:Option[A] = None,
              required:Boolean = false,
              arg:String = "arg",
-             hidden:Boolean = false)
+             hidden:Boolean = false,
+             noshort:Boolean = false)
             (implicit conv:ValueConverter[A])
             :ScallopOption[A] =
   {
-    builder = builder.opt(name, short, descr, default, required, arg, hidden)(conv)
+    builder = builder.opt(name, short, descr, default, required, arg, hidden, noshort)(conv)
     new ScallopOption[A]({verified_?; builder.get[A](name)(conv.manifest)})({verified_?; builder.isSupplied(name)})
   }              
 

@@ -445,4 +445,13 @@ opts.printHelp
     opts.isSupplied("file") should equal (false)
   }
 
+  test ("noshort") {
+    val opts = Scallop(List("-b","1"))
+      .opt[Int]("bananas", noshort = true)
+      .opt[Int]("bags")
+      .verify
+    opts.get[Int]("bananas") should equal (None)
+    opts.get[Int]("bags") should equal (Some(1))
+  }
+  
 }
