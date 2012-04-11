@@ -126,4 +126,14 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.apples.isSupplied should equal (false)
   }
   
+  test ("noshort") {
+    object Conf extends ScallopConf(List("-b","1")) {
+      val bananas = opt[Int]("bananas", noshort = true)
+      val bags = opt[Int]("bags")
+      verify
+    }
+    Conf.bananas.get should equal (None)
+    Conf.bags.get should equal (Some(1))
+  }
+  
 }
