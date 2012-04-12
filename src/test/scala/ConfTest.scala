@@ -240,4 +240,30 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.bananas() should equal (true)
   }
   
+  test ("custom validation - success") {
+    object Conf extends ScallopConf(List("-a","14","-b","3")) {
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      validate (apples, bananas) { (a,b) =>
+        if (a > 0 && b % 7 == 0) Right(Unit)
+        else Left("Something is wrong with composition :)")
+      }
+    }
+    Conf
+  }
+
+  test ("custom validation - failure") {
+    intercept[ValidationFailure] {
+      object Conf extends ScallopConf(List("-a","15","-b","3")) {
+        val apples = opt[Int]("apples")
+        val bananas = opt[Int]("bananas")
+        validate (apples, bananas) { (a,b) =>
+          if (a > 0 && b % 7 == 0) Right(Unit)
+          else Left("Something is wrong with composition :)")
+        }
+        verify
+      }
+      Conf
+    }
+  }  
 }

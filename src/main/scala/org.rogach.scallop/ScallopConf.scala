@@ -2,7 +2,7 @@ package org.rogach.scallop
 
 import exceptions._
 
-abstract class ScallopConf(args:Seq[String]) {
+abstract class ScallopConf(args:Seq[String]) extends ScallopConfValidations {
   var builder = Scallop(args)
   private var verified = false
   
@@ -70,6 +70,12 @@ abstract class ScallopConf(args:Seq[String]) {
   def verify {
     verified = true
     builder.verify
+    validations.foreach { v =>
+      v() match {
+        case Right(_) =>
+        case Left(err) => throw new ValidationFailure(err)
+      }
+    }
   }
   
   /** Checks that this Conf object is verified. If it is not, throws an exception. */
@@ -98,6 +104,7 @@ abstract class ScallopConf(args:Seq[String]) {
       else Right(Unit)
     }
   }
+  
   
   // === some getters for convenience ===
   

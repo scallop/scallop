@@ -4,6 +4,8 @@ addSbtPlugin("me.lessis" % "jot" % "0.1.0")
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.7.3")
 
+addSbtPlugin("com.github.aloiscochard" %% "xsbt-fmpp-plugin" % "0.2")
+
 resolvers += Resolver.url("sbt-plugin-releases",
   new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/"))(Resolver.ivyStylePatterns)
 

@@ -1,0 +1,23 @@
+package org.rogach.scallop
+
+trait ScallopConfValidations { this:ScallopConf =>
+
+  protected var validations:List[Function0[Either[String,Unit]]] = Nil
+
+<#macro lc num>
+  <#list 1..num as h><#nested h><#if num != h>,</#if></#list>
+</#macro>
+<#list 1..7 as i>
+  def validate[<@lc i ; j>A${j}</@lc>](<@lc i ; j>o${j}:ScallopOption[A${j}]</@lc>)(fn: (<@lc i ; j>A${j}</@lc>) => Either[String,Unit]) {
+    codependent(<@lc i ; j>o${j}</@lc>)
+    validations :+= new Function0[Either[String,Unit]] {
+      def apply = {
+        if (o1.isSupplied)
+          fn(<@lc i ; j>o${j}()</@lc>)
+        else Right(Unit)
+      }
+    }
+  }
+</#list>
+
+}
