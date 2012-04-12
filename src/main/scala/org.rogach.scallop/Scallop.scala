@@ -142,6 +142,7 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
              (implicit conv:ValueConverter[A])
              :Scallop = 
   {
+    if (name.head.isDigit) throw new IllegalOptionParameters("First character of the option name must not be a digit: %s" format name)
     val eShort = if (short == 0.toChar || noshort) None else Some(short)
     this.copy(opts = opts :+ new OptDef(name, eShort, descr, conv, default, required, arg, hidden, noshort))
   }

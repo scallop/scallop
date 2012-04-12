@@ -14,15 +14,18 @@ class IdenticalOptionNames(mess:String) extends ScallopException(mess)
 /** Thrown when user provides Scallop with unknown option name in the arguments
     or requests unknown option result from parser. */
 class UnknownOption(mess:String) extends ScallopException(mess)
-/** Thrown then arguments to some option do not satisfy that option's
+/** Thrown when arguments to some option do not satisfy that option's
     value converter (it returns Left in such case). */
 class WrongOptionFormat(mess:String) extends ScallopException(mess)
 /** Thrown when parser failed to find arguments to option (marked as 'required')
     in the input arguments. */
 class RequiredOptionNotFound(mess:String) extends ScallopException(mess)
-/** Thrown then user tried to extract the value of an option before the call
+/** Thrown when user tried to extract the value of an option before the call
     to verify in ScallopConf. */
 class IncompleteBuildException(mess:String) extends ScallopException(mess)
+/** Thrown when user tried to create an option with some illegal parameters
+    - for example, with digit as the first character in opton name. */
+class IllegalOptionParameters(mess:String) extends ScallopException(mess)
 
 /** This is a special case of exception - the one you should never see.
     If you actually saw it, there is a sure bug lurking somewhere. In such cases, please
