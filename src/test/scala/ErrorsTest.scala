@@ -147,4 +147,12 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
     }
   }
   
+  test ("validation failure") {
+    intercept[ValidationFailure] {
+      val opts = Scallop(List("-a","1"))
+        .opt[Int]("apples", validate = (0>))
+        .verify
+    }
+  }
+  
 }

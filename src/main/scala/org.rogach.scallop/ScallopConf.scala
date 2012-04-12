@@ -21,6 +21,7 @@ abstract class ScallopConf(args:Seq[String]) {
              short:Char = 0.toChar,
              descr:String = "",
              default:Option[A] = None,
+             validate:A=>Boolean = (_:A) => true,
              required:Boolean = false,
              arg:String = "arg",
              hidden:Boolean = false,
@@ -28,7 +29,7 @@ abstract class ScallopConf(args:Seq[String]) {
             (implicit conv:ValueConverter[A])
             :ScallopOption[A] =
   {
-    builder = builder.opt(name, short, descr, default, required, arg, hidden, noshort)(conv)
+    builder = builder.opt(name, short, descr, default, validate, required, arg, hidden, noshort)(conv)
     new ScallopOption[A]({verified_?; builder.get[A](name)(conv.manifest)})({verified_?; builder.isSupplied(name)})
   }              
 

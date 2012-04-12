@@ -454,4 +454,18 @@ opts.printHelp
     opts.get[Int]("bags") should equal (Some(1))
   }
   
+  test ("negative number in option parameters") {
+    val opts = Scallop(List("-a","-1"))
+      .opt[Int]("apples")
+      .verify
+    opts.get[Int]("apples") should equal (Some(-1))
+  }
+  
+  test ("correct validation") {
+    val opts = Scallop(List("-a","1"))
+      .opt[Int]("apples", validate = (0<))
+      .verify
+    opts[Int]("apples") should equal (1)
+  }
+  
 }

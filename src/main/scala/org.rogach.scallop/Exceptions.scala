@@ -26,6 +26,8 @@ class IncompleteBuildException(mess:String) extends ScallopException(mess)
 /** Thrown when user tried to create an option with some illegal parameters
     - for example, with digit as the first character in opton name. */
 class IllegalOptionParameters(mess:String) extends ScallopException(mess)
+/** Thrown when the validation failed on some option. */
+class ValidationFailure(mess:String) extends ScallopException(mess)
 
 /** This is a special case of exception - the one you should never see.
     If you actually saw it, there is a sure bug lurking somewhere. In such cases, please
