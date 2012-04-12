@@ -41,7 +41,7 @@ class LoadTest extends FunSuite with ShouldMatchers {
       end - start
     }
     val t = time(Conf.apples())
-    // on my main machine, this number should be 100ms - but to keep the test 
+    // on my main machine, this number should be 200ms - but to keep the test 
     // from failing, I needed to increase the time bound
     assert(t < 2000, "Time bound broken: %d ms" format t)
   }

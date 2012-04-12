@@ -164,4 +164,48 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
   }
   
+  test ("option set validation, mutually exclusive options, success") { 
+    object Conf extends ScallopConf(List("-a","1")){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      mutuallyExclusive(apples, bananas)
+      verify
+    }
+    Conf
+  }
+
+  test ("option set validation, mutually exclusive options, failure") { 
+    intercept[OptionSetValidationFailure] {
+      object Conf extends ScallopConf(List("-a", "1", "-b", "2")){
+        val apples = opt[Int]("apples")
+        val bananas = opt[Int]("bananas")
+        mutuallyExclusive(apples, bananas)
+        verify
+      }
+      Conf
+    }
+  }
+
+  test ("option set validation, codependent options, success") { 
+    object Conf extends ScallopConf(List("-a","1","-b","2")){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      codependent(apples, bananas)
+      verify
+    }
+    Conf
+  }
+
+  test ("option set validation, codependent options, failure") { 
+    intercept[OptionSetValidationFailure] {
+      object Conf extends ScallopConf(List("-a", "1")){
+        val apples = opt[Int]("apples")
+        val bananas = opt[Int]("bananas")
+        codependent(apples, bananas)
+        verify
+      }
+      Conf
+    }
+  }
+  
 }

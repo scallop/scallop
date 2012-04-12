@@ -8,7 +8,7 @@ object Scallop {
   /** Create the new parser with some arguments already inserted.
     * @param args Args to pre-insert.
     */
-  def apply(args:Seq[String]):Scallop = new Scallop(args,Nil,Nil,Nil,None,None,None)
+  def apply(args:Seq[String]):Scallop = new Scallop(args,Nil,Nil,Nil,None,None,None,Nil)
   /** Create the default empty parser, fresh as mountain air. */
   def apply():Scallop = apply(List())
 
@@ -22,7 +22,16 @@ object Scallop {
   * @param vers Version string to display in help.
   * @param banner Banner (summary of this program and command-line usage) to display in help.
   */
-case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], trail:List[TrailDef], vers:Option[String], bann:Option[String], foot:Option[String]) {
+case class Scallop(
+  args:Seq[String],
+  opts:List[OptDef],
+  propts:List[PropDef],
+  trail:List[TrailDef],
+  vers:Option[String],
+  bann:Option[String],
+  foot:Option[String],
+  optionSetValidations:List[List[String]=>Either[String, Unit]]
+) {
   /** Options and trailing arguments. */
   private lazy val (pargs,rest) = parseWithRest(args)
   
@@ -180,7 +189,14 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
   def trailArg[A](name:String, required:Boolean = true, default:Option[A] = None)(implicit conv:ValueConverter[A]):Scallop = {
     this.copy(trail = trail :+ new TrailDef(name, required, conv, default))
   }
-  
+
+  /** Add a validation for supplied option set.
+    * @param fn A function, that accepts the list of names of options, that are supplied.
+                It should return a Left with error message in case of validation failure.
+    */
+  def validationSet(fn: List[String] => Either[String, Unit]) =
+    this.copy(optionSetValidations = optionSetValidations :+ fn)
+    
   /** Add version string to this builder.
     * @param v Version string, to be printed before all other things in help.
     */
@@ -326,6 +342,12 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
       println("version")
       sys.exit(0)
     }
+   
+    // validate option sets
+    optionSetValidations.map(_(opts.map(_.name).filter(isSupplied))).find(_.isLeft).map { l =>
+      throw new OptionSetValidationFailure(l.left.get)
+    }
+    
     // check that there are no garbage options
     pargs.foreach { arg =>
       if (!arg._2.map(n => opts.find(_.name == n).isDefined)
