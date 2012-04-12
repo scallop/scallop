@@ -245,9 +245,10 @@ class ConfTest extends FunSuite with ShouldMatchers {
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
       validate (apples, bananas) { (a,b) =>
-        if (a > 0 && b % 7 == 0) Right(Unit)
+        if (b > 0 && a % 7 == 0) Right(Unit)
         else Left("Something is wrong with composition :)")
       }
+      verify
     }
     Conf
   }
@@ -258,7 +259,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
         val apples = opt[Int]("apples")
         val bananas = opt[Int]("bananas")
         validate (apples, bananas) { (a,b) =>
-          if (a > 0 && b % 7 == 0) Right(Unit)
+          if (b > 0 && a % 7 == 0) Right(Unit)
           else Left("Something is wrong with composition :)")
         }
         verify
