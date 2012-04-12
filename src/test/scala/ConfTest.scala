@@ -146,4 +146,22 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.bags.get should equal (Some(1))
   }
   
+  test ("correct validation") {
+    object Conf extends ScallopConf(List("-a","1")) {
+      val apples = opt[Int]("apples", validate = (0<))
+      verify
+    }
+    Conf.apples() should equal (1)
+  }
+ 
+  test ("failing validation") {
+    intercept[ValidationFailure] {
+      object Conf extends ScallopConf(List("-a","1")) {
+        val apples = opt[Int]("apples", validate = (0>))
+        verify
+      }
+      Conf
+    }
+  }
+  
 }

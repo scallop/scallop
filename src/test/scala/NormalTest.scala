@@ -461,4 +461,11 @@ opts.printHelp
     opts.get[Int]("apples") should equal (Some(-1))
   }
   
+  test ("correct validation") {
+    val opts = Scallop(List("-a","1"))
+      .opt[Int]("apples", validate = (0<))
+      .verify
+    opts[Int]("apples") should equal (1)
+  }
+  
 }

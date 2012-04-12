@@ -147,6 +147,7 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
              short:Char = 0.toChar,
              descr:String = "",
              default:Option[A] = None,
+             validate:A=>Boolean = ((_:A) => true),
              required:Boolean = false,
              arg:String = "arg",
              hidden:Boolean = false,
@@ -155,7 +156,10 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
              :Scallop = 
   {
     val eShort = if (short == 0.toChar || noshort) None else Some(short)
-    this.copy(opts = opts :+ new OptDef(name, eShort, descr, conv, default, required, arg, hidden, noshort))
+    val validator = (m:Manifest[_], a:Any) => 
+      if (m >:> conv.manifest) validate(a.asInstanceOf[A])
+      else false
+    this.copy(opts = opts :+ new OptDef(name, eShort, descr, conv, default, validator, required, arg, hidden, noshort))
   }
   
   /** Add new property option definition to this builder.
@@ -334,6 +338,9 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
       val res = o.conv.parse(params)
       if (res.isLeft) throw new WrongOptionFormat("Wrong format for option '%s': %s" format (o.name, params.map(_.mkString).mkString(" ")))
       if (o.required && !res.right.get.isDefined && !o.default.isDefined) throw new RequiredOptionNotFound("Required option '%s' not found" format o.name)
+      // validaiton
+      if (!get(o.name)(o.conv.manifest).map(v => o.validator(o.conv.manifest,v)).getOrElse(true))
+        throw new ValidationFailure("Validation failure for '%s' option parameters: %s" format (o.name, params))
     }
     this
   }
@@ -391,6 +398,7 @@ case class OptDef(name:String,
                   descr:String,
                   conv:ValueConverter[_], 
                   default:Option[Any],
+                  validator:(Manifest[_],Any)=>Boolean,
                   required:Boolean,
                   arg:String,
                   hidden:Boolean,

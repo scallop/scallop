@@ -23,6 +23,8 @@ class RequiredOptionNotFound(mess:String) extends ScallopException(mess)
 /** Thrown then user tried to extract the value of an option before the call
     to verify in ScallopConf. */
 class IncompleteBuildException(mess:String) extends ScallopException(mess)
+/** Thrown when the validation failed on some option. */
+class ValidationFailure(mess:String) extends ScallopException(mess)
 
 /** This is a special case of exception - the one you should never see.
     If you actually saw it, there is a sure bug lurking somewhere. In such cases, please
