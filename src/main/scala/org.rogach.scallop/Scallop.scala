@@ -28,13 +28,25 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
   
   /** Just a shortcut. */
   private type ArgParsed = (Option[String],Option[String],List[String]) // (short, long, args)
+  
+  /** Tests whether this string contains option name, not some number. */
+  private def isOption(s:String) = 
+    if (s.startsWith("-"))
+      if (s.size > 1)
+        !s(1).isDigit
+      else true
+    else false
+  
+  /** Tests whether this string contains option parameter, not option call. */
+  private def isParameter(s:String) = !isOption(s)
+  
   /** Takes the whole arguments list and parses into options and trailing arguments.
     * @param args The command-line arguments.
     * @return (parsed options, a list of strings corresponding to trailing arguments one-to-one.
     */
   private def parseWithRest(args:Seq[String]):(List[ArgParsed], List[List[String]]) = {
     // the part of arguments after the last option
-    val trailArgs = args.reverse.takeWhile(!_.startsWith("-")).reverse
+    val trailArgs = args.reverse.takeWhile(isParameter).reverse
     // name for that last option
     val optNam = args.reverse.drop(trailArgs.size).headOption 
     optNam match {
@@ -64,16 +76,16 @@ case class Scallop(args:Seq[String], opts:List[OptDef], propts:List[PropDef], tr
   def parse(args:Seq[String]):List[ArgParsed] = {
     args.toList match {
       case a :: rest if a.startsWith("--") => // it starts with -- => surely a long option name
-        (None,Some(a.drop(2)),rest.takeWhile(!_.startsWith("-"))) :: 
-          parse(rest.dropWhile(!_.startsWith("-")))
-      case a :: rest if a.startsWith("-") => // can be either property or several short options
+        (None,Some(a.drop(2)),rest.takeWhile(isParameter)) :: 
+          parse(rest.dropWhile(isParameter))
+      case a :: rest if isOption(a) => // can be either property or several short options
         if (propts.find(_.char == a(1)).isDefined) {
-          (Some(a(1).toString), None, (a.drop(2) +: rest.takeWhile(!_.startsWith("-"))).filter(_.size > 0)) ::
-          parse(rest.dropWhile(!_.startsWith("-")))
+          (Some(a(1).toString), None, (a.drop(2) +: rest.takeWhile(isParameter)).filter(_.size > 0)) ::
+          parse(rest.dropWhile(isParameter))
         } else { // no, not property
           a.drop(1).init.map(i => (Some(i.toString), None, List[String]())).toList :::  // short option names, that will not have any arguments
-          List((Some(a.last.toString),None,rest.takeWhile(!_.startsWith("-")))) ::: // last short option, all arguments go to it
-          parse(rest.dropWhile(!_.startsWith("-")))
+          List((Some(a.last.toString),None,rest.takeWhile(isParameter))) ::: // last short option, all arguments go to it
+          parse(rest.dropWhile(isParameter))
         }
       case Nil => List() // no arguments - no options :)
       case a => throw new OptionParseException("Failed to parse options: " + a.mkString(" "))// there should be options!
