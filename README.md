@@ -81,7 +81,7 @@ val opts = Scallop(List("-d","--num-limbs","1"))
   .opt[Int]("num-limbs", 'k', 
     "number of libms", required = true) // you can override the default short-option character
   .opt[List[Double]]("params") // default converters are provided for all primitives
-                               //and for lists of primitives
+                               // and for lists of primitives
   .opt[String]("debug", hidden = true) // hidden parameters are not printed in help
   .props[String]('D',"some key-value pairs") // yes, property args can have types on their values too
   .args(List("-Dalpha=1","-D","betta=2","gamma=3", "Pigeon")) // you can add parameters a bit later
