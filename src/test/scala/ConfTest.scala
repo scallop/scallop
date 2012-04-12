@@ -208,4 +208,36 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
   }
   
+  test ("mutually exclusive flag options - validation success") {
+    object Conf extends ScallopConf(List("-a")) {
+      val apples = opt[Boolean]("apples")
+      val bananas = opt[Boolean]("bananas")
+      mutuallyExclusive(apples,bananas)
+      verify
+    }
+    Conf
+  }
+
+  test ("mutually exclusive flag options - validation failure") {
+    intercept[OptionSetValidationFailure] {
+      object Conf extends ScallopConf(List("-a", "-b")) {
+        val apples = opt[Boolean]("apples")
+        val bananas = opt[Boolean]("bananas")
+        mutuallyExclusive(apples,bananas)
+        verify
+      }
+      Conf
+    }
+  }
+  
+  test ("boolean default value") {
+    object Conf extends ScallopConf(List("-b")) {
+      val apples = opt[Boolean]("apples", default = Some(true))
+      val bananas = opt[Boolean]("bananas", default = Some(false))
+      verify
+    }
+    Conf.apples() should equal (true)
+    Conf.bananas() should equal (true)
+  }
+  
 }

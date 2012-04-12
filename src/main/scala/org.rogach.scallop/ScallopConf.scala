@@ -83,7 +83,7 @@ abstract class ScallopConf(args:Seq[String]) {
     */
   def mutuallyExclusive(list:ScallopOption[_]*) {
     builder = builder.validationSet { l =>
-      if (list.map(_.name).count(l.contains) > 1) Left("There should be only one or zero of the following options: %s" format list.mkString(", "))
+      if (list.map(_.name).count(l.contains) > 1) Left("There should be only one or zero of the following options: %s" format list.map(_.name).mkString(", "))
       else Right(Unit)
     }
   }
@@ -94,7 +94,7 @@ abstract class ScallopConf(args:Seq[String]) {
   def codependent(list:ScallopOption[_]*) {
     builder = builder.validationSet { l =>
       val c = list.map(_.name).count(l.contains)
-      if (c != 0 && c != list.size) Left("Ether all or none of the following options should be supplied, because they are co-dependent: %s" format list.mkString(", "))
+      if (c != 0 && c != list.size) Left("Ether all or none of the following options should be supplied, because they are co-dependent: %s" format list.map(_.name).mkString(", "))
       else Right(Unit)
     }
   }

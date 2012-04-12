@@ -4,7 +4,7 @@ object `package` {
   implicit val flagConverter = new ValueConverter[Boolean] {
     def parse(s:List[List[String]]) = s match {
       case Nil :: Nil => Right(Some(true))
-      case Nil => Right(Some(false))
+      case Nil => Right(None)
       case _ => Left(Unit)
     }
     val manifest = implicitly[Manifest[Boolean]]

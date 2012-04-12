@@ -165,11 +165,16 @@ case class Scallop(
              :Scallop = 
   {
     if (name.head.isDigit) throw new IllegalOptionParameters("First character of the option name must not be a digit: %s" format name)
+    val defaultA = 
+      if (conv == flagConverter)
+        if (default == Some(true)) Some(true)
+        else Some(false)
+      else default
     val eShort = if (short == 0.toChar || noshort) None else Some(short)
     val validator = (m:Manifest[_], a:Any) => 
       if (m >:> conv.manifest) validate(a.asInstanceOf[A])
       else false
-    this.copy(opts = opts :+ new OptDef(name, eShort, descr, conv, default, validator, required, arg, hidden, noshort))
+    this.copy(opts = opts :+ new OptDef(name, eShort, descr, conv, defaultA, validator, required, arg, hidden, noshort))
   }
   
   /** Add new property option definition to this builder.
@@ -187,7 +192,12 @@ case class Scallop(
     * @param default If this argument is not required and not found in the argument list, use this value.
     */
   def trailArg[A](name:String, required:Boolean = true, default:Option[A] = None)(implicit conv:ValueConverter[A]):Scallop = {
-    this.copy(trail = trail :+ new TrailDef(name, required, conv, default))
+    val defaultA = 
+      if (conv == flagConverter)
+        if (default == Some(true)) Some(true)
+        else Some(false)
+      else default
+    this.copy(trail = trail :+ new TrailDef(name, required, conv, defaultA))
   }
 
   /** Add a validation for supplied option set.
