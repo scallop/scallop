@@ -3,3 +3,4 @@ target/
 .bzrignore
 *.~[0-9]~
 .#*
+.cache
