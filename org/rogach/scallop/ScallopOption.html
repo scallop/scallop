@@ -65,7 +65,7 @@ and evaluates the value only as the last resort.</p></div><dl class="attributes 
       <span class="symbol"> 
         <span class="name">ScallopOption</span>
         
-        <span class="params">(<span name="fn">fn: ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>)</span><span class="params">(<span name="supplied">supplied: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="fn">fn: ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>, <span name="supplied">supplied: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">fn</dt><dd class="cmt"><p>source of the actual value</p></dd><dt class="param">supplied</dt><dd class="cmt"><p>function, that is capable of testing whether the value was explicitly
@@ -297,6 +297,20 @@ predicate p to this value returned false. No value otherwise.</p></div><dl class
 is defined.</p><div class="fullcomment"><div class="comment cmt"><p>A convenience method to check whether the underlying option
 is defined. Just an alias for opt.get.isDefined.
 </p></div></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#isEmpty" data-isabs="false">
+      <a id="isEmpty:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isEmpty</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">A convenience method to check whether the underlying option is
+empty.</p><div class="fullcomment"><div class="comment cmt"><p>A convenience method to check whether the underlying option is
+empty. Just an alias for !opt.isDefined.
+</p></div></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -334,6 +348,17 @@ is defined. Just an alias for opt.get.isDefined.
 <code></code><code>f</code><code></code> to this option's value, if this option is non-empty.
 Returns ScallopOption with no value otherwise.</p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the function to apply
 </p></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#name" data-isabs="false">
+      <a id="name:String"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">name</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">

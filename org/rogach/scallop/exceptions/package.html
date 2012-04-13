@@ -59,6 +59,17 @@
       </h4>
       <p class="comment cmt">Thrown when several options and/or trailing arguments have identical names
     in definition - making it impossible to distinguish between them.</p>
+    </li><li visbl="pub" name="org.rogach.scallop.exceptions.IllegalOptionParameters" data-isabs="false">
+      <a id="IllegalOptionParameters:IllegalOptionParameters"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="IllegalOptionParameters.html"><span class="name">IllegalOptionParameters</span></a>
+        
+        <span class="result"> extends ScallopException</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Thrown when user tried to create an option with some illegal parameters</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.IncompleteBuildException" data-isabs="false">
       <a id="IncompleteBuildException:IncompleteBuildException"></a>
       <h4 class="signature">
@@ -69,7 +80,7 @@
         <span class="result"> extends ScallopException</span>
       </span>
       </h4>
-      <p class="comment cmt">Thrown then user tried to extract the value of an option before the call
+      <p class="comment cmt">Thrown when user tried to extract the value of an option before the call
     to verify in ScallopConf.</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.MajorInternalException" data-isabs="false">
       <a id="MajorInternalException:MajorInternalException"></a>
@@ -94,6 +105,17 @@
       </h4>
       <p class="comment cmt">Thrown when Scallop fails to parse the argument line (usually when there
     are some problems with trailing args).</p>
+    </li><li visbl="pub" name="org.rogach.scallop.exceptions.OptionSetValidationFailure" data-isabs="false">
+      <a id="OptionSetValidationFailure:OptionSetValidationFailure"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="OptionSetValidationFailure.html"><span class="name">OptionSetValidationFailure</span></a>
+        
+        <span class="result"> extends ScallopException</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Trown when some validation for option set failed.</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.RequiredOptionNotFound" data-isabs="false">
       <a id="RequiredOptionNotFound:RequiredOptionNotFound"></a>
       <h4 class="signature">
@@ -129,6 +151,17 @@
       </h4>
       <p class="comment cmt">Thrown when user provides Scallop with unknown option name in the arguments
     or requests unknown option result from parser.</p>
+    </li><li visbl="pub" name="org.rogach.scallop.exceptions.ValidationFailure" data-isabs="false">
+      <a id="ValidationFailure:ValidationFailure"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="ValidationFailure.html"><span class="name">ValidationFailure</span></a>
+        
+        <span class="result"> extends ScallopException</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Thrown when the validation failed on some option.</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.WrongOptionFormat" data-isabs="false">
       <a id="WrongOptionFormat:WrongOptionFormat"></a>
       <h4 class="signature">
@@ -139,7 +172,7 @@
         <span class="result"> extends ScallopException</span>
       </span>
       </h4>
-      <p class="comment cmt">Thrown then arguments to some option do not satisfy that option's
+      <p class="comment cmt">Thrown when arguments to some option do not satisfy that option's
     value converter (it returns Left in such case).</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.WrongTypeRequest" data-isabs="false">
       <a id="WrongTypeRequest:WrongTypeRequest"></a>
