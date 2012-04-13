@@ -22,6 +22,6 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "1.7.1" % "test"
 )
 
-crossScalaVersions := Seq("2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1")
+crossScalaVersions := Seq("2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1", "2.9.2")
 
 unmanagedClasspath in Compile += file("dummy")
