@@ -1,0 +1,10 @@
+This version includes the following improvements:
+
+* defined .isEmpty on ScallopOption
+* improved option retreival speed
+* added `noshort` setting for options
+* fixed #9 - negative numbers in option values
+* added per-option validations
+* added codependent and mutual-exclusive option relationships
+* added cross-option validations
+* improved the wiki
