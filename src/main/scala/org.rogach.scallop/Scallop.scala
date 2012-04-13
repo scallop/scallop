@@ -384,7 +384,7 @@ case class Scallop(
   def summary:String = {
     ("Scallop(%s)" format args.mkString(", ")) + "\n" +
     opts.map(o => " %s  %s => %s" format ((if (isSupplied(o.name)) "*" else " "), o.name, get(o.name)(o.conv.manifest).getOrElse("$None$"))).mkString("\n") + "\n" +
-    propts.map(p => "    props %s => %s" format (p.char, propStringMap(p.char))).mkString("\n") + "\n" + 
+    propts.map(p => " *  props %s => %s" format (p.char, propStringMap(p.char))).mkString("\n") + "\n" + 
     trail.map(t => " %s  %s => %s" format ((if (isSupplied(t.name)) "*" else " "),t.name, get(t.name)(t.conv.manifest).getOrElse("$None$"))).mkString("\n")
   }
 }
