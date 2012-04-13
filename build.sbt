@@ -1,5 +1,7 @@
 import AssemblyKeys._
 
+organization := "org.rogach"
+
 name := "scallop"
 
 version := "0.3.5"
