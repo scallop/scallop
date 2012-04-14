@@ -1,6 +1,6 @@
-package org.rogach.scallop
+package org.rogach
 
-object `package` {
+package object scallop {
   implicit val flagConverter = new ValueConverter[Boolean] {
     def parse(s:List[List[String]]) = s match {
       case Nil :: Nil => Right(Some(true))
