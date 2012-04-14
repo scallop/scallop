@@ -2,7 +2,7 @@ package org.rogach
 
 package object scallop {
   implicit val flagConverter = new ValueConverter[Boolean] {
-    def parse(s:List[List[String]]) = s match {
+    def parse(s: List[List[String]]) = s match {
       case Nil :: Nil => Right(Some(true))
       case Nil => Right(None)
       case _ => Left(Unit)
@@ -11,8 +11,8 @@ package object scallop {
     val argType = ArgType.FLAG
   }
   
-  def singleArgConverter[A](conv: String => A)(implicit m:Manifest[A]) = new ValueConverter[A] {
-    def parse(s:List[List[String]]) = {
+  def singleArgConverter[A](conv: String => A)(implicit m: Manifest[A]) = new ValueConverter[A] {
+    def parse(s: List[List[String]]) = {
       s match {
         case (i :: Nil) :: Nil => 
           try { Right(Some(conv(i))) } catch { case _ => Left(Unit) }
@@ -32,7 +32,7 @@ package object scallop {
   implicit val charConverter = singleArgConverter[Char](_.head)
   implicit val stringConverter = singleArgConverter[String](a=>a)
   
-  def listArgConverter[A](conv: String => A)(implicit m:Manifest[List[A]])  = new ValueConverter[List[A]] {
+  def listArgConverter[A](conv: String => A)(implicit m: Manifest[List[A]])  = new ValueConverter[List[A]] {
     def parse(s:List[List[String]]) = {
       try {
         val l = s.flatten.map(i => conv(i))
@@ -53,7 +53,7 @@ package object scallop {
   implicit val doubleListConverter = listArgConverter[Double](_.toDouble)
   implicit val stringListConverter = listArgConverter[String](a => a)
   
-  def propsConverter[A](conv:ValueConverter[A])(implicit m:Manifest[Map[String,A]]):ValueConverter[Map[String,A]] = new ValueConverter[Map[String,A]] {
+  def propsConverter[A](conv: ValueConverter[A])(implicit m: Manifest[Map[String,A]]): ValueConverter[Map[String,A]] = new ValueConverter[Map[String,A]] {
     val rgx = """([^=]+)=(.*)""".r
     def parse(s:List[List[String]]) = {
       try {
