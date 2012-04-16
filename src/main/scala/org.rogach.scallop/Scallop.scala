@@ -424,11 +424,11 @@ case class Scallop(
     (opts.map(_.short).flatten ++ propts.map(_.char)) groupBy (a=>a) filter (_._2.size > 1) foreach 
       (a => throw new IdenticalOptionNames("Short option name '%s' is not unique" format a._1))
     
-    if (pargs find(_._2 == Some("help")) isDefined) {
+    if (args contains "--help") {
       printHelp
       sys.exit(0)
     }
-    if (vers.isDefined && pargs.find(_._2 == Some("version")).isDefined) {
+    if (vers.isDefined && args.contains("--version")) {
       println("version")
       sys.exit(0)
     }

@@ -484,8 +484,13 @@ opts.printHelp
         .validationSet(l => if (l.contains("apples") && l.contains("bananas")) Right() else Left(""))
         .verify
     }
-  }  
-  
+  }
+
+  test ("help printing") {
+    val opts = Scallop(List("--help"))
+      .opt[Int]("apples")
+    opts.help should equal ("-a, --apples  <arg>")
+  }
   
 }
 
