@@ -4,7 +4,7 @@ organization := "org.rogach"
 
 name := "scallop"
 
-version := "0.3.6"
+version := "0.3.7"
 
 scalaVersion := "2.9.1"
 
