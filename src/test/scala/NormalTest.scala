@@ -40,12 +40,10 @@ intercept[WrongTypeRequest] {
                           // because the wrong type is requested
 }
 
-println(opts.help) // returns options description
+opts.printHelp
 println
 println(opts.summary) // returns summary of parser status (with current arg values)
 
-println
-opts.printHelp
 //opts.args(List("--help")).verify
   }
   

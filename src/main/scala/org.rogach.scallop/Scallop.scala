@@ -429,7 +429,7 @@ case class Scallop(
       sys.exit(0)
     }
     if (vers.isDefined && args.contains("--version")) {
-      println("version")
+      vers.foreach(println)
       sys.exit(0)
     }
    
