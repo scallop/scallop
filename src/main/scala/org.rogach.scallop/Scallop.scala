@@ -37,7 +37,15 @@ case class Scallop(
     optionSetValidations: List[List[String]=>Either[String, Unit]]) {
 
   /** Options and trailing arguments. */
-  private lazy val (pargs,rest) = parseWithRest(args)
+  private lazy val (pargs,rest) = if (args.headOption map("@--" ==) getOrElse false) {
+    // read options from stdin
+    val argList = io.Source.fromInputStream(java.lang.System.in).getLines.toList.flatMap(_.split(" ").filter(_.size > 0))
+    parseWithRest(argList)
+  } else if (args.headOption map(_ startsWith "@") getOrElse false) {
+    // read options from a file (canned config)
+    val argList = io.Source.fromFile(args.head.drop(1)).getLines.toList.flatMap(_.split(" ").filter(_.size > 0))
+    parseWithRest(argList)
+  } else parseWithRest(args)
   
   /** Just a shortcut. */
   private type ArgParsed = (Option[String], Option[String], List[String]) // (short, long, args)

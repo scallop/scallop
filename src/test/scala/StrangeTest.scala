@@ -3,6 +3,7 @@ import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 import java.io.ByteArrayOutputStream
+import java.io.ByteArrayInputStream
 import java.lang.{System, SecurityManager, SecurityException}
 import java.security.Permission
 
@@ -42,6 +43,16 @@ class StrangeTest extends FunSuite with ShouldMatchers {
     System.setSecurityManager(normalSM)
     statuses.reverse
   }
+
+  /** Runs program with needed input. */
+  def withInput[A](input:String)(fn: => A):A = {
+    val normalIn = System.in
+    val streamIn = new ByteArrayInputStream(input.getBytes)
+    System.setIn(streamIn)
+    val res = fn
+    System.setIn(normalIn)
+    res
+  }
   
   test("help printing") {
     val (out, err) = captureOutput {
@@ -80,5 +91,26 @@ class StrangeTest extends FunSuite with ShouldMatchers {
                         |""".stripMargin)
   }
   
+  test ("reading options from stdin") {
+    withInput("-a 3\n-b 5") {
+      object Conf extends ScallopConf(List("@--")) {
+        val apples = opt[Int]("apples")
+        val bananas = opt[Int]("bananas")
+        verify
+      }
+      Conf.apples() should equal (3)
+      Conf.bananas() should equal (5)
+    }
+  }
+  
+  test ("reading options from file") {
+    object Conf extends ScallopConf(List("@src/test/resources/opts.txt")) {
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      verify
+    }
+    Conf.apples() should equal (3)
+    Conf.bananas() should equal (5)
+  }
   
 }
