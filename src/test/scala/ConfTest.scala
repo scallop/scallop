@@ -276,4 +276,21 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     Conf.apples1.get should equal (Some(1))
   }
+  
+  test ("for comprehensions for ScallopOptions") {
+    object Conf extends ScallopConf(Seq("-a","3","-b","2")) {
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      val weight = for {
+        a <- apples 
+        if a > 2
+        b <- bananas
+      } yield a * 2 + b * 3
+      val weight2 = for { a <- apples; if a < 2; b <- bananas } yield a * 2 + b * 3
+      verify
+    }
+    Conf.weight.get should equal (Some(12))
+    Conf.weight2.get should equal (None)
+  }
+  
 }
