@@ -267,4 +267,13 @@ class ConfTest extends FunSuite with ShouldMatchers {
       Conf
     }
   }  
+  
+  test ("numbers in option names") {
+    object Conf extends ScallopConf(Seq("-a", "1")) {
+      val apples1 = opt[Int]("apples1")
+      val apples2 = opt[Int]("apples2")
+      verify
+    }
+    Conf.apples1.get should equal (Some(1))
+  }
 }
