@@ -40,7 +40,6 @@ object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
   val properties = props[String]('E')
   // types (:ScallopOption[Double]) can be omitted, here just for clarity
   val size:ScallopOption[Double] = trailArg[Double](required = false)
-  verify
 }
 // that's it. Completely type-safe and convenient.
 Conf.count() should equal (4)
