@@ -47,7 +47,19 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.rogach.scallop.ArgDef" data-isabs="true">
+              <ol><li visbl="pub" name="org.rogach.scallop.AfterInit" data-isabs="true">
+      <a id="AfterInit:AfterInit"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="AfterInit.html"><span class="name">AfterInit</span></a>
+        
+        <span class="result"> extends DelayedInit</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Magic trait, that makes it possible to run code from superclass
+after all subclasses initialization.</p>
+    </li><li visbl="pub" name="org.rogach.scallop.ArgDef" data-isabs="true">
       <a id="ArgDef:ArgDef"></a>
       <h4 class="signature">
       <span class="kind">class</span>
@@ -65,7 +77,7 @@
       <span class="symbol"> 
         <a href="OptDef.html"><span class="name">OptDef</span></a>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="short">short: Option[Char]</span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: Option[Any]</span>, <span name="validator">validator: (scala.reflect.Manifest[_], Any) ⇒ Boolean</span>, <span name="required">required: Boolean</span>, <span name="arg">arg: String</span>, <span name="hidden">hidden: Boolean</span>, <span name="noshort">noshort: Boolean</span>)</span><span class="result"> extends ArgDef with Product with Serializable</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="short">short: Option[Char]</span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: Option[Any]</span>, <span name="validator">validator: (Manifest[_], Any) ⇒ Boolean</span>, <span name="required">required: Boolean</span>, <span name="arg">arg: String</span>, <span name="hidden">hidden: Boolean</span>, <span name="noshort">noshort: Boolean</span>)</span><span class="result"> extends ArgDef with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Holder for option definition.</p>
@@ -98,7 +110,7 @@
       <span class="symbol"> 
         <a href="ScallopConf.html"><span class="name">ScallopConf</span></a>
         
-        <span class="result"> extends ScallopConfValidations</span>
+        <span class="result"> extends ScallopConfValidations with AfterInit</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>

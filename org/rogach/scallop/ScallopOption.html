@@ -28,8 +28,7 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>A class to hold a reference to not-yet-computed option values.
-Basically, this is a lazy option - it batches up all operations,
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>A class to hold a reference to not-yet-computed option values.</p><p>Basically, this is a lazy option - it batches up all operations,
 and evaluates the value only as the last resort.</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.rogach.scallop.ScallopOption" class="extype" href="">ScallopOption</a>[A]</dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
@@ -74,7 +73,21 @@ and evaluates the value only as the last resort.</p></div><dl class="attributes 
     </li></ol>
             </div>
 
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.rogach.scallop.ScallopOption.WithFilter" data-isabs="false">
+      <a id="WithFilter:WithFilter"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="ScallopOption$WithFilter.html"><span class="name">WithFilter</span></a>
         
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
         
         
 
@@ -184,7 +197,8 @@ and evaluates the value only as the last resort.</p></div><dl class="attributes 
       <p class="shortcomment cmt">Returns ScallopOption, that contains the result of applying <code></code><code>pf</code><code></code>
 to the value, if this option is non-empty and pf is defined for that value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns ScallopOption, that contains the result of applying <code></code><code>pf</code><code></code>
 to the value, if this option is non-empty and pf is defined for that value.
-Returns empty ScallopOption otherwise.</p></div><dl class="paramcmts block"><dt class="param">pf</dt><dd class="cmt"><p>the partial function
+Returns empty ScallopOption otherwise.
+</p></div><dl class="paramcmts block"><dt class="param">pf</dt><dd class="cmt"><p>the partial function
 </p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
@@ -220,7 +234,8 @@ Returns empty ScallopOption otherwise.</p></div><dl class="paramcmts block"><dt 
       </h4>
       <p class="shortcomment cmt">Returns ScallopOption, that contains the value if applying
 predicate p to this value returned true.</p><div class="fullcomment"><div class="comment cmt"><p>Returns ScallopOption, that contains the value if applying
-predicate p to this value returned true. No value otherwise.</p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate used for testing
+predicate p to this value returned true. No value otherwise.
+</p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate used for testing
 </p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#filterNot" data-isabs="false">
       <a id="filterNot((A) ⇒ Boolean):ScallopOption[A]"></a>
@@ -234,7 +249,8 @@ predicate p to this value returned true. No value otherwise.</p></div><dl class=
       </h4>
       <p class="shortcomment cmt">Returns ScallopOption, that contains the value if applying
 predicate p to this value returned false.</p><div class="fullcomment"><div class="comment cmt"><p>Returns ScallopOption, that contains the value if applying
-predicate p to this value returned false. No value otherwise.</p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate used for testing
+predicate p to this value returned false. No value otherwise.
+</p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate used for testing
 </p></dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
@@ -250,6 +266,29 @@ predicate p to this value returned false. No value otherwise.</p></div><dl class
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#flatMap" data-isabs="false">
+      <a id="flatMap[B]((A) ⇒ ScallopOption[B]):ScallopOption[B]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">flatMap</span>
+        <span class="tparams">[<span name="B">B</span>]</span>
+        <span class="params">(<span name="f">f: (A) ⇒ <a name="org.rogach.scallop.ScallopOption" class="extype" href="">ScallopOption</a>[B]</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="">ScallopOption</a>[B]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the result of applying f th this options value if
+this option is non-empty.</p>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#foreach" data-isabs="false">
+      <a id="foreach((A) ⇒ Unit):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">foreach</span>
+        
+        <span class="params">(<span name="f">f: (A) ⇒ <span name="scala.Unit" class="extype">Unit</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Apply the given procedure f to the option's value, if it is nonempty.</p>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#get" data-isabs="false">
       <a id="get:Option[A]"></a>
       <h4 class="signature">
@@ -346,7 +385,8 @@ empty. Just an alias for !opt.isDefined.
       <p class="shortcomment cmt">Returns ScallopOption, that contains the result of applying
 <code></code><code>f</code><code></code> to this option's value, if this option is non-empty.</p><div class="fullcomment"><div class="comment cmt"><p>Returns ScallopOption, that contains the result of applying
 <code></code><code>f</code><code></code> to this option's value, if this option is non-empty.
-Returns ScallopOption with no value otherwise.</p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the function to apply
+Returns ScallopOption with no value otherwise.
+</p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the function to apply
 </p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#name" data-isabs="false">
       <a id="name:String"></a>
@@ -405,7 +445,8 @@ Returns ScallopOption with no value otherwise.</p></div><dl class="paramcmts blo
       <p class="shortcomment cmt">Returns ScallopOption with this value if it is non-empty,
 or with the value of the alternative option.</p><div class="fullcomment"><div class="comment cmt"><p>Returns ScallopOption with this value if it is non-empty,
 or with the value of the alternative option. If it is
-empty too, the resulting ScallopOption will contain None.</p></div><dl class="paramcmts block"><dt class="param">alternative</dt><dd class="cmt"><p>the alternative expression
+empty too, the resulting ScallopOption will contain None.
+</p></div><dl class="paramcmts block"><dt class="param">alternative</dt><dd class="cmt"><p>the alternative expression
 </p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
@@ -471,6 +512,17 @@ empty too, the resulting ScallopOption will contain None.</p></div><dl class="pa
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#withFilter" data-isabs="false">
+      <a id="withFilter((A) ⇒ Boolean):WithFilter"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">withFilter</span>
+        
+        <span class="params">(<span name="p">p: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption.WithFilter" class="extype" href="ScallopOption$WithFilter.html">WithFilter</a></span>
+      </span>
+      </h4>
+      
     </li></ol>
             </div>
 

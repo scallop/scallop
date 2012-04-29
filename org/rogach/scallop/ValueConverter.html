@@ -250,17 +250,18 @@ for example, &quot;-a 1 2 -a 3 4 5&quot; would produce List(List(1,2),List(3,4,5
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ValueConverter#map" data-isabs="false">
-      <a id="map[B]((A) ⇒ B)(Manifest[B]):ValueConverter[B]"></a>
+      <a id="map[B]((A) ⇒ B)(Manifest[B]):ValueConverter[B] { def parse(s: List[List[String]]): Product with Either[Unit,Option[B]] with Serializable }"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">map</span>
         <span class="tparams">[<span name="B">B</span>]</span>
-        <span class="params">(<span name="fn">fn: (A) ⇒ B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[B]</span>)</span><span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="">ValueConverter</a>[B]</span>
+        <span class="params">(<span name="fn">fn: (A) ⇒ B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[B]</span>)</span><span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="">ValueConverter</a>[B] { def parse(s: List[List[String]]): Product with Either[Unit,Option[B]] with Serializable }</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Maps the converter to another value:</p><div class="fullcomment"><div class="comment cmt"><p>Maps the converter to another value:</p><p>intConverter.map(2 +) // and you get a &quot;biased converter&quot;
-</p></div></div>
+      <p class="shortcomment cmt">Maps the converter to another value:</p><div class="fullcomment"><div class="comment cmt"><p>Maps the converter to another value:</p><pre>
+intConverter.map(2 +) // and you get a &quot;biased converter&quot;
+</pre></div></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
