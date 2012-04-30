@@ -6,7 +6,6 @@ object build extends Build {
   
   val versRgx = """[0-9]+\.[0-9]+\.[0-9]+""".r
   val readmeVersion = versRgx.findFirstIn(io.Source.fromFile("README.md").getLines.toList.filter(_.contains("libraryDependencies")).mkString).get
-  println("version: %s" format readmeVersion)
   
   val branch = {
     import sys.process._
@@ -21,12 +20,13 @@ object build extends Build {
       val n = readmeVersion.split("\\.")
       (n.init :+ (n.last.toInt + 1)).mkString(".") + "-SNAPSHOT"
     }
+  println("version: %s" format vers)
   
   lazy val root = Project("main", file("."),
                           settings = 
                             Defaults.defaultSettings ++
                             fmppSettings ++
-                            Seq(version := "0.3.9")
+                            Seq(version := vers)
                             )
                           .configs(Fmpp)
 }
