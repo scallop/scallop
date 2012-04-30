@@ -22,7 +22,7 @@ Add following to your build.sbt:
 ```scala
 resolvers += "Rogach's maven repo" at "https://github.com/Rogach/org.rogach/raw/master/"
 
-libraryDependencies += "org.rogach" %% "scallop" % "0.3.8"
+libraryDependencies += "org.rogach" %% "scallop" % "0.3.9"
 ```
 
 Quick example
@@ -88,3 +88,8 @@ Thanks
 * [Alexy Khrabrov](https://github.com/alexy)
 
 ... and the whole Scala community for help and explanations.
+
+Notes
+=====
+
+Scallop is distributed under (MIT license)[https://github.com/Rogach/scallop/blob/master/license.txt].

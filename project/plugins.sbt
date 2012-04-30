@@ -9,8 +9,12 @@ addSbtPlugin("com.github.aloiscochard" %% "xsbt-fmpp-plugin" % "0.2")
 resolvers += Resolver.url("sbt-plugin-releases",
   new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/"))(Resolver.ivyStylePatterns)
 
+resolvers += Resolver.url("scalasbt", new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases"))(Resolver.ivyStylePatterns)
+
 resolvers += "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
 
 addSbtPlugin("org.ensime" % "ensime-sbt-cmd" % "0.0.7")
 
 addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.0.0")
+
+addSbtPlugin("com.jsuereth" % "xsbt-gpg-plugin" % "0.5")
