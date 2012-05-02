@@ -10,7 +10,7 @@ object Scallop {
     *
     * @param args Args to pre-insert.
     */
-  def apply(args: Seq[String]): Scallop = new Scallop(args, Nil, Nil, Nil, None, None, None, Nil)
+  def apply(args: Seq[String]): Scallop = new Scallop(args, Nil, Nil, Nil, Nil, None, None, None, Nil)
   
   /** Create the default empty parser, fresh as mountain air. */
   def apply(): Scallop = apply(Nil)
@@ -30,6 +30,7 @@ case class Scallop(
     args: Seq[String],
     opts: List[OptDef],
     propts: List[PropDef],
+    proptsLong: List[LongPropDef],
     trail: List[TrailDef],
     vers: Option[String],
     bann: Option[String],
@@ -79,7 +80,7 @@ case class Scallop(
         // find the proper converter
         // options are always required (if we saw it, we must match it), but property options are not
         val (optConv, required) = if (optName startsWith "--") (
-          (opts ++ propts) find (_._name == optName.drop(2)) map {o => (o._conv, true)}
+          (opts ++ propts ++ proptsLong) find (_._name == optName.drop(2)) map {o => (o._conv, true)}
           getOrElse (throw new UnknownOption("Unknown option '%s'" format optName.drop(2)))
         ) else (
           propts find (_.char == optName(1)) map {o => (o._conv, false)}
@@ -221,6 +222,18 @@ case class Scallop(
     this.copy(propts = propts :+ new PropDef(name, descr, conv, keyName, valueName, hidden))
   }
   
+  def propsLong[A](
+      name: String,
+      descr: String = "",
+      keyName: String = "key",
+      valueName: String = "value",
+      hidden: Boolean = false)
+      (implicit conv: ValueConverter[Map[String,A]]): Scallop = {
+    this.copy(proptsLong = proptsLong :+ new LongPropDef(name, descr, conv, keyName, valueName, hidden))
+  }
+    
+
+  
   /** Add new trailing argument definition to this builder.
     *
     * @param name Name for new definition, used for identification.
@@ -274,6 +287,7 @@ case class Scallop(
     (opts ++ propts) sortBy (_._name.toLowerCase) map { 
       case o: OptDef => o.help(getOptShortName(o))
       case o: PropDef => o.help(Some(o.char))
+      case o: LongPropDef => o.help(None)
     } filter (_.size > 0) mkString ("\n")
     
   /** Print help message (with version, banner, option usage and footer) to stdout. */
@@ -336,7 +350,7 @@ case class Scallop(
           ) map (_._3)
         ).right.get
         .orElse(opt.default).asInstanceOf[Option[A]]
-      } getOrElse {
+      } orElse {
         trail.zipWithIndex find(_._1.name == name) map { case (tr, idx) =>
           if (!(tr.conv.manifest <:< m)) {
             throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, tr.conv.manifest))
@@ -346,8 +360,8 @@ case class Scallop(
           ).right.getOrElse(
             if (tr.required) throw new MajorInternalException else None
           ).orElse(tr.default).asInstanceOf[Option[A]]
-        } getOrElse (throw new UnknownOption("Unknown option requested: '%s'" format name))
-      }, m)
+        }
+      } getOrElse (throw new UnknownOption("Unknown option requested: '%s'" format name)), m)
     ).asInstanceOf[(Option[A],Manifest[A])]._1
   }
   
@@ -375,6 +389,17 @@ case class Scallop(
     } getOrElse None
   }
   
+  def prop[A](name:String, key:String)(implicit m: Manifest[Map[String,A]]): Option[A] = {
+    proptsLong find(_.name == name) map { popt =>
+      if (!(popt.conv.manifest <:< m)) {
+        throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, popt.conv.manifest))
+      }
+      popt.conv.parse(
+        pargs filter (_._2 == Some(name)) map(_._3)
+      ).right.get.get.asInstanceOf[Map[String,A]].get(key)
+    } getOrElse None
+  }
+  
   /** Get all data for propety as Map.
     *
     * @param name Propety definition identifier.
@@ -391,6 +416,18 @@ case class Scallop(
     } getOrElse Map()
   }
   
+  def propMap[A](name: String)(implicit m: Manifest[Map[String,A]]): Map[String,A] = {
+    proptsLong find(_.name == name) map { popt =>
+      if (!(popt.conv.manifest <:< m)) {
+        throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, popt.conv.manifest))
+      }
+      popt.conv.parse(
+        pargs filter (_._2 == Some(name)) map (_._3)
+      ).right.get.get.asInstanceOf[Map[String,A]]
+    } getOrElse Map()
+  }
+
+  
   /** Get all data for property as Map[String, String].
     *
     * This method is needed for summary generation - I do not know the exact types at that time.
@@ -399,10 +436,25 @@ case class Scallop(
     propts find (_.char == name) map { popt =>
       popt.conv.parse(
         pargs filter (_._1 == Some(name.toString)) map (_._3)
-      ).right.get.get.asInstanceOf[Map[String,String]]
+      ).fold(
+        _ => throw new WrongOptionFormat("Wrong value format for property '%s': %s" format (popt.char, pargs filter (_._1 == Some(name.toString)) map (_._3) flatMap (a=>a) mkString " " )),
+        _.get.asInstanceOf[Map[String,String]]
+      ) 
     } getOrElse Map()
   }
 
+  private def propStringMap(name: String): Map[String,String] = {
+    proptsLong find (_.name == name) map { popt =>
+      popt.conv.parse(
+        pargs filter (_._1 == Some(name.toString)) map (_._3)
+      ).fold(
+        _ => throw new WrongOptionFormat("Wrong value format for property '%s': %s" format (popt.name, pargs filter (_._1 == Some(name.toString)) map (_._3) flatMap (a=>a) mkString " " )),
+        _.get.asInstanceOf[Map[String,String]]
+      ) 
+    } getOrElse Map()
+  }
+  
+  
   /** Determine the short name for the option (if available). */
   private def getOptShortName(o:OptDef):Option[Char] =
     if (o.noshort) None
@@ -426,7 +478,7 @@ case class Scallop(
     */
   def verify = {
     // long options must not clash
-    (opts.map(_.name) ++ trail.map(_.name)) groupBy (a=>a) filter (_._2.size > 1) foreach
+    (opts.map(_.name) ++ trail.map(_.name) ++ proptsLong.map(_.name)) groupBy (a=>a) filter (_._2.size > 1) foreach
       (a => throw new IdenticalOptionNames("Long option name '%s' is not unique" format a._1))
     // short options must not clash
     (opts.map(_.short).flatten ++ propts.map(_.char)) groupBy (a=>a) filter (_._2.size > 1) foreach 
@@ -451,8 +503,8 @@ case class Scallop(
     // check that there are no garbage options
     pargs foreach { arg =>
       if (!(
-           arg._2 map (n => opts.find(_.name == n) isDefined) getOrElse
-           ((opts.map(o => o.short.getOrElse(o.name.head)) ++ propts.map(_.char)) find
+           arg._2 map (n => (opts.map(_.name) ++ proptsLong.map(_.name)).find(n ==) isDefined) getOrElse
+           (opts.map(o => o.short.getOrElse(o.name.head)) ++ propts.map(_.char) find
            (arg._1.get.head ==) isDefined)
          ))
         throw new UnknownOption("Unknown option: %s" format arg._1.getOrElse(arg._2.get))
@@ -471,6 +523,11 @@ case class Scallop(
       if (!(get(o.name)(o.conv.manifest) map (v => o.validator(o.conv.manifest,v)) getOrElse true))
         throw new ValidationFailure("Validation failure for '%s' option parameters: %s" format (o.name, params))
     }
+    
+    // test properties converters
+    propts foreach (p => propStringMap(p.char))
+    proptsLong foreach (p => propStringMap(p.name))
+    
     this
   }
   
@@ -482,6 +539,7 @@ case class Scallop(
     ("Scallop(%s)" format args.mkString(", ")) + "\n" +
     opts.map(o => " %s  %s => %s" format ((if (isSupplied(o.name)) "*" else " "), o.name, get(o.name)(o.conv.manifest).getOrElse("$None$"))).mkString("\n") + "\n" +
     propts.map(p => " *  props %s => %s" format (p.char, propStringMap(p.char))).mkString("\n") + "\n" + 
+    proptsLong.map(p => " *  props %s => %s" format (p.name, propStringMap(p.name))).mkString("\n") + "\n" + 
     trail.map(t => " %s  %s => %s" format ((if (isSupplied(t.name)) "*" else " "),t.name, get(t.name)(t.conv.manifest).getOrElse("$None$"))).mkString("\n")
   }
 }

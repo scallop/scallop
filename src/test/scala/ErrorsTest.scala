@@ -155,4 +155,12 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
     }
   }
   
+  test ("propts wrong value type") {
+    intercept[WrongOptionFormat] {
+      Scallop(Seq("-Ekey1=a"))
+        .props[Int]('E')
+        .verify
+    }
+  }
+  
 }

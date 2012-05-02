@@ -327,5 +327,29 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.app("key1") should equal (Some(1))
     Conf.app("key2") should equal (Some(2))
   }
+
+  test ("short-named property args with commas and spaces 2") {
+    object Conf extends ScallopConf(Seq("-A","key1=1,","key2=2")) {
+      val app = props[Int]('A')
+    }
+    Conf.app("key1") should equal (Some(1))
+    Conf.app("key2") should equal (Some(2))
+  }
   
+  test ("long-named property args") {
+    object Conf extends ScallopConf(Seq("--Apples","key1=1","key2=2")) {
+      val app = propsLong[Int]("Apples")
+    }
+    Conf.app("key1") should equal (Some(1))
+    Conf.app("key2") should equal (Some(2))
+  }
+  
+  test ("long-named property args with commas and spaces") {
+    object Conf extends ScallopConf(Seq("--Apples","key1=1",",","key2=2")) {
+      val app = propsLong[Int]("Apples")
+    }
+    Conf.app("key1") should equal (Some(1))
+    Conf.app("key2") should equal (Some(2))
+  }
+
 }

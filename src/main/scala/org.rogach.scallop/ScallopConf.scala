@@ -58,6 +58,21 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
       builder.prop(name, key)(conv.manifest)
     }
   }
+
+  def propsLong[A](
+      name: String,
+      descr: String = "",
+      keyName: String = "key",
+      valueName: String = "value",
+      hidden: Boolean = false)
+      (implicit conv: ValueConverter[Map[String,A]]):(String => Option[A]) = {
+    builder = builder.propsLong(name, descr, keyName, valueName, hidden)(conv)
+    (key:String) => {
+      verified_?
+      builder.prop(name, key)(conv.manifest)
+    }
+  }
+
   
   /** Add new trailing argument definition to this config, and get a holder for it's value.
     *
