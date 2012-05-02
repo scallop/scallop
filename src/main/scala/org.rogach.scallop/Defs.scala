@@ -58,6 +58,7 @@ case class OptDef (
   def argLine(sh: Option[Char]): String =
     List(sh.map("-" +), Some("--" + name)).flatten.mkString(", ") + "  " + conv.argType.fn(arg)
 }
+
 /** Holder for property option definition.
   *
   * @param char The char that is used as prefix for property options, and for identification.
@@ -77,6 +78,20 @@ case class PropDef (
   def argLine(sh: Option[Char]) =
     "-%1$s%2$s=%3$s [%2$s=%3$s]..." format (char, keyName, valueName)
 }
+
+case class LongPropDef (
+    name: String,
+    descr: String,
+    conv: ValueConverter[_],
+    keyName: String,
+    valueName: String,
+    hidden: Boolean)
+  extends ArgDef(name, None, descr, conv, hidden) {
+
+  def argLine(sh: Option[Char]) =
+    "--%1$s%2$s=%3$s [%2$s=%3$s]..." format (name, keyName, valueName)
+}
+
 /** Holder for trail argument definition.
   *
   * @param name Name for this definition, used for identification.

@@ -57,7 +57,7 @@ package object scallop {
     val rgx = """([^=]+)=(.*)""".r
     def parse(s:List[List[String]]) = {
       try {
-        Right(Some(s.flatten.map {
+        Right(Some(s.flatten.map(_.trim).filter(","!=).flatMap(_ split "," filter (_.trim.size > 0)).map {
           case rgx(key,value) => (key, conv.parse(List(List(value))).right.get.get)
         }.toMap))
       } catch { case _ =>
