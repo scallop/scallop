@@ -1,6 +1,7 @@
 #!/bin/bash
 
 sbt doc
+for x in $(find target/scala-2.9.1/api/ -type f); do sed -i "s_`pwd`/__" $x; done
 git checkout gh-pages
 rm -r index
 rm -r org
