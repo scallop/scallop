@@ -62,3 +62,5 @@ pomExtra := (
 )
 
 scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/Rogach/scallop/tree/master/€{FILE_PATH}.scala")
+
+parallelExecution in Test := false
