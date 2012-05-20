@@ -13,6 +13,15 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
     }
   }
   
+  test("wrong arg type parameter") {
+    val opts = Scallop(List("--angels","42","34"))
+      .opt[List[Int]]("angels")
+      .verify
+    intercept[WrongTypeRequest] {
+      opts.get[List[Double]]("angels")
+    }
+  }
+
   test ("wrong arg type for prop") {
     val opts = Scallop(List("-Ekey1=1"))
       .props[Int]('E')
