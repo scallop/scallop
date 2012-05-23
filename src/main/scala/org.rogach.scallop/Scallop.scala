@@ -25,7 +25,7 @@ object Scallop {
   * @param trail Definitions for trailing arguments.
   * @param vers Version string to display in help.
   * @param bann Banner (summary of this program and command-line usage) to display in help.
-  * @param footer Footer - displayed after options.
+  * @param foot Footer - displayed after options.
   */
 case class Scallop(
     args: Seq[String],
