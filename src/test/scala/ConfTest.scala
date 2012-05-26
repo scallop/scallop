@@ -15,7 +15,6 @@ class ConfTest extends FunSuite with ShouldMatchers {
       val properties = props[String]('E')
       // types (:ScallopOption[Double]) can be omitted, here just for clarity
       val size:ScallopOption[Double] = trailArg[Double](required = false)
-      verify
     }
     // that's it. Completely type-safe and convenient.
     Conf.count() should equal (4)
@@ -267,4 +266,50 @@ class ConfTest extends FunSuite with ShouldMatchers {
       Conf
     }
   }  
+  
+  test ("numbers in option names") {
+    object Conf extends ScallopConf(Seq("-a", "1")) {
+      val apples1 = opt[Int]("apples1")
+      val apples2 = opt[Int]("apples2")
+      verify
+    }
+    Conf.apples1.get should equal (Some(1))
+  }
+  
+  test ("for comprehensions for ScallopOptions") {
+    object Conf extends ScallopConf(Seq("-a","3","-b","2")) {
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      val weight = for {
+        a <- apples 
+        if a > 2
+        b <- bananas
+      } yield a * 2 + b * 3
+      val weight2 = for { a <- apples; if a < 2; b <- bananas } yield a * 2 + b * 3
+      verify
+    }
+    Conf.weight.get should equal (Some(12))
+    Conf.weight2.get should equal (None)
+  }
+
+  test ("automatic verification") {
+    object Conf extends ScallopConf(Seq("-a","1")) {
+      val apples = opt[Int]("apples")
+    }
+    Conf.verified should equal (true)
+    Conf.apples() should equal (1)
+  }
+  
+  test ("automatic verification, with deeper hierarcy") {
+    class AppleConf(args:Seq[String]) extends ScallopConf(args) {
+      val apples = opt[Int]("apples")
+    }
+    object Conf extends AppleConf(Seq("-a","1","-b","3")) {
+      val bananas = opt[Int]("bananas")
+    }
+    Conf.verified should equal (true)
+    Conf.apples() should equal (1)
+    Conf.bananas() should equal (3)
+  }
+  
 }

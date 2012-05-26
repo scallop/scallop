@@ -2,10 +2,10 @@ package org.rogach.scallop
 
 import exceptions._
 
-abstract class ScallopConf(args: Seq[String]) extends ScallopConfValidations {
+abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations with AfterInit {
   
   var builder = Scallop(args)
-  private var verified = false
+  var verified = false
   
   /** Add a new option definition to this config and get a holder for the value.
     *
@@ -166,4 +166,7 @@ abstract class ScallopConf(args: Seq[String]) extends ScallopConfValidations {
     builder = builder.footer(f)
   }
   
+  final def afterInit {
+    verify
+  }
 }

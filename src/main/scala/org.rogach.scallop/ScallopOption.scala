@@ -47,6 +47,15 @@ class ScallopOption[A](
   def filterNot(p: A => Boolean) =
     new ScallopOption(name, opt.get.filterNot(p), supplied)
     
+  def withFilter(p: A => Boolean) = new WithFilter(p)
+  
+  class WithFilter(p: A => Boolean) {
+    def map[B](f: A => B) = opt filter p map f
+    def flatMap[B](f: A => ScallopOption[B]) = opt filter p flatMap f
+    def foreach(f: A => Unit) = opt filter p foreach f
+    def withFilter(q: A => Boolean) = new WithFilter(x => p(x) && q(x))
+  }
+    
   /** Returns ScallopOption, that contains the result of applying
     * ```f``` to this option's value, if this option is non-empty.
     * Returns ScallopOption with no value otherwise.
@@ -55,6 +64,16 @@ class ScallopOption[A](
     */
   def map[B](f: A => B) = 
     new ScallopOption(name, opt.get.map(f), supplied)
+
+  /** Apply the given procedure f to the option's value, if it is nonempty.
+    */
+  def foreach(f: A => Unit) = opt.get.foreach(f)
+  
+  /** Returns the result of applying f th this options value if
+    * this option is non-empty. 
+    */
+  def flatMap[B](f: A => ScallopOption[B]): ScallopOption[B] = 
+    new ScallopOption(name, (if (opt.isEmpty) new ScallopOption("", None, false) else f(opt())).get, false)
     
   /** Returns ScallopOption with this value if it is non-empty,
     * or with the value of the alternative option. If it is 

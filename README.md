@@ -20,9 +20,7 @@ Installation
 Add following to your build.sbt:
 
 ```scala
-resolvers += "Rogach's maven repo" at "https://github.com/Rogach/org.rogach/raw/master/"
-
-libraryDependencies += "org.rogach" %% "scallop" % "0.3.7"
+libraryDependencies += "org.rogach" %% "scallop" % "0.3.9"
 ```
 
 Quick example
@@ -40,7 +38,6 @@ object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
   val properties = props[String]('E')
   // types (:ScallopOption[Double]) can be omitted, here just for clarity
   val size:ScallopOption[Double] = trailArg[Double](required = false)
-  verify
 }
 // that's it. Completely type-safe and convenient.
 Conf.count() should equal (4)
@@ -59,8 +56,38 @@ For more examples, you can look at Scallop's [test suite](https://github.com/Rog
 
 Also, I wrote a [blog post](http://rogach-scala.blogspot.com/2012/04/better-cli-option-parsing-in-scala.html) and [another one](http://rogach-scala.blogspot.com/2012/04/configuration-objects-in-scallop.html) about Scallop.
 
+Fancy things
+============
+
+Scallop supports quite powerful matching on trailing arguments. For example:
+
+```scala
+object Conf extends ScallopConf(
+       List("-Ekey1=value1", "key2=value2", "key3=value3", 
+            "first", "1","2","3","second","4","5","6")) {
+  val props = props[String]('E')
+  val firstListName = trailArg[String]()
+  val firstList = trailArg[List[Int]]()
+  val secondListName = trailArg[String]()
+  val secondList = trailArg[List[Double]]()
+  verify
+}
+Conf.props("key1") should equal (Some("value1"))
+Conf.firstListName() should equal ("first")
+Conf.secondListName() should equal ("second")
+Conf.firstList() should equal (List(1,2,3))
+Conf.secondList() should equal (List[Double](4,5,6))
+```
+
+In this case, Scallops backtracking parser is clever enough to distinguish the boundaries of the arguments lists.
+
 Thanks
 ======
 * [Alexy Khrabrov](https://github.com/alexy)
 
 ... and the whole Scala community for help and explanations.
+
+Notes
+=====
+
+Scallop is distributed under [MIT license](https://github.com/Rogach/scallop/blob/master/license.txt).
