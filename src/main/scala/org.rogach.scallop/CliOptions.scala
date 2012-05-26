@@ -131,20 +131,20 @@ case class LongNamedPropertyOption(
 case class TrailingArgsOption(
     name: String,
     required: Boolean,
+    descr: String,
     converter: ValueConverter[_],
     validator: (Manifest[_],Any) => Boolean,
-    default: Option[Any])
+    default: Option[Any],
+    hidden: Boolean)
   extends CliOption {
-    
-  def descr = ""
+
   def isPositional = true
   def longNames = Nil
   def shortNames = Nil
   def requiredShortNames = Nil
 
-  def hidden = true
   def argLine(sh: List[Char]): String = 
-    throw new UnsupportedOperationException("This method is not imptemented yet")
+    "%s (%s)" format (name, (if (required) "required" else "not required"))
 }
 
 case class ToggleOption(

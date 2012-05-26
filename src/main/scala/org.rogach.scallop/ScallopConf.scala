@@ -82,12 +82,15 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     */
   def trailArg[A](
       name: => String = ("trailArg " + (1 to 10).map(_ => (97 to 122)(math.random * 26 toInt).toChar).mkString),
+      descr: String = "",
+      validate: A => Boolean = (_:A) => true,
       required: Boolean = true,
-      default: Option[A] = None)
+      default: Option[A] = None,
+      hidden: Boolean = false)
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
     // here, we generate some random name, since it does not matter
     val n = name
-    builder = builder.trailArg(n, required, default)(conv)
+    builder = builder.trailArg(n, required, descr, default, validate, hidden)(conv)
     new ScallopOption[A](
       name, 
       {verified_?; builder.get[A](n)(conv.manifest)},

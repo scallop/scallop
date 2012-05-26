@@ -257,8 +257,10 @@ case class Scallop(
   def trailArg[A](
       name: String,
       required: Boolean = true,
+      descr: String = "",
       default: Option[A] = None,
-      validate: A => Boolean = ((_:A) => true))
+      validate: A => Boolean = ((_:A) => true),
+      hidden: Boolean = false)
       (implicit conv: ValueConverter[A]): Scallop = {
     val defaultA = 
       if (conv == flagConverter)
@@ -271,9 +273,11 @@ case class Scallop(
     }
     this.copy(opts = opts :+ TrailingArgsOption(name,
                                                 required,
+                                                descr,
                                                 conv,
                                                 validator,
-                                                defaultA))
+                                                defaultA,
+                                                hidden))
   }
 
   def toggle(
@@ -328,10 +332,16 @@ case class Scallop(
   /** Get help on options from this builder. The resulting help is carefully formatted at 80 columns,
     * and contains info on proporties and options. It does not contain info about trailing arguments.
     */
-  def help: String = 
-    opts.filter(!_.isPositional) flatMap { opt =>
+  def help: String = {
+    val optsHelp = (opts.filter(!_.isPositional) filter (!_.hidden) flatMap { opt =>
       opt.help(getOptionShortNames(opt))
-    } filter (_.size > 0) sortBy (_.trim.dropWhile('-'==).toLowerCase) mkString "\n"
+    } filter (_.size > 0) sortBy (_.trim.dropWhile('-'==).toLowerCase) mkString "\n")
+    if (opts.filter(_.isPositional).filter(!_.hidden).isEmpty) {
+      optsHelp
+    } else {
+      optsHelp + "\n\nTrailing arguments:\n" + opts.filter(_.isPositional).filter(!_.hidden).flatMap(_.help(Nil)).map("  "+).mkString("\n") + "\n"
+    }
+  }
     
   /** Print help message (with version, banner, option usage and footer) to stdout. */
   def printHelp = {

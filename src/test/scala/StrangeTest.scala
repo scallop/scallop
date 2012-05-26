@@ -63,6 +63,7 @@ class StrangeTest extends FunSuite with ShouldMatchers {
           footer("and some more")
           val apples = opt[Int]("apples", descr = "fresh apples!")
           val verbose = toggle("verbose", descrYes = "very verbose", descrNo = "turn off")
+          val trail = trailArg[String]("trail", descr = "Which trail do you choose?")
           verify
         }
         Conf
@@ -77,6 +78,11 @@ class StrangeTest extends FunSuite with ShouldMatchers {
                         |    turn off 
                         |-v, --verbose
                         |    very verbose 
+                        |
+                        |Trailing arguments:
+                        |  trail (required)
+                        |    Which trail do you choose?
+                        |
                         |and some more
                         |""".stripMargin)
   }
