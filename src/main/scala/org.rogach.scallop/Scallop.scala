@@ -35,13 +35,13 @@ case class Scallop(
     optionSetValidations: List[List[String]=>Either[String, Unit]] = Nil) {
 
   /** Parse the argument into list of options and their arguments. */
-  private def parse(args: Seq[String]): List[(CliOption, List[String])] = {
-    def goParseRest(args: Seq[String], opt: Option[CliOption]) = { 
+  private def parse(args: Seq[String]): List[(CliOption, (String,List[String]))] = {
+    def goParseRest(args: Seq[String], opt: Option[(String, CliOption)]) = { 
       parseTrailingArgs(
         args.toList,
-        opt.map(o=> (o.converter, true)).toList ::: opts.filter(_.isPositional).map(o => (o.converter, o.required))
-      ) map { res => (opt.toList ::: opts.filter(_.isPositional)) zip res filter { case (opt, p) => !opt.isPositional || p.size > 0 } } getOrElse
-        (throw new OptionParseException("Failed to parse the trailing argument list: '%s'" format args.tail))
+        opt.map(o=> (o._2.converter, true)).toList ::: opts.filter(_.isPositional).map(o => (o.converter, o.required))
+      ) map { res => (opt.toList ::: opts.filter(_.isPositional).map(("",_))) zip res filter { case ((invoc, opt), p) => !opt.isPositional || p.size > 0 } } getOrElse
+        (throw new OptionParseException("Failed to parse the trailing argument list: '%s'" format args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
     }
     if (args.isEmpty) Nil
     else if (isOptionName(args.head)) {
@@ -51,9 +51,9 @@ case class Scallop(
         val (before, after) = args.tail.span(isArgument)
         if (after.isEmpty) {
           // get the converter, proceed to trailing args parsing
-          goParseRest(args.tail, Some(opt))
+          goParseRest(args.tail, Some((args.head.drop(2),opt)))
         } else {
-          (opt -> before.toList) :: parse(after)
+          (opt -> (args.head.drop(2), before.toList)) :: parse(after)
         }
       } else {
         if (args.head.size == 2) {
@@ -62,9 +62,9 @@ case class Scallop(
           val (before, after) = args.tail.span(isArgument)
           if (after.isEmpty) {
             // get the converter, proceed to trailing args parsing
-            goParseRest(args.tail, Some(opt))
+            goParseRest(args.tail, Some((args.head.drop(1), opt)))
           } else {
-            (opt -> before.toList) :: parse(after)
+            (opt -> (args.head.drop(1), before.toList)) :: parse(after)
           }
         } else {
           val opt = getOptionWithShortName(args.head(1)) getOrElse
@@ -94,7 +94,7 @@ case class Scallop(
   }
   
   /** Result of parsing */ 
-  private lazy val parsed = if (args.headOption map("@--" ==) getOrElse false) {
+  private lazy val parsed: List[(CliOption, (String, List[String]))] = if (args.headOption map("@--" ==) getOrElse false) {
     // read options from stdin
     val argList = 
       io.Source.fromInputStream(java.lang.System.in).getLines.toList
@@ -154,7 +154,7 @@ case class Scallop(
             if (next.isDefined) Some(p :: next.get)
             else None 
         } else {
-          convs.head._1.parse(List(p)) match {
+          convs.head._1.parse(List(("",p))) match {
             case Right(a) if a.isDefined => 
               val next = parseTrailingArgs(rem, convs.tail)
               if (next.isDefined) Some(p :: next.get)
@@ -275,6 +275,28 @@ case class Scallop(
                                                 defaultA))
   }
 
+  def toggle(
+      name: String,
+      default: Option[Boolean] = None,
+      short: Char = 0.toChar,
+      noshort: Boolean = false,
+      prefix: String = "no",
+      descrYes: String = "",
+      descrNo: String = "",
+      hidden: Boolean = false) = {
+    val eShort = if (short == 0.toChar || noshort) None else Some(short)
+    this.copy(opts = opts :+ ToggleOption(name,
+                                          default,
+                                          eShort,
+                                          noshort,
+                                          prefix,
+                                          descrYes,
+                                          descrNo,
+                                          hidden))
+  }
+    
+    
+
   /** Add a validation for supplied option set.
     *
     * @param fn A function, that accepts the list of names of options, that are supplied.
@@ -306,9 +328,9 @@ case class Scallop(
     * and contains info on proporties and options. It does not contain info about trailing arguments.
     */
   def help: String = 
-    opts.filter(!_.isPositional) sortBy (_.name.toLowerCase) map { opt =>
+    opts.filter(!_.isPositional) flatMap { opt =>
       opt.help(getOptionShortNames(opt))
-    } filter (_.size > 0) mkString "\n"
+    } filter (_.size > 0) sortBy (_.trim.dropWhile('-'==).toLowerCase) mkString "\n"
     
   /** Print help message (with version, banner, option usage and footer) to stdout. */
   def printHelp = {
@@ -398,7 +420,7 @@ case class Scallop(
       val args = parsed filter (_._1 == o) map (_._2)
       val res = o.converter.parse(args)
       if (res.isLeft) throw new WrongOptionFormat(
-        "Wrong format for option '%s': %s" format (o.name, args.map(_.mkString).mkString(" ")))
+        "Wrong format for option '%s': %s" format (o.name, args.map(_._2.mkString).mkString(" ")))
       if (o.required && !res.right.get.isDefined && !o.default.isDefined) throw new RequiredOptionNotFound(
         "Required option '%s' not found" format o.name)
       // validaiton

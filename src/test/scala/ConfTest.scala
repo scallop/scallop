@@ -352,4 +352,44 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.app("key2") should equal (Some(2))
   }
 
+  test ("toggle options - positive, long") {
+    object Conf extends ScallopConf(Seq("--verbose")) {
+      val verbose = toggle("verbose")
+    }
+    Conf.verbose() should equal (true)
+    Conf.verbose.isSupplied should equal (true)
+  }
+  
+  test ("toggle options - negative, long") {
+    object Conf extends ScallopConf(Seq("--noverbose")) {
+      val verbose = toggle("verbose")
+    }
+    Conf.verbose() should equal (false)
+    Conf.verbose.isSupplied should equal (true)
+  }  
+  
+  test ("toggle options - short") {
+    object Conf extends ScallopConf(Seq("-v")) {
+      val verbose = toggle("verbose")
+    }
+    Conf.verbose() should equal (true)
+    Conf.verbose.isSupplied should equal (true)
+  }  
+  
+  test ("toggle options - not supplied") {
+    object Conf extends ScallopConf(Seq()) {
+      val verbose = toggle("verbose")
+    }
+    Conf.verbose.get should equal (None)
+    Conf.verbose.isSupplied should equal (false)
+  }  
+  
+  test ("toggle options - not supplied, with default") {
+    object Conf extends ScallopConf(Seq()) {
+      val verbose = toggle("verbose", default = Some(true))
+    }
+    Conf.verbose.get should equal (Some(true))
+    Conf.verbose.isSupplied should equal (false)
+  }  
+  
 }
