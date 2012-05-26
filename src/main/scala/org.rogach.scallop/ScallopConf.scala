@@ -55,9 +55,24 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     builder = builder.props(name, descr, keyName, valueName, hidden)(conv)
     (key:String) => {
       verified_?
-      builder.prop(name, key)(conv.manifest)
+      builder(name.toString)(conv.manifest).get(key)
     }
   }
+
+  def propsLong[A](
+      name: String,
+      descr: String = "",
+      keyName: String = "key",
+      valueName: String = "value",
+      hidden: Boolean = false)
+      (implicit conv: ValueConverter[Map[String,A]]):(String => Option[A]) = {
+    builder = builder.propsLong(name, descr, keyName, valueName, hidden)(conv)
+    (key:String) => {
+      verified_?
+      builder(name)(conv.manifest).get(key)
+    }
+  }
+
   
   /** Add new trailing argument definition to this config, and get a holder for it's value.
     *
@@ -67,18 +82,54 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     */
   def trailArg[A](
       name: => String = ("trailArg " + (1 to 10).map(_ => (97 to 122)(math.random * 26 toInt).toChar).mkString),
+      descr: String = "",
+      validate: A => Boolean = (_:A) => true,
       required: Boolean = true,
-      default: Option[A] = None)
+      default: Option[A] = None,
+      hidden: Boolean = false)
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
     // here, we generate some random name, since it does not matter
     val n = name
-    builder = builder.trailArg(n, required, default)(conv)
+    builder = builder.trailArg(n, required, descr, default, validate, hidden)(conv)
     new ScallopOption[A](
       name, 
       {verified_?; builder.get[A](n)(conv.manifest)},
       {verified_?; builder.isSupplied(n)})
   }
-  
+
+  /** Add new toggle option definition to this config, and get a holder for it's value.
+    *
+    * Toggle options are just glorified flag options. For example, if you will ask for a
+    * toggle option with name "verbose", it will be invocable in three ways - 
+    * "--verbose", "--noverbose", "-v".
+    *
+    * @param name Name of this option
+    * @param default default value for this option
+    * @param short Overload the char that will be used as short option name. Defaults to first character of the name.
+    * @param noshort If set to true, then this option will not have any short name.
+    * @param profix Prefix to name of the option, that will be used for "negative" version of the
+                    option. 
+    * @param descrYes Description for positive variant of this option.
+    * @param descrNo Description for negative variant of this option.
+    * @param hidden If set to true, then this option will not be present in auto-generated help.
+    */
+  def toggle(
+      name: String,
+      default: Option[Boolean] = None,
+      short: Char = 0.toChar,
+      noshort: Boolean = false,
+      prefix: String = "no",
+      descrYes: String = "",
+      descrNo: String = "",
+      hidden: Boolean = false): ScallopOption[Boolean] = {
+    builder = builder.toggle(name, default, short, noshort, prefix, descrYes, descrNo, hidden)
+    new ScallopOption[Boolean](
+      name,
+      {verified_?; builder.get[Boolean](name)},
+      {verified_?; builder.isSupplied(name)}
+    )
+  }
+
   /** Veryfy that this config object is properly configured. */
   def verify {
     verified = true
@@ -130,7 +181,7 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     */
   def propMap[A](name: Char)(implicit m: Manifest[Map[String,A]]) = {
     verified_?
-    builder.propMap(name)(m)
+    builder(name.toString)(m)
   }
 
   /** Get summary of current parser state.

@@ -10,7 +10,7 @@ object Scallop {
     *
     * @param args Args to pre-insert.
     */
-  def apply(args: Seq[String]): Scallop = new Scallop(args, Nil, Nil, Nil, None, None, None, Nil)
+  def apply(args: Seq[String]): Scallop = new Scallop(args)
   
   /** Create the default empty parser, fresh as mountain air. */
   def apply(): Scallop = apply(Nil)
@@ -28,34 +28,92 @@ object Scallop {
   * @param foot Footer - displayed after options.
   */
 case class Scallop(
-    args: Seq[String],
-    opts: List[OptDef],
-    propts: List[PropDef],
-    trail: List[TrailDef],
-    vers: Option[String],
-    bann: Option[String],
-    foot: Option[String],
-    optionSetValidations: List[List[String]=>Either[String, Unit]]) {
+    args: Seq[String] = Nil,
+    opts: List[CliOption] = Nil,
+    vers: Option[String] = None,
+    bann: Option[String] = None,
+    foot: Option[String] = None,
+    optionSetValidations: List[List[String]=>Either[String, Unit]] = Nil) {
 
-  /** Options and trailing arguments. */
-  private lazy val (pargs,rest) = if (args.headOption map("@--" ==) getOrElse false) {
+  /** Parse the argument into list of options and their arguments. */
+  private def parse(args: Seq[String]): List[(CliOption, (String,List[String]))] = {
+    def goParseRest(args: Seq[String], opt: Option[(String, CliOption)]) = { 
+      parseTrailingArgs(
+        args.toList,
+        opt.map(o=> (o._2.converter, true)).toList ::: opts.filter(_.isPositional).map(o => (o.converter, o.required))
+      ) map { res => (opt.toList ::: opts.filter(_.isPositional).map(("",_))) zip res filter { case ((invoc, opt), p) => !opt.isPositional || p.size > 0 } } getOrElse
+        (throw new OptionParseException("Failed to parse the trailing argument list: '%s'" format args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
+    }
+    if (args.isEmpty) Nil
+    else if (isOptionName(args.head)) {
+      if (args.head.startsWith("--")) {
+        val opt = opts find (_.longNames.contains(args.head.drop(2))) getOrElse
+                  (throw new UnknownOption("Unknown option '%s'" format args.head.drop(2)))
+        val (before, after) = args.tail.span(isArgument)
+        if (after.isEmpty) {
+          // get the converter, proceed to trailing args parsing
+          goParseRest(args.tail, Some((args.head.drop(2),opt)))
+        } else {
+          (opt -> (args.head.drop(2), before.toList)) :: parse(after)
+        }
+      } else {
+        if (args.head.size == 2) {
+          val opt = getOptionWithShortName(args.head(1)) getOrElse 
+                    (throw new UnknownOption("Unknown option '%s'" format args.head.drop(1)))
+          val (before, after) = args.tail.span(isArgument)
+          if (after.isEmpty) {
+            // get the converter, proceed to trailing args parsing
+            goParseRest(args.tail, Some((args.head.drop(1), opt)))
+          } else {
+            (opt -> (args.head.drop(1), before.toList)) :: parse(after)
+          }
+        } else {
+          val opt = getOptionWithShortName(args.head(1)) getOrElse
+                    (throw new UnknownOption("Unknown option '%s'" format args.head.drop(1)))
+          if (opt.converter.argType != ArgType.FLAG) {
+            parse(args.head.take(2) +: args.head.drop(2) +: args.tail)
+          } else {
+            parse(args.head.take(2) +: ("-" + args.head.drop(2)) +: args.tail)
+          }
+        }
+      }
+    } else {
+      // only trailing args left - proceed to trailing args parsing
+      goParseRest(args, None)
+    }
+  }
+  
+  /** Find an option, that responds to this short name. */
+  def getOptionWithShortName(c: Char): Option[CliOption] = {
+    opts find (_.requiredShortNames.contains(c)) orElse {
+      opts find (_.shortNames.contains(c))
+    }
+  }
+  
+  def getOptionShortNames(opt: CliOption): List[Char] = {
+    (opt.shortNames ++ opt.requiredShortNames).distinct.filter(sh => getOptionWithShortName(sh).get == opt)
+  }
+  
+  /** Result of parsing */ 
+  private lazy val parsed: List[(CliOption, (String, List[String]))] = if (args.headOption map("@--" ==) getOrElse false) {
     // read options from stdin
-    val argList = io.Source.fromInputStream(java.lang.System.in).getLines.toList.flatMap(_.split(" ").filter(_.size > 0))
-    parseWithRest(argList)
+    val argList = 
+      io.Source.fromInputStream(java.lang.System.in).getLines.toList
+      .flatMap(_.split(" ").filter(_.size > 0))
+    parse(argList)
   } else if (args.headOption map(_ startsWith "@") getOrElse false) {
     // read options from a file (canned config)
-    val argList = io.Source.fromFile(args.head.drop(1)).getLines.toList.flatMap(_.split(" ").filter(_.size > 0))
-    parseWithRest(argList)
-  } else parseWithRest(args)
-  
-  /** Just a shortcut. */
-  private type ArgParsed = (Option[String], Option[String], List[String]) // (short, long, args)
+    val argList = 
+      io.Source.fromFile(args.head.drop(1)).getLines.toList
+      .flatMap(_.split(" ").filter(_.size > 0))
+    parse(argList)
+  } else parse(args)
 
   /** cache for option&property values returned from this builder. */
-  private var getCache = scala.collection.mutable.Map[(String,Manifest[_]),Any]()
-  
+//  private var getCache = scala.collection.mutable.Map[(String,Manifest[_]),Any]()
+
   /** Tests whether this string contains option name, not some number. */
-  private def isOption(s: String) = 
+  private def isOptionName(s: String) = 
     if (s.startsWith("-"))
       if (s.size > 1)
         !s(1).isDigit
@@ -63,68 +121,8 @@ case class Scallop(
     else false
   
   /** Tests whether this string contains option parameter, not option call. */
-  private def isParameter(s: String) = !isOption(s)
+  private def isArgument(s: String) = !isOptionName(s)
   
-  /** Takes the whole arguments list and parses into options and trailing arguments.
-    *
-    * @param args The command-line arguments.
-    * @return parsed options, a list of strings corresponding to trailing arguments one-to-one.
-    */
-  private def parseWithRest(args: Seq[String]): (List[ArgParsed], List[List[String]]) = {
-    // the part of arguments after the last option
-    val trailArgs = args.reverse.takeWhile(isParameter).reverse
-    // name for that last option
-    val optNam = args.reverse.drop(trailArgs.size).headOption 
-    optNam match {
-      case Some(optName) => {
-        // find the proper converter
-        // options are always required (if we saw it, we must match it), but property options are not
-        val (optConv, required) = if (optName startsWith "--") (
-          (opts ++ propts) find (_._name == optName.drop(2)) map {o => (o._conv, true)}
-          getOrElse (throw new UnknownOption("Unknown option '%s'" format optName.drop(2)))
-        ) else (
-          propts find (_.char == optName(1)) map {o => (o._conv, false)}
-          getOrElse 
-            (opts map (a => (a,getOptShortName(a))) filter (_._2.isDefined) 
-             find (_._2.get == optName.last) map {o => (o._1._conv, true)}
-             getOrElse (throw new UnknownOption("Unknown option '%s'" format optName.drop(1))))
-        )
-        val rest = parseRest(trailArgs.toList, (optConv, required) :: trail.map(t => (t.conv, t.required)))
-          .getOrElse(throw new OptionParseException("Failed to parse the trailing argument list"))
-        (parse(args.reverse.drop(trailArgs.size - rest.headOption.map(_.size).getOrElse(0)).reverse), rest.tail)
-      }
-      case None => {
-        // no last option - there were only trailing arguments in input
-        (Nil, parseRest(trailArgs.toList, trail.map(t => (t.conv, t.required))) getOrElse (throw new OptionParseException("Failed to parse the trailing argument list")))
-      }
-    }
-  }
-  
-  /** Parses the list of arguments into pieces, according to "-" at the arguments beginngings.
-    *
-    * @param args Argument list to parse.
-    * @return List of tuples, that contain short (or long) option name, and list of args corresponding to it.
-    */
-  def parse(args: Seq[String]): List[ArgParsed] = {
-    args.toList match {
-      case a :: rest if a.startsWith("--") => { // it starts with -- => surely a long option name
-        (None, Some(a.drop(2)), rest.takeWhile(isParameter)) :: 
-          parse(rest.dropWhile(isParameter))
-      }
-      case a :: rest if isOption(a) => { // can be either property or several short options
-        if (propts.find(_.char == a(1)).isDefined) {
-          (Some(a(1).toString), None, (a.drop(2) +: rest.takeWhile(isParameter)).filter(_.size > 0)) ::
-          parse(rest.dropWhile(isParameter))
-        } else { // no, not property
-          a.drop(1).init.map(i => (Some(i.toString), None, List[String]())).toList :::  // short option names, that will not have any arguments
-          List((Some(a.last.toString), None, rest.takeWhile(isParameter))) ::: // last short option, all arguments go to it
-          parse(rest.dropWhile(isParameter))
-        }
-      }
-      case Nil => List() // no arguments - no options :)
-      case a => throw new OptionParseException("Failed to parse options: " + a.mkString(" ")) // there should be options!
-    }
-  }
   /** Parses the trailing arguments (including the arguments to last option).
     *
     * Uses simple backtraking algorithm.
@@ -133,10 +131,10 @@ case class Scallop(
     * @return None if match fails, a list of argument lists otherwise. The size of returned list is equal to size of
     *         converter list.
     */
-  private def parseRest(args: List[String], convs: List[(ValueConverter[_], Boolean)]): Option[List[List[String]]] = {
+  private def parseTrailingArgs(args: List[String], convs: List[(ValueConverter[_], Boolean)]): Option[List[List[String]]] = {
     if (convs.isEmpty) {
       if (args.isEmpty) Some(Nil)
-      else None // some arguments are still, and there are no converters to match them => no match
+      else None // some arguments are still left, and there are no converters to match them => no match
     } else {
       // the remainders of arguments, to be matched by subsequent converters
       val remainders = convs.head._1.argType match {
@@ -153,13 +151,13 @@ case class Scallop(
       remainders.view map { rem =>
         val p = args.take(args.size - rem.size) // to be matched by current converter
         if (p.isEmpty && !convs.head._2) { // will it match an empty list?
-            val next = parseRest(rem, convs.tail)
+            val next = parseTrailingArgs(rem, convs.tail)
             if (next.isDefined) Some(p :: next.get)
             else None 
         } else {
-          convs.head._1.parse(List(p)) match {
+          convs.head._1.parse(List(("",p))) match {
             case Right(a) if a.isDefined => 
-              val next = parseRest(rem, convs.tail)
+              val next = parseTrailingArgs(rem, convs.tail)
               if (next.isDefined) Some(p :: next.get)
               else None
             case _ => None
@@ -172,13 +170,17 @@ case class Scallop(
   /** Add a new option definition to this builder.
     *
     * @param name Name for new option, used as long option name in parsing, and for option identification.
-    * @param short Overload the char that will be used as short option name. Defaults to first character of the name.
+    * @param short Overload the char that will be used as short option name. 
+                   Defaults to first character of the name.
     * @param descr Description for this option, for help description.
-    * @param default Default value to use if option is not found in input arguments (if you provide this, you can omit the type on method).
+    * @param default Default value to use if option is not found in input arguments
+                     (if you provide this, you can omit the type on method).
     * @param required Is this option required? Defaults to false.
     * @param arg The name for this ortion argument, as it will appear in help. Defaults to "arg".
     * @param noshort If set to true, then this option does not have any short name.
     * @param conv The converter for this option. Usually found implicitly.
+    * @param validate The function, that validates the parsed value
+    * @param hidden Hides description of this option from help (this can be useful for debugging options)
     */
   def opt[A](
       name: String,
@@ -202,8 +204,18 @@ case class Scallop(
       if (m >:> conv.manifest) validate(a.asInstanceOf[A])
       else false
     }
-    this.copy(opts = opts :+ new OptDef(name, eShort, descr, conv, defaultA, validator, required, arg, hidden, noshort))
+    this.copy(opts = opts :+ SimpleOption(name, 
+                                          eShort,
+                                          descr,
+                                          required, 
+                                          conv, 
+                                          defaultA, 
+                                          validator,
+                                          arg,
+                                          hidden,
+                                          noshort))
   }
+  
   
   /** Add new property option definition to this builder.
     *
@@ -218,28 +230,77 @@ case class Scallop(
       keyName: String = "key",
       valueName: String = "value",
       hidden: Boolean = false)
-      (implicit conv: ValueConverter[Map[String,A]]): Scallop = {
-    this.copy(propts = propts :+ new PropDef(name, descr, conv, keyName, valueName, hidden))
-  }
+      (implicit conv: ValueConverter[Map[String,A]]): Scallop =
+    this.copy(opts = opts :+ PropertyOption(name.toString, name, descr, conv, keyName, valueName, hidden))
   
+  def propsLong[A](
+      name: String,
+      descr: String = "",
+      keyName: String = "key",
+      valueName: String = "value",
+      hidden: Boolean = false)
+      (implicit conv: ValueConverter[Map[String,A]]): Scallop =
+    this.copy(opts = opts :+ LongNamedPropertyOption(name,
+                                                     descr,
+                                                     conv,
+                                                     keyName,
+                                                     valueName,
+                                                     hidden))
+
   /** Add new trailing argument definition to this builder.
     *
     * @param name Name for new definition, used for identification.
     * @param required Is this trailing argument required? Defaults to true.
     * @param default If this argument is not required and not found in the argument list, use this value.
+    * @param validate The function, that validates the parsed value
     */
   def trailArg[A](
       name: String,
       required: Boolean = true,
-      default: Option[A] = None)
+      descr: String = "",
+      default: Option[A] = None,
+      validate: A => Boolean = ((_:A) => true),
+      hidden: Boolean = false)
       (implicit conv: ValueConverter[A]): Scallop = {
     val defaultA = 
       if (conv == flagConverter)
         if (default == Some(true)) Some(true)
         else Some(false)
       else default
-    this.copy(trail = trail :+ new TrailDef(name, required, conv, defaultA))
+    val validator = { (m:Manifest[_], a:Any) => 
+      if (m >:> conv.manifest) validate(a.asInstanceOf[A])
+      else false
+    }
+    this.copy(opts = opts :+ TrailingArgsOption(name,
+                                                required,
+                                                descr,
+                                                conv,
+                                                validator,
+                                                defaultA,
+                                                hidden))
   }
+
+  def toggle(
+      name: String,
+      default: Option[Boolean] = None,
+      short: Char = 0.toChar,
+      noshort: Boolean = false,
+      prefix: String = "no",
+      descrYes: String = "",
+      descrNo: String = "",
+      hidden: Boolean = false) = {
+    val eShort = if (short == 0.toChar || noshort) None else Some(short)
+    this.copy(opts = opts :+ ToggleOption(name,
+                                          default,
+                                          eShort,
+                                          noshort,
+                                          prefix,
+                                          descrYes,
+                                          descrNo,
+                                          hidden))
+  }
+    
+    
 
   /** Add a validation for supplied option set.
     *
@@ -271,11 +332,16 @@ case class Scallop(
   /** Get help on options from this builder. The resulting help is carefully formatted at 80 columns,
     * and contains info on proporties and options. It does not contain info about trailing arguments.
     */
-  def help: String = 
-    (opts ++ propts) sortBy (_._name.toLowerCase) map { 
-      case o: OptDef => o.help(getOptShortName(o))
-      case o: PropDef => o.help(Some(o.char))
-    } filter (_.size > 0) mkString ("\n")
+  def help: String = {
+    val optsHelp = (opts.filter(!_.isPositional) filter (!_.hidden) flatMap { opt =>
+      opt.help(getOptionShortNames(opt))
+    } filter (_.size > 0) sortBy (_.trim.dropWhile('-'==).toLowerCase) mkString "\n")
+    if (opts.filter(_.isPositional).filter(!_.hidden).isEmpty) {
+      optsHelp
+    } else {
+      optsHelp + "\n\nTrailing arguments:\n" + opts.filter(_.isPositional).filter(!_.hidden).flatMap(_.help(Nil)).map("  "+).mkString("\n") + "\n"
+    }
+  }
     
   /** Print help message (with version, banner, option usage and footer) to stdout. */
   def printHelp = {
@@ -297,61 +363,28 @@ case class Scallop(
     */
   def isSupplied(name: String): Boolean = {
     opts find (_.name == name) map { opt =>
-      val sh = getOptShortName(opt)
-      opt.conv.parse(
-        pargs filter ( a =>
-          a._2 map (opt.name ==) getOrElse (
-            sh map (a._1.get.head == _) getOrElse (false)
-          )
-        ) map (_._3)
-      ).right.get.isDefined
-    } getOrElse {
-      trail.zipWithIndex find (_._1.name == name) map { case (tr, idx) =>
-        tr.conv.parse(
-          List(rest(idx))
-        ).right.getOrElse(
-          if (tr.required) throw new MajorInternalException else None
-        ).isDefined
-      } getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name))
-    }
+      val args = parsed.filter(_._1 == opt).map(_._2)
+      opt.converter.parse(args).right.get.isDefined
+    } getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name))
   }
   
-  
-  /** Get the value of option (or trailing arg) as Option.
-    * @param name Name for option.
-    * @param m Manifest for requested type. Usually found implicitly.
-    */
+   /** Get the value of option (or trailing arg) as Option.
+     * @param name Name for option.
+     * @param m Manifest for requested type. Usually found implicitly.
+     */
   def get[A](name: String)(implicit m: Manifest[A]): Option[A] = {
-    getCache.getOrElseUpdate(
-      (name, m),
-      (opts find (_.name == name) map { opt =>
-        val sh = getOptShortName(opt)
-        if (!(opt.conv.manifest <:< m)) {
-          throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, opt.conv.manifest))
-        }
-        opt.conv.parse(
-          pargs filter (a =>
-            a._2 map(opt.name ==) getOrElse (
-              sh map (a._1.get.head == _) getOrElse (false)
-            )
-          ) map (_._3)
-        ).right.get
-        .orElse(opt.default).asInstanceOf[Option[A]]
-      } getOrElse {
-        trail.zipWithIndex find(_._1.name == name) map { case (tr, idx) =>
-          if (!(tr.conv.manifest <:< m)) {
-            throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, tr.conv.manifest))
-          }
-          tr.conv.parse(
-            List(rest(idx))
-          ).right.getOrElse(
-            if (tr.required) throw new MajorInternalException else None
-          ).orElse(tr.default).asInstanceOf[Option[A]]
-        } getOrElse (throw new UnknownOption("Unknown option requested: '%s'" format name))
-      }, m)
-    ).asInstanceOf[(Option[A],Manifest[A])]._1
+    opts.find(_.name == name).map{ opt =>
+      if (!(opt.converter.manifest <:< m))
+        throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, opt.converter.manifest))
+      val args = parsed.filter(_._1 == opt).map(_._2)
+      opt.converter.parse(args).right
+        .getOrElse(if (opt.required)  throw new MajorInternalException else None)
+        .orElse(opt.default)
+    }.getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name)).asInstanceOf[Option[A]]
   }
   
+  def get[A](name: Char)(implicit m: Manifest[A]): Option[A] = get(name.toString)(m)
+    
   /** Get the value of option. If option is not found, this will throw an exception.
     *
     * @param name Name for option.
@@ -359,78 +392,21 @@ case class Scallop(
     */
   def apply[A](name: String)(implicit m: Manifest[A]): A = get(name)(m).get
   
-  /** Get the value of some prorerty
-    *
-    * @param name Property definition identifier.
-    * @param key Name of the property to retreive.
-    * @return Some(value) if property is found, None otherwise.
-    */
-  def prop[A](name: Char, key: String)(implicit m: Manifest[Map[String,A]]): Option[A] = {
-    propts find(_.char == name) map { popt =>
-      if (!(popt.conv.manifest <:< m)) {
-        throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, popt.conv.manifest))
-      }
-      popt.conv.parse(
-        pargs filter (_._1 == Some(name.toString)) map(_._3)
-      ).right.get.get.asInstanceOf[Map[String,A]].get(key)
-    } getOrElse None
-  }
+  def apply[A](name: Char)(implicit m: Manifest[A]): A = apply(name.toString)(m)
   
-  /** Get all data for propety as Map.
-    *
-    * @param name Propety definition identifier.
-    * @return All key-value pairs for this property in a map.
-    */
-  def propMap[A](name: Char)(implicit m: Manifest[Map[String,A]]): Map[String,A] = {
-    propts find(_.char == name) map { popt =>
-      if (!(popt.conv.manifest <:< m)) {
-        throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, popt.conv.manifest))
-      }
-      popt.conv.parse(
-        pargs filter (_._1 == Some(name.toString)) map (_._3)
-      ).right.get.get.asInstanceOf[Map[String,A]]
-    } getOrElse Map()
-  }
+  def prop[A](name: Char, key: String)(implicit m: Manifest[Map[String, A]]): Option[A] = apply(name)(m).get(key)
   
-  /** Get all data for property as Map[String, String].
-    *
-    * This method is needed for summary generation - I do not know the exact types at that time.
-    */
-  private def propStringMap(name: Char): Map[String,String] = {
-    propts find (_.char == name) map { popt =>
-      popt.conv.parse(
-        pargs filter (_._1 == Some(name.toString)) map (_._3)
-      ).right.get.get.asInstanceOf[Map[String,String]]
-    } getOrElse Map()
-  }
-
-  /** Determine the short name for the option (if available). */
-  private def getOptShortName(o:OptDef):Option[Char] =
-    if (o.noshort) None
-    else
-      o.short.orElse {
-        val sh = o.name.head
-        if ((opts.map(_.short).flatten ++ propts.map(_.char)) contains sh) None
-        else if (opts takeWhile (o != ) 
-                      filter (!_.short.isDefined) 
-                      filter (!_.noshort) 
-                      map (_.name.head) 
-                      contains sh)
-                None
-             else Some(sh)
-      }
-
   /** Verify the builder. Parses arguments, makes sure no definitions clash, no garbage or unknown options are present,
     * and all present arguments are in proper format. It is recommended to call this method before using the results.
     * 
     * If there is "--help" or "--version" option present, it prints help or version statement and exits.
     */
   def verify = {
-    // long options must not clash
-    (opts.map(_.name) ++ trail.map(_.name)) groupBy (a=>a) filter (_._2.size > 1) foreach
+    // long options names must not clash
+    opts flatMap (_.longNames) groupBy (a=>a) filter (_._2.size > 1) foreach
       (a => throw new IdenticalOptionNames("Long option name '%s' is not unique" format a._1))
-    // short options must not clash
-    (opts.map(_.short).flatten ++ propts.map(_.char)) groupBy (a=>a) filter (_._2.size > 1) foreach 
+    // short options names must not clash
+    opts flatMap (o => (o.requiredShortNames).distinct) groupBy (a=>a) filter (_._2.size > 1) foreach
       (a => throw new IdenticalOptionNames("Short option name '%s' is not unique" format a._1))
     
     if (args contains "--help") {
@@ -441,6 +417,8 @@ case class Scallop(
       vers.foreach(println)
       sys.exit(0)
     }
+    
+    parsed
    
     // validate option sets
     optionSetValidations map (
@@ -449,29 +427,19 @@ case class Scallop(
       throw new OptionSetValidationFailure(l.left.get)
     }
     
-    // check that there are no garbage options
-    pargs foreach { arg =>
-      if (!(
-           arg._2 map (n => opts.find(_.name == n) isDefined) getOrElse
-           ((opts.map(o => o.short.getOrElse(o.name.head)) ++ propts.map(_.char)) find
-           (arg._1.get.head ==) isDefined)
-         ))
-        throw new UnknownOption("Unknown option: %s" format arg._1.getOrElse(arg._2.get))
-    }
-    
-    opts foreach { o => 
-      val sh = getOptShortName(o)
-      val params = pargs filter (a => 
-        a._2 map(o.name ==) getOrElse
-        (sh map (a._1.get.head == _) getOrElse false)
-      ) map (_._3)
-      val res = o.conv.parse(params)
-      if (res.isLeft) throw new WrongOptionFormat("Wrong format for option '%s': %s" format (o.name, params.map(_.mkString).mkString(" ")))
-      if (o.required && !res.right.get.isDefined && !o.default.isDefined) throw new RequiredOptionNotFound("Required option '%s' not found" format o.name)
+    opts foreach { o =>
+      val args = parsed filter (_._1 == o) map (_._2)
+      val res = o.converter.parse(args)
+      if (res.isLeft) throw new WrongOptionFormat(
+        "Wrong format for option '%s': %s" format (o.name, args.map(_._2.mkString).mkString(" ")))
+      if (o.required && !res.right.get.isDefined && !o.default.isDefined) throw new RequiredOptionNotFound(
+        "Required option '%s' not found" format o.name)
       // validaiton
-      if (!(get(o.name)(o.conv.manifest) map (v => o.validator(o.conv.manifest,v)) getOrElse true))
-        throw new ValidationFailure("Validation failure for '%s' option parameters: %s" format (o.name, params))
+      if (!(get(o.name)(o.converter.manifest) map (v => o.validator(o.converter.manifest,v)) getOrElse true))
+        throw new ValidationFailure("Validation failure for '%s' option parameters: %s" format (o.name, args))
+
     }
+
     this
   }
   
@@ -481,26 +449,12 @@ case class Scallop(
     */
   def summary: String = {
     ("Scallop(%s)" format args.mkString(", ")) + "\n" +
-    opts.map(o => " %s  %s => %s" format ((if (isSupplied(o.name)) "*" else " "), o.name, get(o.name)(o.conv.manifest).getOrElse("$None$"))).mkString("\n") + "\n" +
-    propts.map(p => " *  props %s => %s" format (p.char, propStringMap(p.char))).mkString("\n") + "\n" + 
-    trail.map(t => " %s  %s => %s" format ((if (isSupplied(t.name)) "*" else " "),t.name, get(t.name)(t.conv.manifest).getOrElse("$None$"))).mkString("\n")
+    opts.map(o => 
+      " %s  %s => %s" format ((if (isSupplied(o.name)) "*" else " "),
+                              o.name,
+                              get(o.name)(o.converter.manifest).getOrElse("$None$"))
+    ).mkString("\n") + "\n"
   }
-}
-
-/** An enumeration of possible arg types by number of arguments they can take. */
-object ArgType extends Enumeration {
   
-  /** Custom class for enumeration type.
-    * @param fn Transformation from option name to option's args definition in help. */
-  case class V(fn: String => String) extends Val
-  
-  /** Option takes no argument. At all. It is either there or it isn't. */
-  val FLAG = V(_ => "")
-  
-  /** Option takes only one argument. (for example, .opt[Int]) */
-  val SINGLE = V("<" + _ + ">")
-  
-  /** Option takes any number of arguments. (.opt[List[Int]]) */
-  val LIST = V("<" + _ + ">...")
 }
 
