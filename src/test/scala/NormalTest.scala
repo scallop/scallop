@@ -33,7 +33,6 @@ opts.get[Boolean]("donkey") should equal (Some(true))
 opts[Int]("monkeys") should equal (2)
 opts[Int]("num-limbs") should equal (1)
 opts.prop[String]('D',"alpha") should equal (Some("1"))
-opts.prop[String]('E',"gamma") should equal (None)
 opts[String]("pet name") should equal ("Pigeon")
 intercept[WrongTypeRequest] {
   opts[Double]("monkeys") // this will throw an exception at runtime
@@ -206,7 +205,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     val opts = Scallop(List("-D", "aoeu=htns", "qjk=gcr"))
       .props[String]('D')
       .verify
-    opts.propMap[String]('D') should equal (Map("aoeu" -> "htns", "qjk" -> "gcr"))
+    opts[Map[String,String]]('D') should equal (Map("aoeu" -> "htns", "qjk" -> "gcr"))
   }
   
   test ("empty prop") {
@@ -224,7 +223,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       .verify
     opts.prop[Int]('E',"key1") should equal (Some(1))
     opts.prop[Int]('E',"key2") should equal (Some(2))
-    opts.propMap[Int]('E') should equal (Map("key1" -> 1, "key2" -> 2))
+    opts[Map[String,Int]]('E') should equal (Map("key1" -> 1, "key2" -> 2))
   }
   
   test ("typed double prop") {
@@ -368,7 +367,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       .trailArg[String]("second list name")
       .trailArg[List[Double]]("second list values")
       .verify
-    opts.propMap[String]('E') should equal ((1 to 3).map(i => ("key"+i,"value"+i)).toMap)
+    opts[Map[String,String]]('E') should equal ((1 to 3).map(i => ("key"+i,"value"+i)).toMap)
     opts[String]("first list name") should equal ("first")
     opts[String]("second list name") should equal ("second")
     opts[List[Int]]("first list values") should equal (List(1,2,3))

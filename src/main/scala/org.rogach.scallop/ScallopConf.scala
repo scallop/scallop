@@ -55,7 +55,7 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     builder = builder.props(name, descr, keyName, valueName, hidden)(conv)
     (key:String) => {
       verified_?
-      builder.prop(name, key)(conv.manifest)
+      builder(name.toString)(conv.manifest).get(key)
     }
   }
 
@@ -69,7 +69,7 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     builder = builder.propsLong(name, descr, keyName, valueName, hidden)(conv)
     (key:String) => {
       verified_?
-      builder.prop(name, key)(conv.manifest)
+      builder(name)(conv.manifest).get(key)
     }
   }
 
@@ -145,7 +145,7 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     */
   def propMap[A](name: Char)(implicit m: Manifest[Map[String,A]]) = {
     verified_?
-    builder.propMap(name)(m)
+    builder(name.toString)(m)
   }
 
   /** Get summary of current parser state.
