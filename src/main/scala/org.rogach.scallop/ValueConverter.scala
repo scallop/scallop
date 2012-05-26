@@ -6,14 +6,14 @@ import scala.reflect.Manifest
 trait ValueConverter[A] { parent =>
   
   /** Takes a list of arguments to all option invocations:
-    * for example, "-a 1 2 -a 3 4 5" would produce List(List(1,2),List(3,4,5)).
+    * for example, "-a 1 2 -a 3 4 5" would produce List(("a",List(1,2)),("a",List(3,4,5))).
     * <ul>
     * <li> parse returns Left, if there was an error while parsing. </li>
     * <li> if no option was found, it returns Right(None). </li>
     * <li> if option was found, it returns Right(...). </li>
     * </ul>
     */
-  def parse(s: List[List[String]]): Either[Unit,Option[A]]
+  def parse(s: List[(String,List[String])]): Either[Unit,Option[A]]
   
   /** Manifest, holding the type for this builder. */
   val manifest: Manifest[A]
@@ -28,7 +28,7 @@ trait ValueConverter[A] { parent =>
     * }}} 
     */
   def map[B](fn: A => B)(implicit m: Manifest[B]) = new ValueConverter[B] { child =>
-    def parse(s: List[List[String]]) = parent.parse(s).right.map(_.map(fn))
+    def parse(s: List[(String,List[String])]) = parent.parse(s).right.map(_.map(fn))
     val manifest = m
     val argType = parent.argType
   }

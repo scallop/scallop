@@ -93,7 +93,40 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
       {verified_?; builder.get[A](n)(conv.manifest)},
       {verified_?; builder.isSupplied(n)})
   }
-  
+
+  /** Add new toggle option definition to this config, and get a holder for it's value.
+    *
+    * Toggle options are just glorified flag options. For example, if you will ask for a
+    * toggle option with name "verbose", it will be invocable in three ways - 
+    * "--verbose", "--noverbose", "-v".
+    *
+    * @param name Name of this option
+    * @param default default value for this option
+    * @param short Overload the char that will be used as short option name. Defaults to first character of the name.
+    * @param noshort If set to true, then this option will not have any short name.
+    * @param profix Prefix to name of the option, that will be used for "negative" version of the
+                    option. 
+    * @param descrYes Description for positive variant of this option.
+    * @param descrNo Description for negative variant of this option.
+    * @param hidden If set to true, then this option will not be present in auto-generated help.
+    */
+  def toggle(
+      name: String,
+      default: Option[Boolean] = None,
+      short: Char = 0.toChar,
+      noshort: Boolean = false,
+      prefix: String = "no",
+      descrYes: String = "",
+      descrNo: String = "",
+      hidden: Boolean = false): ScallopOption[Boolean] = {
+    builder = builder.toggle(name, default, short, noshort, prefix, descrYes, descrNo, hidden)
+    new ScallopOption[Boolean](
+      name,
+      {verified_?; builder.get[Boolean](name)},
+      {verified_?; builder.isSupplied(name)}
+    )
+  }
+
   /** Veryfy that this config object is properly configured. */
   def verify {
     verified = true
