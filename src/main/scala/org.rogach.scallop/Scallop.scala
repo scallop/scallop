@@ -41,7 +41,7 @@ case class Scallop(
         args.toList,
         opt.map(o=> (o._2.converter, true)).toList ::: opts.filter(_.isPositional).map(o => (o.converter, o.required))
       ) map { res => (opt.toList ::: opts.filter(_.isPositional).map(("",_))) zip res filter { case ((invoc, opt), p) => !opt.isPositional || p.size > 0 } } getOrElse
-        (throw new OptionParseException("Failed to parse the trailing argument list: '%s'" format args.tail)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
+        (throw new OptionParseException("Failed to parse the trailing argument list: '%s'" format args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
     }
     if (args.isEmpty) Nil
     else if (isOptionName(args.head)) {
@@ -275,6 +275,28 @@ case class Scallop(
                                                 defaultA))
   }
 
+  def toggle(
+      name: String,
+      default: Option[Boolean] = None,
+      short: Char = 0.toChar,
+      noshort: Boolean = false,
+      prefix: String = "no",
+      descrYes: String = "",
+      descrNo: String = "",
+      hidden: Boolean = false) = {
+    val eShort = if (short == 0.toChar || noshort) None else Some(short)
+    this.copy(opts = opts :+ ToggleOption(name,
+                                          default,
+                                          eShort,
+                                          noshort,
+                                          prefix,
+                                          descrYes,
+                                          descrNo,
+                                          hidden))
+  }
+    
+    
+
   /** Add a validation for supplied option set.
     *
     * @param fn A function, that accepts the list of names of options, that are supplied.
@@ -306,9 +328,9 @@ case class Scallop(
     * and contains info on proporties and options. It does not contain info about trailing arguments.
     */
   def help: String = 
-    opts.filter(!_.isPositional) sortBy (_.name.toLowerCase) map { opt =>
+    opts.filter(!_.isPositional) flatMap { opt =>
       opt.help(getOptionShortNames(opt))
-    } filter (_.size > 0) mkString "\n"
+    } filter (_.size > 0) sortBy (_.trim.dropWhile('-'==).toLowerCase) mkString "\n"
     
   /** Print help message (with version, banner, option usage and footer) to stdout. */
   def printHelp = {

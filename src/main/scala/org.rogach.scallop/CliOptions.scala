@@ -40,20 +40,24 @@ trait CliOption {
   def argLine(sh: List[Char]): String
   
   /** The full text of definition+description for this arg, as it will appear in options help. */
-  def help(sh: List[Char]): String = {
+  def help(sh: List[Char]): List[String] = {
     if (!hidden) {
-      var text = List[String]("")
-      descr.split(" ") foreach { w =>
-        if (text.last.size + 1 + w.size <= 76) {
-          text = text.init :+ (text.last + w + " ")
-        } else if (text.last.size + w.size <= 76) {
-          text = text.init :+ (text.last + w)
-        } else text :+= w
-      }
-      (argLine(sh) + "\n" + text.map("    " +).mkString("\n")).trim
-    } else ""
+      var text = format(descr.split(" "))
+      List((argLine(sh) + "\n" + text.map("    " +).mkString("\n")).trim)
+    } else Nil
   }
   
+  protected def format(s: Seq[String]): List[String] = {
+    var text = List[String]("")
+    s foreach { w =>
+      if (text.last.size + 1 + w.size <= 76) {
+        text = text.init :+ (text.last + w + " ")
+      } else if (text.last.size + w.size <= 76) {
+        text = text.init :+ (text.last + w)
+      } else text :+= w
+    }
+    text
+  }
 }
 
 case class SimpleOption(
@@ -142,3 +146,55 @@ case class TrailingArgsOption(
   def argLine(sh: List[Char]): String = 
     throw new UnsupportedOperationException("This method is not imptemented yet")
 }
+
+case class ToggleOption(
+    name: String,
+    default: Option[Boolean],
+    short: Option[Char],
+    noshort: Boolean,
+    prefix: String,
+    descrYes: String,
+    descrNo: String,
+    hidden: Boolean)
+  extends CliOption {
+
+  def descr = ""
+  def isPositional = false
+  def validator = (a,b) => true
+  def required = false
+
+  def shortNames = if (noshort) Nil else List(short.getOrElse(name.head))
+  def requiredShortNames = if (noshort) Nil else short.toList
+  def longNames = List(name, prefix + name)
+  
+  def converter = new ValueConverter[Boolean] {
+    def parse(s: List[(String, List[String])]) = {
+      val noname = prefix + name
+      val shortname = name.head.toString
+      s match {
+        case (`name`, Nil) :: Nil => Right(Some(true))
+        case (`noname`, Nil) :: Nil => Right(Some(false))
+        case (`shortname`, Nil) :: Nil => Right(Some(true))
+        case Nil => Right(None)
+        case ("", Nil) :: Nil => Right(Some(true)) // it is called this way only when parsing trailing args
+                                                   // but such hack may cause some problems in the future
+        case _ => Left(Unit)
+      }
+    }
+    val manifest = implicitly[Manifest[Boolean]]
+    val argType = ArgType.FLAG
+  }
+  
+  def argLine(sh: List[Char]): String = throw new MajorInternalException
+  override def help(sh: List[Char]): List[String] = {
+    List(
+      (sh.map("-" +) ++ List("--" + name) mkString ", ") + "\n" + 
+      format(descrYes.split(" ")).map("    " +).mkString("\n"),
+      
+      ("--" + prefix + name) + "\n" +
+      format(descrNo.split(" ")).map("    " +).mkString("\n")
+    )
+  }
+  
+}
+  
