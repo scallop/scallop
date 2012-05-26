@@ -28,7 +28,7 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/ScallopConf.scala">ScallopConf.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a name="org.rogach.scallop.AfterInit" class="extype" href="AfterInit.html">AfterInit</a>, <span name="scala.DelayedInit" class="extype">DelayedInit</span>, <a name="org.rogach.scallop.ScallopConfValidations" class="extype" href="ScallopConfValidations.html">ScallopConfValidations</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -393,6 +393,17 @@
       <p class="shortcomment cmt">Add new property option definition to this config object, and get a handle for option retreiving.</p><div class="fullcomment"><div class="comment cmt"><p>Add new property option definition to this config object, and get a handle for option retreiving.
 </p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Char, that will be used as prefix for property arguments.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this property option, for help description.</p></dd><dt class="param">keyName</dt><dd class="cmt"><p>Name for 'key' part of this option arg name, as it will appear in help option definition. Defaults to &quot;key&quot;.</p></dd><dt class="param">valueName</dt><dd class="cmt"><p>Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to &quot;value&quot;.</p></dd><dt>returns</dt><dd class="cmt"><p>A holder for retreival of the values.
 </p></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#propsLong" data-isabs="false">
+      <a id="propsLong[A](String,String,String,String,Boolean)(ValueConverter[Map[String, A]]):(String) ⇒ Option[A]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">propsLong</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="descr">descr: String = <span class="symbol">&quot;&quot;</span></span>, <span name="keyName">keyName: String = <span class="symbol">&quot;key&quot;</span></span>, <span name="valueName">valueName: String = <span class="symbol">&quot;value&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, A]]</span>)</span><span class="result">: (String) ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#summary" data-isabs="false">
       <a id="summary:String"></a>
       <h4 class="signature">
@@ -428,14 +439,29 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#toggle" data-isabs="false">
+      <a id="toggle(String,Option[Boolean],Char,Boolean,String,String,String,Boolean):ScallopOption[Boolean]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">toggle</span>
+        
+        <span class="params">(<span name="name">name: String</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>, <span name="short">short: <span name="scala.Char" class="extype">Char</span> = <span class="symbol">0.toChar</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>, <span name="prefix">prefix: String = <span class="symbol">&quot;no&quot;</span></span>, <span name="descrYes">descrYes: String = <span class="symbol">&quot;&quot;</span></span>, <span name="descrNo">descrNo: String = <span class="symbol">&quot;&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[<span name="scala.Boolean" class="extype">Boolean</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Add new toggle option definition to this config, and get a holder for it's value.</p><div class="fullcomment"><div class="comment cmt"><p>Add new toggle option definition to this config, and get a holder for it's value.</p><p>Toggle options are just glorified flag options. For example, if you will ask for a
+toggle option with name &quot;verbose&quot;, it will be invocable in three ways -
+&quot;--verbose&quot;, &quot;--noverbose&quot;, &quot;-v&quot;.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name of this option</p></dd><dt class="param">default</dt><dd class="cmt"><p>default value for this option</p></dd><dt class="param">short</dt><dd class="cmt"><p>Overload the char that will be used as short option name. Defaults to first character of the name.</p></dd><dt class="param">noshort</dt><dd class="cmt"><p>If set to true, then this option will not have any short name.</p></dd><dt class="param">descrYes</dt><dd class="cmt"><p>Description for positive variant of this option.</p></dd><dt class="param">descrNo</dt><dd class="cmt"><p>Description for negative variant of this option.</p></dd><dt class="param">hidden</dt><dd class="cmt"><p>If set to true, then this option will not be present in auto-generated help.
+</p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#trailArg" data-isabs="false">
-      <a id="trailArg[A](⇒ String,Boolean,Option[A])(ValueConverter[A]):ScallopOption[A]"></a>
+      <a id="trailArg[A](⇒ String,String,(A) ⇒ Boolean,Boolean,Option[A],Boolean)(ValueConverter[A]):ScallopOption[A]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">trailArg</span>
         <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="name">name: ⇒ String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[A]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A]</span>
+        <span class="params">(<span name="name">name: ⇒ String</span>, <span name="descr">descr: String</span>, <span name="validate">validate: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[A]</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add new trailing argument definition to this config, and get a holder for it's value.</p><div class="fullcomment"><div class="comment cmt"><p>Add new trailing argument definition to this config, and get a holder for it's value.

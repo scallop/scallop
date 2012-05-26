@@ -28,7 +28,7 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Converter from list of plain strings to something meaningful.</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.rogach.scallop.ValueConverter" class="extype" href="">ValueConverter</a>[A]</dd></dl><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Converter from list of plain strings to something meaningful.</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.rogach.scallop.ValueConverter" class="extype" href="">ValueConverter</a>[A]</dd><dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/ValueConverter.scala">ValueConverter.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -83,18 +83,18 @@
       </h4>
       <p class="shortcomment cmt">Manifest, holding the type for this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Manifest, holding the type for this builder.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ValueConverter#parse" data-isabs="true">
-      <a id="parse(List[List[String]]):Either[Unit, Option[A]]"></a>
+      <a id="parse(List[(String, List[String])]):Either[Unit, Option[A]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">parse</span>
         
-        <span class="params">(<span name="s">s: List[List[String]]</span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[<span name="scala.Unit" class="extype">Unit</span>, <span name="scala.Option" class="extype">Option</span>[A]]</span>
+        <span class="params">(<span name="s">s: List[(String, List[String])]</span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[<span name="scala.Unit" class="extype">Unit</span>, <span name="scala.Option" class="extype">Option</span>[A]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Takes a list of arguments to all option invocations:
-for example, &quot;-a 1 2 -a 3 4 5&quot; would produce List(List(1,2),List(3,4,5)).</p><div class="fullcomment"><div class="comment cmt"><p>Takes a list of arguments to all option invocations:
-for example, &quot;-a 1 2 -a 3 4 5&quot; would produce List(List(1,2),List(3,4,5)).</p><ul><li> parse returns Left, if there was an error while parsing.</li><li> if no option was found, it returns Right(None).</li><li> if option was found, it returns Right(...).</li></ul></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+for example, &quot;-a 1 2 -a 3 4 5&quot; would produce List((&quot;a&quot;,List(1,2)),(&quot;a&quot;,List(3,4,5))).</p><div class="fullcomment"><div class="comment cmt"><p>Takes a list of arguments to all option invocations:
+for example, &quot;-a 1 2 -a 3 4 5&quot; would produce List((&quot;a&quot;,List(1,2)),(&quot;a&quot;,List(3,4,5))).</p><ul><li> parse returns Left, if there was an error while parsing.</li><li> if no option was found, it returns Right(None).</li><li> if option was found, it returns Right(...).</li></ul></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
     </li></ol>
             </div>
 
@@ -250,13 +250,13 @@ for example, &quot;-a 1 2 -a 3 4 5&quot; would produce List(List(1,2),List(3,4,5
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ValueConverter#map" data-isabs="false">
-      <a id="map[B]((A) ⇒ B)(Manifest[B]):ValueConverter[B] { def parse(s: List[List[String]]): Product with Either[Unit,Option[B]] with Serializable }"></a>
+      <a id="map[B]((A) ⇒ B)(Manifest[B]):ValueConverter[B] { def parse(s: List[(String, List[String])]): Product with Either[Unit,Option[B]] with Serializable }"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">map</span>
         <span class="tparams">[<span name="B">B</span>]</span>
-        <span class="params">(<span name="fn">fn: (A) ⇒ B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[B]</span>)</span><span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="">ValueConverter</a>[B] { def parse(s: List[List[String]]): Product with Either[Unit,Option[B]] with Serializable }</span>
+        <span class="params">(<span name="fn">fn: (A) ⇒ B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[B]</span>)</span><span class="result">: <a name="org.rogach.scallop.ValueConverter" class="extype" href="">ValueConverter</a>[B] { def parse(s: List[(String, List[String])]): Product with Either[Unit,Option[B]] with Serializable }</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Maps the converter to another value:</p><div class="fullcomment"><div class="comment cmt"><p>Maps the converter to another value:</p><pre>

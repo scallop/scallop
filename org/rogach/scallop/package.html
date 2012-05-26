@@ -59,39 +59,39 @@
       </h4>
       <p class="comment cmt">Magic trait, that makes it possible to run code from superclass
 after all subclasses initialization.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.ArgDef" data-isabs="true">
-      <a id="ArgDef:ArgDef"></a>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption" data-isabs="true">
+      <a id="CliOption:CliOption"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">trait</span>
       <span class="symbol"> 
-        <a href="ArgDef.html"><span class="name">ArgDef</span></a>
+        <a href="CliOption.html"><span class="name">CliOption</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
       </h4>
-      <p class="comment cmt">Parent class for option and property definitions.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.OptDef" data-isabs="false">
-      <a id="OptDef:OptDef"></a>
+      
+    </li><li visbl="pub" name="org.rogach.scallop.LongNamedPropertyOption" data-isabs="false">
+      <a id="LongNamedPropertyOption:LongNamedPropertyOption"></a>
       <h4 class="signature">
       <span class="kind">case class</span>
       <span class="symbol"> 
-        <a href="OptDef.html"><span class="name">OptDef</span></a>
+        <a href="LongNamedPropertyOption.html"><span class="name">LongNamedPropertyOption</span></a>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="short">short: Option[Char]</span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: Option[Any]</span>, <span name="validator">validator: (Manifest[_], Any) ⇒ Boolean</span>, <span name="required">required: Boolean</span>, <span name="arg">arg: String</span>, <span name="hidden">hidden: Boolean</span>, <span name="noshort">noshort: Boolean</span>)</span><span class="result"> extends ArgDef with Product with Serializable</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="descr">descr: String</span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends CliOption with Product with Serializable</span>
       </span>
       </h4>
-      <p class="comment cmt">Holder for option definition.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.PropDef" data-isabs="false">
-      <a id="PropDef:PropDef"></a>
+      
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption" data-isabs="false">
+      <a id="PropertyOption:PropertyOption"></a>
       <h4 class="signature">
       <span class="kind">case class</span>
       <span class="symbol"> 
-        <a href="PropDef.html"><span class="name">PropDef</span></a>
+        <a href="PropertyOption.html"><span class="name">PropertyOption</span></a>
         
-        <span class="params">(<span name="char">char: Char</span>, <span name="descr">descr: String</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends ArgDef with Product with Serializable</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="short">short: Char</span>, <span name="descr">descr: String</span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends CliOption with Product with Serializable</span>
       </span>
       </h4>
-      <p class="comment cmt">Holder for property option definition.</p>
+      
     </li><li visbl="pub" name="org.rogach.scallop.Scallop" data-isabs="false">
       <a id="Scallop:Scallop"></a>
       <h4 class="signature">
@@ -99,7 +99,7 @@ after all subclasses initialization.</p>
       <span class="symbol"> 
         <a href="Scallop.html"><span class="name">Scallop</span></a>
         
-        <span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[OptDef]</span>, <span name="propts">propts: List[PropDef]</span>, <span name="trail">trail: List[TrailDef]</span>, <span name="vers">vers: Option[String]</span>, <span name="bann">bann: Option[String]</span>, <span name="foot">foot: Option[String]</span>, <span name="optionSetValidations">optionSetValidations: List[(List[String]) ⇒ Either[String, Unit]]</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[CliOption]</span>, <span name="vers">vers: Option[String]</span>, <span name="bann">bann: Option[String]</span>, <span name="foot">foot: Option[String]</span>, <span name="optionSetValidations">optionSetValidations: List[(List[String]) ⇒ Either[String, Unit]]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">The main builder class.</p>
@@ -136,17 +136,39 @@ after all subclasses initialization.</p>
       </span>
       </h4>
       <p class="comment cmt">A class to hold a reference to not-yet-computed option values.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.TrailDef" data-isabs="false">
-      <a id="TrailDef:TrailDef"></a>
+    </li><li visbl="pub" name="org.rogach.scallop.SimpleOption" data-isabs="false">
+      <a id="SimpleOption:SimpleOption"></a>
       <h4 class="signature">
       <span class="kind">case class</span>
       <span class="symbol"> 
-        <a href="TrailDef.html"><span class="name">TrailDef</span></a>
+        <a href="SimpleOption.html"><span class="name">SimpleOption</span></a>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="required">required: Boolean</span>, <span name="conv">conv: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: Option[Any]</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="short">short: Option[Char]</span>, <span name="descr">descr: String</span>, <span name="required">required: Boolean</span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: Option[Any]</span>, <span name="validator">validator: (Manifest[_], Any) ⇒ Boolean</span>, <span name="argName">argName: String</span>, <span name="hidden">hidden: Boolean</span>, <span name="noshort">noshort: Boolean</span>)</span><span class="result"> extends CliOption with Product with Serializable</span>
       </span>
       </h4>
-      <p class="comment cmt">Holder for trail argument definition.</p>
+      
+    </li><li visbl="pub" name="org.rogach.scallop.ToggleOption" data-isabs="false">
+      <a id="ToggleOption:ToggleOption"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="ToggleOption.html"><span class="name">ToggleOption</span></a>
+        
+        <span class="params">(<span name="name">name: String</span>, <span name="default">default: Option[Boolean]</span>, <span name="short">short: Option[Char]</span>, <span name="noshort">noshort: Boolean</span>, <span name="prefix">prefix: String</span>, <span name="descrYes">descrYes: String</span>, <span name="descrNo">descrNo: String</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends CliOption with Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.rogach.scallop.TrailingArgsOption" data-isabs="false">
+      <a id="TrailingArgsOption:TrailingArgsOption"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="TrailingArgsOption.html"><span class="name">TrailingArgsOption</span></a>
+        
+        <span class="params">(<span name="name">name: String</span>, <span name="required">required: Boolean</span>, <span name="descr">descr: String</span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="validator">validator: (Manifest[_], Any) ⇒ Boolean</span>, <span name="default">default: Option[Any]</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends CliOption with Product with Serializable</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.rogach.scallop.ValueConverter" data-isabs="true">
       <a id="ValueConverter:ValueConverter[A]"></a>
       <h4 class="signature">

@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.rogach.scallop.ArgType.V</title>
+          <title>org.rogach.scallop.PropertyOption</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -15,22 +15,22 @@
         <body class="type">
       <div id="definition">
         <img src="../../../lib/class_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.rogach" class="extype" href="../package.html">rogach</a>.<a name="org.rogach.scallop" class="extype" href="package.html">scallop</a>.<a name="org.rogach.scallop.ArgType" class="extype" href="ArgType$.html">ArgType</a></p>
-        <h1>V</h1>
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.rogach" class="extype" href="../package.html">rogach</a>.<a name="org.rogach.scallop" class="extype" href="package.html">scallop</a></p>
+        <h1>PropertyOption</h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="kind">case class</span>
       <span class="symbol"> 
-        <span class="name">V</span>
+        <span class="name">PropertyOption</span>
         
-        <span class="params">(<span name="fn">fn: (String) ⇒ String</span>)</span><span class="result"> extends <span name="scala.Enumeration.Val" class="extype">Val</span> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String</span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result"> extends <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Custom class for enumeration type.</p></div><dl class="paramcmts block"><dt class="param">fn</dt><dd class="cmt"><p>Transformation from option name to option's args definition in help.</p></dd></dl><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/ArgType.scala">ArgType.scala</a></dd></dl><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/CliOptions.scala">CliOptions.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <span name="scala.Enumeration.Val" class="extype">Val</span>, <span name="scala.Enumeration.Value" class="extype">Value</span>, <span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.math.Ordered" class="extype">Ordered</span>[<span name="scala.Enumeration.Value" class="extype">Value</span>], <span name="java.lang.Comparable" class="extype">Comparable</span>[<span name="scala.Enumeration.Value" class="extype">Value</span>], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -46,7 +46,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.rogach.scallop.ArgType.V" class="in"><span>V</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="scala.Enumeration.Val" class="in"><span>Val</span></li><li name="scala.Enumeration.Value" class="in"><span>Value</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.math.Ordered" class="in"><span>Ordered</span></li><li name="java.lang.Comparable" class="in"><span>Comparable</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.rogach.scallop.PropertyOption" class="in"><span>PropertyOption</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="org.rogach.scallop.CliOption" class="in"><span>CliOption</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -56,17 +56,17 @@
 
         <div class="members" id="constructors">
               <h3>Instance Constructors</h3>
-              <ol><li visbl="pub" name="org.rogach.scallop.ArgType.V#this" data-isabs="false">
-      <a id="this:V"></a>
+              <ol><li visbl="pub" name="org.rogach.scallop.PropertyOption#this" data-isabs="false">
+      <a id="this:PropertyOption"></a>
       <h4 class="signature">
       <span class="kind">new</span>
       <span class="symbol"> 
-        <span class="name">V</span>
+        <span class="name">PropertyOption</span>
         
-        <span class="params">(<span name="fn">fn: (String) ⇒ String</span>)</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String</span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="keyName">keyName: String</span>, <span name="valueName">valueName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">fn</dt><dd class="cmt"><p>Transformation from option name to option's args definition in help.</p></dd></dl></div>
+      
     </li></ol>
             </div>
 
@@ -109,28 +109,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.math.Ordered#&lt;" data-isabs="false">
-      <a id="&lt;(Value):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">&lt;</span>
-        
-        <span class="params">(<span name="that">that: <span name="scala.Enumeration.Value" class="extype">Value</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Ordered</dd></dl></div>
-    </li><li visbl="pub" name="scala.math.Ordered#&lt;=" data-isabs="false">
-      <a id="&lt;=(Value):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">&lt;=</span>
-        
-        <span class="params">(<span name="that">that: <span name="scala.Enumeration.Value" class="extype">Value</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Ordered</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
       <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -153,28 +131,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.math.Ordered#&gt;" data-isabs="false">
-      <a id="&gt;(Value):Boolean"></a>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#argLine" data-isabs="false">
+      <a id="argLine(List[Char]):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">&gt;</span>
+        <span class="name">argLine</span>
         
-        <span class="params">(<span name="that">that: <span name="scala.Enumeration.Value" class="extype">Value</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+        <span class="params">(<span name="sh">sh: List[<span name="scala.Char" class="extype">Char</span>]</span>)</span><span class="result">: String</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Ordered</dd></dl></div>
-    </li><li visbl="pub" name="scala.math.Ordered#&gt;=" data-isabs="false">
-      <a id="&gt;=(Value):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">&gt;=</span>
-        
-        <span class="params">(<span name="that">that: <span name="scala.Enumeration.Value" class="extype">Value</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Ordered</dd></dl></div>
+      <p class="shortcomment cmt">The line, that would be printed as definition of this arg in help.</p><div class="fullcomment"><div class="comment cmt"><p>The line, that would be printed as definition of this arg in help.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -186,7 +153,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ArgType.V#canEqual" data-isabs="false">
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#canEqual" data-isabs="false">
       <a id="canEqual(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -196,7 +163,7 @@
         <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ArgType.V" class="extype" href="">V</a> → Equals</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → Equals</dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -211,28 +178,40 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="scala.Enumeration.Value#compare" data-isabs="false">
-      <a id="compare(Value):Int"></a>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#converter" data-isabs="false">
+      <a id="converter:org.rogach.scallop.ValueConverter[_]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">converter</span>
+        
+        <span class="result">: org.rogach.scallop.ValueConverter[_]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Converter for pure string arguments to the needed type of this option.</p><div class="fullcomment"><div class="comment cmt"><p>Converter for pure string arguments to the needed type of this option.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#default" data-isabs="false">
+      <a id="default:Some[Map[Nothing, Nothing]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">compare</span>
+        <span class="name">default</span>
         
-        <span class="params">(<span name="that">that: <span name="scala.Enumeration.Value" class="extype">Value</span></span>)</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+        <span class="result">: <span name="scala.Some" class="extype">Some</span>[<span name="scala.collection.immutable.Map" class="extype">Map</span>[<span name="scala.Nothing" class="extype">Nothing</span>, <span name="scala.Nothing" class="extype">Nothing</span>]]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Value → Ordered</dd></dl></div>
-    </li><li visbl="pub" name="scala.math.Ordered#compareTo" data-isabs="false">
-      <a id="compareTo(Value):Int"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#descr" data-isabs="false">
+      <a id="descr:String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
+      <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">compareTo</span>
+        <span class="name">descr</span>
         
-        <span class="params">(<span name="that">that: <span name="scala.Enumeration.Value" class="extype">Value</span></span>)</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+        <span class="result">: String</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Ordered → Comparable</dd></dl></div>
+      <p class="shortcomment cmt">Description for this option, that will be presented to the user</p><div class="fullcomment"><div class="comment cmt"><p>Description for this option, that will be presented to the user</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -244,17 +223,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.Enumeration.Value#equals" data-isabs="false">
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#equals" data-isabs="false">
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">equals</span>
         
-        <span class="params">(<span name="other">other: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Value → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → Equals → AnyRef → Any</dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -269,17 +248,17 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ArgType.V#fn" data-isabs="false">
-      <a id="fn:(String) ⇒ String"></a>
+    </li><li visbl="prt" name="org.rogach.scallop.CliOption#format" data-isabs="false">
+      <a id="format(Seq[String]):List[String]"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">fn</span>
+        <span class="name">format</span>
         
-        <span class="result">: (String) ⇒ String</span>
+        <span class="params">(<span name="s">s: Seq[String]</span>)</span><span class="result">: List[String]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Transformation from option name to option's args definition in help.</p>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -291,7 +270,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.Enumeration.Value#hashCode" data-isabs="false">
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -301,18 +280,29 @@
         <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Value → AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.Enumeration.Val#id" data-isabs="false">
-      <a id="id:Int"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#help" data-isabs="false">
+      <a id="help(List[Char]):List[String]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">id</span>
+        <span class="name">help</span>
         
-        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+        <span class="params">(<span name="sh">sh: List[<span name="scala.Char" class="extype">Char</span>]</span>)</span><span class="result">: List[String]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Val → Value</dd></dl></div>
+      <p class="shortcomment cmt">The full text of definition+description for this arg, as it will appear in options help.</p><div class="fullcomment"><div class="comment cmt"><p>The full text of definition+description for this arg, as it will appear in options help.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#hidden" data-isabs="false">
+      <a id="hidden:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">hidden</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">If true, then this option is not shown in help printout.</p><div class="fullcomment"><div class="comment cmt"><p>If true, then this option is not shown in help printout.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -324,6 +314,53 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#isPositional" data-isabs="false">
+      <a id="isPositional:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isPositional</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#keyName" data-isabs="false">
+      <a id="keyName:String"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">keyName</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#longNames" data-isabs="false">
+      <a id="longNames:scala.collection.immutable.Nil.type"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">longNames</span>
+        
+        <span class="result">: scala.collection.immutable.Nil.type</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#name" data-isabs="false">
+      <a id="name:String"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">name</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">&quot;Internal&quot; name of this option - the one that
+ would be used to access parsed values.</p><div class="fullcomment"><div class="comment cmt"><p>&quot;Internal&quot; name of this option - the one that
+ would be used to access parsed values.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -357,7 +394,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ArgType.V#productArity" data-isabs="false">
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#productArity" data-isabs="false">
       <a id="productArity:Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -367,8 +404,8 @@
         <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ArgType.V" class="extype" href="">V</a> → Product</dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ArgType.V#productElement" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#productElement" data-isabs="false">
       <a id="productElement(Int):Any"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -378,7 +415,7 @@
         <span class="params">(<span name="arg0">arg0: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Any" class="extype">Any</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ArgType.V" class="extype" href="">V</a> → Product</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → Product</dd></dl></div>
     </li><li visbl="pub" name="scala.Product#productIterator" data-isabs="false">
       <a id="productIterator:Iterator[Any]"></a>
       <h4 class="signature">
@@ -390,7 +427,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ArgType.V#productPrefix" data-isabs="false">
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#productPrefix" data-isabs="false">
       <a id="productPrefix:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -400,18 +437,51 @@
         <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ArgType.V" class="extype" href="">V</a> → Product</dd></dl></div>
-    </li><li visbl="prt" name="scala.Enumeration.Val#readResolve" data-isabs="false">
-      <a id="readResolve():AnyRef"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#required" data-isabs="false">
+      <a id="required:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">readResolve</span>
+        <span class="name">required</span>
         
-        <span class="params">()</span><span class="result">: AnyRef</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Val</dd></dl></div>
+      <p class="shortcomment cmt">Is there a requirement to have at least one invocation of this option?</p><div class="fullcomment"><div class="comment cmt"><p>Is there a requirement to have at least one invocation of this option?</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#requiredShortNames" data-isabs="false">
+      <a id="requiredShortNames:List[Char]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">requiredShortNames</span>
+        
+        <span class="result">: <span name="scala.collection.immutable.List" class="extype">List</span>[<span name="scala.Char" class="extype">Char</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Names, that were explicitly requested by the user</p><div class="fullcomment"><div class="comment cmt"><p>Names, that were explicitly requested by the user</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#short" data-isabs="false">
+      <a id="short:Char"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">short</span>
+        
+        <span class="result">: <span name="scala.Char" class="extype">Char</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#shortNames" data-isabs="false">
+      <a id="shortNames:List[Char]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">shortNames</span>
+        
+        <span class="result">: <span name="scala.collection.immutable.List" class="extype">List</span>[<span name="scala.Char" class="extype">Char</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Short names, that are suggested by option implementation, not the user</p><div class="fullcomment"><div class="comment cmt"><p>Short names, that are suggested by option implementation, not the user</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -423,17 +493,39 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.Enumeration.Val#toString" data-isabs="false">
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">toString</span>
         
-        <span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+        <span class="params">()</span><span class="result">: String</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Val → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#validator" data-isabs="false">
+      <a id="validator:(Manifest[_], Any) ⇒ Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">validator</span>
+        
+        <span class="result">: (Manifest[_], <span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.PropertyOption" class="extype" href="">PropertyOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.PropertyOption#valueName" data-isabs="false">
+      <a id="valueName:String"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">valueName</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
@@ -498,22 +590,16 @@
     </li></ol>
             </div>
 
-        <div name="scala.Product" class="parent">
-              <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
-            </div><div name="scala.Equals" class="parent">
-              <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
-            </div><div name="scala.Enumeration.Val" class="parent">
-              <h3>Inherited from <span name="scala.Enumeration.Val" class="extype">Val</span></h3>
-            </div><div name="scala.Enumeration.Value" class="parent">
-              <h3>Inherited from <span name="scala.Enumeration.Value" class="extype">Value</span></h3>
-            </div><div name="scala.Serializable" class="parent">
+        <div name="scala.Serializable" class="parent">
               <h3>Inherited from <span name="scala.Serializable" class="extype">Serializable</span></h3>
             </div><div name="java.io.Serializable" class="parent">
               <h3>Inherited from <span name="java.io.Serializable" class="extype">Serializable</span></h3>
-            </div><div name="scala.math.Ordered" class="parent">
-              <h3>Inherited from <span name="scala.math.Ordered" class="extype">Ordered</span>[<span name="scala.Enumeration.Value" class="extype">Value</span>]</h3>
-            </div><div name="java.lang.Comparable" class="parent">
-              <h3>Inherited from <span name="java.lang.Comparable" class="extype">Comparable</span>[<span name="scala.Enumeration.Value" class="extype">Value</span>]</h3>
+            </div><div name="scala.Product" class="parent">
+              <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
+            </div><div name="scala.Equals" class="parent">
+              <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
+            </div><div name="org.rogach.scallop.CliOption" class="parent">
+              <h3>Inherited from <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">

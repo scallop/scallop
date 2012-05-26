@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.rogach.scallop.ScallopOption</title>
+          <title>org.rogach.scallop.CliOption</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -14,24 +14,26 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../lib/class_big.png" />
+        <img src="../../../lib/trait_big.png" />
         <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.rogach" class="extype" href="../package.html">rogach</a>.<a name="org.rogach.scallop" class="extype" href="package.html">scallop</a></p>
-        <h1>ScallopOption</h1>
+        <h1>CliOption</h1>
       </div>
 
       <h4 class="signature" id="signature">
-      <span class="kind">class</span>
+      <span class="kind">trait</span>
       <span class="symbol"> 
-        <span class="name">ScallopOption</span>
-        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="name">CliOption</span>
+        
         <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>A class to hold a reference to not-yet-computed option values.</p><p>Basically, this is a lazy option - it batches up all operations,
-and evaluates the value only as the last resort.</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.rogach.scallop.ScallopOption" class="extype" href="">ScallopOption</a>[A]</dd><dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/ScallopOption.scala">ScallopOption.scala</a></dd></dl><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/CliOptions.scala">CliOptions.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+        </div><div class="toggleContainer block">
+          <span class="toggle">Known Subclasses</span>
+          <div class="subClasses hiddenContent"><a name="org.rogach.scallop.LongNamedPropertyOption" class="extype" href="LongNamedPropertyOption.html">LongNamedPropertyOption</a>, <a name="org.rogach.scallop.PropertyOption" class="extype" href="PropertyOption.html">PropertyOption</a>, <a name="org.rogach.scallop.SimpleOption" class="extype" href="SimpleOption.html">SimpleOption</a>, <a name="org.rogach.scallop.ToggleOption" class="extype" href="ToggleOption.html">ToggleOption</a>, <a name="org.rogach.scallop.TrailingArgsOption" class="extype" href="TrailingArgsOption.html">TrailingArgsOption</a></div>
         </div></div>
         
 
@@ -47,7 +49,7 @@ and evaluates the value only as the last resort.</p></div><dl class="attributes 
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.rogach.scallop.ScallopOption" class="in"><span>ScallopOption</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.rogach.scallop.CliOption" class="in"><span>CliOption</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -55,44 +57,153 @@ and evaluates the value only as the last resort.</p></div><dl class="attributes 
             </div>
         </div>
 
-        <div class="members" id="constructors">
-              <h3>Instance Constructors</h3>
-              <ol><li visbl="pub" name="org.rogach.scallop.ScallopOption#this" data-isabs="false">
-      <a id="this:ScallopOption[A]"></a>
-      <h4 class="signature">
-      <span class="kind">new</span>
-      <span class="symbol"> 
-        <span class="name">ScallopOption</span>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="fn">fn: ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>, <span name="supplied">supplied: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">fn</dt><dd class="cmt"><p>source of the actual value</p></dd><dt class="param">supplied</dt><dd class="cmt"><p>function, that is capable of testing whether the value was explicitly
-                found in argument list.
-</p></dd></dl></div>
-    </li></ol>
-            </div>
 
-        <div class="types members" id="types">
-              <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.rogach.scallop.ScallopOption.WithFilter" data-isabs="false">
-      <a id="WithFilter:WithFilter"></a>
-      <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="ScallopOption$WithFilter.html"><span class="name">WithFilter</span></a>
         
-        <span class="result"> extends AnyRef</span>
+        
+        <div class="values members" id="values">
+              <h3>Abstract Value Members</h3>
+              <ol><li visbl="pub" name="org.rogach.scallop.CliOption#argLine" data-isabs="true">
+      <a id="argLine(List[Char]):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">argLine</span>
+        
+        <span class="params">(<span name="sh">sh: List[<span name="scala.Char" class="extype">Char</span>]</span>)</span><span class="result">: String</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">The line, that would be printed as definition of this arg in help.</p><div class="fullcomment"><div class="comment cmt"><p>The line, that would be printed as definition of this arg in help.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#converter" data-isabs="true">
+      <a id="converter:org.rogach.scallop.ValueConverter[_]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">converter</span>
+        
+        <span class="result">: org.rogach.scallop.ValueConverter[_]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Converter for pure string arguments to the needed type of this option.</p><div class="fullcomment"><div class="comment cmt"><p>Converter for pure string arguments to the needed type of this option.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#default" data-isabs="true">
+      <a id="default:Option[Any]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">default</span>
+        
+        <span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#descr" data-isabs="true">
+      <a id="descr:String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">descr</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Description for this option, that will be presented to the user</p><div class="fullcomment"><div class="comment cmt"><p>Description for this option, that will be presented to the user</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#hidden" data-isabs="true">
+      <a id="hidden:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">hidden</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">If true, then this option is not shown in help printout.</p><div class="fullcomment"><div class="comment cmt"><p>If true, then this option is not shown in help printout.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#isPositional" data-isabs="true">
+      <a id="isPositional:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isPositional</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#longNames" data-isabs="true">
+      <a id="longNames:List[String]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">longNames</span>
+        
+        <span class="result">: List[String]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#name" data-isabs="true">
+      <a id="name:String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">name</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">&quot;Internal&quot; name of this option - the one that
+ would be used to access parsed values.</p><div class="fullcomment"><div class="comment cmt"><p>&quot;Internal&quot; name of this option - the one that
+ would be used to access parsed values.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#required" data-isabs="true">
+      <a id="required:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">required</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Is there a requirement to have at least one invocation of this option?</p><div class="fullcomment"><div class="comment cmt"><p>Is there a requirement to have at least one invocation of this option?</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#requiredShortNames" data-isabs="true">
+      <a id="requiredShortNames:List[Char]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">requiredShortNames</span>
+        
+        <span class="result">: List[<span name="scala.Char" class="extype">Char</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Names, that were explicitly requested by the user</p><div class="fullcomment"><div class="comment cmt"><p>Names, that were explicitly requested by the user</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#shortNames" data-isabs="true">
+      <a id="shortNames:List[Char]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">shortNames</span>
+        
+        <span class="result">: List[<span name="scala.Char" class="extype">Char</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Short names, that are suggested by option implementation, not the user</p><div class="fullcomment"><div class="comment cmt"><p>Short names, that are suggested by option implementation, not the user</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#validator" data-isabs="true">
+      <a id="validator:(Manifest[_], Any) ⇒ Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">validator</span>
+        
+        <span class="result">: (Manifest[_], <span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
     </li></ol>
             </div>
-        
-        
 
         <div class="values members" id="values">
-              <h3>Value Members</h3>
+              <h3>Concrete Value Members</h3>
               <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -148,17 +259,6 @@ and evaluates the value only as the last resort.</p></div><dl class="attributes 
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#apply" data-isabs="false">
-      <a id="apply():A"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">apply</span>
-        
-        <span class="params">()</span><span class="result">: A</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Retreive the underlying value.</p><div class="fullcomment"><div class="comment cmt"><p>Retreive the underlying value. Use only if you are completely sure that there is a value.</p></div></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -184,22 +284,6 @@ and evaluates the value only as the last resort.</p></div><dl class="attributes 
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#collect" data-isabs="false">
-      <a id="collect[B](PartialFunction[A, B]):ScallopOption[B]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">collect</span>
-        <span class="tparams">[<span name="B">B</span>]</span>
-        <span class="params">(<span name="pf">pf: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[A, B]</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="">ScallopOption</a>[B]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns ScallopOption, that contains the result of applying <code></code><code>pf</code><code></code>
-to the value, if this option is non-empty and pf is defined for that value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns ScallopOption, that contains the result of applying <code></code><code>pf</code><code></code>
-to the value, if this option is non-empty and pf is defined for that value.
-Returns empty ScallopOption otherwise.
-</p></div><dl class="paramcmts block"><dt class="param">pf</dt><dd class="cmt"><p>the partial function
-</p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -222,36 +306,6 @@ Returns empty ScallopOption otherwise.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#filter" data-isabs="false">
-      <a id="filter((A) ⇒ Boolean):ScallopOption[A]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">filter</span>
-        
-        <span class="params">(<span name="p">p: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="">ScallopOption</a>[A]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns ScallopOption, that contains the value if applying
-predicate p to this value returned true.</p><div class="fullcomment"><div class="comment cmt"><p>Returns ScallopOption, that contains the value if applying
-predicate p to this value returned true. No value otherwise.
-</p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate used for testing
-</p></dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#filterNot" data-isabs="false">
-      <a id="filterNot((A) ⇒ Boolean):ScallopOption[A]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">filterNot</span>
-        
-        <span class="params">(<span name="p">p: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="">ScallopOption</a>[A]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns ScallopOption, that contains the value if applying
-predicate p to this value returned false.</p><div class="fullcomment"><div class="comment cmt"><p>Returns ScallopOption, that contains the value if applying
-predicate p to this value returned false. No value otherwise.
-</p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate used for testing
-</p></dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -266,40 +320,17 @@ predicate p to this value returned false. No value otherwise.
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#flatMap" data-isabs="false">
-      <a id="flatMap[B]((A) ⇒ ScallopOption[B]):ScallopOption[B]"></a>
+    </li><li visbl="prt" name="org.rogach.scallop.CliOption#format" data-isabs="false">
+      <a id="format(Seq[String]):List[String]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">flatMap</span>
-        <span class="tparams">[<span name="B">B</span>]</span>
-        <span class="params">(<span name="f">f: (A) ⇒ <a name="org.rogach.scallop.ScallopOption" class="extype" href="">ScallopOption</a>[B]</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="">ScallopOption</a>[B]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns the result of applying f th this options value if
-this option is non-empty.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#foreach" data-isabs="false">
-      <a id="foreach((A) ⇒ Unit):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">foreach</span>
+        <span class="name">format</span>
         
-        <span class="params">(<span name="f">f: (A) ⇒ <span name="scala.Unit" class="extype">Unit</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+        <span class="params">(<span name="s">s: Seq[String]</span>)</span><span class="result">: List[String]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Apply the given procedure f to the option's value, if it is nonempty.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#get" data-isabs="false">
-      <a id="get:Option[A]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">get</span>
-        
-        <span class="result">: <span name="scala.Option" class="extype">Option</span>[A]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Retreive the underlying value as an option</p>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -322,34 +353,17 @@ this option is non-empty.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#isDefined" data-isabs="false">
-      <a id="isDefined:Boolean"></a>
+    </li><li visbl="pub" name="org.rogach.scallop.CliOption#help" data-isabs="false">
+      <a id="help(List[Char]):List[String]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">isDefined</span>
+        <span class="name">help</span>
         
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+        <span class="params">(<span name="sh">sh: List[<span name="scala.Char" class="extype">Char</span>]</span>)</span><span class="result">: List[String]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">A convenience method to check whether the underlying option
-is defined.</p><div class="fullcomment"><div class="comment cmt"><p>A convenience method to check whether the underlying option
-is defined. Just an alias for opt.get.isDefined.
-</p></div></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#isEmpty" data-isabs="false">
-      <a id="isEmpty:Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">isEmpty</span>
-        
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">A convenience method to check whether the underlying option is
-empty.</p><div class="fullcomment"><div class="comment cmt"><p>A convenience method to check whether the underlying option is
-empty. Just an alias for !opt.isDefined.
-</p></div></div>
+      <p class="shortcomment cmt">The full text of definition+description for this arg, as it will appear in options help.</p>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -361,44 +375,6 @@ empty. Just an alias for !opt.isDefined.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#isSupplied" data-isabs="false">
-      <a id="isSupplied:Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">isSupplied</span>
-        
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Tests whether the underlying value was explicitly supplied by user.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#map" data-isabs="false">
-      <a id="map[B]((A) ⇒ B):ScallopOption[B]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">map</span>
-        <span class="tparams">[<span name="B">B</span>]</span>
-        <span class="params">(<span name="f">f: (A) ⇒ B</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="">ScallopOption</a>[B]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns ScallopOption, that contains the result of applying
-<code></code><code>f</code><code></code> to this option's value, if this option is non-empty.</p><div class="fullcomment"><div class="comment cmt"><p>Returns ScallopOption, that contains the result of applying
-<code></code><code>f</code><code></code> to this option's value, if this option is non-empty.
-Returns ScallopOption with no value otherwise.
-</p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the function to apply
-</p></dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#name" data-isabs="false">
-      <a id="name:String"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">name</span>
-        
-        <span class="result">: String</span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -432,22 +408,6 @@ Returns ScallopOption with no value otherwise.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#orElse" data-isabs="false">
-      <a id="orElse[B&gt;:A](⇒ Option[B]):ScallopOption[B]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">orElse</span>
-        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
-        <span class="params">(<span name="alternative">alternative: ⇒ <span name="scala.Option" class="extype">Option</span>[B]</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="">ScallopOption</a>[B]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns ScallopOption with this value if it is non-empty,
-or with the value of the alternative option.</p><div class="fullcomment"><div class="comment cmt"><p>Returns ScallopOption with this value if it is non-empty,
-or with the value of the alternative option. If it is
-empty too, the resulting ScallopOption will contain None.
-</p></div><dl class="paramcmts block"><dt class="param">alternative</dt><dd class="cmt"><p>the alternative expression
-</p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -459,7 +419,7 @@ empty too, the resulting ScallopOption will contain None.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#toString" data-isabs="false">
+    </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -469,7 +429,7 @@ empty too, the resulting ScallopOption will contain None.
         <span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopOption" class="extype" href="">ScallopOption</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
@@ -512,17 +472,6 @@ empty too, the resulting ScallopOption will contain None.
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption#withFilter" data-isabs="false">
-      <a id="withFilter((A) ⇒ Boolean):WithFilter"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">withFilter</span>
-        
-        <span class="params">(<span name="p">p: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption.WithFilter" class="extype" href="ScallopOption$WithFilter.html">WithFilter</a></span>
-      </span>
-      </h4>
-      
     </li></ol>
             </div>
 

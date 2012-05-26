@@ -24,12 +24,13 @@
       <span class="symbol"> 
         <span class="name">Scallop</span>
         
-        <span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[<a name="org.rogach.scallop.OptDef" class="extype" href="OptDef.html">OptDef</a>]</span>, <span name="propts">propts: List[<a name="org.rogach.scallop.PropDef" class="extype" href="PropDef.html">PropDef</a>]</span>, <span name="trail">trail: List[<a name="org.rogach.scallop.TrailDef" class="extype" href="TrailDef.html">TrailDef</a>]</span>, <span name="vers">vers: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="bann">bann: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="foot">foot: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="optionSetValidations">optionSetValidations: List[(List[String]) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[<a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a>]</span>, <span name="vers">vers: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="bann">bann: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="foot">foot: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="optionSetValidations">optionSetValidations: List[(List[String]) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The main builder class.
-</p></div><dl class="paramcmts block"><dt class="param">args</dt><dd class="cmt"><p>Arguments to parse.</p></dd><dt class="param">opts</dt><dd class="cmt"><p>Options definitions.</p></dd><dt class="param">propts</dt><dd class="cmt"><p>Property options definitions.</p></dd><dt class="param">trail</dt><dd class="cmt"><p>Definitions for trailing arguments.</p></dd><dt class="param">vers</dt><dd class="cmt"><p>Version string to display in help.</p></dd></dl><div class="toggleContainer block">
+</p></div><dl class="paramcmts block"><dt class="param">args</dt><dd class="cmt"><p>Arguments to parse.</p></dd><dt class="param">opts</dt><dd class="cmt"><p>Options definitions.</p></dd><dt class="param">vers</dt><dd class="cmt"><p>Version string to display in help.</p></dd><dt class="param">bann</dt><dd class="cmt"><p>Banner (summary of this program and command-line usage) to display in help.</p></dd><dt class="param">foot</dt><dd class="cmt"><p>Footer - displayed after options.
+</p></dd></dl><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/Scallop.scala">Scallop.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -64,10 +65,11 @@
       <span class="symbol"> 
         <span class="name">Scallop</span>
         
-        <span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[<a name="org.rogach.scallop.OptDef" class="extype" href="OptDef.html">OptDef</a>]</span>, <span name="propts">propts: List[<a name="org.rogach.scallop.PropDef" class="extype" href="PropDef.html">PropDef</a>]</span>, <span name="trail">trail: List[<a name="org.rogach.scallop.TrailDef" class="extype" href="TrailDef.html">TrailDef</a>]</span>, <span name="vers">vers: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="bann">bann: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="foot">foot: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="optionSetValidations">optionSetValidations: List[(List[String]) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]]</span>)</span>
+        <span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[<a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a>]</span>, <span name="vers">vers: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="bann">bann: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="foot">foot: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="optionSetValidations">optionSetValidations: List[(List[String]) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]]</span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">args</dt><dd class="cmt"><p>Arguments to parse.</p></dd><dt class="param">opts</dt><dd class="cmt"><p>Options definitions.</p></dd><dt class="param">propts</dt><dd class="cmt"><p>Property options definitions.</p></dd><dt class="param">trail</dt><dd class="cmt"><p>Definitions for trailing arguments.</p></dd><dt class="param">vers</dt><dd class="cmt"><p>Version string to display in help.</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">args</dt><dd class="cmt"><p>Arguments to parse.</p></dd><dt class="param">opts</dt><dd class="cmt"><p>Options definitions.</p></dd><dt class="param">vers</dt><dd class="cmt"><p>Version string to display in help.</p></dd><dt class="param">bann</dt><dd class="cmt"><p>Banner (summary of this program and command-line usage) to display in help.</p></dd><dt class="param">foot</dt><dd class="cmt"><p>Footer - displayed after options.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -133,6 +135,17 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#apply" data-isabs="false">
+      <a id="apply[A](Char)(Manifest[A]):A"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">apply</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[A]</span>)</span><span class="result">: A</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#apply" data-isabs="false">
       <a id="apply[A](String)(Manifest[A]):A"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -190,7 +203,7 @@
         <span class="result">: <span name="scala.Option" class="extype">Option</span>[String]</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">Banner (summary of this program and command-line usage) to display in help.</p>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#banner" data-isabs="false">
       <a id="banner(String):Scallop"></a>
       <h4 class="signature">
@@ -276,7 +289,7 @@ summary on it's usage.
         <span class="result">: <span name="scala.Option" class="extype">Option</span>[String]</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">Footer - displayed after options.</p>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#footer" data-isabs="false">
       <a id="footer(String):Scallop"></a>
       <h4 class="signature">
@@ -290,6 +303,17 @@ summary on it's usage.
       <p class="shortcomment cmt">Add footer string to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add footer string to this builder. Footer will be printed in help after option definitions.
 </p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>Footer string, can contain multiple lines. Note this is not formatted to 80 characters!
 </p></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#get" data-isabs="false">
+      <a id="get[A](Char)(Manifest[A]):Option[A]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">get</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[A]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[A]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#get" data-isabs="false">
       <a id="get[A](String)(Manifest[A]):Option[A]"></a>
       <h4 class="signature">
@@ -313,6 +337,28 @@ summary on it's usage.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#getOptionShortNames" data-isabs="false">
+      <a id="getOptionShortNames(CliOption):List[Char]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">getOptionShortNames</span>
+        
+        <span class="params">(<span name="opt">opt: <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></span>)</span><span class="result">: List[<span name="scala.Char" class="extype">Char</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#getOptionWithShortName" data-isabs="false">
+      <a id="getOptionWithShortName(Char):Option[CliOption]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">getOptionWithShortName</span>
+        
+        <span class="params">(<span name="c">c: <span name="scala.Char" class="extype">Char</span></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Find an option, that responds to this short name.</p>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -405,8 +451,10 @@ and contains info on proporties and options. It does not contain info about trai
       </span>
       </h4>
       <p class="shortcomment cmt">Add a new option definition to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add a new option definition to this builder.
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new option, used as long option name in parsing, and for option identification.</p></dd><dt class="param">short</dt><dd class="cmt"><p>Overload the char that will be used as short option name. Defaults to first character of the name.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, for help description.</p></dd><dt class="param">default</dt><dd class="cmt"><p>Default value to use if option is not found in input arguments (if you provide this, you can omit the type on method).</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this option required? Defaults to false.</p></dd><dt class="param">arg</dt><dd class="cmt"><p>The name for this ortion argument, as it will appear in help. Defaults to &quot;arg&quot;.</p></dd><dt class="param">noshort</dt><dd class="cmt"><p>If set to true, then this option does not have any short name.</p></dd><dt class="param">conv</dt><dd class="cmt"><p>The converter for this option. Usually found implicitly.
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new option, used as long option name in parsing, and for option identification.</p></dd><dt class="param">short</dt><dd class="cmt"><p>Overload the char that will be used as short option name.
+                   Defaults to first character of the name.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, for help description.</p></dd><dt class="param">default</dt><dd class="cmt"><p>Default value to use if option is not found in input arguments
+                     (if you provide this, you can omit the type on method).</p></dd><dt class="param">validate</dt><dd class="cmt"><p>The function, that validates the parsed value</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this option required? Defaults to false.</p></dd><dt class="param">arg</dt><dd class="cmt"><p>The name for this ortion argument, as it will appear in help. Defaults to &quot;arg&quot;.</p></dd><dt class="param">hidden</dt><dd class="cmt"><p>Hides description of this option from help (this can be useful for debugging options)
+</p></dd><dt class="param">noshort</dt><dd class="cmt"><p>If set to true, then this option does not have any short name.</p></dd><dt class="param">conv</dt><dd class="cmt"><p>The converter for this option. Usually found implicitly.</p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#optionSetValidations" data-isabs="false">
       <a id="optionSetValidations:List[(List[String]) ⇒ Either[String, Unit]]"></a>
       <h4 class="signature">
@@ -419,29 +467,16 @@ and contains info on proporties and options. It does not contain info about trai
       </h4>
       
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#opts" data-isabs="false">
-      <a id="opts:List[OptDef]"></a>
+      <a id="opts:List[CliOption]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
         <span class="name">opts</span>
         
-        <span class="result">: List[<a name="org.rogach.scallop.OptDef" class="extype" href="OptDef.html">OptDef</a>]</span>
+        <span class="result">: List[<a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Options definitions.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.Scallop#parse" data-isabs="false">
-      <a id="parse(Seq[String]):List[()]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">parse</span>
-        
-        <span class="params">(<span name="args">args: Seq[String]</span>)</span><span class="result">: List[()]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Parses the list of arguments into pieces, according to &quot;-&quot; at the arguments beginngings.</p><div class="fullcomment"><div class="comment cmt"><p>Parses the list of arguments into pieces, according to &quot;-&quot; at the arguments beginngings.
-</p></div><dl class="paramcmts block"><dt class="param">args</dt><dd class="cmt"><p>Argument list to parse.</p></dd><dt>returns</dt><dd class="cmt"><p>List of tuples, that contain short (or long) option name, and list of args corresponding to it.
-</p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#printHelp" data-isabs="false">
       <a id="printHelp:Unit"></a>
       <h4 class="signature">
@@ -507,23 +542,7 @@ and contains info on proporties and options. It does not contain info about trai
         <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>, <span name="key">key: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[Map[String, A]]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[A]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Get the value of some prorerty
-</p><div class="fullcomment"><div class="comment cmt"><p>Get the value of some prorerty
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Property definition identifier.</p></dd><dt class="param">key</dt><dd class="cmt"><p>Name of the property to retreive.</p></dd><dt>returns</dt><dd class="cmt"><p>Some(value) if property is found, None otherwise.
-</p></dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.Scallop#propMap" data-isabs="false">
-      <a id="propMap[A](Char)(Manifest[Map[String, A]]):Map[String, A]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">propMap</span>
-        <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[Map[String, A]]</span>)</span><span class="result">: Map[String, A]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Get all data for propety as Map.</p><div class="fullcomment"><div class="comment cmt"><p>Get all data for propety as Map.
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Propety definition identifier.</p></dd><dt>returns</dt><dd class="cmt"><p>All key-value pairs for this property in a map.
-</p></dd></dl></div>
+      
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#props" data-isabs="false">
       <a id="props[A](Char,String,String,String,Boolean)(ValueConverter[Map[String, A]]):Scallop"></a>
       <h4 class="signature">
@@ -537,17 +556,17 @@ and contains info on proporties and options. It does not contain info about trai
       <p class="shortcomment cmt">Add new property option definition to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add new property option definition to this builder.
 </p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Char, that will be used as prefix for property arguments.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this property option, for help description.</p></dd><dt class="param">keyName</dt><dd class="cmt"><p>Name for 'key' part of this option arg name, as it will appear in help option definition. Defaults to &quot;key&quot;.</p></dd><dt class="param">valueName</dt><dd class="cmt"><p>Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to &quot;value&quot;.
 </p></dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.Scallop#propts" data-isabs="false">
-      <a id="propts:List[PropDef]"></a>
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#propsLong" data-isabs="false">
+      <a id="propsLong[A](String,String,String,String,Boolean)(ValueConverter[Map[String, A]]):Scallop"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">propts</span>
-        
-        <span class="result">: List[<a name="org.rogach.scallop.PropDef" class="extype" href="PropDef.html">PropDef</a>]</span>
+        <span class="name">propsLong</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="descr">descr: String = <span class="symbol">&quot;&quot;</span></span>, <span name="keyName">keyName: String = <span class="symbol">&quot;key&quot;</span></span>, <span name="valueName">valueName: String = <span class="symbol">&quot;value&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, A]]</span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Property options definitions.</p>
+      
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#summary" data-isabs="false">
       <a id="summary:String"></a>
       <h4 class="signature">
@@ -582,29 +601,29 @@ and contains info on proporties and options. It does not contain info about trai
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a> → AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.Scallop#trail" data-isabs="false">
-      <a id="trail:List[TrailDef]"></a>
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#toggle" data-isabs="false">
+      <a id="toggle(String,Option[Boolean],Char,Boolean,String,String,String,Boolean):Scallop"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">trail</span>
+        <span class="name">toggle</span>
         
-        <span class="result">: List[<a name="org.rogach.scallop.TrailDef" class="extype" href="TrailDef.html">TrailDef</a>]</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>, <span name="short">short: <span name="scala.Char" class="extype">Char</span> = <span class="symbol">0.toChar</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>, <span name="prefix">prefix: String = <span class="symbol">&quot;no&quot;</span></span>, <span name="descrYes">descrYes: String = <span class="symbol">&quot;&quot;</span></span>, <span name="descrNo">descrNo: String = <span class="symbol">&quot;&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Definitions for trailing arguments.</p>
+      
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#trailArg" data-isabs="false">
-      <a id="trailArg[A](String,Boolean,Option[A])(ValueConverter[A]):Scallop"></a>
+      <a id="trailArg[A](String,Boolean,String,Option[A],(A) ⇒ Boolean,Boolean)(ValueConverter[A]):Scallop"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">trailArg</span>
         <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="name">name: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[A]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
+        <span class="params">(<span name="name">name: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="descr">descr: String</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[A]</span>, <span name="validate">validate: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add new trailing argument definition to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add new trailing argument definition to this builder.
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new definition, used for identification.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this trailing argument required? Defaults to true.</p></dd><dt class="param">default</dt><dd class="cmt"><p>If this argument is not required and not found in the argument list, use this value.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new definition, used for identification.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this trailing argument required? Defaults to true.</p></dd><dt class="param">default</dt><dd class="cmt"><p>If this argument is not required and not found in the argument list, use this value.</p></dd><dt class="param">validate</dt><dd class="cmt"><p>The function, that validates the parsed value
 </p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#validationSet" data-isabs="false">
       <a id="validationSet((List[String]) ⇒ Either[String, Unit]):Scallop"></a>
