@@ -35,15 +35,14 @@ case class Scallop(
     optionSetValidations: List[List[String]=>Either[String, Unit]] = Nil) {
 
   /** Parse the argument into list of options and their arguments. */
-  def parse(args: Seq[String]): List[(CliOption, List[String])] = {
+  private def parse(args: Seq[String]): List[(CliOption, List[String])] = {
     def goParseRest(args: Seq[String], opt: Option[CliOption]) = { 
       parseTrailingArgs(
         args.toList,
         opt.map(o=> (o.converter, true)).toList ::: opts.filter(_.isPositional).map(o => (o.converter, o.required))
-      ) map { res => (opt.toList ::: opts.filter(_.isPositional)) zip res} getOrElse
+      ) map { res => (opt.toList ::: opts.filter(_.isPositional)) zip res filter { case (opt, p) => !opt.isPositional || p.size > 0 } } getOrElse
         (throw new OptionParseException("Failed to parse the trailing argument list: '%s'" format args.tail))
     }
-    
     if (args.isEmpty) Nil
     else if (isOptionName(args.head)) {
       if (args.head.startsWith("--")) {
@@ -134,7 +133,7 @@ case class Scallop(
   private def parseTrailingArgs(args: List[String], convs: List[(ValueConverter[_], Boolean)]): Option[List[List[String]]] = {
     if (convs.isEmpty) {
       if (args.isEmpty) Some(Nil)
-      else None // some arguments are still, and there are no converters to match them => no match
+      else None // some arguments are still left, and there are no converters to match them => no match
     } else {
       // the remainders of arguments, to be matched by subsequent converters
       val remainders = convs.head._1.argType match {
@@ -385,6 +384,8 @@ case class Scallop(
       vers.foreach(println)
       sys.exit(0)
     }
+    
+    parsed
    
     // validate option sets
     optionSetValidations map (
