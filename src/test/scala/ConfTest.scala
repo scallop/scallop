@@ -392,4 +392,12 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.verbose.isSupplied should equal (false)
   }  
   
+  test ("forced end of options parsing (--)") {
+    object Conf extends ScallopConf(Seq("-a","1","--","-b","2")) {
+      val apples = opt[Int]("apples")
+      val bananas = trailArg[List[String]]("bananas")
+    }
+    Conf.apples() should equal (1)
+    Conf.bananas() should equal (List("-b", "2"))
+  }
 }

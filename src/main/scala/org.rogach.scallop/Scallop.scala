@@ -48,7 +48,7 @@ case class Scallop(
         (throw new OptionParseException("Failed to parse the trailing argument list: '%s'" format args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
     }
     if (args.isEmpty) acc
-    else if (isOptionName(args.head)) {
+    else if (isOptionName(args.head) && args.head != "--") {
       if (args.head.startsWith("--")) {
         val opt = opts find (_.longNames.contains(args.head.drop(2))) getOrElse
                   (throw new UnknownOption("Unknown option '%s'" format args.head.drop(2)))
@@ -84,7 +84,8 @@ case class Scallop(
       }
     } else {
       // only trailing args left - proceed to trailing args parsing
-      acc ::: goParseRest(args, None)
+      val trailArgs = if (args.head == "--") args.tail else args
+      acc ::: goParseRest(trailArgs, None)
     }
   }
   
