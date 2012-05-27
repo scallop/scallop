@@ -1,0 +1,9 @@
+Release
+=======
+1. Bump the version (in README.md).
+2. Write notes for herald.
+3. +compile
+4. +publish
+4. Close the release in Nexus UI.
+6. Tag the release.
+7. Publish herald notes.
