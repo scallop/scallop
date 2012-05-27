@@ -45,5 +45,13 @@ class LoadTest extends FunSuite with ShouldMatchers {
     // from failing, I needed to increase the time bound
     assert(t < 2000, "Time bound broken: %d ms" format t)
   }
+  
+  test ("too many options") {
+    val opts = List.fill(10000)(List("-a","1")).flatten
+    object Conf extends ScallopConf(opts) {
+      val apples = opt[List[Int]]("apples")
+    }
+    Conf.apples() should have size (10000)
+  }
 
 }

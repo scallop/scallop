@@ -35,8 +35,11 @@ case class Scallop(
     foot: Option[String] = None,
     optionSetValidations: List[List[String]=>Either[String, Unit]] = Nil) {
 
+  type Parsed = List[(CliOption, (String, List[String]))]
   /** Parse the argument into list of options and their arguments. */
-  private def parse(args: Seq[String]): List[(CliOption, (String,List[String]))] = {
+  private def parse(args: Seq[String]): Parsed = parse(Nil, args)
+  @annotation.tailrec
+  private def parse(acc: Parsed, args: Seq[String]): Parsed = {
     def goParseRest(args: Seq[String], opt: Option[(String, CliOption)]) = { 
       parseTrailingArgs(
         args.toList,
@@ -44,7 +47,7 @@ case class Scallop(
       ) map { res => (opt.toList ::: opts.filter(_.isPositional).map(("",_))) zip res filter { case ((invoc, opt), p) => !opt.isPositional || p.size > 0 } } getOrElse
         (throw new OptionParseException("Failed to parse the trailing argument list: '%s'" format args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
     }
-    if (args.isEmpty) Nil
+    if (args.isEmpty) acc
     else if (isOptionName(args.head)) {
       if (args.head.startsWith("--")) {
         val opt = opts find (_.longNames.contains(args.head.drop(2))) getOrElse
@@ -52,9 +55,10 @@ case class Scallop(
         val (before, after) = args.tail.span(isArgument)
         if (after.isEmpty) {
           // get the converter, proceed to trailing args parsing
-          goParseRest(args.tail, Some((args.head.drop(2),opt)))
+          acc ::: goParseRest(args.tail, Some((args.head.drop(2),opt)))
         } else {
-          (opt -> (args.head.drop(2), before.toList)) :: parse(after)
+          parse( acc = (opt -> (args.head.drop(2), before.toList)) :: acc,
+                 args = after)
         }
       } else {
         if (args.head.size == 2) {
@@ -63,23 +67,24 @@ case class Scallop(
           val (before, after) = args.tail.span(isArgument)
           if (after.isEmpty) {
             // get the converter, proceed to trailing args parsing
-            goParseRest(args.tail, Some((args.head.drop(1), opt)))
+            acc ::: goParseRest(args.tail, Some((args.head.drop(1), opt)))
           } else {
-            (opt -> (args.head.drop(1), before.toList)) :: parse(after)
+            parse( acc = (opt -> (args.head.drop(1), before.toList)) :: acc,
+                   args = after)
           }
         } else {
           val opt = getOptionWithShortName(args.head(1)) getOrElse
                     (throw new UnknownOption("Unknown option '%s'" format args.head.drop(1)))
           if (opt.converter.argType != ArgType.FLAG) {
-            parse(args.head.take(2) +: args.head.drop(2) +: args.tail)
+            parse(acc, args.head.take(2) +: args.head.drop(2) +: args.tail)
           } else {
-            parse(args.head.take(2) +: ("-" + args.head.drop(2)) +: args.tail)
+            parse(acc, args.head.take(2) +: ("-" + args.head.drop(2)) +: args.tail)
           }
         }
       }
     } else {
       // only trailing args left - proceed to trailing args parsing
-      goParseRest(args, None)
+      acc ::: goParseRest(args, None)
     }
   }
   
