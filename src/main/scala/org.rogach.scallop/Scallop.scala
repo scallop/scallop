@@ -45,7 +45,7 @@ case class Scallop(
         args.toList,
         opt.map(o=> (o._2.converter, true)).toList ::: opts.filter(_.isPositional).map(o => (o.converter, o.required))
       ) map { res => (opt.toList ::: opts.filter(_.isPositional).map(("",_))) zip res filter { case ((invoc, opt), p) => !opt.isPositional || p.size > 0 } } getOrElse
-        (throw new OptionParseException("Failed to parse the trailing argument list: '%s'" format args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
+        (throw new OptionParseException("Failed to parse the trailing argument list: '%s'" format args.mkString(" "))) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
     }
     if (args.isEmpty) acc
     else if (isOptionName(args.head) && args.head != "--") {
