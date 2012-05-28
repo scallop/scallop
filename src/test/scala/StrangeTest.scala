@@ -72,11 +72,11 @@ class StrangeTest extends FunSuite with ShouldMatchers {
     }
     out should equal ("""0.1.2
                         |some rubbish
-                        |-a, --apples  <arg>
+                        |  -a, --apples  <arg>
                         |    fresh apples!
-                        |--noverbose
+                        |  --noverbose
                         |    turn off 
-                        |-v, --verbose
+                        |  -v, --verbose
                         |    very verbose 
                         |
                         |Trailing arguments:

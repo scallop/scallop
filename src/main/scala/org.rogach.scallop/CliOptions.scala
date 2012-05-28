@@ -43,7 +43,7 @@ trait CliOption {
   def help(sh: List[Char]): List[String] = {
     if (!hidden) {
       var text = format(descr.split(" "))
-      List((argLine(sh) + "\n" + text.map("    " +).mkString("\n")).trim)
+      List("  " + (argLine(sh) + "\n" + text.map("    " +).mkString("\n")).trim)
     } else Nil
   }
   
@@ -79,7 +79,7 @@ case class SimpleOption(
   def requiredShortNames = if (noshort) Nil else short.toList
 
   def argLine(sh: List[Char]): String = {
-    List(sh.map("-" +), List("--" + name)).flatten.mkString(", ") + "  " + converter.argType.fn(argName)    
+    "  " + List(sh.map("-" +), List("--" + name)).flatten.mkString(", ") + "  " + converter.argType.fn(argName)    
   }
 }
 
@@ -188,10 +188,10 @@ case class ToggleOption(
   def argLine(sh: List[Char]): String = throw new MajorInternalException
   override def help(sh: List[Char]): List[String] = {
     List(
-      (sh.map("-" +) ++ List("--" + name) mkString ", ") + "\n" + 
+      "  " + (sh.map("-" +) ++ List("--" + name) mkString ", ") + "\n" + 
       format(descrYes.split(" ")).map("    " +).mkString("\n"),
       
-      ("--" + prefix + name) + "\n" +
+      "  " + ("--" + prefix + name) + "\n" +
       format(descrNo.split(" ")).map("    " +).mkString("\n")
     )
   }

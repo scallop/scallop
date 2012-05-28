@@ -344,7 +344,7 @@ case class Scallop(
     if (opts.filter(_.isPositional).filter(!_.hidden).isEmpty) {
       optsHelp
     } else {
-      optsHelp + "\n\nTrailing arguments:\n" + opts.filter(_.isPositional).filter(!_.hidden).flatMap(_.help(Nil)).map("  "+).mkString("\n") + "\n"
+      optsHelp + "\n\nTrailing arguments:\n" + opts.filter(_.isPositional).filter(!_.hidden).flatMap(_.help(Nil)).mkString("\n") + "\n"
     }
   }
     
