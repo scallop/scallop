@@ -78,6 +78,15 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.files() should equal (List("a"))
   }
 
+  test ("trailing args - non-empty list arg after flag option") {
+    object Conf extends ScallopConf(Seq("-v", "a")) {
+      val verbose = opt[Boolean]("verbose")
+      val files = trailArg[List[String]]()
+    }
+    Conf.verbose() should equal (true)
+    Conf.files() should equal (List("a"))
+  }
+
   test ("passing to functions") {
     object Conf extends ScallopConf(List("-a","3")) {
       val apples = opt[Int]("apples")
@@ -423,4 +432,5 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.apples() should equal (1)
     Conf.bananas() should equal (List("-b", "2"))
   }
+  
 }

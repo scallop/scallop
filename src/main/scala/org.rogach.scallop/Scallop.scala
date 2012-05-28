@@ -407,6 +407,9 @@ case class Scallop(
     * If there is "--help" or "--version" option present, it prints help or version statement and exits.
     */
   def verify = {
+    // option identifiers must not clash 
+    opts map (_.name) groupBy (a=>a) filter (_._2.size > 1) foreach
+      (a => throw new IdenticalOptionNames("Option identifier '%s' is not unique" format a._1))
     // long options names must not clash
     opts flatMap (_.longNames) groupBy (a=>a) filter (_._2.size > 1) foreach
       (a => throw new IdenticalOptionNames("Long option name '%s' is not unique" format a._1))

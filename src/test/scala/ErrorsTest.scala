@@ -146,4 +146,13 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
     }
   }
   
+  test ("option identifier clash") {
+    intercept[IdenticalOptionNames] {
+      val opts = Scallop(Nil)
+        .opt[Boolean]("tasks")
+        .trailArg[List[String]]("tasks")
+        .verify
+    }
+  }
+  
 }
