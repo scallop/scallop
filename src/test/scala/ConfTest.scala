@@ -432,5 +432,15 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.apples() should equal (1)
     Conf.bananas() should equal (List("-b", "2"))
   }
-  
+
+  test ("help formatter test") {
+    object Conf extends ScallopConf(Nil) {
+      val silent = opt[Boolean]("silent", descr = "supress all output, including output from scripts (stderr from scripts is still printed)")
+    }
+    Conf.builder.opts.head.help(List('s')) should equal (List(
+      """  -s, --silent  
+        |    supress all output, including output from scripts (stderr from scripts is 
+        |    still printed)""".stripMargin
+    ))
+  }
 }

@@ -48,13 +48,14 @@ trait CliOption {
   }
   
   protected def format(s: Seq[String]): List[String] = {
+    
     var text = List[String]("")
     s foreach { w =>
       if (text.last.size + 1 + w.size <= 76) {
         text = text.init :+ (text.last + w + " ")
       } else if (text.last.size + w.size <= 76) {
         text = text.init :+ (text.last + w)
-      } else text :+= w
+      } else text :+= (w + " ")
     }
     text
   }
