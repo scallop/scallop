@@ -150,9 +150,8 @@ case class Scallop(
             if (args.isEmpty) List(Nil) else List(args.tail)
           else 
             if (args.isEmpty) List(Nil) else List(args.tail, args)
-        case ArgType.LIST => // if it is required, we must match at least one argument
-          if (convs.head._2) args.tails.toList.reverse.init
-          else args.tails.toList.reverse
+        case ArgType.LIST =>
+          args.tails.toList.reverse
       }
       remainders.view map { rem =>
         val p = args.take(args.size - rem.size) // to be matched by current converter
