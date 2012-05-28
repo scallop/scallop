@@ -26,11 +26,11 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
       default: Option[A] = None,
       validate: A => Boolean = (_:A) => true,
       required: Boolean = false,
-      arg: String = "arg",
+      argName: String = "arg",
       hidden: Boolean = false,
       noshort: Boolean = false)
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
-    builder = builder.opt(name, short, descr, default, validate, required, arg, hidden, noshort)(conv)
+    builder = builder.opt(name, short, descr, default, validate, required, argName, hidden, noshort)(conv)
     new ScallopOption[A](
       name,
       {verified_?; builder.get[A](name)(conv.manifest)},
