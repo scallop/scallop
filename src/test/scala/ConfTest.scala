@@ -55,6 +55,13 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.file2.get should equal (Some("filename2"))
   }
   
+  test ("trailing args - empty list arg") {
+    object Conf extends ScallopConf(Nil) {
+      val files = trailArg[List[String]]()
+    }
+    Conf.files() should equal (Nil)
+  }
+  
   test ("passing to functions") {
     object Conf extends ScallopConf(List("-a","3")) {
       val apples = opt[Int]("apples")

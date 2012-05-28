@@ -36,7 +36,7 @@ package object scallop {
     def parse(s:List[(String, List[String])]) = {
       try {
         val l = s.map(_._2).flatten.map(i => conv(i))
-        if (l.isEmpty) Right(None)
+        if (l.isEmpty) Right(Some(Nil))
         else Right(Some(l))
       } catch { case _ =>
         Left(Unit)

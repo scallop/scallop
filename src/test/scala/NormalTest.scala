@@ -305,7 +305,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       .trailArg[List[Int]]("numbers", required = false)
       .verify
     opts.get[List[Int]]("echo") should equal (Some(List(42,43)))
-    opts.get[List[Int]]("numbers") should equal (None)
+    opts.get[List[Int]]("numbers") should equal (Some(Nil))
   }
 
   test ("trail options - after list argument, single optional value") {
