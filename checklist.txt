@@ -6,4 +6,5 @@ Release
 4. +publish
 4. Close the release in Nexus UI.
 6. Tag the release.
-7. Publish herald notes.
+7. Update API docs.
+8. Publish herald notes.
