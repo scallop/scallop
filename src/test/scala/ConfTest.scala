@@ -434,13 +434,11 @@ class ConfTest extends FunSuite with ShouldMatchers {
   }
 
   test ("help formatter test") {
-    object Conf extends ScallopConf(Nil) {
-      val silent = opt[Boolean]("silent", descr = "supress all output, including output from scripts (stderr from scripts is still printed)")
-    }
-    Conf.builder.opts.head.help(List('s')) should equal (List(
-      """  -s, --silent  
-        |    supress all output, including output from scripts (stderr from scripts is 
-        |    still printed)""".stripMargin
+    val text = Formatter.wrap("supress all output, including output from scripts (stderr from scripts is still printed)".split(" "), 76)
+    val expected =  (List(
+      "supress all output, including output from scripts (stderr from scripts is ",
+      "still printed) "
     ))
+    text should equal (expected)
   }
 }

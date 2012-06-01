@@ -39,26 +39,9 @@ trait CliOption {
   /** The line, that would be printed as definition of this arg in help. */
   def argLine(sh: List[Char]): String
   
-  /** The full text of definition+description for this arg, as it will appear in options help. */
-  def help(sh: List[Char]): List[String] = {
-    if (!hidden) {
-      var text = format(descr.split(" "))
-      List("  " + (argLine(sh) + "\n" + text.map("    " +).mkString("\n")).trim)
-    } else Nil
-  }
-  
-  protected def format(s: Seq[String]): List[String] = {
-    
-    var text = List[String]("")
-    s foreach { w =>
-      if (text.last.size + 1 + w.size <= 76) {
-        text = text.init :+ (text.last + w + " ")
-      } else if (text.last.size + w.size <= 76) {
-        text = text.init :+ (text.last + w)
-      } else text :+= (w + " ")
-    }
-    text
-  }
+  /** List of argument lines and descriptions to them. */
+  def helpInfo(sh: List[Char]): List[(String, String)] 
+
 }
 
 case class SimpleOption(
@@ -80,8 +63,9 @@ case class SimpleOption(
   def requiredShortNames = if (noshort) Nil else short.toList
 
   def argLine(sh: List[Char]): String = {
-    "  " + List(sh.map("-" +), List("--" + name)).flatten.mkString(", ") + "  " + converter.argType.fn(argName)    
+    List(sh.map("-" +), List("--" + name)).flatten.mkString(", ") + "  " + converter.argType.fn(argName)    
   }
+  def helpInfo(sh: List[Char]) = List((argLine(sh), descr))
 }
 
 case class PropertyOption(
@@ -105,6 +89,7 @@ case class PropertyOption(
   def argLine(sh: List[Char]): String =
     "-%1$s%2$s=%3$s [%2$s=%3$s]..." format (short, keyName, valueName)
 
+  def helpInfo(sh: List[Char]) = List((argLine(sh), descr))
 }
 
 case class LongNamedPropertyOption(
@@ -126,7 +111,8 @@ case class LongNamedPropertyOption(
 
   def argLine(sh: List[Char]) =
     "--%1$s%2$s=%3$s [%2$s=%3$s]..." format (name, keyName, valueName)
-  
+
+  def helpInfo(sh: List[Char]) = List((argLine(sh), descr))
 }
 
 case class TrailingArgsOption(
@@ -146,6 +132,8 @@ case class TrailingArgsOption(
 
   def argLine(sh: List[Char]): String = 
     "%s (%s)" format (name, (if (required) "required" else "not required"))
+  
+  def helpInfo(sh: List[Char]) = List((argLine(sh), descr))
 }
 
 case class ToggleOption(
@@ -187,15 +175,9 @@ case class ToggleOption(
   }
   
   def argLine(sh: List[Char]): String = throw new MajorInternalException
-  override def help(sh: List[Char]): List[String] = {
-    List(
-      "  " + (sh.map("-" +) ++ List("--" + name) mkString ", ") + "\n" + 
-      format(descrYes.split(" ")).map("    " +).mkString("\n"),
-      
-      "  " + ("--" + prefix + name) + "\n" +
-      format(descrNo.split(" ")).map("    " +).mkString("\n")
-    )
-  }
-  
+  def helpInfo(sh: List[Char]) = List(
+    (sh.map("-" +) ++ List("--" + name) mkString ", ") -> descrYes,
+    ("--" + prefix + name) -> descrNo
+  )
 }
   

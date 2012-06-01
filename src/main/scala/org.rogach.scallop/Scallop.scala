@@ -338,13 +338,12 @@ case class Scallop(
     * and contains info on proporties and options. It does not contain info about trailing arguments.
     */
   def help: String = {
-    val optsHelp = (opts.filter(!_.isPositional) filter (!_.hidden) flatMap { opt =>
-      opt.help(getOptionShortNames(opt))
-    } filter (_.size > 0) sortBy (_.trim.dropWhile('-'==).toLowerCase) mkString "\n")
-    if (opts.filter(_.isPositional).filter(!_.hidden).isEmpty) {
+    val optsHelp = Formatter format (opts filter (!_.isPositional) filter (!_.hidden) sortBy (_.name.toLowerCase) flatMap (o => o.helpInfo(getOptionShortNames(o))))
+    val trailHelp = Formatter format (opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)))
+    if (opts filter (_.isPositional) isEmpty) {
       optsHelp
     } else {
-      optsHelp + "\n\nTrailing arguments:\n" + opts.filter(_.isPositional).filter(!_.hidden).flatMap(_.help(Nil)).mkString("\n") + "\n"
+      optsHelp + "\n\nTrailing arguments:\n" + trailHelp
     }
   }
     

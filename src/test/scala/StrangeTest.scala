@@ -72,16 +72,12 @@ class StrangeTest extends FunSuite with ShouldMatchers {
     }
     out should equal ("""0.1.2
                         |some rubbish
-                        |  -a, --apples  <arg>
-                        |    fresh apples!
-                        |  --noverbose
-                        |    turn off 
-                        |  -v, --verbose
-                        |    very verbose 
+                        |  -a, --apples  <arg>   fresh apples!
+                        |  -v, --verbose         very verbose 
+                        |      --noverbose       turn off 
                         |
                         |Trailing arguments:
-                        |  trail (required)
-                        |    Which trail do you choose?
+                        |  trail (required)   Which trail do you choose?
                         |
                         |and some more
                         |""".stripMargin)
