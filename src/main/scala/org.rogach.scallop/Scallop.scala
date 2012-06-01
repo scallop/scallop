@@ -438,7 +438,7 @@ case class Scallop(
       val args = parsed filter (_._1 == o) map (_._2)
       val res = o.converter.parse(args)
       if (res.isLeft) throw new WrongOptionFormat(
-        "Wrong format for option '%s': %s" format (o.name, args.map(_._2.mkString).mkString(" ")))
+        "Wrong format for option '%s': %s" format (o.name, args.map(_._2.mkString(" ")).mkString(" ")))
       if (o.required && !res.right.get.isDefined && !o.default.isDefined) throw new RequiredOptionNotFound(
         "Required option '%s' not found" format o.name)
       // validaiton
