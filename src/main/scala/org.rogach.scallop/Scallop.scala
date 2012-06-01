@@ -34,11 +34,24 @@ case class Scallop(
     bann: Option[String] = None,
     foot: Option[String] = None,
     optionSetValidations: List[List[String]=>Either[String, Unit]] = Nil,
-    helpWidth: Option[Int] = None) {
+    helpWidth: Option[Int] = None,
+    subbuilders: List[(String, Scallop)] = Nil) {
 
   type Parsed = List[(CliOption, (String, List[String]))]
+  
+  case class ParseResult(
+    opts: List[(CliOption, (String, List[String]))] = Nil,
+    subcommand: Option[String] = None,
+    subcommandArgs: List[String] = Nil
+  )
+
   /** Parse the argument into list of options and their arguments. */
-  private def parse(args: Seq[String]): Parsed = parse(Nil, args)
+  private def parse(args: Seq[String]): ParseResult = {
+    subbuilders.find(sub => args.contains(sub._1)) match {
+      case Some((name, sub)) => ParseResult(parse(Nil, args.takeWhile(name!=)), Some(name), args.dropWhile(name!=).drop(1).toList)
+      case None => ParseResult(parse(Nil, args))
+    }
+  }
   @annotation.tailrec
   private def parse(acc: Parsed, args: Seq[String]): Parsed = {
     def goParseRest(args: Seq[String], opt: Option[(String, CliOption)]) = { 
@@ -102,7 +115,7 @@ case class Scallop(
   }
   
   /** Result of parsing */ 
-  private lazy val parsed: List[(CliOption, (String, List[String]))] = if (args.headOption map("@--" ==) getOrElse false) {
+  private lazy val parsed: ParseResult = if (args.headOption map("@--" ==) getOrElse false) {
     // read options from stdin
     val argList = 
       io.Source.fromInputStream(java.lang.System.in).getLines.toList
@@ -305,8 +318,11 @@ case class Scallop(
                                           descrNo,
                                           hidden))
   }
-    
-    
+  
+  /** Adds a subbuilder (subcommand) to this builder.
+    * @param name All arguments after this string would be routed to this builder.
+    */
+  def addSubBuilder(name: String, builder: Scallop) = this.copy(subbuilders = subbuilders :+ (name -> builder))
 
   /** Add a validation for supplied option set.
     *
@@ -370,10 +386,16 @@ case class Scallop(
     * @param name Identifier of option or trailing arg definition
     */
   def isSupplied(name: String): Boolean = {
-    opts find (_.name == name) map { opt =>
-      val args = parsed.filter(_._1 == opt).map(_._2)
-      opt.converter.parse(args).right.get.isDefined
-    } getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name))
+    if (name.contains('\0')) {
+      // delegating to subbuilder
+      subbuilders.find(_._1 == name.takeWhile('\0'!=)).map(_._2.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\0'!=).drop(1)))
+        .getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name.replace("\0",".")))
+    } else {
+      opts find (_.name == name) map { opt =>
+        val args = parsed.opts.filter(_._1 == opt).map(_._2)
+        opt.converter.parse(args).right.get.isDefined
+      } getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name))
+    }
   }
   
    /** Get the value of option (or trailing arg) as Option.
@@ -381,14 +403,20 @@ case class Scallop(
      * @param m Manifest for requested type. Usually found implicitly.
      */
   def get[A](name: String)(implicit m: Manifest[A]): Option[A] = {
-    opts.find(_.name == name).map{ opt =>
-      if (!(opt.converter.manifest <:< m))
-        throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, opt.converter.manifest))
-      val args = parsed.filter(_._1 == opt).map(_._2)
-      opt.converter.parse(args).right
-        .getOrElse(if (opt.required)  throw new MajorInternalException else None)
-        .orElse(opt.default)
-    }.getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name)).asInstanceOf[Option[A]]
+    if (name.contains('\0')) {
+      // delegating to subbuilder
+      subbuilders.find(_._1 == name.takeWhile('\0'!=)).map(_._2.args(parsed.subcommandArgs).get(name.dropWhile('\0'!=).drop(1))(m))
+        .getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name.replace("\0","."))).asInstanceOf[Option[A]]
+    } else {
+      opts.find(_.name == name).map{ opt =>
+        if (!(opt.converter.manifest <:< m))
+          throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, opt.converter.manifest))
+        val args = parsed.opts.filter(_._1 == opt).map(_._2)
+        opt.converter.parse(args).right
+          .getOrElse(if (opt.required)  throw new MajorInternalException else None)
+          .orElse(opt.default)
+      }.getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name)).asInstanceOf[Option[A]]
+    }
   }
   
   def get[A](name: Char)(implicit m: Manifest[A]): Option[A] = get(name.toString)(m)
@@ -439,7 +467,7 @@ case class Scallop(
     }
     
     opts foreach { o =>
-      val args = parsed filter (_._1 == o) map (_._2)
+      val args = parsed.opts filter (_._1 == o) map (_._2)
       val res = o.converter.parse(args)
       if (res.isLeft) throw new WrongOptionFormat(
         "Wrong format for option '%s': %s" format (o.name, args.map(_._2.mkString(" ")).mkString(" ")))

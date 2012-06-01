@@ -97,7 +97,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     a(Conf)
   }
-  
+
   test ("extracting values before call to verify") {
     intercept[IncompleteBuildException] {
       object Conf extends ScallopConf(List("-a")) {
@@ -226,7 +226,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     Conf
   }
-
+  
   test ("option set validation, codependent options, failure") { 
     intercept[OptionSetValidationFailure] {
       object Conf extends ScallopConf(List("-a", "1")){
@@ -260,7 +260,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
       Conf
     }
   }
-  
+
   test ("boolean default value") {
     object Conf extends ScallopConf(List("-b")) {
       val apples = opt[Boolean]("apples", default = Some(true))
@@ -441,4 +441,5 @@ class ConfTest extends FunSuite with ShouldMatchers {
     ))
     text should equal (expected)
   }
+
 }

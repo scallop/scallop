@@ -1,12 +1,46 @@
 package org.rogach.scallop
 
 import exceptions._
+import scala.util.DynamicVariable
 
-abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations with AfterInit {
+object ScallopConf {
+  val rootConf = new DynamicVariable[ScallopConf](null)
+  val builders = new DynamicVariable[List[(String,Scallop)]](Nil)
+  def cleanUp = {
+    ScallopConf.builders.value = Nil
+    ScallopConf.rootConf.value = null
+  }
+}
+
+abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandname: String = "") extends ScallopConfValidations with AfterInit {
   
-  var builder = Scallop(args)
+  if (ScallopConf.rootConf.value == null) {
+    ScallopConf.rootConf.value = this
+  }
+  val rootConfig = ScallopConf.rootConf.value
+  
+  if (ScallopConf.builders.value.isEmpty) {
+    // If this is the root config, init the root builder
+    ScallopConf.builders.value = (commandname, Scallop(args)) :: Nil
+  } else {
+    // if it is the subcommand config, add new builder to the list
+    ScallopConf.builders.value = ScallopConf.builders.value :+ (commandname, Scallop(args))
+  }
+  
+  def editBuilder(fn: Scallop => Scallop) {
+    val last = ScallopConf.builders.value.last
+    ScallopConf.builders.value = ScallopConf.builders.value.init :+ (last._1, fn(last._2))
+    builder = ScallopConf.builders.value.last._2
+  }
+  
+  var builder = ScallopConf.builders.value.last._2
+
+  def getName(name: String): String = {
+    (ScallopConf.builders.value.map(_._1).mkString("\0") + "\0" + name).stripPrefix("\0")
+  }
+
   var verified = false
-  
+
   /** Add a new option definition to this config and get a holder for the value.
     *
     * @param name Name for new option, used as long option name in parsing, and for option identification.
@@ -30,11 +64,11 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
       hidden: Boolean = false,
       noshort: Boolean = false)
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
-    builder = builder.opt(name, short, descr, default, validate, required, argName, hidden, noshort)(conv)
+    editBuilder(_.opt(name, short, descr, default, validate, required, argName, hidden, noshort)(conv))
     new ScallopOption[A](
-      name,
-      {verified_?; builder.get[A](name)(conv.manifest)},
-      {verified_?; builder.isSupplied(name)})
+      getName(name),
+      {verified_?; rootConfig.builder.get[A](getName(name))(conv.manifest)},
+      {verified_?; rootConfig.builder.isSupplied(getName(name))})
   }              
 
   /** Add new property option definition to this config object, and get a handle for option retreiving.
@@ -52,10 +86,10 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
       valueName: String = "value",
       hidden: Boolean = false)
       (implicit conv: ValueConverter[Map[String,A]]):(String => Option[A]) = {
-    builder = builder.props(name, descr, keyName, valueName, hidden)(conv)
+    editBuilder(_.props(name, descr, keyName, valueName, hidden)(conv))
     (key:String) => {
       verified_?
-      builder(name.toString)(conv.manifest).get(key)
+      rootConfig.builder(getName(name.toString))(conv.manifest).get(key)
     }
   }
 
@@ -66,10 +100,10 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
       valueName: String = "value",
       hidden: Boolean = false)
       (implicit conv: ValueConverter[Map[String,A]]):(String => Option[A]) = {
-    builder = builder.propsLong(name, descr, keyName, valueName, hidden)(conv)
+    editBuilder(_.propsLong(name, descr, keyName, valueName, hidden)(conv))
     (key:String) => {
       verified_?
-      builder(name)(conv.manifest).get(key)
+      rootConfig.builder(getName(name))(conv.manifest).get(key)
     }
   }
 
@@ -90,11 +124,11 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
     // here, we generate some random name, since it does not matter
     val n = name
-    builder = builder.trailArg(n, required, descr, default, validate, hidden)(conv)
+    editBuilder(_.trailArg(n, required, descr, default, validate, hidden)(conv))
     new ScallopOption[A](
-      name, 
-      {verified_?; builder.get[A](n)(conv.manifest)},
-      {verified_?; builder.isSupplied(n)})
+      getName(name), 
+      {verified_?; rootConfig.builder.get[A](n)(conv.manifest)},
+      {verified_?; rootConfig.builder.isSupplied(n)})
   }
 
   /** Add new toggle option definition to this config, and get a holder for it's value.
@@ -122,30 +156,37 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
       descrYes: String = "",
       descrNo: String = "",
       hidden: Boolean = false): ScallopOption[Boolean] = {
-    builder = builder.toggle(name, default, short, noshort, prefix, descrYes, descrNo, hidden)
+    editBuilder(_.toggle(name, default, short, noshort, prefix, descrYes, descrNo, hidden))
     new ScallopOption[Boolean](
-      name,
-      {verified_?; builder.get[Boolean](name)},
-      {verified_?; builder.isSupplied(name)}
+      getName(name),
+      {verified_?; rootConfig.builder.get[Boolean](name)},
+      {verified_?; rootConfig.builder.isSupplied(name)}
     )
   }
 
   /** Veryfy that this config object is properly configured. */
   def verify {
-    verified = true
-    builder.verify
-    validations foreach { v =>
-      v() match {
-        case Right(_) =>
-        case Left(err) => throw new ValidationFailure(err)
+    try {
+      verified = true
+      builder.verify
+      validations foreach { v =>
+        v() match {
+          case Right(_) =>
+          case Left(err) => throw new ValidationFailure(err)
+        }
       }
+    } finally {
+      ScallopConf.cleanUp
     }
   }
   
   /** Checks that this Conf object is verified. If it is not, throws an exception. */
   def verified_? = {
     if (verified) true
-    else throw new IncompleteBuildException("It seems you tried to get option value before you constructed all options (maybe you forgot to call .verify method?). Please, move all extraction of values to after 'verify' method in ScallopConf.")
+    else {
+      ScallopConf.cleanUp
+      throw new IncompleteBuildException("It seems you tried to get option value before you constructed all options (maybe you forgot to call .verify method?). Please, move all extraction of values to after 'verify' method in ScallopConf.")
+    }
   }
   
   /** In the verify stage, checks that only one or zero of the provided options have values supplied in arguments.
@@ -153,10 +194,10 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     * @param list list of mutually exclusive options
     */
   def mutuallyExclusive(list: ScallopOption[_]*) {
-    builder = builder.validationSet { l =>
+    editBuilder(_.validationSet { l =>
       if (list.map(_.name).count(l.contains) > 1) Left("There should be only one or zero of the following options: %s" format list.map(_.name).mkString(", "))
       else Right(Unit)
-    }
+    })
   }
   
   /** In the verify stage, checks that either all or none of the provided options have values supplied in arguments.
@@ -164,11 +205,11 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     * @param list list of codependent options
     */
   def codependent(list: ScallopOption[_]*) {
-    builder = builder.validationSet { l =>
+    editBuilder(_.validationSet { l =>
       val c = list map (_.name) count (l.contains)
       if (c != 0 && c != list.size) Left("Ether all or none of the following options should be supplied, because they are co-dependent: %s" format list.map(_.name).mkString(", "))
       else Right(Unit)
-    }
+    })
   }
   
   
@@ -181,7 +222,7 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     */
   def propMap[A](name: Char)(implicit m: Manifest[Map[String,A]]) = {
     verified_?
-    builder(name.toString)(m)
+    rootConfig.builder(name.toString)(m)
   }
 
   /** Get summary of current parser state.
@@ -198,7 +239,7 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     * @param v Version string.
     */
   def version(v: String) {
-    builder = builder.version(v)
+    editBuilder(_.version(v))
   }
   
   /** Add a banner string to option builder.
@@ -206,7 +247,7 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     * @param b Banner string.
     */
   def banner(b: String) {
-    builder = builder.banner(b)
+    editBuilder(_.banner(b))
   }
   
   /** Add a footer string to this builder.
@@ -214,17 +255,29 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
     * @param f footer string.
     */
   def footer(f: String) {
-    builder = builder.footer(f)
+    editBuilder(_.footer(f))
   }
 
   /** Explicitly set width of help printout. By default, Scallop tries
     * to determine it from terminal width or defaults to 80 characters.
     */
   def helpWidth(w: Int) {
-    builder = builder.setHelpWidth(w)
+    editBuilder(_.setHelpWidth(w))
   }
   
   final def afterInit {
-    verify
+    if (ScallopConf.builders.value.size > 1) {
+      val b = ScallopConf.builders.value.last
+      ScallopConf.builders.value = ScallopConf.builders.value.init
+      editBuilder(_.addSubBuilder(b._1, b._2))
+      verified = true
+    } else {
+      try {
+        verify
+      } finally {
+        ScallopConf.cleanUp
+      }
+    }
   }
+
 }
