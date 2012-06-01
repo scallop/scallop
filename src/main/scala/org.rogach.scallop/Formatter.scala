@@ -11,18 +11,15 @@ object Formatter {
     * Also accepts optional width, to which the result must be formatted.
     */
   def format(s: List[(String, String)], width: Option[Int] = None): String = {
-    val neededWidth = width orElse getWidth getOrElse DEFAULT_WIDTH
+    val neededWidth = width getOrElse DEFAULT_WIDTH
     val argWidth =  if (s.isEmpty) 0 else s.map(_._1).map(a => if (a.startsWith("--")) "    " + a else a).map(_.size).max
     s.flatMap { case (arg, descr) => 
-//      println("|" + arg + "|")
       val argPadding = " " * (if (arg.trim.startsWith("--")) 4 else 0)
       val text = wrap(descr.split(" "), neededWidth - argWidth - COLUMN_PADDING).map(l => " " * (argWidth + COLUMN_PADDING + INDENT) + l)
       (" " * INDENT + argPadding + arg + text.head.drop(arg.size + argPadding.size + INDENT)) :: text.tail
     }.mkString("\n")
   }
   
-  def getWidth: Option[Int] = Some(80)
-
   /** Carefully wraps the text to the needed width. */
   def wrap(s: Seq[String], width: Int): List[String] = {
     var text = List[String]("")
