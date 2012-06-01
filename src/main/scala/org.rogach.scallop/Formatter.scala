@@ -12,10 +12,12 @@ object Formatter {
     */
   def format(s: List[(String, String)], width: Option[Int] = None): String = {
     val neededWidth = width orElse getWidth getOrElse DEFAULT_WIDTH
-    val argWidth =  if (s.isEmpty) 0 else s.map(_._1.size).max
+    val argWidth =  if (s.isEmpty) 0 else s.map(_._1).map(a => if (a.startsWith("--")) "    " + a else a).map(_.size).max
     s.flatMap { case (arg, descr) => 
+//      println("|" + arg + "|")
+      val argPadding = " " * (if (arg.trim.startsWith("--")) 4 else 0)
       val text = wrap(descr.split(" "), neededWidth - argWidth - COLUMN_PADDING).map(l => " " * (argWidth + COLUMN_PADDING + INDENT) + l)
-      (" " * INDENT + arg + text.head.drop(arg.size + INDENT)) :: text.tail
+      (" " * INDENT + argPadding + arg + text.head.drop(arg.size + argPadding.size + INDENT)) :: text.tail
     }.mkString("\n")
   }
   

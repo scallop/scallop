@@ -72,15 +72,24 @@ class StrangeTest extends FunSuite with ShouldMatchers {
     }
     out should equal ("""0.1.2
                         |some rubbish
-                        |  -a, --apples  <arg>   fresh apples!
+                        |  -a, --apples  <arg>   fresh apples! 
                         |  -v, --verbose         very verbose 
                         |      --noverbose       turn off 
                         |
                         |Trailing arguments:
-                        |  trail (required)   Which trail do you choose?
+                        |  trail (required)   Which trail do you choose? 
                         |
                         |and some more
                         |""".stripMargin)
+  }
+  
+  test ("help wrapping") {
+    val opts = Scallop()
+      .opt[Boolean]("apples", descr = "********* ********* ********* ********* ********* *********")
+    opts.setHelpWidth(80).help should equal ("""  -a, --apples   ********* ********* ********* ********* ********* ********* """)
+    opts.setHelpWidth(40).help should equal ("""  -a, --apples   ********* ********* 
+                                               |                 ********* ********* 
+                                               |                 ********* ********* """.stripMargin)
   }
   
   test ("version printing") {

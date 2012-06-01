@@ -33,7 +33,8 @@ case class Scallop(
     vers: Option[String] = None,
     bann: Option[String] = None,
     foot: Option[String] = None,
-    optionSetValidations: List[List[String]=>Either[String, Unit]] = Nil) {
+    optionSetValidations: List[List[String]=>Either[String, Unit]] = Nil,
+    helpWidth: Option[Int] = None) {
 
   type Parsed = List[(CliOption, (String, List[String]))]
   /** Parse the argument into list of options and their arguments. */
@@ -334,16 +335,19 @@ case class Scallop(
     */
   def footer(f: String) = this.copy(foot = Some(f))
   
+  /** Explicitly sets the needed width for the help printout. */
+  def setHelpWidth(w: Int) = this.copy(helpWidth = Some(w))
+  
   /** Get help on options from this builder. The resulting help is carefully formatted at 80 columns,
     * and contains info on proporties and options. It does not contain info about trailing arguments.
     */
   def help: String = {
-    val optsHelp = Formatter format (opts filter (!_.isPositional) filter (!_.hidden) sortBy (_.name.toLowerCase) flatMap (o => o.helpInfo(getOptionShortNames(o))))
-    val trailHelp = Formatter format (opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)))
+    val optsHelp = Formatter format (opts filter (!_.isPositional) filter (!_.hidden) sortBy (_.name.toLowerCase) flatMap (o => o.helpInfo(getOptionShortNames(o))), helpWidth)
+    val trailHelp = Formatter format (opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)), helpWidth)
     if (opts filter (_.isPositional) isEmpty) {
       optsHelp
     } else {
-      optsHelp + "\n\nTrailing arguments:\n" + trailHelp
+      optsHelp + "\n\nTrailing arguments:\n" + trailHelp + "\n"
     }
   }
     

@@ -216,6 +216,13 @@ abstract class ScallopConf(val args: Seq[String]) extends ScallopConfValidations
   def footer(f: String) {
     builder = builder.footer(f)
   }
+
+  /** Explicitly set width of help printout. By default, Scallop tries
+    * to determine it from terminal width or defaults to 80 characters.
+    */
+  def helpWidth(w: Int) {
+    builder = builder.setHelpWidth(w)
+  }
   
   final def afterInit {
     verify
