@@ -10,6 +10,7 @@ Scallop supports:
 * Property arguments (-Dkey=value, -D key1=value key2=value)
 * Non-string types of options and properties values (with extendable converters)
 * Powerful matching on trailing args
+* Subcommands
 
 It should be noted that the whole option builder is completely immutable (thus thread-safe), so you can reuse it, delegate
 argument construction to sub-modules, etc. 
@@ -80,6 +81,24 @@ Conf.secondList() should equal (List[Double](4,5,6))
 ```
 
 In this case, Scallops backtracking parser is clever enough to distinguish the boundaries of the arguments lists.
+
+Also, Scallop supports parsing of subcommands. Not only subcommands, but nested subcommands!
+
+```scala
+object Conf extends ScallopConf(Seq("sub1", "sub2", "sub3", "sub4", "win!")) {
+  val sub1 = new Subcommand("sub1") {
+    val sub2 = new Subcommand("sub2") {
+      val sub3 = new Subcommand("sub3") {
+        val sub4 = new Subcommand("sub4") {
+          val opts = trailArg[List[String]]()
+        }
+      }
+    }
+  }
+}
+Conf.subcommands should equal (List(Conf.sub1, Conf.sub1.sub2, Conf.sub1.sub2.sub3, Conf.sub1.sub2.sub3.sub4))
+Conf.sub1.sub2.sub3.sub4.opts() should equal (List("win!"))
+```
 
 Thanks
 ======
