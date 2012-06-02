@@ -1,8 +1,8 @@
 This version includes the following improvements:
 
 * new, prettier help output format
-* help output width now can be customised
-* several bug fixes (concerning verification and trailing arguments
+* help output width can be customised
+* several bug fixes (concerning verification and trailing arguments)
 * "--" now serves as a switch to end optons parsing - everything after it is considered to be trailing arguments
 * nested subcommands support
 
