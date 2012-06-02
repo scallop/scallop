@@ -35,7 +35,7 @@ object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
   // are applicable here as well
   val count:ScallopOption[Int] = opt[Int]("count", descr = "count the trees", required = true)
                 .map(1+) // also here work all standard Option methods -
-                         // evaluation is deferred to after option construcnion
+                         // evaluation is deferred to after option construction
   val properties = props[String]('E')
   // types (:ScallopOption[Double]) can be omitted, here just for clarity
   val size:ScallopOption[Double] = trailArg[Double](required = false)
