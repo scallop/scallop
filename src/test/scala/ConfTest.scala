@@ -26,6 +26,30 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     someInternalFunc(Conf)
   }
+  
+  test ("output help") {
+    object Conf extends ScallopConf(Seq()) {
+      version("test 1.2.3 (c) 2012 Mr Placeholder")
+      banner("""Usage: test [OPTION]... [tree|palm] [OPTION]... [tree-name]
+               |test is an awesome program, which does something funny      
+               |Options:
+               |""".stripMargin)
+      footer("\nFor all other tricks, consult the documentation!")
+      // ... options ...
+      val properties = props[String]('D', descr = "some key-value pairs")
+      val verbose = opt[Boolean]("verbose", descr = "use more verbose output")
+      val amount = opt[Int]("amount", descr = "how many objects do you need?")
+      val tree = new Subcommand("tree") {
+        val height = opt[Double]("height", descr = "how tall should the tree be?")
+        val name = trailArg[String]("tree name", descr = "tree name")
+      }
+      val palm = new Subcommand("palm") {
+        val height = opt[Double]("height", descr = "how tall should the palm be?")
+        val name = trailArg[String]("tree name", descr = "palm name")
+      }
+    }
+    Conf.builder.printHelp
+  }
 
   test ("simple arg") {
     object Conf extends ScallopConf(List("-a","3")) {
