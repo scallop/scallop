@@ -12,7 +12,7 @@ Scallop supports:
 * Powerful matching on trailing args
 * Subcommands
 
-It should be noted that the whole option builder is completely immutable (thus thread-safe), so you can reuse it, delegate
+It should be noted that the option builder is completely immutable (thus thread-safe), so you can reuse it, delegate
 argument construction to sub-modules, etc. 
 
 Installation
