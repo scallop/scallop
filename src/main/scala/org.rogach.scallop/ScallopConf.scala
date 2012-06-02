@@ -5,38 +5,64 @@ import scala.util.DynamicVariable
 
 object ScallopConf {
   val rootConf = new DynamicVariable[ScallopConf](null)
-  val builders = new DynamicVariable[List[(String,Scallop)]](Nil)
+  val confs = new DynamicVariable[List[ScallopConf]](Nil)
   def cleanUp = {
-    ScallopConf.builders.value = Nil
+    ScallopConf.confs.value = Nil
     ScallopConf.rootConf.value = null
   }
 }
 
+class Subcommand(val commandName: String) extends ScallopConf(Nil, commandName) {
+  1 + 1 // to get the initialization work. Else, it seems that delayedInit is never invoked with this, and the count is broken.
+}
+
 abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandname: String = "") extends ScallopConfValidations with AfterInit {
-  
+
   if (ScallopConf.rootConf.value == null) {
     ScallopConf.rootConf.value = this
   }
   val rootConfig = ScallopConf.rootConf.value
   
-  if (ScallopConf.builders.value.isEmpty) {
+  if (ScallopConf.confs.value.isEmpty) {
     // If this is the root config, init the root builder
-    ScallopConf.builders.value = (commandname, Scallop(args)) :: Nil
+    ScallopConf.confs.value = this :: Nil
   } else {
     // if it is the subcommand config, add new builder to the list
-    ScallopConf.builders.value = ScallopConf.builders.value :+ (commandname, Scallop(args))
+    ScallopConf.confs.value = ScallopConf.confs.value :+ this
   }
   
   def editBuilder(fn: Scallop => Scallop) {
-    val last = ScallopConf.builders.value.last
-    ScallopConf.builders.value = ScallopConf.builders.value.init :+ (last._1, fn(last._2))
-    builder = ScallopConf.builders.value.last._2
+    builder = fn(builder)
   }
   
-  var builder = ScallopConf.builders.value.last._2
+  var builder = Scallop(args)
 
+  /** List of sub-configs of this config. */
+  var subconfigs = List[ScallopConf]()
+  
+  /** Retrieves the choosen subcommand. */
+  def subcommand: Option[ScallopConf] = {
+    verified_?
+    assert(rootConfig == this, "You shouldn't call 'subcommand' on subcommand object")
+    builder.getSubcommandName.map(n => subconfigs.find(_.commandname == n).get)
+  }
+  
+  /** Retrieves the list of the chosen nested subcommands. */
+  def subcommands: List[ScallopConf] = {
+    verified_?
+    assert(rootConfig == this, "You shouldn't call 'subcommands' on subcommand object")
+
+    var config = this
+    var configs = List[ScallopConf]()
+    builder.getSubcommandNames.foreach { bn =>
+      config = config.subconfigs.find(_.commandname == bn).get
+      configs :+= config
+    }
+    configs
+  }
+  
   def getName(name: String): String = {
-    (ScallopConf.builders.value.map(_._1).mkString("\0") + "\0" + name).stripPrefix("\0")
+    (ScallopConf.confs.value.map(_.commandname).mkString("\0") + "\0" + name).stripPrefix("\0")
   }
 
   var verified = false
@@ -65,10 +91,11 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       noshort: Boolean = false)
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
     editBuilder(_.opt(name, short, descr, default, validate, required, argName, hidden, noshort)(conv))
+    val n = getName(name)
     new ScallopOption[A](
-      getName(name),
-      {verified_?; rootConfig.builder.get[A](getName(name))(conv.manifest)},
-      {verified_?; rootConfig.builder.isSupplied(getName(name))})
+      n,
+      {verified_?; rootConfig.builder.get[A](n)(conv.manifest)},
+      {verified_?; rootConfig.builder.isSupplied(n)})
   }              
 
   /** Add new property option definition to this config object, and get a handle for option retreiving.
@@ -87,9 +114,10 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       hidden: Boolean = false)
       (implicit conv: ValueConverter[Map[String,A]]):(String => Option[A]) = {
     editBuilder(_.props(name, descr, keyName, valueName, hidden)(conv))
+    val n = getName(name.toString)
     (key:String) => {
       verified_?
-      rootConfig.builder(getName(name.toString))(conv.manifest).get(key)
+      rootConfig.builder(n)(conv.manifest).get(key)
     }
   }
 
@@ -101,9 +129,10 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       hidden: Boolean = false)
       (implicit conv: ValueConverter[Map[String,A]]):(String => Option[A]) = {
     editBuilder(_.propsLong(name, descr, keyName, valueName, hidden)(conv))
+    val n = getName(name)
     (key:String) => {
       verified_?
-      rootConfig.builder(getName(name))(conv.manifest).get(key)
+      rootConfig.builder(n)(conv.manifest).get(key)
     }
   }
 
@@ -123,10 +152,11 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       hidden: Boolean = false)
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
     // here, we generate some random name, since it does not matter
-    val n = name
-    editBuilder(_.trailArg(n, required, descr, default, validate, hidden)(conv))
+    val nm = name
+    editBuilder(_.trailArg(nm, required, descr, default, validate, hidden)(conv))
+    val n = getName(nm)
     new ScallopOption[A](
-      getName(name), 
+      n, 
       {verified_?; rootConfig.builder.get[A](n)(conv.manifest)},
       {verified_?; rootConfig.builder.isSupplied(n)})
   }
@@ -157,10 +187,11 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       descrNo: String = "",
       hidden: Boolean = false): ScallopOption[Boolean] = {
     editBuilder(_.toggle(name, default, short, noshort, prefix, descrYes, descrNo, hidden))
+    val n = getName(name)
     new ScallopOption[Boolean](
-      getName(name),
-      {verified_?; rootConfig.builder.get[Boolean](name)},
-      {verified_?; rootConfig.builder.isSupplied(name)}
+      n,
+      {verified_?; rootConfig.builder.get[Boolean](n)},
+      {verified_?; rootConfig.builder.isSupplied(n)}
     )
   }
 
@@ -205,7 +236,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @param list list of codependent options
     */
   def codependent(list: ScallopOption[_]*) {
-    editBuilder(_.validationSet { l =>
+    rootConfig.editBuilder(_.validationSet { l =>
       val c = list map (_.name) count (l.contains)
       if (c != 0 && c != list.size) Left("Ether all or none of the following options should be supplied, because they are co-dependent: %s" format list.map(_.name).mkString(", "))
       else Right(Unit)
@@ -266,10 +297,10 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   }
   
   final def afterInit {
-    if (ScallopConf.builders.value.size > 1) {
-      val b = ScallopConf.builders.value.last
-      ScallopConf.builders.value = ScallopConf.builders.value.init
-      editBuilder(_.addSubBuilder(b._1, b._2))
+    if (ScallopConf.confs.value.size > 1) {
+      ScallopConf.confs.value = ScallopConf.confs.value.init
+      ScallopConf.confs.value.last.editBuilder(_.addSubBuilder(commandname, builder))
+      ScallopConf.confs.value.last.subconfigs :+= this
       verified = true
     } else {
       try {

@@ -7,10 +7,7 @@ import org.rogach.scallop.exceptions._
 class Isolated extends FunSuite with ShouldMatchers {
  
   test ("i") {
-    object Conf extends ScallopConf(Seq("-a")) {
-      val apples = opt[Boolean]("apples")
-    }
-    Conf.apples() should equal (true)
+
   }
 
 }

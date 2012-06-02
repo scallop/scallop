@@ -155,4 +155,15 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
     }
   }
   
+  test ("subcommand parse failure") {
+    object Conf extends ScallopConf(Seq("tree", "a")) {
+      val tree = new Subcommand("tree") {
+        val apples = trailArg[List[Int]]()
+      }
+    }
+    intercept[OptionParseException] {
+      Conf
+    }
+  }
+  
 }

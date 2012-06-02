@@ -323,6 +323,19 @@ case class Scallop(
     * @param name All arguments after this string would be routed to this builder.
     */
   def addSubBuilder(name: String, builder: Scallop) = this.copy(subbuilders = subbuilders :+ (name -> builder))
+  
+  /** Retrieves name of the subcommand that was found in input arguments. */
+  def getSubcommandName = parsed.subcommand
+  
+  /** Returns the list of subcommand names, recursively. */
+  def getSubcommandNames: List[String] = {
+    parsed.subcommand.map(subName => subbuilders.find(_._1 == subName).map(s => s._1 :: s._2.args(parsed.subcommandArgs).getSubcommandNames).getOrElse(Nil)).getOrElse(Nil)
+  }
+  
+  /** Retrieves a list of all supplied options (including options from subbuilders). */
+  def getAllSuppliedOptionNames: List[String] = {
+    opts.map(_.name).filter(isSupplied) ::: parsed.subcommand.map(subName => subbuilders.find(_._1 == subName).map(s => s._2.args(parsed.subcommandArgs)).get.getAllSuppliedOptionNames.map(subName + "\0" + _)).getOrElse(Nil)
+  }
 
   /** Add a validation for supplied option set.
     *
@@ -354,16 +367,19 @@ case class Scallop(
   /** Explicitly sets the needed width for the help printout. */
   def setHelpWidth(w: Int) = this.copy(helpWidth = Some(w))
   
-  /** Get help on options from this builder. The resulting help is carefully formatted at 80 columns,
+  /** Get help on options from this builder. The resulting help is carefully formatted to required number of columns (default = 80, change with .setHelpWidth method),
     * and contains info on proporties and options. It does not contain info about trailing arguments.
     */
   def help: String = {
     val optsHelp = Formatter format (opts filter (!_.isPositional) filter (!_.hidden) sortBy (_.name.toLowerCase) flatMap (o => o.helpInfo(getOptionShortNames(o))), helpWidth)
+    val subcommandsHelps = subbuilders.map { case (sn, sub) =>
+      ("Subcommand: %s" format sn) + "\n" + sub.help
+    }
     val trailHelp = Formatter format (opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)), helpWidth)
     if (opts filter (_.isPositional) isEmpty) {
-      optsHelp
+      optsHelp + (if (subcommandsHelps.size > 0) "\n\n" + subcommandsHelps.mkString("\n") else "")
     } else {
-      optsHelp + "\n\nTrailing arguments:\n" + trailHelp + "\n"
+      optsHelp + "\n\n trailing arguments:\n" + trailHelp + "\n"
     }
   }
     
@@ -437,7 +453,7 @@ case class Scallop(
     * 
     * If there is "--help" or "--version" option present, it prints help or version statement and exits.
     */
-  def verify = {
+  def verify: Scallop = {
     // option identifiers must not clash 
     opts map (_.name) groupBy (a=>a) filter (_._2.size > 1) foreach
       (a => throw new IdenticalOptionNames("Option identifier '%s' is not unique" format a._1))
@@ -461,9 +477,16 @@ case class Scallop(
    
     // validate option sets
     optionSetValidations map (
-      _(opts.map(_.name).filter(isSupplied))
+      _(getAllSuppliedOptionNames)
     ) find (_.isLeft) map { l =>
       throw new OptionSetValidationFailure(l.left.get)
+    }
+    
+    // verify subcommand parsing
+    parsed.subcommand.map { sn =>
+      subbuilders.find(_._1 == sn).map { case (sn, sub)=>
+        sub.args(parsed.subcommandArgs).verify
+      }
     }
     
     opts foreach { o =>
@@ -492,7 +515,9 @@ case class Scallop(
       " %s  %s => %s" format ((if (isSupplied(o.name)) "*" else " "),
                               o.name,
                               get(o.name)(o.converter.manifest).getOrElse("$None$"))
-    ).mkString("\n") + "\n"
+    ).mkString("\n") + "\n" + parsed.subcommand.map { sn =>
+      ("subcommand: %s\n" format sn) + subbuilders.find(_._1 == sn).get._2.args(parsed.subcommandArgs).summary
+    }.getOrElse("")
   }
   
 }
