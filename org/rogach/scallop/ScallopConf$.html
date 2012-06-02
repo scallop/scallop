@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.rogach.scallop.AfterInit</title>
+          <title>org.rogach.scallop.ScallopConf</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -12,30 +12,25 @@
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="type">
+        <body class="value">
       <div id="definition">
-        <img src="../../../lib/trait_big.png" />
+        <a title="Go to companion" href="ScallopConf.html"><img src="../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.rogach" class="extype" href="../package.html">rogach</a>.<a name="org.rogach.scallop" class="extype" href="package.html">scallop</a></p>
-        <h1>AfterInit</h1>
+        <h1><a title="Go to companion" href="ScallopConf.html">ScallopConf</a></h1>
       </div>
 
       <h4 class="signature" id="signature">
-      <span class="kind">trait</span>
+      <span class="kind">object</span>
       <span class="symbol"> 
-        <span class="name">AfterInit</span>
+        <span class="name">ScallopConf</span>
         
-        <span class="result"> extends <span name="scala.DelayedInit" class="extype">DelayedInit</span></span>
+        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Magic trait, that makes it possible to run code from superclass
-after all subclasses initialization.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/AfterInit.scala">AfterInit.scala</a></dd></dl><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/ScallopConf.scala">ScallopConf.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="scala.DelayedInit" class="extype">DelayedInit</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
-        </div><div class="toggleContainer block">
-          <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a>, <a name="org.rogach.scallop.Subcommand" class="extype" href="Subcommand.html">Subcommand</a></div>
+          <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -51,7 +46,7 @@ after all subclasses initialization.
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.rogach.scallop.AfterInit" class="in"><span>AfterInit</span></li><li name="scala.DelayedInit" class="in"><span>DelayedInit</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.rogach.scallop.ScallopConf" class="in"><span>ScallopConf</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -63,24 +58,10 @@ after all subclasses initialization.
 
         
         
-        <div class="values members" id="values">
-              <h3>Abstract Value Members</h3>
-              <ol><li visbl="pub" name="org.rogach.scallop.AfterInit#afterInit" data-isabs="true">
-      <a id="afterInit:Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">afterInit</span>
         
-        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
-    </li></ol>
-            </div>
 
         <div class="values members" id="values">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -147,6 +128,17 @@ after all subclasses initialization.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#cleanUp" data-isabs="false">
+      <a id="cleanUp:Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">cleanUp</span>
+        
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -161,17 +153,17 @@ after all subclasses initialization.
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.AfterInit#delayedInit" data-isabs="false">
-      <a id="delayedInit(⇒ Unit):Unit"></a>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#confs" data-isabs="false">
+      <a id="confs:DynamicVariable[List[ScallopConf]]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
+      <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">delayedInit</span>
+        <span class="name">confs</span>
         
-        <span class="params">(<span name="x">x: ⇒ <span name="scala.Unit" class="extype">Unit</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+        <span class="result">: <span name="scala.util.DynamicVariable" class="extype">DynamicVariable</span>[List[<a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a>]]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.AfterInit" class="extype" href="">AfterInit</a> → DelayedInit</dd></dl></div>
+      
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -274,6 +266,17 @@ after all subclasses initialization.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#rootConf" data-isabs="false">
+      <a id="rootConf:DynamicVariable[ScallopConf]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">rootConf</span>
+        
+        <span class="result">: <span name="scala.util.DynamicVariable" class="extype">DynamicVariable</span>[<a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a>]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -343,9 +346,7 @@ after all subclasses initialization.
 
         
 
-        <div name="scala.DelayedInit" class="parent">
-              <h3>Inherited from <span name="scala.DelayedInit" class="extype">DelayedInit</span></h3>
-            </div><div name="scala.AnyRef" class="parent">
+        <div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>

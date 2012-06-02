@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">Scallop</span>
         
-        <span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[<a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a>]</span>, <span name="vers">vers: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="bann">bann: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="foot">foot: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="optionSetValidations">optionSetValidations: List[(List[String]) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[<a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a>]</span>, <span name="vers">vers: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="bann">bann: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="foot">foot: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="optionSetValidations">optionSetValidations: List[(List[String]) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]]</span>, <span name="helpWidth">helpWidth: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Int" class="extype">Int</span>]</span>, <span name="subbuilders">subbuilders: List[(String, <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a>)]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -65,7 +65,7 @@
       <span class="symbol"> 
         <span class="name">Scallop</span>
         
-        <span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[<a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a>]</span>, <span name="vers">vers: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="bann">bann: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="foot">foot: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="optionSetValidations">optionSetValidations: List[(List[String]) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]]</span>)</span>
+        <span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[<a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a>]</span>, <span name="vers">vers: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="bann">bann: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="foot">foot: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="optionSetValidations">optionSetValidations: List[(List[String]) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]]</span>, <span name="helpWidth">helpWidth: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Int" class="extype">Int</span>]</span>, <span name="subbuilders">subbuilders: List[(String, <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a>)]</span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">args</dt><dd class="cmt"><p>Arguments to parse.</p></dd><dt class="param">opts</dt><dd class="cmt"><p>Options definitions.</p></dd><dt class="param">vers</dt><dd class="cmt"><p>Version string to display in help.</p></dd><dt class="param">bann</dt><dd class="cmt"><p>Banner (summary of this program and command-line usage) to display in help.</p></dd><dt class="param">foot</dt><dd class="cmt"><p>Footer - displayed after options.
@@ -75,7 +75,18 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.rogach.scallop.Scallop#Parsed" data-isabs="false">
+              <ol><li visbl="pub" name="org.rogach.scallop.Scallop.ParseResult" data-isabs="false">
+      <a id="ParseResult:ParseResult"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="Scallop$ParseResult.html"><span class="name">ParseResult</span></a>
+        
+        <span class="params">(<span name="opts">opts: List[(CliOption, (String, List[String]))]</span>, <span name="subcommand">subcommand: Option[String]</span>, <span name="subcommandArgs">subcommandArgs: List[String]</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#Parsed" data-isabs="false">
       <a id="Parsed:Parsed"></a>
       <h4 class="signature">
       <span class="kind">type</span>
@@ -148,6 +159,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#addSubBuilder" data-isabs="false">
+      <a id="addSubBuilder(String,Scallop):Scallop"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">addSubBuilder</span>
+        
+        <span class="params">(<span name="name">name: String</span>, <span name="builder">builder: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Adds a subbuilder (subcommand) to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a subbuilder (subcommand) to this builder.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>All arguments after this string would be routed to this builder.
+</p></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#apply" data-isabs="false">
       <a id="apply[A](Char)(Manifest[A]):A"></a>
       <h4 class="signature">
@@ -340,6 +363,17 @@ summary on it's usage.
       </h4>
       <p class="shortcomment cmt">Get the value of option (or trailing arg) as Option.</p><div class="fullcomment"><div class="comment cmt"><p>Get the value of option (or trailing arg) as Option.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for option.</p></dd><dt class="param">m</dt><dd class="cmt"><p>Manifest for requested type. Usually found implicitly.
 </p></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#getAllSuppliedOptionNames" data-isabs="false">
+      <a id="getAllSuppliedOptionNames:List[String]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">getAllSuppliedOptionNames</span>
+        
+        <span class="result">: List[String]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Retrieves a list of all supplied options (including options from subbuilders).</p>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -373,6 +407,28 @@ summary on it's usage.
       </span>
       </h4>
       <p class="shortcomment cmt">Find an option, that responds to this short name.</p>
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#getSubcommandName" data-isabs="false">
+      <a id="getSubcommandName:Option[String]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">getSubcommandName</span>
+        
+        <span class="result">: <span name="scala.Option" class="extype">Option</span>[String]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Retrieves name of the subcommand that was found in input arguments.</p>
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#getSubcommandNames" data-isabs="false">
+      <a id="getSubcommandNames:List[String]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">getSubcommandNames</span>
+        
+        <span class="result">: List[String]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the list of subcommand names, recursively.</p>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -394,9 +450,20 @@ summary on it's usage.
         <span class="result">: String</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Get help on options from this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Get help on options from this builder. The resulting help is carefully formatted at 80 columns,
+      <p class="shortcomment cmt">Get help on options from this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Get help on options from this builder. The resulting help is carefully formatted to required number of columns (default = 80, change with .setHelpWidth method),
 and contains info on proporties and options. It does not contain info about trailing arguments.
 </p></div></div>
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#helpWidth" data-isabs="false">
+      <a id="helpWidth:Option[Int]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">helpWidth</span>
+        
+        <span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Int" class="extype">Int</span>]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -578,6 +645,28 @@ and contains info on proporties and options. It does not contain info about trai
         <span class="name">propsLong</span>
         <span class="tparams">[<span name="A">A</span>]</span>
         <span class="params">(<span name="name">name: String</span>, <span name="descr">descr: String = <span class="symbol">&quot;&quot;</span></span>, <span name="keyName">keyName: String = <span class="symbol">&quot;key&quot;</span></span>, <span name="valueName">valueName: String = <span class="symbol">&quot;value&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, A]]</span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#setHelpWidth" data-isabs="false">
+      <a id="setHelpWidth(Int):Scallop"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">setHelpWidth</span>
+        
+        <span class="params">(<span name="w">w: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Explicitly sets the needed width for the help printout.</p>
+    </li><li visbl="pub" name="org.rogach.scallop.Scallop#subbuilders" data-isabs="false">
+      <a id="subbuilders:List[(String, Scallop)]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">subbuilders</span>
+        
+        <span class="result">: List[(String, <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a>)]</span>
       </span>
       </h4>
       
