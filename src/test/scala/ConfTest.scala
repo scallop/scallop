@@ -466,4 +466,11 @@ class ConfTest extends FunSuite with ShouldMatchers {
     text should equal (expected)
   }
 
+  test ("sort option with arg concatenation test") {
+    object Conf extends ScallopConf(Seq("-ffile")) {
+      val file = opt[String]("file")
+    }
+    Conf.file() should equal ("file")
+  }
+
 }
