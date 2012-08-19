@@ -61,7 +61,7 @@ class StrangeTest extends FunSuite with ShouldMatchers {
           version("0.1.2")
           banner("some rubbish")
           footer("and some more")
-          val apples = opt[Int]("apples", descr = "fresh apples!")
+          val apples = opt[Int]("apples", descr = "fresh apples!", default = Some(3))
           val verbose = toggle("verbose", descrYes = "very verbose", descrNo = "turn off")
           val tree = new Subcommand("tree") {
             val branches = opt[Int]("branches", descr = "how many branches?")
@@ -78,7 +78,7 @@ class StrangeTest extends FunSuite with ShouldMatchers {
     }
     out should equal ("""0.1.2
                         |some rubbish
-                        |  -a, --apples  <arg>   fresh apples! 
+                        |  -a, --apples  <arg>   fresh apples! (default = 3) 
                         |  -v, --verbose         very verbose 
                         |      --noverbose       turn off 
                         |

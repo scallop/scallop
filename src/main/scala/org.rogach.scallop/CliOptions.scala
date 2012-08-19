@@ -39,8 +39,8 @@ trait CliOption {
   /** The line, that would be printed as definition of this arg in help. */
   def argLine(sh: List[Char]): String
   
-  /** List of argument lines and descriptions to them. */
-  def helpInfo(sh: List[Char]): List[(String, String)] 
+  /** List of argument lines, descriptions to them, and optional default values. */
+  def helpInfo(sh: List[Char]): List[(String, String, Option[String])] 
 
 }
 
@@ -65,7 +65,11 @@ case class SimpleOption(
   def argLine(sh: List[Char]): String = {
     (List(sh.map("-" +), List("--" + name)).flatten.mkString(", ") + "  " + converter.argType.fn(argName)).trim
   }
-  def helpInfo(sh: List[Char]) = List((argLine(sh), descr))
+  def helpInfo(sh: List[Char]) = List((
+    argLine(sh),
+    descr,
+    (if (converter.manifest <:< implicitly[Manifest[Boolean]]) None else default.map(_.toString))  // we don't need to remind user of default flag value, do we?
+  ))
 }
 
 case class PropertyOption(
@@ -89,7 +93,7 @@ case class PropertyOption(
   def argLine(sh: List[Char]): String =
     "-%1$s%2$s=%3$s [%2$s=%3$s]..." format (short, keyName, valueName)
 
-  def helpInfo(sh: List[Char]) = List((argLine(sh), descr))
+  def helpInfo(sh: List[Char]) = List((argLine(sh), descr, None))
 }
 
 case class LongNamedPropertyOption(
@@ -112,7 +116,7 @@ case class LongNamedPropertyOption(
   def argLine(sh: List[Char]) =
     "--%1$s%2$s=%3$s [%2$s=%3$s]..." format (name, keyName, valueName)
 
-  def helpInfo(sh: List[Char]) = List((argLine(sh), descr))
+  def helpInfo(sh: List[Char]) = List((argLine(sh), descr, None))
 }
 
 case class TrailingArgsOption(
@@ -133,7 +137,7 @@ case class TrailingArgsOption(
   def argLine(sh: List[Char]): String = 
     "%s (%s)" format (name, (if (required) "required" else "not required"))
   
-  def helpInfo(sh: List[Char]) = List((argLine(sh), descr))
+  def helpInfo(sh: List[Char]) = List((argLine(sh), descr, default.map(_.toString)))
 }
 
 case class ToggleOption(
@@ -176,8 +180,8 @@ case class ToggleOption(
   
   def argLine(sh: List[Char]): String = throw new MajorInternalException
   def helpInfo(sh: List[Char]) = List(
-    (sh.map("-" +) ++ List("--" + name) mkString ", ") -> descrYes,
-    ("--" + prefix + name) -> descrNo
+    ((sh.map("-" +) ++ List("--" + name) mkString ", "), descrYes, None),
+    (("--" + prefix + name), descrNo, None)
   )
 }
   
