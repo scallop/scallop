@@ -37,6 +37,13 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   
   var builder = Scallop(args)
 
+  private[this] var _guessOptionName = false
+  /** If true, scallop would try to guess missing option names from the names of their fields. */
+  def guessOptionName = _guessOptionName
+  /** If set to true, scallop would try to guess missing option names from the names of their fields. */
+  def guessOptionName_=(v: Boolean) { _guessOptionName = v }
+
+
   /** List of sub-configs of this config. */
   var subconfigs = List[ScallopConf]()
   
@@ -80,7 +87,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @return A holder for parsed value
     */
   def opt[A](
-      name: String,
+      name: String = null,
       short: Char = 0.toChar,
       descr: String = "",
       default: Option[A] = None,
@@ -90,8 +97,26 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       hidden: Boolean = false,
       noshort: Boolean = false)
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
-    editBuilder(_.opt(name, short, descr, default, validate, required, argName, hidden, noshort)(conv))
-    val n = getName(name)
+
+    // guessing name, if needed
+    val resolvedName = 
+      if (name == null)
+        if (guessOptionName) {
+          this.getClass.getMethods
+            .filterNot(classOf[ScallopConf].getMethods.toSet)
+            .filterNot(_.getName.endsWith("_$eq"))
+            .filterNot(_.getName.endsWith("$outer"))
+            .filter(_.getReturnType == classOf[ScallopOption[_]])
+            .filter(_.getParameterTypes.isEmpty)
+            .find(m => m.invoke(this) == null)
+            .get // hoping that this should work
+            .getName
+        }
+        else throw new IllegalArgumentException("You should supply a name for your option!")
+      else name
+
+    editBuilder(_.opt(resolvedName, short, descr, default, validate, required, argName, hidden, noshort)(conv))
+    val n = getName(resolvedName)
     new ScallopOption[A](
       n,
       {verified_?; rootConfig.builder.get[A](n)(conv.manifest)},
