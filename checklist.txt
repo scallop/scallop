@@ -1,10 +1,14 @@
 Release
 =======
 1. Bump the version (in README.md).
-2. Write notes for herald.
+2. Write notes for herald. (optional)
 3. +compile
-4. +publish
-4. Close the release in Nexus UI.
-6. Tag the release.
-7. Update API docs.
-8. Publish herald notes.
+4. +test
+5. +publish
+6. Close the release in Nexus UI.
+7. Tag the release.
+8. Wait for Central sync.
+9. Push latest version to github.
+10. Update API docs.
+11. Update wiki.
+12. Publish herald notes. (optional)
