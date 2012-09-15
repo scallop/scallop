@@ -111,6 +111,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
             .find(m => m.invoke(this) == null)
             .get // hoping that this should work
             .getName
+            .flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
         }
         else throw new IllegalArgumentException("You should supply a name for your option!")
       else name

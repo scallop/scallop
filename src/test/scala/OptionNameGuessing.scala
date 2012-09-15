@@ -27,4 +27,12 @@ class OptionNameGuessing extends FunSuite with ShouldMatchers {
     Conf.bananas.get should equal (None)
     Conf.aaa.get should equal (None)
   }
+  
+  test ("comelCase convert") {
+    object Conf extends ScallopConf(Seq("--apple-tree", "1")) {
+      guessOptionName = true
+      val appleTree = opt[Int]()
+    }
+    Conf.appleTree() should equal (1)
+  }
 }
