@@ -50,11 +50,11 @@
               <ol><li visbl="pub" name="org.rogach.scallop.exceptions.IdenticalOptionNames" data-isabs="false">
       <a id="IdenticalOptionNames:IdenticalOptionNames"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="IdenticalOptionNames.html"><span class="name">IdenticalOptionNames</span></a>
         
-        <span class="result"> extends ScallopException</span>
+        <span class="params">(<span name="mess">mess: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when several options and/or trailing arguments have identical names
@@ -62,22 +62,22 @@
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.IllegalOptionParameters" data-isabs="false">
       <a id="IllegalOptionParameters:IllegalOptionParameters"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="IllegalOptionParameters.html"><span class="name">IllegalOptionParameters</span></a>
         
-        <span class="result"> extends ScallopException</span>
+        <span class="params">(<span name="mess">mess: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when user tried to create an option with some illegal parameters</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.IncompleteBuildException" data-isabs="false">
       <a id="IncompleteBuildException:IncompleteBuildException"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="IncompleteBuildException.html"><span class="name">IncompleteBuildException</span></a>
         
-        <span class="result"> extends ScallopException</span>
+        <span class="params">()</span><span class="result"> extends ScallopException with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when user tried to extract the value of an option before the call
@@ -85,22 +85,22 @@
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.MajorInternalException" data-isabs="false">
       <a id="MajorInternalException:MajorInternalException"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="MajorInternalException.html"><span class="name">MajorInternalException</span></a>
         
-        <span class="result"> extends ScallopException</span>
+        <span class="params">()</span><span class="result"> extends ScallopException with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">This is a special case of exception - the one you should never see.</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.OptionParseException" data-isabs="false">
       <a id="OptionParseException:OptionParseException"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="OptionParseException.html"><span class="name">OptionParseException</span></a>
         
-        <span class="result"> extends ScallopException</span>
+        <span class="params">(<span name="failedArgs">failedArgs: Seq[String]</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when Scallop fails to parse the argument line (usually when there
@@ -108,22 +108,22 @@
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.OptionSetValidationFailure" data-isabs="false">
       <a id="OptionSetValidationFailure:OptionSetValidationFailure"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="OptionSetValidationFailure.html"><span class="name">OptionSetValidationFailure</span></a>
         
-        <span class="result"> extends ScallopException</span>
+        <span class="params">(<span name="mess">mess: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Trown when some validation for option set failed.</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.RequiredOptionNotFound" data-isabs="false">
       <a id="RequiredOptionNotFound:RequiredOptionNotFound"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="RequiredOptionNotFound.html"><span class="name">RequiredOptionNotFound</span></a>
         
-        <span class="result"> extends ScallopException</span>
+        <span class="params">(<span name="name">name: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when parser failed to find arguments to option (marked as 'required')
@@ -135,18 +135,29 @@
       <span class="symbol"> 
         <a href="ScallopException.html"><span class="name">ScallopException</span></a>
         
-        <span class="result"> extends Exception</span>
+        <span class="result"> extends Exception with ScallopResult</span>
       </span>
       </h4>
       <p class="comment cmt">Parent class for all exceptions thrown from this library.</p>
+    </li><li visbl="pub" name="org.rogach.scallop.exceptions.ScallopResult" data-isabs="true">
+      <a id="ScallopResult:ScallopResult"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="ScallopResult.html"><span class="name">ScallopResult</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Parent trait for all not-positive results that can be resulted from this library (including help and exits)</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.UnknownOption" data-isabs="false">
       <a id="UnknownOption:UnknownOption"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="UnknownOption.html"><span class="name">UnknownOption</span></a>
         
-        <span class="result"> extends ScallopException</span>
+        <span class="params">(<span name="optionName">optionName: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when user provides Scallop with unknown option name in the arguments
@@ -154,22 +165,22 @@
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.ValidationFailure" data-isabs="false">
       <a id="ValidationFailure:ValidationFailure"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="ValidationFailure.html"><span class="name">ValidationFailure</span></a>
         
-        <span class="result"> extends ScallopException</span>
+        <span class="params">(<span name="mess">mess: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when the validation failed on some option.</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.WrongOptionFormat" data-isabs="false">
       <a id="WrongOptionFormat:WrongOptionFormat"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="WrongOptionFormat.html"><span class="name">WrongOptionFormat</span></a>
         
-        <span class="result"> extends ScallopException</span>
+        <span class="params">(<span name="optionName">optionName: String</span>, <span name="args">args: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when arguments to some option do not satisfy that option's
@@ -177,11 +188,11 @@
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.WrongTypeRequest" data-isabs="false">
       <a id="WrongTypeRequest:WrongTypeRequest"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="WrongTypeRequest.html"><span class="name">WrongTypeRequest</span></a>
         
-        <span class="result"> extends ScallopException</span>
+        <span class="params">(<span name="requested">requested: Manifest[_]</span>, <span name="required">required: Manifest[_]</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when the user requests wrong type of option argument from Scallop.</p>
@@ -190,7 +201,54 @@
         
         
 
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="org.rogach.scallop.exceptions.Exit" data-isabs="false">
+      <a id="Exit:Exit"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="Exit$.html"><span class="name">Exit</span></a>
         
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Extractor object, for matching on both Help and Version results.</p>
+    </li><li visbl="pub" name="org.rogach.scallop.exceptions.Help" data-isabs="false">
+      <a id="Help:Help"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="Help$.html"><span class="name">Help</span></a>
+        
+        <span class="result"> extends Throwable with ScallopResult with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Thrown when user requested help output (via &quot;--help&quot;)</p>
+    </li><li visbl="pub" name="org.rogach.scallop.exceptions.ScallopException" data-isabs="false">
+      <a id="ScallopException:ScallopException"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="ScallopException$.html"><span class="name">ScallopException</span></a>
+        
+        <span class="result"> extends Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Extractor object, for matching on all exceptions.</p>
+    </li><li visbl="pub" name="org.rogach.scallop.exceptions.Version" data-isabs="false">
+      <a id="Version:Version"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="Version$.html"><span class="name">Version</span></a>
+        
+        <span class="result"> extends Throwable with ScallopResult with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Thrown when user requested version printout (via &quot;--version&quot;)</p>
+    </li></ol>
+            </div>
 
         
 

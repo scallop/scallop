@@ -14,9 +14,9 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../lib/class_big.png" />
+        <a title="Go to companion" href="ScallopException$.html"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a name="org" class="extype" href="../../../package.html">org</a>.<a name="org.rogach" class="extype" href="../../package.html">rogach</a>.<a name="org.rogach.scallop" class="extype" href="../package.html">scallop</a>.<a name="org.rogach.scallop.exceptions" class="extype" href="package.html">exceptions</a></p>
-        <h1>ScallopException</h1>
+        <h1><a title="Go to companion" href="ScallopException$.html">ScallopException</a></h1>
       </div>
 
       <h4 class="signature" id="signature">
@@ -24,13 +24,13 @@
       <span class="symbol"> 
         <span class="name">ScallopException</span>
         
-        <span class="result"> extends <span name="java.lang.Exception" class="extype">Exception</span></span>
+        <span class="result"> extends <span name="java.lang.Exception" class="extype">Exception</span> with <a name="org.rogach.scallop.exceptions.ScallopResult" class="extype" href="ScallopResult.html">ScallopResult</a></span>
       </span>
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Parent class for all exceptions thrown from this library.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/Exceptions.scala">Exceptions.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="java.lang.Exception" class="extype">Exception</span>, <span name="java.lang.Throwable" class="extype">Throwable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.rogach.scallop.exceptions.ScallopResult" class="extype" href="ScallopResult.html">ScallopResult</a>, <span name="java.lang.Exception" class="extype">Exception</span>, <span name="java.lang.Throwable" class="extype">Throwable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a name="org.rogach.scallop.exceptions.IdenticalOptionNames" class="extype" href="IdenticalOptionNames.html">IdenticalOptionNames</a>, <a name="org.rogach.scallop.exceptions.IllegalOptionParameters" class="extype" href="IllegalOptionParameters.html">IllegalOptionParameters</a>, <a name="org.rogach.scallop.exceptions.IncompleteBuildException" class="extype" href="IncompleteBuildException.html">IncompleteBuildException</a>, <a name="org.rogach.scallop.exceptions.MajorInternalException" class="extype" href="MajorInternalException.html">MajorInternalException</a>, <a name="org.rogach.scallop.exceptions.OptionParseException" class="extype" href="OptionParseException.html">OptionParseException</a>, <a name="org.rogach.scallop.exceptions.OptionSetValidationFailure" class="extype" href="OptionSetValidationFailure.html">OptionSetValidationFailure</a>, <a name="org.rogach.scallop.exceptions.RequiredOptionNotFound" class="extype" href="RequiredOptionNotFound.html">RequiredOptionNotFound</a>, <a name="org.rogach.scallop.exceptions.UnknownOption" class="extype" href="UnknownOption.html">UnknownOption</a>, <a name="org.rogach.scallop.exceptions.ValidationFailure" class="extype" href="ValidationFailure.html">ValidationFailure</a>, <a name="org.rogach.scallop.exceptions.WrongOptionFormat" class="extype" href="WrongOptionFormat.html">WrongOptionFormat</a>, <a name="org.rogach.scallop.exceptions.WrongTypeRequest" class="extype" href="WrongTypeRequest.html">WrongTypeRequest</a></div>
@@ -49,7 +49,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.rogach.scallop.exceptions.ScallopException" class="in"><span>ScallopException</span></li><li name="java.lang.Exception" class="in"><span>Exception</span></li><li name="java.lang.Throwable" class="in"><span>Throwable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.rogach.scallop.exceptions.ScallopException" class="in"><span>ScallopException</span></li><li name="org.rogach.scallop.exceptions.ScallopResult" class="in"><span>ScallopResult</span></li><li name="java.lang.Exception" class="in"><span>Exception</span></li><li name="java.lang.Throwable" class="in"><span>Throwable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -294,6 +294,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.exceptions.ScallopException#message" data-isabs="false">
+      <a id="message:String"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">message</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -440,7 +451,9 @@
 
         
 
-        <div name="java.lang.Exception" class="parent">
+        <div name="org.rogach.scallop.exceptions.ScallopResult" class="parent">
+              <h3>Inherited from <a name="org.rogach.scallop.exceptions.ScallopResult" class="extype" href="ScallopResult.html">ScallopResult</a></h3>
+            </div><div name="java.lang.Exception" class="parent">
               <h3>Inherited from <span name="java.lang.Exception" class="extype">Exception</span></h3>
             </div><div name="java.lang.Throwable" class="parent">
               <h3>Inherited from <span name="java.lang.Throwable" class="extype">Throwable</span></h3>

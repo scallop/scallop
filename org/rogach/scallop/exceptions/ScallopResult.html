@@ -2,40 +2,38 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.rogach.scallop.AfterInit</title>
+          <title>org.rogach.scallop.exceptions.ScallopResult</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
-      <script type="text/javascript" src="../../../lib/jquery.js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../../lib/template.css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
     
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../lib/trait_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.rogach" class="extype" href="../package.html">rogach</a>.<a name="org.rogach.scallop" class="extype" href="package.html">scallop</a></p>
-        <h1>AfterInit</h1>
+        <img src="../../../../lib/trait_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../../package.html">org</a>.<a name="org.rogach" class="extype" href="../../package.html">rogach</a>.<a name="org.rogach.scallop" class="extype" href="../package.html">scallop</a>.<a name="org.rogach.scallop.exceptions" class="extype" href="package.html">exceptions</a></p>
+        <h1>ScallopResult</h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="kind">trait</span>
       <span class="symbol"> 
-        <span class="name">AfterInit</span>
+        <span class="name">ScallopResult</span>
         
-        <span class="result"> extends <span name="scala.DelayedInit" class="extype">DelayedInit</span></span>
+        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Magic trait, that makes it possible to run code from superclass
-after all subclasses initialization.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/AfterInit.scala">AfterInit.scala</a></dd></dl><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Parent trait for all not-positive results that can be resulted from this library (including help and exits)</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>sealed </dd><dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/Exceptions.scala">Exceptions.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="scala.DelayedInit" class="extype">DelayedInit</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.rogach.scallop.LazyScallopConf" class="extype" href="LazyScallopConf.html">LazyScallopConf</a>, <a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a>, <a name="org.rogach.scallop.Subcommand" class="extype" href="Subcommand.html">Subcommand</a></div>
+          <div class="subClasses hiddenContent"><a name="org.rogach.scallop.exceptions.Help" class="extype" href="Help$.html">Help</a>, <a name="org.rogach.scallop.exceptions.IdenticalOptionNames" class="extype" href="IdenticalOptionNames.html">IdenticalOptionNames</a>, <a name="org.rogach.scallop.exceptions.IllegalOptionParameters" class="extype" href="IllegalOptionParameters.html">IllegalOptionParameters</a>, <a name="org.rogach.scallop.exceptions.IncompleteBuildException" class="extype" href="IncompleteBuildException.html">IncompleteBuildException</a>, <a name="org.rogach.scallop.exceptions.MajorInternalException" class="extype" href="MajorInternalException.html">MajorInternalException</a>, <a name="org.rogach.scallop.exceptions.OptionParseException" class="extype" href="OptionParseException.html">OptionParseException</a>, <a name="org.rogach.scallop.exceptions.OptionSetValidationFailure" class="extype" href="OptionSetValidationFailure.html">OptionSetValidationFailure</a>, <a name="org.rogach.scallop.exceptions.RequiredOptionNotFound" class="extype" href="RequiredOptionNotFound.html">RequiredOptionNotFound</a>, <a name="org.rogach.scallop.exceptions.ScallopException" class="extype" href="ScallopException.html">ScallopException</a>, <a name="org.rogach.scallop.exceptions.UnknownOption" class="extype" href="UnknownOption.html">UnknownOption</a>, <a name="org.rogach.scallop.exceptions.ValidationFailure" class="extype" href="ValidationFailure.html">ValidationFailure</a>, <a name="org.rogach.scallop.exceptions.Version" class="extype" href="Version$.html">Version</a>, <a name="org.rogach.scallop.exceptions.WrongOptionFormat" class="extype" href="WrongOptionFormat.html">WrongOptionFormat</a>, <a name="org.rogach.scallop.exceptions.WrongTypeRequest" class="extype" href="WrongTypeRequest.html">WrongTypeRequest</a></div>
         </div></div>
         
 
@@ -51,7 +49,7 @@ after all subclasses initialization.
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.rogach.scallop.AfterInit" class="in"><span>AfterInit</span></li><li name="scala.DelayedInit" class="in"><span>DelayedInit</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.rogach.scallop.exceptions.ScallopResult" class="in"><span>ScallopResult</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -63,24 +61,10 @@ after all subclasses initialization.
 
         
         
-        <div class="values members" id="values">
-              <h3>Abstract Value Members</h3>
-              <ol><li visbl="pub" name="org.rogach.scallop.AfterInit#afterInit" data-isabs="true">
-      <a id="afterInit:Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">afterInit</span>
         
-        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
-    </li></ol>
-            </div>
 
         <div class="values members" id="values">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -157,21 +141,10 @@ after all subclasses initialization.
         <span class="params">()</span><span class="result">: AnyRef</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.rogach.scallop.AfterInit#delayedInit" data-isabs="false">
-      <a id="delayedInit(⇒ Unit):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">delayedInit</span>
-        
-        <span class="params">(<span name="x">x: ⇒ <span name="scala.Unit" class="extype">Unit</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.AfterInit" class="extype" href="">AfterInit</a> → DelayedInit</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -204,7 +177,7 @@ after all subclasses initialization.
         <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -343,9 +316,7 @@ after all subclasses initialization.
 
         
 
-        <div name="scala.DelayedInit" class="parent">
-              <h3>Inherited from <span name="scala.DelayedInit" class="extype">DelayedInit</span></h3>
-            </div><div name="scala.AnyRef" class="parent">
+        <div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
