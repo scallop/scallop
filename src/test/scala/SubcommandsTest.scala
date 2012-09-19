@@ -1,9 +1,12 @@
+package org.rogach.scallop
+
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
 class SubcommandsTest extends UsefulMatchers {
+  throwError.value = true
   
   test ("builder") {
     val sub = Scallop()
