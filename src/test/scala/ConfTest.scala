@@ -1,9 +1,12 @@
+package org.rogach.scallop
+
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
 class ConfTest extends FunSuite with ShouldMatchers {
+  throwError.value = true
 
   test ("full example") {
     object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {

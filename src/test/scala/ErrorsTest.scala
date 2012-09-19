@@ -1,9 +1,13 @@
+package org.rogach.scallop
+
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
 class ErrorsTest extends FunSuite with ShouldMatchers {
+  throwError.value = true
+
   test("wrong arg type") {
     val opts = Scallop(List("--angels","42"))
       .opt[Int]("angels")

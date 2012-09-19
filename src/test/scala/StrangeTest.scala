@@ -1,3 +1,5 @@
+package org.rogach.scallop
+
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
@@ -8,6 +10,7 @@ import java.lang.{System, SecurityManager, SecurityException}
 import java.security.Permission
 
 class StrangeTest extends FunSuite with ShouldMatchers {
+  throwError.value = false
   
   /** Captures all output from the *fn* block into two strings - (stdout, stderr). */
   def captureOutput(fn: => Unit):(String,String) = {

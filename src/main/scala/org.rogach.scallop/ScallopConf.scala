@@ -232,9 +232,31 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
           case Left(err) => throw new ValidationFailure(err)
         }
       }
+    } catch { 
+      case e => onError(e)
     } finally {
       ScallopConf.cleanUp
     }
+  }
+  
+  protected def onError(e: Throwable) = e match {
+    case r: ScallopResult if !throwError.value => r match {
+      case Help => 
+        builder.printHelp
+        sys.exit(0)
+      case Version => 
+        builder.vers.foreach(println)
+        sys.exit(0)
+      case ScallopException(message) =>
+        if (System.console() == null) {
+          // no colors on output
+          println("[scallop] Error: %s" format message)
+        } else {
+          println("[\033[31mscallop\033[0m] Error: %s" format message)
+        }
+        sys.exit(1)
+    }
+    case e => throw e
   }
   
   /** Checks that this Conf object is verified. If it is not, throws an exception. */
@@ -242,7 +264,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     if (verified) true
     else {
       ScallopConf.cleanUp
-      throw new IncompleteBuildException("It seems you tried to get option value before you constructed all options (maybe you forgot to call .verify method?). Please, move all extraction of values to after 'verify' method in ScallopConf.")
+      throw new IncompleteBuildException()
     }
   }
   
@@ -336,5 +358,28 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       }
     }
   }
-
+  
 }
+
+/** This configuration object allows user to specify custom error handling in its "initialize" method.
+  * That method returs the proper ScallopConf, which then can be queried for options.
+  */
+abstract class LazyScallopConf(args: Seq[String]) extends ScallopConf(args) {
+  /** Initializes this configuration object, passing any exceptions into provided partial function.
+    * Note that this method neither creates new configuration object nor mutates the state of the current object.
+    */
+  def initialize(fn: PartialFunction[ScallopResult, Unit]): ScallopConf = {
+    try {
+      verify
+    } catch {
+      case e: ScallopResult if fn.isDefinedAt(e)=> fn(e)
+      case e => throw e
+    }
+    this
+  }
+  override def onError(e: Throwable) = throw e
+  
+}
+
+/** Convenience variable to permit testing. */
+private[scallop] object throwError extends util.DynamicVariable[Boolean](false)

@@ -59,13 +59,13 @@ case class Scallop(
         args.toList,
         opt.map(o=> (o._2.converter, true)).toList ::: opts.filter(_.isPositional).map(o => (o.converter, o.required))
       ) map { res => (opt.toList ::: opts.filter(_.isPositional).map(("",_))) zip res filter { case ((invoc, opt), p) => !opt.isPositional || p.size > 0 } } getOrElse
-        (throw new OptionParseException("Failed to parse the trailing argument list: '%s'" format args.mkString(" "))) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
+        (throw new OptionParseException(args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
     }
     if (args.isEmpty) acc
     else if (isOptionName(args.head) && args.head != "--") {
       if (args.head.startsWith("--")) {
         val opt = opts find (_.longNames.contains(args.head.drop(2))) getOrElse
-                  (throw new UnknownOption("Unknown option '%s'" format args.head.drop(2)))
+                  (throw new UnknownOption(args.head.drop(2)))
         val (before, after) = args.tail.span(isArgument)
         if (after.isEmpty) {
           // get the converter, proceed to trailing args parsing
@@ -77,7 +77,7 @@ case class Scallop(
       } else {
         if (args.head.size == 2) {
           val opt = getOptionWithShortName(args.head(1)) getOrElse 
-                    (throw new UnknownOption("Unknown option '%s'" format args.head.drop(1)))
+                    (throw new UnknownOption(args.head.drop(1)))
           val (before, after) = args.tail.span(isArgument)
           if (after.isEmpty) {
             // get the converter, proceed to trailing args parsing
@@ -88,7 +88,7 @@ case class Scallop(
           }
         } else {
           val opt = getOptionWithShortName(args.head(1)) getOrElse
-                    (throw new UnknownOption("Unknown option '%s'" format args.head.drop(1)))
+                    (throw new UnknownOption(args.head.drop(1)))
           if (opt.converter.argType != ArgType.FLAG) {
             parse(acc, args.head.take(2) +: args.head.drop(2) +: args.tail)
           } else {
@@ -405,12 +405,12 @@ case class Scallop(
     if (name.contains('\0')) {
       // delegating to subbuilder
       subbuilders.find(_._1 == name.takeWhile('\0'!=)).map(_._2.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\0'!=).drop(1)))
-        .getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name.replace("\0",".")))
+        .getOrElse(throw new UnknownOption(name.replace("\0",".")))
     } else {
       opts find (_.name == name) map { opt =>
         val args = parsed.opts.filter(_._1 == opt).map(_._2)
         opt.converter.parse(args).right.get.isDefined
-      } getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name))
+      } getOrElse(throw new UnknownOption(name))
     }
   }
   
@@ -422,16 +422,16 @@ case class Scallop(
     if (name.contains('\0')) {
       // delegating to subbuilder
       subbuilders.find(_._1 == name.takeWhile('\0'!=)).map(_._2.args(parsed.subcommandArgs).get(name.dropWhile('\0'!=).drop(1))(m))
-        .getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name.replace("\0","."))).asInstanceOf[Option[A]]
+        .getOrElse(throw new UnknownOption(name.replace("\0","."))).asInstanceOf[Option[A]]
     } else {
       opts.find(_.name == name).map{ opt =>
         if (!(opt.converter.manifest <:< m))
-          throw new WrongTypeRequest("Requested '%s' instead of '%s'" format (m, opt.converter.manifest))
+          throw new WrongTypeRequest(m, opt.converter.manifest)
         val args = parsed.opts.filter(_._1 == opt).map(_._2)
         opt.converter.parse(args).right
           .getOrElse(if (opt.required)  throw new MajorInternalException else None)
           .orElse(opt.default)
-      }.getOrElse(throw new UnknownOption("Unknown option requested: '%s'" format name)).asInstanceOf[Option[A]]
+      }.getOrElse(throw new UnknownOption(name)).asInstanceOf[Option[A]]
     }
   }
   
@@ -465,12 +465,10 @@ case class Scallop(
       (a => throw new IdenticalOptionNames("Short option name '%s' is not unique" format a._1))
     
     if (args contains "--help") {
-      printHelp
-      sys.exit(0)
+      throw Help
     }
     if (vers.isDefined && args.contains("--version")) {
-      vers.foreach(println)
-      sys.exit(0)
+      throw Version
     }
     
     parsed
@@ -492,13 +490,12 @@ case class Scallop(
     opts foreach { o =>
       val args = parsed.opts filter (_._1 == o) map (_._2)
       val res = o.converter.parse(args)
-      if (res.isLeft) throw new WrongOptionFormat(
-        "Wrong format for option '%s': %s" format (o.name, args.map(_._2.mkString(" ")).mkString(" ")))
-      if (o.required && !res.right.get.isDefined && !o.default.isDefined) throw new RequiredOptionNotFound(
-        "Required option '%s' not found" format o.name)
+      if (res.isLeft) throw new WrongOptionFormat(o.name, args.map(_._2.mkString(" ")).mkString(" "))
+      if (o.required && !res.right.get.isDefined && !o.default.isDefined) 
+        throw new RequiredOptionNotFound(o.name)
       // validaiton
       if (!(get(o.name)(o.converter.manifest) map (v => o.validator(o.converter.manifest,v)) getOrElse true))
-        throw new ValidationFailure("Validation failure for '%s' option parameters: %s" format (o.name, args))
+        throw new ValidationFailure("Validation failure for '%s' option parameters: %s" format (o.name, args.map(_._2.mkString(" ")).mkString(" ")))
 
     }
 
