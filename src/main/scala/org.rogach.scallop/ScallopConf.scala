@@ -371,15 +371,15 @@ abstract class LazyScallopConf(args: Seq[String]) extends ScallopConf(args) {
   /** Initializes this configuration object, passing any exceptions into provided partial function.
     * Note that this method neither creates new configuration object nor mutates the state of the current object.
     */
-  def initialize(fn: PartialFunction[ScallopResult, Unit]): ScallopConf = {
+  def initialize(fn: PartialFunction[ScallopResult, Unit]) = {
     try {
       verify
     } catch {
       case e: ScallopResult if fn.isDefinedAt(e)=> fn(e)
       case e => throw e
     }
-    this
   }
+
   override def onError(e: Throwable) = throw e
   
 }
