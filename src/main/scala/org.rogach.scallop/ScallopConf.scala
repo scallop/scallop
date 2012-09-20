@@ -312,7 +312,10 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     verified_?
     builder.summary
   }
-  
+
+  /** Prints help message (with version, banner, option usage and footer) to stdout. */
+  def printHelp = builder.printHelp
+
   /** Add a version string to option builder.
     *
     * @param v Version string.
