@@ -54,13 +54,33 @@ case class Scallop(
   }
   @annotation.tailrec
   private def parse(acc: Parsed, args: Seq[String]): Parsed = {
-    def goParseRest(args: Seq[String], opt: Option[(String, CliOption)]) = { 
-      parseTrailingArgs(
-        args.toList,
-        opt.map(o=> (o._2.converter, true)).toList ::: opts.filter(_.isPositional).map(o => (o.converter, o.required))
-      ) map { res => (opt.toList ::: opts.filter(_.isPositional).map(("",_))) zip res filter { case ((invoc, opt), p) => !opt.isPositional || p.size > 0 } } getOrElse
-        (throw new OptionParseException(args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
+
+    def goParseRest(args: Seq[String], opt: Option[(String, CliOption)]): Parsed = { 
+      def parseRest = {
+        parseTrailingArgs(
+          args.toList,
+          opt.map(o=> (o._2.converter, true)).toList ::: opts.filter(_.isPositional).map(o => (o.converter, o.required))
+        ) map { res => 
+          (opt.toList ::: opts.filter(_.isPositional).map(("",_))) zip res filter { 
+            case ((invoc, opt), p) => !opt.isPositional || p.size > 0 
+          } 
+        } getOrElse (throw new OptionParseException(args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
+     }
+     
+     opt match {
+        case Some((invoc, o)) =>
+          // short-circuit parsing when there are no trailing args - to get better error messages
+          o.converter.argType match {
+            case ArgType.FLAG   => 
+              (o, (invoc, Nil)) :: goParseRest(args, None)
+            case ArgType.SINGLE =>
+              (o, (invoc, args.take(1).toList)) :: goParseRest(args.tail, None)
+            case ArgType.LIST   => parseRest
+          }
+        case None => parseRest
+      }
     }
+
     if (args.isEmpty) acc
     else if (isOptionName(args.head) && args.head != "--") {
       if (args.head.startsWith("--")) {
