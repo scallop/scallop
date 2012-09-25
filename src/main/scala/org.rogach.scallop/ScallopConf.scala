@@ -37,7 +37,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   
   var builder = Scallop(args)
 
-  private[this] var _guessOptionName = false
+  private[this] var _guessOptionName = true
   /** If true, scallop would try to guess missing option names from the names of their fields. */
   def guessOptionName = _guessOptionName
   /** If set to true, scallop would try to guess missing option names from the names of their fields. */
