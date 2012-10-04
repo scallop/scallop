@@ -14,6 +14,7 @@ class StrangeBugs extends UsefulMatchers {
 
     intercept[IdenticalOptionNames] {
       val conf = new ScallopConf() {
+        guessOptionName = true
         val guessedName = opt[Int]()
         val nonGuessedName = opt[Int]()
       }
