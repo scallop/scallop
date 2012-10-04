@@ -9,8 +9,8 @@ class Usability extends UsefulMatchers {
     var s = false
     try {
       val conf = new ScallopConf(Seq("-a","asdf")) {
-        val apples = opt[Int]()
-        val bananas = opt[Int]()
+        val apples = opt[Int]("apples")
+        val bananas = opt[Int]("bananas")
       }
     } catch {
       case WrongOptionFormat("apples", "asdf") => s = true
