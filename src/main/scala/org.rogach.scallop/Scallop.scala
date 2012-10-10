@@ -404,7 +404,7 @@ case class Scallop(
   }
     
   /** Print help message (with version, banner, option usage and footer) to stdout. */
-  def printHelp = {
+  def printHelp() = {
     vers foreach println
     bann foreach println
     println(help)

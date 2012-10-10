@@ -6,7 +6,7 @@ import scala.util.DynamicVariable
 object ScallopConf {
   val rootConf = new DynamicVariable[ScallopConf](null)
   val confs = new DynamicVariable[List[ScallopConf]](Nil)
-  def cleanUp = {
+  def cleanUp() = {
     ScallopConf.confs.value = Nil
     ScallopConf.rootConf.value = null
   }
@@ -222,7 +222,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   }
 
   /** Veryfy that this config object is properly configured. */
-  def verify {
+  def verify() {
     try {
       verified = true
       builder.verify
@@ -314,7 +314,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   }
 
   /** Prints help message (with version, banner, option usage and footer) to stdout. */
-  def printHelp = builder.printHelp
+  def printHelp() = builder.printHelp
 
   /** Add a version string to option builder.
     *
