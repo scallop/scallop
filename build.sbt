@@ -6,7 +6,7 @@ name := "scallop"
 
 scalaVersion := "2.9.1"
 
-scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint")
+scalacOptions ++= Seq("-deprecation", "-unchecked")
 
 seq(Revolver.settings: _*)
 
