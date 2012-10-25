@@ -239,7 +239,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     }
   }
   
-  protected def onError(e: Throwable) = e match {
+  protected def onError(e: Throwable): Unit = e match {
     case r: ScallopResult if !throwError.value => r match {
       case Help => 
         builder.printHelp
