@@ -169,5 +169,13 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
       Conf
     }
   }
-  
+
+  test ("parse failure on half-provided single-arg option") {
+    object Conf extends ScallopConf(Seq("-a")) {
+      val apples = opt[Int]("apples")
+    }
+    intercept[WrongOptionFormat] {
+      Conf
+    }
+  }
 }

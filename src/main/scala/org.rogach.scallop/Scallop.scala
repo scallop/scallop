@@ -74,7 +74,11 @@ case class Scallop(
             case ArgType.FLAG   => 
               (o, (invoc, Nil)) :: goParseRest(args, None)
             case ArgType.SINGLE =>
-              (o, (invoc, args.take(1).toList)) :: goParseRest(args.tail, None)
+              if (args.size > 0) {
+                (o, (invoc, args.take(1).toList)) :: goParseRest(args.tail, None)
+              } else {
+                throw new WrongOptionFormat(o.name, args.mkString)
+              }
             case ArgType.LIST   => parseRest
           }
         case None => parseRest
