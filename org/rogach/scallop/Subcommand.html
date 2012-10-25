@@ -132,13 +132,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#afterInit" data-isabs="false">
-      <a id="afterInit:Unit"></a>
+      <a id="afterInit():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">afterInit</span>
         
-        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a> → <a name="org.rogach.scallop.AfterInit" class="extype" href="AfterInit.html">AfterInit</a></dd></dl></div>
@@ -457,6 +457,17 @@ to determine it from terminal width or defaults to 80 characters.
       <p class="shortcomment cmt">Add a new option definition to this config and get a holder for the value.</p><div class="fullcomment"><div class="comment cmt"><p>Add a new option definition to this config and get a holder for the value.
 </p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new option, used as long option name in parsing, and for option identification.</p></dd><dt class="param">short</dt><dd class="cmt"><p>Overload the char that will be used as short option name. Defaults to first character of the name.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, for help description.</p></dd><dt class="param">default</dt><dd class="cmt"><p>Default value to use if option is not found in input arguments (if you provide this, you can omit the type on method).</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this option required? Defaults to false.</p></dd><dt class="param">noshort</dt><dd class="cmt"><p>If set to true, then this option does not have any short name.</p></dd><dt class="param">conv</dt><dd class="cmt"><p>The converter for this option. Usually found implicitly.</p></dd><dt>returns</dt><dd class="cmt"><p>A holder for parsed value
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#printHelp" data-isabs="false">
+      <a id="printHelp():Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">printHelp</span>
+        
+        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Prints help message (with version, banner, option usage and footer) to stdout.</p><div class="fullcomment"><div class="comment cmt"><p>Prints help message (with version, banner, option usage and footer) to stdout.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#propMap" data-isabs="false">
       <a id="propMap[A](Char)(Manifest[Map[String, A]]):Map[String, A]"></a>
       <h4 class="signature">
@@ -726,13 +737,13 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
       </h4>
       <p class="shortcomment cmt">Checks that this Conf object is verified.</p><div class="fullcomment"><div class="comment cmt"><p>Checks that this Conf object is verified. If it is not, throws an exception.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#verify" data-isabs="false">
-      <a id="verify:Unit"></a>
+      <a id="verify():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">verify</span>
         
-        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Veryfy that this config object is properly configured.</p><div class="fullcomment"><div class="comment cmt"><p>Veryfy that this config object is properly configured.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
