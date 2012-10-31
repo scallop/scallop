@@ -155,5 +155,12 @@ class SubcommandsTest extends UsefulMatchers {
       Conf
     }
   }
+  
+  test ("no-option subcommands") {
+    object Conf extends ScallopConf(Seq("tree")) {
+      val tree = new Subcommand("tree") {()}
+    }
+    Conf.subcommand ==== Some(Conf.tree)
+  }
 
 }
