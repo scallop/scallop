@@ -4,20 +4,18 @@ organization := "org.rogach"
 
 name := "scallop"
 
-scalaVersion := "2.9.1"
+scalaVersion := "2.9.2"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked")
 
 seq(Revolver.settings: _*)
-
-seq(jotSettings: _*)
 
 seq(assemblySettings: _*)
 
 resolvers += "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "1.7.1" % "test"
+  "org.scalatest" % "scalatest_2.10.0-RC2" % "1.8" % "test"
 )
 
 crossScalaVersions := Seq("2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1", "2.9.2")
