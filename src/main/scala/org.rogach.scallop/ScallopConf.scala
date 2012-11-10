@@ -13,7 +13,7 @@ object ScallopConf {
 }
 
 class Subcommand(val commandName: String) extends ScallopConf(Nil, commandName) {
-  1 + 1 // to get the initialization work. Else, it seems that delayedInit is never invoked with this, and the count is broken.
+  () // to get the initialization work. Else, it seems that delayedInit is never invoked with this, and the count is broken.
 }
 
 abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandname: String = "") extends ScallopConfValidations with AfterInit {
@@ -233,7 +233,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
         }
       }
     } catch { 
-      case e => onError(e)
+      case e: Throwable => onError(e)
     } finally {
       ScallopConf.cleanUp
     }
@@ -376,7 +376,7 @@ abstract class LazyScallopConf(args: Seq[String]) extends ScallopConf(args) {
       verify
     } catch {
       case e: ScallopResult if fn.isDefinedAt(e)=> fn(e)
-      case e => throw e
+      case e: Throwable => throw e
     }
   }
 

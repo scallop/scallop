@@ -15,7 +15,7 @@ package object scallop {
     def parse(s: List[(String, List[String])]) = {
       s match {
         case (_, i :: Nil) :: Nil => 
-          try { Right(Some(conv(i))) } catch { case _ => Left(Unit) }
+          try { Right(Some(conv(i))) } catch { case _: Throwable => Left(Unit) }
         case Nil => Right(None)
         case _ => Left(Unit)
       }
@@ -38,7 +38,7 @@ package object scallop {
         val l = s.map(_._2).flatten.map(i => conv(i))
         if (l.isEmpty) Right(Some(Nil))
         else Right(Some(l))
-      } catch { case _ =>
+      } catch { case _: Throwable =>
         Left(Unit)
       }
     }
@@ -60,7 +60,7 @@ package object scallop {
         Right(Some(s.map(_._2).flatten.map(_.trim).filter(","!=).flatMap(_ split "," filter (_.trim.size > 0)).map {
           case rgx(key,value) => (key, conv.parse(List(("",List(value)))).right.get.get)
         }.toMap))
-      } catch { case _ =>
+      } catch { case _: Throwable =>
         Left(Unit)
       }
     }
