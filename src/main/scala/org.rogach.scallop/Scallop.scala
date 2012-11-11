@@ -1,7 +1,7 @@
 package org.rogach.scallop
 
-import scala.reflect.Manifest
 import org.rogach.scallop.exceptions._
+import reflect.runtime.universe._
 
 /** The creator and god of all parsers :) */
 object Scallop {
@@ -153,9 +153,6 @@ case class Scallop(
     parse(argList)
   } else parse(args)
 
-  /** cache for option&property values returned from this builder. */
-//  private var getCache = scala.collection.mutable.Map[(String,Manifest[_]),Any]()
-
   /** Tests whether this string contains option name, not some number. */
   private def isOptionName(s: String) = 
     if (s.startsWith("-"))
@@ -243,8 +240,8 @@ case class Scallop(
         else Some(false)
       else default
     val eShort = if (short == 0.toChar || noshort) None else Some(short)
-    val validator = { (m:Manifest[_], a:Any) => 
-      if (m >:> conv.manifest) validate(a.asInstanceOf[A])
+    val validator = { (tt:TypeTag[_], a:Any) => 
+      if (conv.tag.tpe <:< tt.tpe) validate(a.asInstanceOf[A])
       else false
     }
     this.copy(opts = opts :+ SimpleOption(name, 
@@ -310,8 +307,8 @@ case class Scallop(
         if (default == Some(true)) Some(true)
         else Some(false)
       else default
-    val validator = { (m:Manifest[_], a:Any) => 
-      if (m >:> conv.manifest) validate(a.asInstanceOf[A])
+    val validator = { (tt: TypeTag[_], a:Any) => 
+      if (conv.tag.tpe <:< tt.tpe) validate(a.asInstanceOf[A])
       else false
     }
     this.copy(opts = opts :+ TrailingArgsOption(name,
@@ -440,17 +437,17 @@ case class Scallop(
   
    /** Get the value of option (or trailing arg) as Option.
      * @param name Name for option.
-     * @param m Manifest for requested type. Usually found implicitly.
+     * @param tt TypeTag for requested type. Usually found implicitly.
      */
-  def get[A](name: String)(implicit m: Manifest[A]): Option[A] = {
+  def get[A](name: String)(implicit tt: TypeTag[A]): Option[A] = {
     if (name.contains('\0')) {
       // delegating to subbuilder
-      subbuilders.find(_._1 == name.takeWhile('\0'!=)).map(_._2.args(parsed.subcommandArgs).get(name.dropWhile('\0'!=).drop(1))(m))
+      subbuilders.find(_._1 == name.takeWhile('\0'!=)).map(_._2.args(parsed.subcommandArgs).get(name.dropWhile('\0'!=).drop(1))(tt))
         .getOrElse(throw new UnknownOption(name.replace("\0","."))).asInstanceOf[Option[A]]
     } else {
       opts.find(_.name == name).map{ opt =>
-        if (!(opt.converter.manifest <:< m))
-          throw new WrongTypeRequest(m, opt.converter.manifest)
+        if (!(opt.converter.tag.tpe <:< tt.tpe))
+          throw new WrongTypeRequest(tt, opt.converter.tag)
         val args = parsed.opts.filter(_._1 == opt).map(_._2)
         opt.converter.parse(args).right
           .getOrElse(if (opt.required)  throw new MajorInternalException else None)
@@ -459,18 +456,18 @@ case class Scallop(
     }
   }
   
-  def get[A](name: Char)(implicit m: Manifest[A]): Option[A] = get(name.toString)(m)
+  def get[A](name: Char)(implicit tt: TypeTag[A]): Option[A] = get(name.toString)(tt)
     
   /** Get the value of option. If option is not found, this will throw an exception.
     *
     * @param name Name for option.
-    * @param m Manifest for requested type. Usually found implicitly.
+    * @param tt TypeTag for requested type. Usually found implicitly.
     */
-  def apply[A](name: String)(implicit m: Manifest[A]): A = get(name)(m).get
+  def apply[A](name: String)(implicit tt: TypeTag[A]): A = get(name)(tt).get
   
-  def apply[A](name: Char)(implicit m: Manifest[A]): A = apply(name.toString)(m)
+  def apply[A](name: Char)(implicit tt: TypeTag[A]): A = apply(name.toString)(tt)
   
-  def prop[A](name: Char, key: String)(implicit m: Manifest[Map[String, A]]): Option[A] = apply(name)(m).get(key)
+  def prop[A](name: Char, key: String)(implicit tt: TypeTag[Map[String, A]]): Option[A] = apply(name)(tt).get(key)
   
   /** Verify the builder. Parses arguments, makes sure no definitions clash, no garbage or unknown options are present,
     * and all present arguments are in proper format. It is recommended to call this method before using the results.
@@ -518,7 +515,7 @@ case class Scallop(
       if (o.required && !res.right.get.isDefined && !o.default.isDefined) 
         throw new RequiredOptionNotFound(o.name)
       // validaiton
-      if (!(get(o.name)(o.converter.manifest) map (v => o.validator(o.converter.manifest,v)) getOrElse true))
+      if (!(get(o.name)(o.converter.tag) map (v => o.validator(o.converter.tag,v)) getOrElse true))
         throw new ValidationFailure("Validation failure for '%s' option parameters: %s" format (o.name, args.map(_._2.mkString(" ")).mkString(" ")))
 
     }
@@ -535,7 +532,7 @@ case class Scallop(
     opts.map(o => 
       " %s  %s => %s" format ((if (isSupplied(o.name)) "*" else " "),
                               o.name,
-                              get(o.name)(o.converter.manifest).getOrElse("$None$"))
+                              get(o.name)(o.converter.tag).getOrElse("$None$"))
     ).mkString("\n") + "\n" + parsed.subcommand.map { sn =>
       ("subcommand: %s\n" format sn) + subbuilders.find(_._1 == sn).get._2.args(parsed.subcommandArgs).summary
     }.getOrElse("")

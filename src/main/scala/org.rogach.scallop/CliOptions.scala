@@ -1,6 +1,7 @@
 package org.rogach.scallop
 
 import exceptions._
+import scala.reflect.runtime.universe._
 
 trait CliOption {
   
@@ -29,7 +30,7 @@ trait CliOption {
   /** Is there a requirement to have at least one invocation of this option? */
   def required: Boolean
   
-  def validator: (Manifest[_], Any) => Boolean
+  def validator: (TypeTag[_], Any) => Boolean
   
   def default: Option[Any]
   
@@ -51,7 +52,7 @@ case class SimpleOption(
     required: Boolean,
     converter: ValueConverter[_],
     default: Option[Any],
-    validator: (Manifest[_], Any) => Boolean,
+    validator: (TypeTag[_], Any) => Boolean,
     argName: String,
     hidden: Boolean,
     noshort: Boolean) 
@@ -68,7 +69,7 @@ case class SimpleOption(
   def helpInfo(sh: List[Char]) = List((
     argLine(sh),
     descr,
-    (if (converter.manifest <:< implicitly[Manifest[Boolean]]) None else default.map(_.toString))  // we don't need to remind user of default flag value, do we?
+    (if (converter.tag.tpe <:< typeTag[Boolean].tpe) None else default.map(_.toString))  // we don't need to remind user of default flag value, do we?
   ))
 }
 
@@ -124,7 +125,7 @@ case class TrailingArgsOption(
     required: Boolean,
     descr: String,
     converter: ValueConverter[_],
-    validator: (Manifest[_],Any) => Boolean,
+    validator: (TypeTag[_],Any) => Boolean,
     default: Option[Any],
     hidden: Boolean)
   extends CliOption {
@@ -174,7 +175,7 @@ case class ToggleOption(
         case _ => Left(Unit)
       }
     }
-    val manifest = implicitly[Manifest[Boolean]]
+    val tag = typeTag[Boolean]
     val argType = ArgType.FLAG
   }
   

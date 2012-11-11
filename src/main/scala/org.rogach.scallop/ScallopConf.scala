@@ -2,6 +2,7 @@ package org.rogach.scallop
 
 import exceptions._
 import scala.util.DynamicVariable
+import reflect.runtime.universe._
 
 object ScallopConf {
   val rootConf = new DynamicVariable[ScallopConf](null)
@@ -120,7 +121,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     val n = getName(resolvedName)
     new ScallopOption[A](
       n,
-      {verified_?; rootConfig.builder.get[A](n)(conv.manifest)},
+      {verified_?; rootConfig.builder.get[A](n)(conv.tag)},
       {verified_?; rootConfig.builder.isSupplied(n)})
   }              
 
@@ -143,7 +144,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     val n = getName(name.toString)
     (key:String) => {
       verified_?
-      rootConfig.builder(n)(conv.manifest).get(key)
+      rootConfig.builder(n)(conv.tag).get(key)
     }
   }
 
@@ -158,7 +159,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     val n = getName(name)
     (key:String) => {
       verified_?
-      rootConfig.builder(n)(conv.manifest).get(key)
+      rootConfig.builder(n)(conv.tag).get(key)
     }
   }
 
@@ -183,7 +184,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     val n = getName(nm)
     new ScallopOption[A](
       n, 
-      {verified_?; rootConfig.builder.get[A](n)(conv.manifest)},
+      {verified_?; rootConfig.builder.get[A](n)(conv.tag)},
       {verified_?; rootConfig.builder.isSupplied(n)})
   }
 
@@ -299,9 +300,9 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @param name Propety definition identifier.
     * @return All key-value pairs for this property in a map.
     */
-  def propMap[A](name: Char)(implicit m: Manifest[Map[String,A]]) = {
+  def propMap[A](name: Char)(implicit tt: TypeTag[Map[String,A]]) = {
     verified_?
-    rootConfig.builder(name.toString)(m)
+    rootConfig.builder(name.toString)(tt)
   }
 
   /** Get summary of current parser state.

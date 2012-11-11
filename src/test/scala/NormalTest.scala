@@ -2,6 +2,7 @@ import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
+import reflect.runtime.universe._
 
 class NormalTest extends FunSuite with ShouldMatchers {
   
@@ -374,8 +375,8 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts[List[Double]]("second list values") should equal (List[Double](4,5,6))
   }
   
+  case class Person(name:String, phone:String)
   test ("custom converter example") {
-    case class Person(name:String, phone:String)
     val personConverter = new ValueConverter[Person] {
       val nameRgx = """([A-Za-z]*)""".r
       val phoneRgx = """([0-9\-]*)""".r
@@ -391,7 +392,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
           case Nil => Right(None) // no person found
           case _ => Left(Unit) // error when parsing
         }
-      val manifest = implicitly[Manifest[Person]] // some magic to make typing work
+      val tag = typeTag[Person] // some magic to make typing work
       val argType = org.rogach.scallop.ArgType.LIST
     }
     val opts = Scallop(List("--person", "Pete", "123-45"))

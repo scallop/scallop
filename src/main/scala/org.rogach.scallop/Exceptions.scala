@@ -1,5 +1,7 @@
 package org.rogach.scallop.exceptions
 
+import reflect.runtime.universe._
+
 /** Parent trait for all not-positive results that can be resulted from this library (including help and exits) */
 sealed trait ScallopResult
 
@@ -26,8 +28,8 @@ object ScallopException {
 }
 
 /** Thrown when the user requests wrong type of option argument from Scallop. */
-case class WrongTypeRequest(requested: Manifest[_], required: Manifest[_]) 
-  extends ScallopException("Requested '%s' instead of '%s'" format (requested, required))
+case class WrongTypeRequest(requested: TypeTag[_], required: TypeTag[_]) 
+  extends ScallopException("Requested '%s' instead of '%s'" format (requested.tpe, required.tpe))
 /** Thrown when Scallop fails to parse the argument line (usually when there   
     are some problems with trailing args). */
 case class OptionParseException(failedArgs: Seq[String]) 

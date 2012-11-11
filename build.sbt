@@ -32,6 +32,8 @@ crossScalaVersions := Seq("2.10.0-RC2")
 
 unmanagedClasspath in Compile += file("dummy")
 
+libraryDependencies <+= scalaVersion(sv => "org.scala-lang" % "scala-reflect" % sv)
+
 publishTo <<= version { v: String =>
   val nexus = "https://oss.sonatype.org/"
   if (v.trim.endsWith("SNAPSHOT"))

@@ -1,6 +1,6 @@
 package org.rogach.scallop
 
-import scala.reflect.Manifest
+import scala.reflect.runtime.universe.TypeTag
 
 /** Converter from list of plain strings to something meaningful. */
 trait ValueConverter[A] { parent =>
@@ -15,8 +15,8 @@ trait ValueConverter[A] { parent =>
     */
   def parse(s: List[(String,List[String])]): Either[Unit,Option[A]]
   
-  /** Manifest, holding the type for this builder. */
-  val manifest: Manifest[A]
+  /** TypeTag, holding the type for this builder. */
+  val tag: TypeTag[A]
   
   /** Type of parsed argument list. */
   val argType: ArgType.V 
@@ -27,9 +27,9 @@ trait ValueConverter[A] { parent =>
     * intConverter.map(2 +) // and you get a "biased converter"
     * }}} 
     */
-  def map[B](fn: A => B)(implicit m: Manifest[B]) = new ValueConverter[B] { child =>
+  def map[B](fn: A => B)(implicit tt: TypeTag[B]) = new ValueConverter[B] { child =>
     def parse(s: List[(String,List[String])]) = parent.parse(s).right.map(_.map(fn))
-    val manifest = m
+    val tag = tt
     val argType = parent.argType
   }
   
