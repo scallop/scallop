@@ -162,5 +162,26 @@ class SubcommandsTest extends UsefulMatchers {
     }
     Conf.subcommand ==== Some(Conf.tree)
   }
+  
+  test ("isSupplied, if there are no selected subcommands") {
+    object Conf extends ScallopConf(Nil) {
+      val tree = new Subcommand("tree") {
+        val apples = opt[Int]("apples")
+      }
+    }
+    Conf.tree.apples.isSupplied ==== false
+  }
+  
+  test ("isSupplied, for other subcommand") {
+    object Conf extends ScallopConf(Seq("tree", "-a", "42")) {
+      val tree = new Subcommand("tree") {
+        val apples = opt[Int]("apples")
+      }
+      val palm = new Subcommand("palm") {
+        val bananas = opt[Int]("bananas")
+      }
+    }
+    Conf.palm.bananas.isSupplied ==== false
+  }
 
 }

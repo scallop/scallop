@@ -428,8 +428,13 @@ case class Scallop(
   def isSupplied(name: String): Boolean = {
     if (name.contains('\0')) {
       // delegating to subbuilder
-      subbuilders.find(_._1 == name.takeWhile('\0'!=)).map(_._2.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\0'!=).drop(1)))
-        .getOrElse(throw new UnknownOption(name.replace("\0",".")))
+      parsed.subcommand.map { subc =>
+        if (subc == name.takeWhile('\0'!=)) {
+          subbuilders.find(_._1 == subc)
+          .map(_._2.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\0'!=).drop(1)))
+          .getOrElse(throw new UnknownOption(name.replace("\0",".")))
+        } else false // only current subcommand can have supplied arguments
+      }.getOrElse(false) // no subcommands, so their options are definitely not supplied
     } else {
       opts find (_.name == name) map { opt =>
         val args = parsed.opts.filter(_._1 == opt).map(_._2)
