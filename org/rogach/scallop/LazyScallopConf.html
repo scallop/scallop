@@ -12,7 +12,7 @@
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="type">
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="type">
       <div id="definition">
         <img src="../../../lib/class_big.png" />
         <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.rogach" class="extype" href="../package.html">rogach</a>.<a name="org.rogach.scallop" class="extype" href="package.html">scallop</a></p>
@@ -20,52 +20,54 @@
       </div>
 
       <h4 class="signature" id="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <span class="name">LazyScallopConf</span>
-        
-        <span class="result"> extends <a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">LazyScallopConf</span><span class="result"> extends <a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This configuration object allows user to specify custom error handling in its &quot;initialize&quot; method.
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This configuration object allows user to specify custom error handling in its &quot;initialize&quot; method.
 That method returs the proper ScallopConf, which then can be queried for options.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Source</dt><dd><a href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/ScallopConf.scala">ScallopConf.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/Rogach/scallop/tree/master/src/main/scala/org.rogach.scallop/ScallopConf.scala">ScallopConf.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a>, <a name="org.rogach.scallop.AfterInit" class="extype" href="AfterInit.html">AfterInit</a>, <span name="scala.DelayedInit" class="extype">DelayedInit</span>, <a name="org.rogach.scallop.ScallopConfValidations" class="extype" href="ScallopConfValidations.html">ScallopConfValidations</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
-        
+    
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol><li class="alpha in"><span>Alphabetic</span></li><li class="inherit out"><span>By inheritance</span></li></ol>
+            </div>
+        <div id="ancestors">
+              <span class="filtertype">Inherited</span>
+              <ol><li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li></ol>
+              <ol id="linearization"><li name="org.rogach.scallop.LazyScallopConf" class="in"><span>LazyScallopConf</span></li><li name="org.rogach.scallop.ScallopConf" class="in"><span>ScallopConf</span></li><li name="org.rogach.scallop.AfterInit" class="in"><span>AfterInit</span></li><li name="scala.DelayedInit" class="in"><span>DelayedInit</span></li><li name="org.rogach.scallop.ScallopConfValidations" class="in"><span>ScallopConfValidations</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+            </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
 
       <div id="template">
-
-        <div id="mbrsel">
-          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
-          <div id="order">
-                <span class="filtertype">Ordering</span>
-                <ol><li class="alpha in"><span>Alphabetic</span></li><li class="inherit out"><span>By inheritance</span></li></ol>
-              </div>
-          <div id="ancestors">
-                <span class="filtertype">Inherited</span>
-                <ol><li class="hideall out"><span>Hide All</span></li>
-                <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.rogach.scallop.LazyScallopConf" class="in"><span>LazyScallopConf</span></li><li name="org.rogach.scallop.ScallopConf" class="in"><span>ScallopConf</span></li><li name="org.rogach.scallop.AfterInit" class="in"><span>AfterInit</span></li><li name="scala.DelayedInit" class="in"><span>DelayedInit</span></li><li name="org.rogach.scallop.ScallopConfValidations" class="in"><span>ScallopConfValidations</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
-              </div>
-          <div id="visbl">
-              <span class="filtertype">Visibility</span>
-              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
-            </div>
-        </div>
-
+        <div id="allMembers">
         <div class="members" id="constructors">
               <h3>Instance Constructors</h3>
               <ol><li visbl="pub" name="org.rogach.scallop.LazyScallopConf#this" data-isabs="false">
       <a id="this:LazyScallopConf"></a>
       <h4 class="signature">
-      <span class="kind">new</span>
-      <span class="symbol"> 
-        <span class="name">LazyScallopConf</span>
-        
-        <span class="params">(<span name="args">args: Seq[String]</span>)</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">LazyScallopConf</span><span class="params">(<span name="args">args: Seq[String]</span>)</span>
       </span>
       </h4>
       
@@ -73,7 +75,7 @@ That method returs the proper ScallopConf, which then can be queried for options
             </div>
 
         
-        
+
         
 
         <div class="values members" id="values">
@@ -81,88 +83,96 @@ That method returs the proper ScallopConf, which then can be queried for options
               <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">!=</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $bang$eq">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#!=" data-isabs="false">
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">!=</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $bang$eq">!=</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
       <a id="##():Int"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">##</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $hash$hash">##</span><span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
       <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">==</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $eq$eq">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#==" data-isabs="false">
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">==</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $eq$eq">==</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#afterInit" data-isabs="false">
       <a id="afterInit():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">afterInit</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">afterInit</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a> → <a name="org.rogach.scallop.AfterInit" class="extype" href="AfterInit.html">AfterInit</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a> → <a name="org.rogach.scallop.AfterInit" class="extype" href="AfterInit.html">AfterInit</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">asInstanceOf</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="result">: T0</span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: T0</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#banner" data-isabs="false">
       <a id="banner(String):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">banner</span>
-        
-        <span class="params">(<span name="b">b: String</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">banner</span><span class="params">(<span name="b">b: String</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add a banner string to option builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add a banner string to option builder.
@@ -171,22 +181,24 @@ That method returs the proper ScallopConf, which then can be queried for options
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#builder" data-isabs="false">
       <a id="builder:Scallop"></a>
       <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol"> 
-        <span class="name">builder</span>
-        
-        <span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="Scallop.html">Scallop</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">builder</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="Scallop.html">Scallop</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">clone</span>
-        
-        <span class="params">()</span><span class="result">: AnyRef</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: AnyRef</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -196,11 +208,12 @@ That method returs the proper ScallopConf, which then can be queried for options
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#codependent" data-isabs="false">
       <a id="codependent(org.rogach.scallop.ScallopOption[_]*):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">codependent</span>
-        
-        <span class="params">(<span name="list">list: org.rogach.scallop.ScallopOption[_]*</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">codependent</span><span class="params">(<span name="list">list: org.rogach.scallop.ScallopOption[_]*</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">In the verify stage, checks that either all or none of the provided options have values supplied in arguments.</p><div class="fullcomment"><div class="comment cmt"><p>In the verify stage, checks that either all or none of the provided options have values supplied in arguments.
@@ -209,66 +222,72 @@ That method returs the proper ScallopConf, which then can be queried for options
     </li><li visbl="prt" name="org.rogach.scallop.ScallopConf#commandname" data-isabs="false">
       <a id="commandname:String"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">commandname</span>
-        
-        <span class="result">: String</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">commandname</span><span class="result">: String</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.AfterInit#delayedInit" data-isabs="false">
       <a id="delayedInit(⇒ Unit):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">delayedInit</span>
-        
-        <span class="params">(<span name="x">x: ⇒ <span name="scala.Unit" class="extype">Unit</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">delayedInit</span><span class="params">(<span name="x">x: ⇒ <span name="scala.Unit" class="extype">Unit</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.AfterInit" class="extype" href="AfterInit.html">AfterInit</a> → DelayedInit</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.AfterInit" class="extype" href="AfterInit.html">AfterInit</a> → DelayedInit</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#editBuilder" data-isabs="false">
       <a id="editBuilder((Scallop) ⇒ Scallop):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">editBuilder</span>
-        
-        <span class="params">(<span name="fn">fn: (<a name="org.rogach.scallop.Scallop" class="extype" href="Scallop.html">Scallop</a>) ⇒ <a name="org.rogach.scallop.Scallop" class="extype" href="Scallop.html">Scallop</a></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">editBuilder</span><span class="params">(<span name="fn">fn: (<a name="org.rogach.scallop.Scallop" class="extype" href="Scallop.html">Scallop</a>) ⇒ <a name="org.rogach.scallop.Scallop" class="extype" href="Scallop.html">Scallop</a></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">eq</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">equals</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">finalize</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -278,11 +297,12 @@ That method returs the proper ScallopConf, which then can be queried for options
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#footer" data-isabs="false">
       <a id="footer(String):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">footer</span>
-        
-        <span class="params">(<span name="f">f: String</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">footer</span><span class="params">(<span name="f">f: String</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add a footer string to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add a footer string to this builder.
@@ -291,66 +311,72 @@ That method returs the proper ScallopConf, which then can be queried for options
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getClass</span>
-        
-        <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#getName" data-isabs="false">
       <a id="getName(String):String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getName</span>
-        
-        <span class="params">(<span name="name">name: String</span>)</span><span class="result">: String</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getName</span><span class="params">(<span name="name">name: String</span>)</span><span class="result">: String</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#guessOptionName" data-isabs="false">
       <a id="guessOptionName:Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">guessOptionName</span>
-        
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">guessOptionName</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">If true, scallop would try to guess missing option names from the names of their fields.</p><div class="fullcomment"><div class="comment cmt"><p>If true, scallop would try to guess missing option names from the names of their fields.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#guessOptionName_=" data-isabs="false">
       <a id="guessOptionName_=(Boolean):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">guessOptionName_=</span>
-        
-        <span class="params">(<span name="v">v: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: guessOptionName_$eq">guessOptionName_=</span><span class="params">(<span name="v">v: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">If set to true, scallop would try to guess missing option names from the names of their fields.</p><div class="fullcomment"><div class="comment cmt"><p>If set to true, scallop would try to guess missing option names from the names of their fields.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">hashCode</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#helpWidth" data-isabs="false">
       <a id="helpWidth(Int):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">helpWidth</span>
-        
-        <span class="params">(<span name="w">w: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">helpWidth</span><span class="params">(<span name="w">w: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Explicitly set width of help printout.</p><div class="fullcomment"><div class="comment cmt"><p>Explicitly set width of help printout. By default, Scallop tries
@@ -359,11 +385,12 @@ to determine it from terminal width or defaults to 80 characters.
     </li><li visbl="pub" name="org.rogach.scallop.LazyScallopConf#initialize" data-isabs="false">
       <a id="initialize(PartialFunction[ScallopResult, Unit]):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">initialize</span>
-        
-        <span class="params">(<span name="fn">fn: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<a name="org.rogach.scallop.exceptions.ScallopResult" class="extype" href="exceptions/ScallopResult.html">ScallopResult</a>, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">initialize</span><span class="params">(<span name="fn">fn: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<a name="org.rogach.scallop.exceptions.ScallopResult" class="extype" href="exceptions/ScallopResult.html">ScallopResult</a>, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Initializes this configuration object, passing any exceptions into provided partial function.</p><div class="fullcomment"><div class="comment cmt"><p>Initializes this configuration object, passing any exceptions into provided partial function.
@@ -372,22 +399,24 @@ Note that this method neither creates new configuration object nor mutates the s
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">isInstanceOf</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#mutuallyExclusive" data-isabs="false">
       <a id="mutuallyExclusive(org.rogach.scallop.ScallopOption[_]*):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">mutuallyExclusive</span>
-        
-        <span class="params">(<span name="list">list: org.rogach.scallop.ScallopOption[_]*</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mutuallyExclusive</span><span class="params">(<span name="list">list: org.rogach.scallop.ScallopOption[_]*</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">In the verify stage, checks that only one or zero of the provided options have values supplied in arguments.</p><div class="fullcomment"><div class="comment cmt"><p>In the verify stage, checks that only one or zero of the provided options have values supplied in arguments.
@@ -396,79 +425,86 @@ Note that this method neither creates new configuration object nor mutates the s
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">ne</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
       <a id="notify():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">notify</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#notifyAll" data-isabs="false">
       <a id="notifyAll():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">notifyAll</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.LazyScallopConf#onError" data-isabs="false">
       <a id="onError(Throwable):Nothing"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">onError</span>
-        
-        <span class="params">(<span name="e">e: Throwable</span>)</span><span class="result">: <span name="scala.Nothing" class="extype">Nothing</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">onError</span><span class="params">(<span name="e">e: Throwable</span>)</span><span class="result">: <span name="scala.Nothing" class="extype">Nothing</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.LazyScallopConf" class="extype" href="">LazyScallopConf</a> → <a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#opt" data-isabs="false">
       <a id="opt[A](String,Char,String,Option[A],(A) ⇒ Boolean,Boolean,String,Boolean,Boolean)(ValueConverter[A]):ScallopOption[A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">opt</span>
-        <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[A]</span>, <span name="validate">validate: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="argName">argName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">opt</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[A]</span>, <span name="validate">validate: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="argName">argName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add a new option definition to this config and get a holder for the value.</p><div class="fullcomment"><div class="comment cmt"><p>Add a new option definition to this config and get a holder for the value.
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new option, used as long option name in parsing, and for option identification.</p></dd><dt class="param">short</dt><dd class="cmt"><p>Overload the char that will be used as short option name. Defaults to first character of the name.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, for help description.</p></dd><dt class="param">default</dt><dd class="cmt"><p>Default value to use if option is not found in input arguments (if you provide this, you can omit the type on method).</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this option required? Defaults to false.</p></dd><dt class="param">noshort</dt><dd class="cmt"><p>If set to true, then this option does not have any short name.</p></dd><dt class="param">conv</dt><dd class="cmt"><p>The converter for this option. Usually found implicitly.</p></dd><dt>returns</dt><dd class="cmt"><p>A holder for parsed value
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new option, used as long option name in parsing, and for option identification.</p></dd><dt class="param">short</dt><dd class="cmt"><p>Overload the char that will be used as short option name. Defaults to first character of the name.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, for help description.</p></dd><dt class="param">default</dt><dd class="cmt"><p>Default value to use if option is not found in input arguments (if you provide this, you can omit the type on method).</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this option required? Defaults to false.</p></dd><dt class="param">argName</dt><dd class="cmt"><p>The name for this option argument, as it will appear in help. Defaults to &quot;arg&quot;.</p></dd><dt class="param">noshort</dt><dd class="cmt"><p>If set to true, then this option does not have any short name.</p></dd><dt class="param">conv</dt><dd class="cmt"><p>The converter for this option. Usually found implicitly.</p></dd><dt>returns</dt><dd class="cmt"><p>A holder for parsed value
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#printHelp" data-isabs="false">
       <a id="printHelp():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">printHelp</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printHelp</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Prints help message (with version, banner, option usage and footer) to stdout.</p><div class="fullcomment"><div class="comment cmt"><p>Prints help message (with version, banner, option usage and footer) to stdout.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#propMap" data-isabs="false">
       <a id="propMap[A](Char)(Manifest[Map[String, A]]):Map[String, A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">propMap</span>
-        <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: Manifest[Map[String, A]]</span>)</span><span class="result">: Map[String, A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">propMap</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: Manifest[Map[String, A]]</span>)</span><span class="result">: Map[String, A]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Get all data for propety as Map.</p><div class="fullcomment"><div class="comment cmt"><p>Get all data for propety as Map.
@@ -477,11 +513,12 @@ Note that this method neither creates new configuration object nor mutates the s
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#props" data-isabs="false">
       <a id="props[A](Char,String,String,String,Boolean)(ValueConverter[Map[String, A]]):(String) ⇒ Option[A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">props</span>
-        <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String = <span class="symbol">&quot;&quot;</span></span>, <span name="keyName">keyName: String = <span class="symbol">&quot;key&quot;</span></span>, <span name="valueName">valueName: String = <span class="symbol">&quot;value&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, A]]</span>)</span><span class="result">: (String) ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">props</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="name">name: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String = <span class="symbol">&quot;&quot;</span></span>, <span name="keyName">keyName: String = <span class="symbol">&quot;key&quot;</span></span>, <span name="valueName">valueName: String = <span class="symbol">&quot;value&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, A]]</span>)</span><span class="result">: (String) ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add new property option definition to this config object, and get a handle for option retreiving.</p><div class="fullcomment"><div class="comment cmt"><p>Add new property option definition to this config object, and get a handle for option retreiving.
@@ -490,66 +527,72 @@ Note that this method neither creates new configuration object nor mutates the s
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#propsLong" data-isabs="false">
       <a id="propsLong[A](String,String,String,String,Boolean)(ValueConverter[Map[String, A]]):(String) ⇒ Option[A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">propsLong</span>
-        <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="name">name: String</span>, <span name="descr">descr: String = <span class="symbol">&quot;&quot;</span></span>, <span name="keyName">keyName: String = <span class="symbol">&quot;key&quot;</span></span>, <span name="valueName">valueName: String = <span class="symbol">&quot;value&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, A]]</span>)</span><span class="result">: (String) ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">propsLong</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="name">name: String</span>, <span name="descr">descr: String = <span class="symbol">&quot;&quot;</span></span>, <span name="keyName">keyName: String = <span class="symbol">&quot;key&quot;</span></span>, <span name="valueName">valueName: String = <span class="symbol">&quot;value&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[Map[String, A]]</span>)</span><span class="result">: (String) ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#rootConfig" data-isabs="false">
       <a id="rootConfig:ScallopConf"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">rootConfig</span>
-        
-        <span class="result">: <a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rootConfig</span><span class="result">: <a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#subcommand" data-isabs="false">
       <a id="subcommand:Option[ScallopConf]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">subcommand</span>
-        
-        <span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a>]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">subcommand</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Retrieves the choosen subcommand.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves the choosen subcommand.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#subcommands" data-isabs="false">
       <a id="subcommands:List[ScallopConf]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">subcommands</span>
-        
-        <span class="result">: List[<a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a>]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">subcommands</span><span class="result">: List[<a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Retrieves the list of the chosen nested subcommands.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves the list of the chosen nested subcommands.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#subconfigs" data-isabs="false">
       <a id="subconfigs:List[ScallopConf]"></a>
       <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol"> 
-        <span class="name">subconfigs</span>
-        
-        <span class="result">: <span name="scala.collection.immutable.List" class="extype">List</span>[<a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a>]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">subconfigs</span><span class="result">: <span name="scala.collection.immutable.List" class="extype">List</span>[<a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">List of sub-configs of this config.</p><div class="fullcomment"><div class="comment cmt"><p>List of sub-configs of this config.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#summary" data-isabs="false">
       <a id="summary:String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">summary</span>
-        
-        <span class="result">: String</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">summary</span><span class="result">: String</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Get summary of current parser state.</p><div class="fullcomment"><div class="comment cmt"><p>Get summary of current parser state.
@@ -558,33 +601,36 @@ Note that this method neither creates new configuration object nor mutates the s
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">synchronized</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="params">(<span name="arg0">arg0: ⇒ T0</span>)</span><span class="result">: T0</span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ T0</span>)</span><span class="result">: T0</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">toString</span>
-        
-        <span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#toggle" data-isabs="false">
       <a id="toggle(String,Option[Boolean],Char,Boolean,String,String,String,Boolean):ScallopOption[Boolean]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">toggle</span>
-        
-        <span class="params">(<span name="name">name: String</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>, <span name="short">short: <span name="scala.Char" class="extype">Char</span> = <span class="symbol">0.toChar</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>, <span name="prefix">prefix: String = <span class="symbol">&quot;no&quot;</span></span>, <span name="descrYes">descrYes: String = <span class="symbol">&quot;&quot;</span></span>, <span name="descrNo">descrNo: String = <span class="symbol">&quot;&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[<span name="scala.Boolean" class="extype">Boolean</span>]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toggle</span><span class="params">(<span name="name">name: String</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>, <span name="short">short: <span name="scala.Char" class="extype">Char</span> = <span class="symbol">0.toChar</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>, <span name="prefix">prefix: String = <span class="symbol">&quot;no&quot;</span></span>, <span name="descrYes">descrYes: String = <span class="symbol">&quot;&quot;</span></span>, <span name="descrNo">descrNo: String = <span class="symbol">&quot;&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[<span name="scala.Boolean" class="extype">Boolean</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add new toggle option definition to this config, and get a holder for it's value.</p><div class="fullcomment"><div class="comment cmt"><p>Add new toggle option definition to this config, and get a holder for it's value.</p><p>Toggle options are just glorified flag options. For example, if you will ask for a
@@ -595,11 +641,12 @@ toggle option with name &quot;verbose&quot;, it will be invocable in three ways 
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#trailArg" data-isabs="false">
       <a id="trailArg[A](⇒ String,String,(A) ⇒ Boolean,Boolean,Option[A],Boolean)(ValueConverter[A]):ScallopOption[A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">trailArg</span>
-        <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="name">name: ⇒ String</span>, <span name="descr">descr: String</span>, <span name="validate">validate: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[A]</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">trailArg</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="name">name: ⇒ String</span>, <span name="descr">descr: String</span>, <span name="validate">validate: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[A]</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add new trailing argument definition to this config, and get a holder for it's value.</p><div class="fullcomment"><div class="comment cmt"><p>Add new trailing argument definition to this config, and get a holder for it's value.
@@ -608,11 +655,12 @@ toggle option with name &quot;verbose&quot;, it will be invocable in three ways 
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConfValidations#validate" data-isabs="false">
       <a id="validate[A1, A2, A3, A4, A5, A6, A7](ScallopOption[A1],ScallopOption[A2],ScallopOption[A3],ScallopOption[A4],ScallopOption[A5],ScallopOption[A6],ScallopOption[A7])((A1, A2, A3, A4, A5, A6, A7) ⇒ Either[String, Unit]):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">validate</span>
-        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>, <span name="A7">A7</span>]</span>
-        <span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>, <span name="o2">o2: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A2]</span>, <span name="o3">o3: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A3]</span>, <span name="o4">o4: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A4]</span>, <span name="o5">o5: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A5]</span>, <span name="o6">o6: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A6]</span>, <span name="o7">o7: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A7]</span>)</span><span class="params">(<span name="fn">fn: (A1, A2, A3, A4, A5, A6, A7) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validate</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>, <span name="A7">A7</span>]</span><span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>, <span name="o2">o2: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A2]</span>, <span name="o3">o3: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A3]</span>, <span name="o4">o4: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A4]</span>, <span name="o5">o5: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A5]</span>, <span name="o6">o6: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A6]</span>, <span name="o7">o7: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A7]</span>)</span><span class="params">(<span name="fn">fn: (A1, A2, A3, A4, A5, A6, A7) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Adds a validation function to this configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a validation function to this configuration. This function will be run after all other verification steps.
@@ -621,11 +669,12 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConfValidations#validate" data-isabs="false">
       <a id="validate[A1, A2, A3, A4, A5, A6](ScallopOption[A1],ScallopOption[A2],ScallopOption[A3],ScallopOption[A4],ScallopOption[A5],ScallopOption[A6])((A1, A2, A3, A4, A5, A6) ⇒ Either[String, Unit]):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">validate</span>
-        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>]</span>
-        <span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>, <span name="o2">o2: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A2]</span>, <span name="o3">o3: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A3]</span>, <span name="o4">o4: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A4]</span>, <span name="o5">o5: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A5]</span>, <span name="o6">o6: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A6]</span>)</span><span class="params">(<span name="fn">fn: (A1, A2, A3, A4, A5, A6) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validate</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>, <span name="A6">A6</span>]</span><span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>, <span name="o2">o2: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A2]</span>, <span name="o3">o3: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A3]</span>, <span name="o4">o4: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A4]</span>, <span name="o5">o5: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A5]</span>, <span name="o6">o6: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A6]</span>)</span><span class="params">(<span name="fn">fn: (A1, A2, A3, A4, A5, A6) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Adds a validation function to this configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a validation function to this configuration. This function will be run after all other verification steps.
@@ -634,11 +683,12 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConfValidations#validate" data-isabs="false">
       <a id="validate[A1, A2, A3, A4, A5](ScallopOption[A1],ScallopOption[A2],ScallopOption[A3],ScallopOption[A4],ScallopOption[A5])((A1, A2, A3, A4, A5) ⇒ Either[String, Unit]):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">validate</span>
-        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>]</span>
-        <span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>, <span name="o2">o2: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A2]</span>, <span name="o3">o3: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A3]</span>, <span name="o4">o4: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A4]</span>, <span name="o5">o5: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A5]</span>)</span><span class="params">(<span name="fn">fn: (A1, A2, A3, A4, A5) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validate</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>, <span name="A5">A5</span>]</span><span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>, <span name="o2">o2: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A2]</span>, <span name="o3">o3: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A3]</span>, <span name="o4">o4: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A4]</span>, <span name="o5">o5: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A5]</span>)</span><span class="params">(<span name="fn">fn: (A1, A2, A3, A4, A5) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Adds a validation function to this configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a validation function to this configuration. This function will be run after all other verification steps.
@@ -647,11 +697,12 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConfValidations#validate" data-isabs="false">
       <a id="validate[A1, A2, A3, A4](ScallopOption[A1],ScallopOption[A2],ScallopOption[A3],ScallopOption[A4])((A1, A2, A3, A4) ⇒ Either[String, Unit]):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">validate</span>
-        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>]</span>
-        <span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>, <span name="o2">o2: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A2]</span>, <span name="o3">o3: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A3]</span>, <span name="o4">o4: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A4]</span>)</span><span class="params">(<span name="fn">fn: (A1, A2, A3, A4) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validate</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>]</span><span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>, <span name="o2">o2: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A2]</span>, <span name="o3">o3: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A3]</span>, <span name="o4">o4: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A4]</span>)</span><span class="params">(<span name="fn">fn: (A1, A2, A3, A4) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Adds a validation function to this configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a validation function to this configuration. This function will be run after all other verification steps.
@@ -660,11 +711,12 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConfValidations#validate" data-isabs="false">
       <a id="validate[A1, A2, A3](ScallopOption[A1],ScallopOption[A2],ScallopOption[A3])((A1, A2, A3) ⇒ Either[String, Unit]):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">validate</span>
-        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>]</span>
-        <span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>, <span name="o2">o2: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A2]</span>, <span name="o3">o3: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A3]</span>)</span><span class="params">(<span name="fn">fn: (A1, A2, A3) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validate</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>]</span><span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>, <span name="o2">o2: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A2]</span>, <span name="o3">o3: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A3]</span>)</span><span class="params">(<span name="fn">fn: (A1, A2, A3) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Adds a validation function to this configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a validation function to this configuration. This function will be run after all other verification steps.
@@ -673,11 +725,12 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConfValidations#validate" data-isabs="false">
       <a id="validate[A1, A2](ScallopOption[A1],ScallopOption[A2])((A1, A2) ⇒ Either[String, Unit]):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">validate</span>
-        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span>
-        <span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>, <span name="o2">o2: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A2]</span>)</span><span class="params">(<span name="fn">fn: (A1, A2) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validate</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>, <span name="o2">o2: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A2]</span>)</span><span class="params">(<span name="fn">fn: (A1, A2) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Adds a validation function to this configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a validation function to this configuration. This function will be run after all other verification steps.
@@ -686,11 +739,12 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConfValidations#validate" data-isabs="false">
       <a id="validate[A1](ScallopOption[A1])((A1) ⇒ Either[String, Unit]):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">validate</span>
-        <span class="tparams">[<span name="A1">A1</span>]</span>
-        <span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>)</span><span class="params">(<span name="fn">fn: (A1) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validate</span><span class="tparams">[<span name="A1">A1</span>]</span><span class="params">(<span name="o1">o1: <a name="org.rogach.scallop.ScallopOption" class="extype" href="ScallopOption.html">ScallopOption</a>[A1]</span>)</span><span class="params">(<span name="fn">fn: (A1) ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Adds a validation function to this configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a validation function to this configuration. This function will be run after all other verification steps.
@@ -699,55 +753,60 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
     </li><li visbl="prt" name="org.rogach.scallop.ScallopConfValidations#validations" data-isabs="false">
       <a id="validations:List[() ⇒ Either[String, Unit]]"></a>
       <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol"> 
-        <span class="name">validations</span>
-        
-        <span class="result">: List[() ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validations</span><span class="result">: List[() ⇒ <span name="scala.Either" class="extype">Either</span>[String, <span name="scala.Unit" class="extype">Unit</span>]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConfValidations" class="extype" href="ScallopConfValidations.html">ScallopConfValidations</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#verified" data-isabs="false">
       <a id="verified:Boolean"></a>
       <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol"> 
-        <span class="name">verified</span>
-        
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">verified</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#verified_?" data-isabs="false">
       <a id="verified_?:Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">verified_?</span>
-        
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: verified_$qmark">verified_?</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Checks that this Conf object is verified.</p><div class="fullcomment"><div class="comment cmt"><p>Checks that this Conf object is verified. If it is not, throws an exception.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#verify" data-isabs="false">
       <a id="verify():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">verify</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">verify</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Veryfy that this config object is properly configured.</p><div class="fullcomment"><div class="comment cmt"><p>Veryfy that this config object is properly configured.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#version" data-isabs="false">
       <a id="version(String):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">version</span>
-        
-        <span class="params">(<span name="v">v: String</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">version</span><span class="params">(<span name="v">v: String</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add a version string to option builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add a version string to option builder.
@@ -756,42 +815,45 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>, <span name="arg1">arg1: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>, <span name="arg1">arg1: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait(Long):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -799,7 +861,9 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
             </div>
 
         
+        </div>
 
+        <div id="inheritedMembers">
         <div name="org.rogach.scallop.ScallopConf" class="parent">
               <h3>Inherited from <a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></h3>
             </div><div name="org.rogach.scallop.AfterInit" class="parent">
@@ -813,10 +877,14 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
             </div>
+        </div>
 
       </div>
-      
+
       <div id="tooltip"></div>
-      
+
+      <div id="footer">  </div>
+
+
     </body>
       </html>
