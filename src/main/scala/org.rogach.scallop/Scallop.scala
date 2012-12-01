@@ -232,7 +232,7 @@ case class Scallop(
       default: Option[A] = None,
       validate: A => Boolean = ((_:A) => true),
       required: Boolean = false,
-      arg: String = "arg",
+      argName: String = "arg",
       hidden: Boolean = false,
       noshort: Boolean = false)
       (implicit conv: ValueConverter[A]): Scallop = {
@@ -254,7 +254,7 @@ case class Scallop(
                                           conv, 
                                           defaultA, 
                                           validator,
-                                          arg,
+                                          argName,
                                           hidden,
                                           noshort))
   }
