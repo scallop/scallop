@@ -219,7 +219,7 @@ case class Scallop(
     * @param default Default value to use if option is not found in input arguments
                      (if you provide this, you can omit the type on method).
     * @param required Is this option required? Defaults to false.
-    * @param arg The name for this ortion argument, as it will appear in help. Defaults to "arg".
+    * @param argName The name for this ortion argument, as it will appear in help. Defaults to "arg".
     * @param noshort If set to true, then this option does not have any short name.
     * @param conv The converter for this option. Usually found implicitly.
     * @param validate The function, that validates the parsed value
