@@ -216,7 +216,7 @@ case class Scallop(
     * @param default Default value to use if option is not found in input arguments
                      (if you provide this, you can omit the type on method).
     * @param required Is this option required? Defaults to false.
-    * @param arg The name for this ortion argument, as it will appear in help. Defaults to "arg".
+    * @param argName The name for this ortion argument, as it will appear in help. Defaults to "arg".
     * @param noshort If set to true, then this option does not have any short name.
     * @param conv The converter for this option. Usually found implicitly.
     * @param validate The function, that validates the parsed value
@@ -229,7 +229,7 @@ case class Scallop(
       default: Option[A] = None,
       validate: A => Boolean = ((_:A) => true),
       required: Boolean = false,
-      arg: String = "arg",
+      argName: String = "arg",
       hidden: Boolean = false,
       noshort: Boolean = false)
       (implicit conv: ValueConverter[A]): Scallop = {
@@ -251,7 +251,7 @@ case class Scallop(
                                           conv, 
                                           defaultA, 
                                           validator,
-                                          arg,
+                                          argName,
                                           hidden,
                                           noshort))
   }
@@ -425,8 +425,13 @@ case class Scallop(
   def isSupplied(name: String): Boolean = {
     if (name.contains('\0')) {
       // delegating to subbuilder
-      subbuilders.find(_._1 == name.takeWhile('\0'!=)).map(_._2.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\0'!=).drop(1)))
-        .getOrElse(throw new UnknownOption(name.replace("\0",".")))
+      parsed.subcommand.map { subc =>
+        if (subc == name.takeWhile('\0'!=)) {
+          subbuilders.find(_._1 == subc)
+          .map(_._2.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\0'!=).drop(1)))
+          .getOrElse(throw new UnknownOption(name.replace("\0",".")))
+        } else false // only current subcommand can have supplied arguments
+      }.getOrElse(false) // no subcommands, so their options are definitely not supplied
     } else {
       opts find (_.name == name) map { opt =>
         val args = parsed.opts.filter(_._1 == opt).map(_._2)
