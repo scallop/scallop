@@ -240,6 +240,29 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     }
   }
   
+  /** This name would be included in output when reporting errors. */
+  var printedName = "scallop"
+  
+  /** This function is called with the error message when ScallopException
+    * occurs. By default, this function prints message (prefixed by *printedName*) to stdout,
+    * coloring the output if possible, then calls `sys.exit(1)`.
+    *
+    * Update this variable with another function if you need to change that behavior.
+    */
+  var errorMessageHandler = { (message: String) =>
+    if (System.console() == null) {
+      // no colors on output
+      println("[%s] Error: %s" format (printedName, message))
+    } else {
+      println("[\033[31m%s\033[0m] Error: %s" format (printedName, message))
+    }
+    sys.exit(1)
+  }
+
+  /** This function is called in event of any exception
+    * in arguments parsing. By default, it catches only
+    * standard Scallop errors, letting all other pass through.
+    */
   protected def onError(e: Throwable): Unit = e match {
     case r: ScallopResult if !throwError.value => r match {
       case Help => 
@@ -248,14 +271,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       case Version => 
         builder.vers.foreach(println)
         sys.exit(0)
-      case ScallopException(message) =>
-        if (System.console() == null) {
-          // no colors on output
-          println("[scallop] Error: %s" format message)
-        } else {
-          println("[\033[31mscallop\033[0m] Error: %s" format message)
-        }
-        sys.exit(1)
+      case ScallopException(message) => errorMessageHandler(message)
     }
     case e => throw e
   }
