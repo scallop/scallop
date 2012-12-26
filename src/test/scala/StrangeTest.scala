@@ -1,7 +1,5 @@
 package org.rogach.scallop
 
-import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 import java.io.ByteArrayOutputStream
@@ -9,7 +7,7 @@ import java.io.ByteArrayInputStream
 import java.lang.{System, SecurityManager, SecurityException}
 import java.security.Permission
 
-class StrangeTest extends FunSuite with ShouldMatchers {
+class StrangeTest extends UsefulMatchers {
   throwError.value = false
   
   /** Captures all output from the *fn* block into two strings - (stdout, stderr). */
@@ -45,6 +43,15 @@ class StrangeTest extends FunSuite with ShouldMatchers {
     }
     System.setSecurityManager(normalSM)
     statuses.reverse
+  }
+  
+  /** Supresses exits in *fn* block, and captures stdout/stderr. */
+  def captureOutputAndExits(fn: => Unit): (String, String, List[Int]) = {
+    var exits = List[Int]()
+    val (out, err) = captureOutput {
+      exits = trapExit(fn)
+    }
+    (out, err, exits)
   }
 
   /** Runs program with needed input. */
@@ -142,6 +149,19 @@ class StrangeTest extends FunSuite with ShouldMatchers {
     }
     Conf.apples() should equal (3)
     Conf.bananas() should equal (5)
+  }
+  
+  test ("changing printed program name") {
+    val (out, err, exits) = captureOutputAndExits {
+      object Conf extends ScallopConf(Seq()) {
+        val apples = trailArg[Int]("beans")
+        printedName = "beans"
+      }
+      Conf
+    }
+    exits ==== List(1)
+    err ==== ""
+    out ==== "[\033[31mbeans\033[0m] Error: Required option 'beans' not found\n"
   }
   
 }
