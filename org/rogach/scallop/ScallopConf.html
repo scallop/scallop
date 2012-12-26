@@ -292,6 +292,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#errorMessageHandler" data-isabs="false">
+      <a id="errorMessageHandler:(String) ⇒ Nothing"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">errorMessageHandler</span><span class="result">: (String) ⇒ <span name="scala.Nothing" class="extype">Nothing</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">This function is called with the error message when ScallopException
+occurs.</p><div class="fullcomment"><div class="comment cmt"><p>This function is called with the error message when ScallopException
+occurs. By default, this function prints message (prefixed by *printedName*) to stdout,
+coloring the output if possible, then calls <code>sys.exit(1)</code>.</p><p>Update this variable with another function if you need to change that behavior.
+</p></div></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -468,7 +484,11 @@ to determine it from terminal width or defaults to 80 characters.
         <span class="name">onError</span><span class="params">(<span name="e">e: Throwable</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <p class="shortcomment cmt">This function is called in event of any exception
+in arguments parsing.</p><div class="fullcomment"><div class="comment cmt"><p>This function is called in event of any exception
+in arguments parsing. By default, it catches only
+standard Scallop errors, letting all other pass through.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#opt" data-isabs="false">
       <a id="opt[A](String,Char,String,Option[A],(A) ⇒ Boolean,Boolean,String,Boolean,Boolean)(ValueConverter[A]):ScallopOption[A]"></a>
       <h4 class="signature">
@@ -495,6 +515,18 @@ to determine it from terminal width or defaults to 80 characters.
       </span>
       </h4>
       <p class="shortcomment cmt">Prints help message (with version, banner, option usage and footer) to stdout.</p>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#printedName" data-isabs="false">
+      <a id="printedName:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printedName</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">This name would be included in output when reporting errors.</p>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#propMap" data-isabs="false">
       <a id="propMap[A](Char)(Manifest[Map[String, A]]):Map[String, A]"></a>
       <h4 class="signature">
