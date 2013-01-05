@@ -158,6 +158,8 @@ case class Scallop(
     if (s.startsWith("-"))
       if (s.size > 1)
         !s(1).isDigit
+      else if (s.size == 1)
+        false
       else true
     else false
   
