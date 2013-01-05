@@ -476,4 +476,13 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.file() should equal ("file")
   }
 
+  test ("hyphens as arguments") {
+    object Conf extends ScallopConf(Seq("--output", "-", "-")) {
+      val output = opt[String]("output")
+      val input = trailArg[List[String]]("input")
+    }
+    Conf.output() should equal ("-")
+    Conf.input() should equal (List("-"))
+  }
+
 }
