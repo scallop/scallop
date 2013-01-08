@@ -248,7 +248,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     *
     * Update this variable with another function if you need to change that behavior.
     */
-  var errorMessageHandler = { (message: String) =>
+  var errorMessageHandler: String => Unit = { message =>
     if (System.console() == null) {
       // no colors on output
       println("[%s] Error: %s" format (printedName, message))
