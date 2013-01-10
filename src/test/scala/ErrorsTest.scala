@@ -36,7 +36,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
   
   test ("options parse failure") {
-    intercept[OptionParseException] { 
+    intercept[TrailingArgsParseException] { 
       val opts = Scallop(List("42"))
         .verify
     }
@@ -135,7 +135,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
   
   test ("excess arguments") {
-    intercept[OptionParseException] {
+    intercept[TrailingArgsParseException] {
       val opts = Scallop(List("1","2"))
         .trailArg[Int]("first")
         .verify
@@ -165,7 +165,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
         val apples = trailArg[List[Int]]()
       }
     }
-    intercept[OptionParseException] {
+    intercept[TrailingArgsParseException] {
       Conf
     }
   }

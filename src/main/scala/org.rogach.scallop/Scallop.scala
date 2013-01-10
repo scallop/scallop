@@ -64,7 +64,7 @@ case class Scallop(
           (opt.toList ::: opts.filter(_.isPositional).map(("",_))) zip res filter { 
             case ((invoc, opt), p) => !opt.isPositional || p.size > 0 
           } 
-        } getOrElse (throw new OptionParseException(args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
+        } getOrElse (throw new TrailingArgsParseException(args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
      }
      
      opt match {

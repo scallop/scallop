@@ -30,7 +30,7 @@ case class WrongTypeRequest(requested: Manifest[_], required: Manifest[_])
   extends ScallopException("Requested '%s' instead of '%s'" format (requested, required))
 /** Thrown when Scallop fails to parse the argument line (usually when there   
     are some problems with trailing args). */
-case class OptionParseException(failedArgs: Seq[String]) 
+case class TrailingArgsParseException(failedArgs: Seq[String]) 
   extends ScallopException("Failed to parse the trailing argument list: '%s'" format failedArgs.mkString(" "))
 /** Thrown when several options and/or trailing arguments have identical names
     in definition - making it impossible to distinguish between them. */
