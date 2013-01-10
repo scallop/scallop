@@ -47,7 +47,7 @@ case class Scallop(
 
   /** Parse the argument into list of options and their arguments. */
   private def parse(args: Seq[String]): ParseResult = {
-    subbuilders.find(sub => args.contains(sub._1)) match {
+    subbuilders.filter(s => args.contains(s._1)).sortBy(s => args.indexOf(s._1)).headOption match {
       case Some((name, sub)) => ParseResult(parse(Nil, args.takeWhile(name!=)), Some(name), args.dropWhile(name!=).drop(1).toList)
       case None => ParseResult(parse(Nil, args))
     }
