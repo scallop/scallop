@@ -77,6 +77,11 @@ class StrangeTest extends UsefulMatchers {
             val branches = opt[Int]("branches", descr = "how many branches?")
             val trail = trailArg[String]("trail", descr = "Which trail do you choose?")
           }
+          val peach = new Subcommand("peach") {
+            banner("plant the fruit-bearing peach tree")
+            val peaches = opt[Int]("peaches", descr = "how many peaches?")
+            footer("Latin name: Prunus persica\n")
+          }
           val palm = new Subcommand("palm") {
             val leaves = opt[Int]("leaves", descr = "how many leaves?")
           }
@@ -97,6 +102,11 @@ class StrangeTest extends UsefulMatchers {
                         |
                         | trailing arguments:
                         |  trail (required)   Which trail do you choose? 
+                        |
+                        |Subcommand: peach
+                        |plant the fruit-bearing peach tree
+                        |  -p, --peaches  <arg>   how many peaches? 
+                        |Latin name: Prunus persica
                         |
                         |Subcommand: palm
                         |  -l, --leaves  <arg>   how many leaves? 

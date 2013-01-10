@@ -399,7 +399,7 @@ case class Scallop(
   def help: String = {
     val optsHelp = Formatter format (opts filter (!_.isPositional) filter (!_.hidden) sortBy (_.name.toLowerCase) flatMap (o => o.helpInfo(getOptionShortNames(o))), helpWidth)
     val subcommandsHelps = subbuilders.map { case (sn, sub) =>
-      ("Subcommand: %s" format sn) + "\n" + sub.help
+      ("Subcommand: %s" format sn) + "\n" + sub.bann.map(_+"\n").getOrElse("") + sub.help + sub.foot.map("\n"+_).getOrElse("")
     }
     val trailHelp = Formatter format (opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)), helpWidth)
     if (opts filter (_.isPositional) isEmpty) {
