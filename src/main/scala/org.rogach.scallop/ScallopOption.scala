@@ -4,15 +4,21 @@ package org.rogach.scallop
   *
   * Basically, this is a lazy option - it batches up all operations,
   * and evaluates the value only as the last resort.
+  * @param nm Name for the option, can be None (then it's determined by reflection during config verification)
   * @param fn source of the actual value 
   * @param supplied function, that is capable of testing whether the value was explicitly
   *                 found in argument list.
   */
-class ScallopOption[A](
-    val name: String,
-    fn: => Option[A],
-    supplied: => Boolean) { opt => 
+abstract class ScallopOption[A](nm: String) { opt => 
   
+  private[scallop] var _name = nm
+
+  lazy val fn: Option[A] = None
+  lazy val supplied: Boolean = false
+
+  /** Name for the option */
+  def name = _name
+
   /** Retreive the underlying value as an option */
   def get = fn
   
@@ -29,7 +35,10 @@ class ScallopOption[A](
     * @param pf the partial function
     */
   def collect[B](pf: PartialFunction[A,B]) =
-    new ScallopOption(name, opt.get.collect(pf), supplied)
+    new ScallopOption[B](name) {
+      override lazy val fn = opt.get.collect(pf)
+      override lazy val supplied = opt.supplied
+    }
   
   /** Returns ScallopOption, that contains the value if applying
     * predicate p to this value returned true. No value otherwise.
@@ -37,7 +46,10 @@ class ScallopOption[A](
     * @param p the predicate used for testing
     */
   def filter(p: A => Boolean) =
-    new ScallopOption(name, opt.get.filter(p), supplied)
+    new ScallopOption[A](name) {
+      override lazy val fn = opt.get.filter(p)
+      override lazy val supplied = opt.supplied
+    }
 
   /** Returns ScallopOption, that contains the value if applying
     * predicate p to this value returned false. No value otherwise.
@@ -45,7 +57,10 @@ class ScallopOption[A](
     * @param p the predicate used for testing
     */
   def filterNot(p: A => Boolean) =
-    new ScallopOption(name, opt.get.filterNot(p), supplied)
+    new ScallopOption[A](name) {
+      override lazy val fn = opt.get.filterNot(p)
+      override lazy val supplied = opt.supplied
+    }
     
   def withFilter(p: A => Boolean) = new WithFilter(p)
   
@@ -63,7 +78,10 @@ class ScallopOption[A](
     * @param f the function to apply
     */
   def map[B](f: A => B) = 
-    new ScallopOption(name, opt.get.map(f), supplied)
+    new ScallopOption[B](name) { 
+      override lazy val fn = opt.get.map(f)
+      override lazy val supplied = opt.supplied
+    }
 
   /** Apply the given procedure f to the option's value, if it is nonempty.
     */
@@ -73,7 +91,14 @@ class ScallopOption[A](
     * this option is non-empty. 
     */
   def flatMap[B](f: A => ScallopOption[B]): ScallopOption[B] = 
-    new ScallopOption(name, (if (opt.isEmpty) new ScallopOption("", None, false) else f(opt())).get, false)
+    new ScallopOption[B](name) {
+      override lazy val fn: Option[B] = 
+        if (opt.isEmpty) 
+          None
+        else 
+          f(opt()).get
+      override lazy val supplied = false
+    }
     
   /** Returns ScallopOption with this value if it is non-empty,
     * or with the value of the alternative option. If it is 
@@ -82,7 +107,10 @@ class ScallopOption[A](
     * @param alternative the alternative expression
     */
   def orElse[B >: A](alternative: => Option[B]) =
-    new ScallopOption(name, opt.get.orElse(alternative), supplied)
+    new ScallopOption[B](name) {
+      override lazy val fn = opt.get.orElse(alternative)
+      override lazy val supplied = opt.supplied
+    }
     
   /** A convenience method to check whether the underlying option
     * is defined. Just an alias for opt.get.isDefined.

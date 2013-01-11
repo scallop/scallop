@@ -37,11 +37,16 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   
   var builder = Scallop(args)
 
-  private[this] var _guessOptionName = false
+  // machinery to support option name guessing
+
+  private[this] var _guessOptionName = true
   /** If true, scallop would try to guess missing option names from the names of their fields. */
   def guessOptionName = _guessOptionName
   /** If set to true, scallop would try to guess missing option names from the names of their fields. */
   def guessOptionName_=(v: Boolean) { _guessOptionName = v }
+  
+  private[this] val gen = new util.Random(0)
+  private[this] def genName() = "\t%d" format gen.nextInt(1000000)
 
 
   /** List of sub-configs of this config. */
@@ -102,26 +107,17 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     val resolvedName = 
       if (name == null)
         if (guessOptionName) {
-          this.getClass.getMethods
-            .filterNot(classOf[ScallopConf].getMethods.toSet)
-            .filterNot(_.getName.endsWith("_$eq"))
-            .filterNot(_.getName.endsWith("$outer"))
-            .filter(_.getReturnType == classOf[ScallopOption[_]])
-            .filter(_.getParameterTypes.isEmpty)
-            .find(m => m.invoke(this) == null)
-            .get // hoping that this should work
-            .getName
-            .flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
+          genName() // generate unique name, that will be replaced during verification with guessed name
         }
         else throw new IllegalArgumentException("You should supply a name for your option!")
       else name
 
     editBuilder(_.opt(resolvedName, short, descr, default, validate, required, argName, hidden, noshort)(conv))
     val n = getName(resolvedName)
-    new ScallopOption[A](
-      n,
-      {verified_?; rootConfig.builder.get[A](n)(conv.manifest)},
-      {verified_?; rootConfig.builder.isSupplied(n)})
+    new ScallopOption[A](n) {
+      override lazy val fn = {verified_?; rootConfig.builder.get[A](name)(conv.manifest)}
+      override lazy val supplied = {verified_?; rootConfig.builder.isSupplied(name)}
+    }
   }              
 
   /** Add new property option definition to this config object, and get a handle for option retreiving.
@@ -181,10 +177,10 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     val nm = name
     editBuilder(_.trailArg(nm, required, descr, default, validate, hidden)(conv))
     val n = getName(nm)
-    new ScallopOption[A](
-      n, 
-      {verified_?; rootConfig.builder.get[A](n)(conv.manifest)},
-      {verified_?; rootConfig.builder.isSupplied(n)})
+    new ScallopOption[A](n) { 
+      override lazy val fn = {verified_?; rootConfig.builder.get[A](name)(conv.manifest)}
+      override lazy val supplied = {verified_?; rootConfig.builder.isSupplied(name)}
+    }
   }
 
   /** Add new toggle option definition to this config, and get a holder for it's value.
@@ -214,11 +210,10 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       hidden: Boolean = false): ScallopOption[Boolean] = {
     editBuilder(_.toggle(name, default, short, noshort, prefix, descrYes, descrNo, hidden))
     val n = getName(name)
-    new ScallopOption[Boolean](
-      n,
-      {verified_?; rootConfig.builder.get[Boolean](n)},
-      {verified_?; rootConfig.builder.isSupplied(n)}
-    )
+    new ScallopOption[Boolean](n) {
+      override lazy val fn = {verified_?; rootConfig.builder.get[Boolean](name)}
+      override lazy val supplied = {verified_?; rootConfig.builder.isSupplied(name)}
+    }
   }
 
   /** Veryfy that this config object is properly configured. */
@@ -364,6 +359,31 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   }
   
   final def afterInit {
+    if (guessOptionName) {
+      this.getClass.getMethods
+        .filterNot(classOf[ScallopConf].getMethods.toSet)
+        .filterNot(_.getName.endsWith("$eq"))
+        .filterNot(_.getName.endsWith("$outer"))
+        .filter(_.getReturnType == classOf[ScallopOption[_]])
+        .filter(_.getParameterTypes.isEmpty)
+        .foreach { m =>
+          val opt = m.invoke(this).asInstanceOf[ScallopOption[_]]
+          if (opt.name.contains("\t")) {
+            val newShortName = m.getName.flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
+            val newFullName = getName(newShortName)
+            val shortGenName = '\t' +: opt.name.reverse.takeWhile('\t'!=).reverse // the old, generated version of name, without prefixes from parent builders
+            editBuilder(e => e.copy(opts = e.opts.map { o => 
+              if (o.name == shortGenName) {
+                o match {
+                  case so: SimpleOption => so.copy(name = newShortName)
+                  case _ => o
+                }
+              } else o
+            }))
+            opt._name = newFullName
+          }
+        }
+    }
     if (ScallopConf.confs.value.size > 1) {
       ScallopConf.confs.value = ScallopConf.confs.value.init
       ScallopConf.confs.value.last.editBuilder(_.addSubBuilder(commandname, builder))
