@@ -45,9 +45,8 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   /** If set to true, scallop would try to guess missing option names from the names of their fields. */
   def guessOptionName_=(v: Boolean) { _guessOptionName = v }
   
-  private[this] val gen = new util.Random(0)
-  private[this] def genName() = "\t%d" format gen.nextInt(1000000)
-
+  private[this] var gen = 0
+  private[this] def genName() = { gen += 1; "\t%d" format gen }
 
   /** List of sub-configs of this config. */
   var subconfigs = List[ScallopConf]()
