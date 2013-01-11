@@ -21,11 +21,14 @@ object Scallop {
   *
   * @param args Arguments to parse.
   * @param opts Options definitions.
-  * @param propts Property options definitions.
-  * @param trail Definitions for trailing arguments.
   * @param vers Version string to display in help.
   * @param bann Banner (summary of this program and command-line usage) to display in help.
   * @param foot Footer - displayed after options.
+  * @param descr Short description - used for subcommands
+  * @param optionSetValidations Validations, that enforce some rules on groups of options
+  * @param helpWidth Width, to which the help output will be formatted (note that banner, footer, version and description are not affected!)
+  * @param shortSubcommandsHelp If true, then help output from this builder wouldn't list full help for subcommands, only short description
+  * @param subbuilders subcommands in this builder
   */
 case class Scallop(
     args: Seq[String] = Nil,
@@ -33,8 +36,10 @@ case class Scallop(
     vers: Option[String] = None,
     bann: Option[String] = None,
     foot: Option[String] = None,
+    descr: String = "",
     optionSetValidations: List[List[String]=>Either[String, Unit]] = Nil,
     helpWidth: Option[Int] = None,
+    shortSubcommandsHelp: Boolean = false,
     subbuilders: List[(String, Scallop)] = Nil) {
 
   type Parsed = List[(CliOption, (String, List[String]))]
@@ -350,6 +355,16 @@ case class Scallop(
     */
   def addSubBuilder(name: String, builder: Scallop) = this.copy(subbuilders = subbuilders :+ (name -> builder))
   
+  /** Traverses the tree of subbuilders, using the provided name. 
+    * @param name Names of subcommand names, that lead to the needed builder, separated by \\0.
+    */
+  def findSubbuilder(name: String): Option[Scallop] = {
+    if (name.contains("\0")) {
+      val (firstSub, rest) = name.span('\0'!=)
+      subbuilders.find(_._1 == firstSub).flatMap(_._2.findSubbuilder(rest.tail))
+    } else subbuilders.find(_._1 == name).map(_._2)
+  }
+
   /** Retrieves name of the subcommand that was found in input arguments. */
   def getSubcommandName = parsed.subcommand
   
@@ -398,14 +413,22 @@ case class Scallop(
     */
   def help: String = {
     val optsHelp = Formatter format (opts filter (!_.isPositional) filter (!_.hidden) sortBy (_.name.toLowerCase) flatMap (o => o.helpInfo(getOptionShortNames(o))), helpWidth)
-    val subcommandsHelps = subbuilders.map { case (sn, sub) =>
-      ("Subcommand: %s" format sn) + "\n" + sub.bann.map(_+"\n").getOrElse("") + sub.help + sub.foot.map("\n"+_).getOrElse("")
+    val subcommandsHelp = if (shortSubcommandsHelp) {
+      subbuilders.headOption.map { _ =>
+        val maxCommandLength = subbuilders.map(_._1.size).max
+        "\n\nSubcommands:\n" + subbuilders.map(s => "  " + s._1.padTo(maxCommandLength, ' ') + "   " + s._2.descr).mkString("\n")
+      }.getOrElse("")
+    } else {
+      val subHelp = subbuilders.map { case (sn, sub) =>
+        ("Subcommand: %s" format sn) + "\n" + sub.bann.map(_+"\n").getOrElse("") + sub.help + sub.foot.map("\n"+_).getOrElse("")
+      }.mkString("\n")
+      if (subHelp.nonEmpty) "\n\n" + subHelp else subHelp
     }
     val trailHelp = Formatter format (opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)), helpWidth)
     if (opts filter (_.isPositional) isEmpty) {
-      optsHelp + (if (subcommandsHelps.size > 0) "\n\n" + subcommandsHelps.mkString("\n") else "")
+      optsHelp + subcommandsHelp
     } else {
-      optsHelp + "\n\n trailing arguments:\n" + trailHelp + "\n"
+      optsHelp + "\n\n trailing arguments:\n" + trailHelp + subcommandsHelp
     }
   }
     
@@ -494,10 +517,11 @@ case class Scallop(
     // short options names must not clash
     opts flatMap (o => (o.requiredShortNames).distinct) groupBy (a=>a) filter (_._2.size > 1) foreach
       (a => throw new IdenticalOptionNames("Short option name '%s' is not unique" format a._1))
-    
-    if (args contains "--help") {
-      throw Help
+
+    if (args.headOption == Some("--help")) {
+      throw Help("")
     }
+
     if (vers.isDefined && args.contains("--version")) {
       throw Version
     }
@@ -514,7 +538,12 @@ case class Scallop(
     // verify subcommand parsing
     parsed.subcommand.map { sn =>
       subbuilders.find(_._1 == sn).map { case (sn, sub)=>
-        sub.args(parsed.subcommandArgs).verify
+        try {
+          sub.args(parsed.subcommandArgs).verify
+        } catch {
+          case Help("") => throw Help(sn)
+          case h @ Help(subname) => throw Help(sn + "\0" + subname)
+        }
       }
     }
     

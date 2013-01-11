@@ -14,6 +14,12 @@ object ScallopConf {
 
 class Subcommand(val commandName: String) extends ScallopConf(Nil, commandName) {
   1 + 1 // to get the initialization work. Else, it seems that delayedInit is never invoked with this, and the count is broken.
+  
+  /** Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled.
+    */
+  def descr(d: String) {
+    editBuilder(_.copy(descr = d))
+  }
 }
 
 abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandname: String = "") extends ScallopConfValidations with AfterInit {
@@ -258,8 +264,11 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     */
   protected def onError(e: Throwable): Unit = e match {
     case r: ScallopResult if !throwError.value => r match {
-      case Help => 
+      case Help("") => 
         builder.printHelp
+        sys.exit(0)
+      case Help(subname) =>
+        builder.findSubbuilder(subname).get.printHelp
         sys.exit(0)
       case Version => 
         builder.vers.foreach(println)
@@ -355,6 +364,10 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     */
   def helpWidth(w: Int) {
     editBuilder(_.setHelpWidth(w))
+  }
+  
+  def shortSubcommandsHelp(v: Boolean = true) {
+    editBuilder(_.copy(shortSubcommandsHelp = v))
   }
   
   final def afterInit {
