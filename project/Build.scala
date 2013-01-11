@@ -26,6 +26,7 @@ object build extends Build {
     val sonatype = "https://oss.sonatype.org/content/repositories/snapshots"
     val extracted = Project.extract(state)
     val eVersion = extracted.getOpt(version).get
+    val crossVersions = extracted.getOpt(crossScalaVersions).getOrElse(Seq(eVersion))
 
     def grc(url: String) = { 
       import java.net._;
@@ -43,10 +44,12 @@ object build extends Build {
     val snapshotVersion = getV(num)
     printf("Publishing version '%s'\n", snapshotVersion)
 
-    Project.runTask(
-      publish in Compile,
-      extracted.append(List(version := snapshotVersion), state),
-      true)
+    crossVersions.foreach { scalaVers =>
+      Project.runTask(
+        publish in Compile,
+        extracted.append(List(version := snapshotVersion, scalaVersion := scalaVers), state),
+        true)
+    }
 
     println("Usage:")
     println("""resolvers += "sonatype snapshots" at "%s"""" format sonatype)
