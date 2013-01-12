@@ -28,20 +28,17 @@ object build extends Build {
     val eVersion = extracted.getOpt(version).get
     val crossVersions = extracted.getOpt(crossScalaVersions).getOrElse(Seq(eVersion))
 
-    def grc(url: String) = { 
-      import java.net._;
-      printf("Trying: %s\n", url)
-      val u = new URL(url)
-      val conn = u.openConnection().asInstanceOf[HttpURLConnection]
-      conn.setRequestMethod("GET")
-      conn.connect()
-      conn.getResponseCode()
-    }
     def getV(i: Int) = "%s~%d~SNAPSHOT" format (eVersion, i)
-    def getUrl(i: Int) = "%s/org/rogach/scallop_2.9.2/%2$s/scallop_2.9.2-%2$s.pom" format (sonatype, getV(i))
 
-    val num = Stream.from(1).find(i => grc(getUrl(i)) == 404).get
-    val snapshotVersion = getV(num)
+    val snapshotIndex = {
+      import dispatch._
+      Http(url("https://oss.sonatype.org/content/repositories/snapshots/org/rogach/scallop_2.9.2/") OK as.tagsoup.NodeSeq).map { x =>
+        val vRgx = ("""%s~(\d+)~SNAPSHOT""" format eVersion).r
+        x \\ "a" map (_.text) collect { case vRgx(v) => v.toInt}
+      }.apply.sorted.lastOption.map(1+).getOrElse(1)
+    }
+
+    val snapshotVersion = getV(snapshotIndex)
     printf("Publishing version '%s'\n", snapshotVersion)
 
     crossVersions.foreach { scalaVers =>
