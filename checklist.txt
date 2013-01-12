@@ -5,11 +5,11 @@ Release
 * +compile
 * +test
 * +publish
-* Close the release in Nexus UI.
 * Commit the changes.
-* Tag the release.
-* Wait for Central sync.
-* Push latest version to github.
+* switch branch to for-2.10, merge master, compile, test, publish
+* Tag the release (on master).
+* Close the release in Nexus UI.
+* Push latest version to github. (push --all; push --tags)
 * Update API docs.
 * Update wiki.
-* Publish herald notes. (optional)
+* Publish herald notes (after Central sync).
