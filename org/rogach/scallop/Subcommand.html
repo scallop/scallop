@@ -265,6 +265,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.AfterInit" class="extype" href="AfterInit.html">AfterInit</a> → DelayedInit</dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.Subcommand#descr" data-isabs="false">
+      <a id="descr(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">descr</span><span class="params">(<span name="d">d: String</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Short description for this subcommand.</p><div class="fullcomment"><div class="comment cmt"><p>Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled.
+</p></div></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#editBuilder" data-isabs="false">
       <a id="editBuilder((Scallop) ⇒ Scallop):Unit"></a>
       <h4 class="signature">
@@ -302,14 +315,14 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#errorMessageHandler" data-isabs="false">
-      <a id="errorMessageHandler:(String) ⇒ Nothing"></a>
+      <a id="errorMessageHandler:(String) ⇒ Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">errorMessageHandler</span><span class="result">: (String) ⇒ <span name="scala.Nothing" class="extype">Nothing</span></span>
+        <span class="name">errorMessageHandler</span><span class="result">: (String) ⇒ <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">This function is called with the error message when ScallopException
@@ -585,6 +598,18 @@ standard Scallop errors, letting all other pass through.
       </span>
       <span class="symbol">
         <span class="name">rootConfig</span><span class="result">: <a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopConf#shortSubcommandsHelp" data-isabs="false">
+      <a id="shortSubcommandsHelp(Boolean):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">shortSubcommandsHelp</span><span class="params">(<span name="v">v: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.ScallopConf" class="extype" href="ScallopConf.html">ScallopConf</a></dd></dl></div>

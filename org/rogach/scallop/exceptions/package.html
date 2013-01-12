@@ -48,7 +48,19 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.rogach.scallop.exceptions.IdenticalOptionNames" data-isabs="false">
+              <ol><li visbl="pub" name="org.rogach.scallop.exceptions.Help" data-isabs="false">
+      <a id="Help:Help"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Help.html"><span class="name">Help</span></a><span class="params">(<span name="command">command: String</span>)</span><span class="result"> extends Throwable with ScallopResult with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Thrown when user requested help output (via &quot;--help&quot;)</p>
+    </li><li visbl="pub" name="org.rogach.scallop.exceptions.IdenticalOptionNames" data-isabs="false">
       <a id="IdenticalOptionNames:IdenticalOptionNames"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -98,19 +110,6 @@
       </span>
       </h4>
       <p class="comment cmt">This is a special case of exception - the one you should never see.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.OptionParseException" data-isabs="false">
-      <a id="OptionParseException:OptionParseException"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="OptionParseException.html"><span class="name">OptionParseException</span></a><span class="params">(<span name="failedArgs">failedArgs: Seq[String]</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
-      </span>
-      </h4>
-      <p class="comment cmt">Thrown when Scallop fails to parse the argument line (usually when there
-    are some problems with trailing args).</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.OptionSetValidationFailure" data-isabs="false">
       <a id="OptionSetValidationFailure:OptionSetValidationFailure"></a>
       <h4 class="signature">
@@ -160,6 +159,19 @@
       </span>
       </h4>
       <p class="comment cmt">Parent trait for all not-positive results that can be resulted from this library (including help and exits)</p>
+    </li><li visbl="pub" name="org.rogach.scallop.exceptions.TrailingArgsParseException" data-isabs="false">
+      <a id="TrailingArgsParseException:TrailingArgsParseException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="TrailingArgsParseException.html"><span class="name">TrailingArgsParseException</span></a><span class="params">(<span name="failedArgs">failedArgs: Seq[String]</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Thrown when Scallop fails to parse the argument line (usually when there
+    are some problems with trailing args).</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.UnknownOption" data-isabs="false">
       <a id="UnknownOption:UnknownOption"></a>
       <h4 class="signature">
@@ -229,18 +241,6 @@
       </span>
       </h4>
       <p class="comment cmt">Extractor object, for matching on both Help and Version results.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.Help" data-isabs="false">
-      <a id="Help:Help"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="Help$.html"><span class="name">Help</span></a><span class="result"> extends Throwable with ScallopResult with Product with Serializable</span>
-      </span>
-      </h4>
-      <p class="comment cmt">Thrown when user requested help output (via &quot;--help&quot;)</p>
     </li><li visbl="pub" name="org.rogach.scallop.exceptions.ScallopException" data-isabs="false">
       <a id="ScallopException:ScallopException"></a>
       <h4 class="signature">

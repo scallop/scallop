@@ -117,7 +117,7 @@ after all subclasses initialization.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Scallop.html"><span class="name">Scallop</span></a><span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[CliOption]</span>, <span name="vers">vers: Option[String]</span>, <span name="bann">bann: Option[String]</span>, <span name="foot">foot: Option[String]</span>, <span name="optionSetValidations">optionSetValidations: List[(List[String]) ⇒ Either[String, Unit]]</span>, <span name="helpWidth">helpWidth: Option[Int]</span>, <span name="subbuilders">subbuilders: List[(String, Scallop)]</span>)</span><span class="result"> extends Product with Serializable</span>
+        <a href="Scallop.html"><span class="name">Scallop</span></a><span class="params">(<span name="args">args: Seq[String]</span>, <span name="opts">opts: List[CliOption]</span>, <span name="vers">vers: Option[String]</span>, <span name="bann">bann: Option[String]</span>, <span name="foot">foot: Option[String]</span>, <span name="descr">descr: String</span>, <span name="optionSetValidations">optionSetValidations: List[(List[String]) ⇒ Either[String, Unit]]</span>, <span name="helpWidth">helpWidth: Option[Int]</span>, <span name="shortSubcommandsHelp">shortSubcommandsHelp: Boolean</span>, <span name="subbuilders">subbuilders: List[(String, Scallop)]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">The main builder class.</p>
@@ -145,11 +145,11 @@ after all subclasses initialization.</p>
       </span>
       </h4>
       <p class="comment cmt">Helper trait for generaton of <code>validate</code> methods on ScallopConf.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption" data-isabs="false">
+    </li><li visbl="pub" name="org.rogach.scallop.ScallopOption" data-isabs="true">
       <a id="ScallopOption:ScallopOption[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
