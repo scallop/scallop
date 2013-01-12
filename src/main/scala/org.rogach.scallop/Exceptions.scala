@@ -6,13 +6,13 @@ import reflect.runtime.universe._
 sealed trait ScallopResult
 
 /** Thrown when user requested help output (via "--help") */
-case object Help extends Throwable with ScallopResult
+case class Help(command: String) extends Throwable with ScallopResult
 /** Thrown when user requested version printout (via "--version") */
 case object Version extends Throwable with ScallopResult 
 /** Extractor object, for matching on both Help and Version results. */
 object Exit {
   def unapply(r: ScallopResult) = r match {
-    case Help => true
+    case Help(_) => true
     case Version => true
     case _ => false
   }
@@ -32,7 +32,7 @@ case class WrongTypeRequest(requested: TypeTag[_], required: TypeTag[_])
   extends ScallopException("Requested '%s' instead of '%s'" format (requested.tpe, required.tpe))
 /** Thrown when Scallop fails to parse the argument line (usually when there   
     are some problems with trailing args). */
-case class OptionParseException(failedArgs: Seq[String]) 
+case class TrailingArgsParseException(failedArgs: Seq[String]) 
   extends ScallopException("Failed to parse the trailing argument list: '%s'" format failedArgs.mkString(" "))
 /** Thrown when several options and/or trailing arguments have identical names
     in definition - making it impossible to distinguish between them. */

@@ -17,7 +17,7 @@ class LazyConfTest extends UsefulMatchers {
     var s = false
     val conf = new LazyScallopConf(Seq("--help")) {}
     conf.initialize {
-      case Help => s = true
+      case Help("") => s = true
     }
     s ==== true
   }

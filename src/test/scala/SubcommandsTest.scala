@@ -183,5 +183,16 @@ class SubcommandsTest extends UsefulMatchers {
     }
     Conf.palm.bananas.isSupplied ==== false
   }
+  
+  test ("subcommand name as parameter to other subcommand") {
+    object Conf extends ScallopConf(Seq("help", "tree")) {
+      val tree = new Subcommand("tree") {()}
+
+      val help = new Subcommand("help")  {
+        val command = trailArg[String]()
+      }
+    }
+    Conf.help.command() ==== "tree"
+  }
 
 }
