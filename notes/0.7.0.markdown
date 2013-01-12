@@ -1,0 +1,9 @@
+New changes since version `0.5.1`:
+
+* Now cross-building for Scala 2.9.x and 2.10.
+* Option name guessing - now you can write `val apples = opt[Int]()` instead of `val apples = opt[Int]("apples")`. 
+  CamelCase field names are converted to hyphen-case option names.
+* Added .printHelp method on [ScallopConf](http://rogach.github.com/scallop/#org.rogach.scallop.ScallopConf).
+* Improved flexibility in controlling error printing in [ScallopConf](http://rogach.github.com/scallop/#org.rogach.scallop.ScallopConf) (`printedName` & `errorMessageHandler`).
+* Short listing of subcommands in main help (activated using `shortSubcommandHelp()`), and specific help for each subcommand. ([#36](https://github.com/Rogach/scallop/issues/36))
+* Several bugfixes - [#23](https://github.com/Rogach/scallop/issues/23), [#26](https://github.com/Rogach/scallop/issues/26), [#27](https://github.com/Rogach/scallop/issues/27), [#31](https://github.com/Rogach/scallop/issues/31), [#33](https://github.com/Rogach/scallop/issues/33), [#34](https://github.com/Rogach/scallop/issues/34), and others.
