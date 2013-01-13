@@ -10,6 +10,6 @@ Release
 * Tag the release (on master).
 * Close the release in Nexus UI.
 * Push latest version to github. (push --all; push --tags)
-* Update API docs.
+* Update API docs (make-site, ghpages-push-site).
 * Update wiki.
 * Publish herald notes (after Central sync).
