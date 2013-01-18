@@ -100,7 +100,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       name: String = null,
       short: Char = 0.toChar,
       descr: String = "",
-      default: Option[A] = None,
+      default: => Option[A] = None,
       validate: A => Boolean = (_:A) => true,
       required: Boolean = false,
       argName: String = "arg",
@@ -117,7 +117,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
         else throw new IllegalArgumentException("You should supply a name for your option!")
       else name
 
-    editBuilder(_.opt(resolvedName, short, descr, default, validate, required, argName, hidden, noshort)(conv))
+    editBuilder(_.opt(resolvedName, short, descr, () => default, validate, required, argName, hidden, noshort)(conv))
     val n = getName(resolvedName)
     new ScallopOption[A](n) {
       override lazy val fn = {verified_?; rootConfig.builder.get[A](name)(conv.manifest)}
@@ -175,12 +175,12 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       descr: String = "",
       validate: A => Boolean = (_:A) => true,
       required: Boolean = true,
-      default: Option[A] = None,
+      default: => Option[A] = None,
       hidden: Boolean = false)
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
     // here, we generate some random name, since it does not matter
     val nm = name
-    editBuilder(_.trailArg(nm, required, descr, default, validate, hidden)(conv))
+    editBuilder(_.trailArg(nm, required, descr, () => default, validate, hidden)(conv))
     val n = getName(nm)
     new ScallopOption[A](n) { 
       override lazy val fn = {verified_?; rootConfig.builder.get[A](name)(conv.manifest)}
@@ -206,14 +206,14 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     */
   def toggle(
       name: String,
-      default: Option[Boolean] = None,
+      default: => Option[Boolean] = None,
       short: Char = 0.toChar,
       noshort: Boolean = false,
       prefix: String = "no",
       descrYes: String = "",
       descrNo: String = "",
       hidden: Boolean = false): ScallopOption[Boolean] = {
-    editBuilder(_.toggle(name, default, short, noshort, prefix, descrYes, descrNo, hidden))
+    editBuilder(_.toggle(name, () => default, short, noshort, prefix, descrYes, descrNo, hidden))
     val n = getName(name)
     new ScallopOption[Boolean](n) {
       override lazy val fn = {verified_?; rootConfig.builder.get[Boolean](name)}

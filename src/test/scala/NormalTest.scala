@@ -16,7 +16,7 @@ val opts = Scallop(List("-d","--num-limbs","1"))
                               // banner, options usage, and footer
   .footer("\nFor all other tricks, consult the documentation!")
   .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
-  .opt("monkeys", default = Some(2), short = 'm') // you can add the default option
+  .opt("monkeys", default = () => Some(2), short = 'm') // you can add the default option
                                                   // the type will be inferred
   .opt[Int]("num-limbs", 'k', 
     "number of libms", required = true) // you can override the default short-option character
@@ -157,7 +157,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
 
   test ("default value") {
     val opts = Scallop(List())
-      .opt("ang", default = Some(42), required = true)
+      .opt("ang", default = () => Some(42), required = true)
       .verify
     opts[Int]("ang") should equal (42)
   }
@@ -346,14 +346,14 @@ println(opts.summary) // returns summary of parser status (with current arg valu
   
   test ("trail option - with default value, provided") {
     val opts = Scallop(List("first"))
-      .trailArg[String]("name", required = false, default = Some("aoeu"))
+      .trailArg[String]("name", required = false, default = () => Some("aoeu"))
       .verify
     opts[String]("name") should equal ("first")
   }
   
   test ("trail option - with default value, not provided") {
     val opts = Scallop(Nil)
-      .trailArg[String]("name", required = false, default = Some("aoeu"))
+      .trailArg[String]("name", required = false, default = () => Some("aoeu"))
       .verify
     opts[String]("name") should equal ("aoeu")
   }
@@ -416,7 +416,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
 
   test ("is supplied - option value was not supplied, with default") {
     val opts = Scallop(Nil)
-      .opt[Int]("apples", default = Some(7))
+      .opt[Int]("apples", default = () => Some(7))
       .verify
     opts.isSupplied("apples") should equal (false)
   }
@@ -437,7 +437,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
 
   test ("is supplied - trail arg value was not supplied, with default value") {
     val opts = Scallop(Nil)
-      .trailArg[String]("file", default = Some("second"), required = false)
+      .trailArg[String]("file", default = () => Some("second"), required = false)
       .verify
     opts.isSupplied("file") should equal (false)
   }

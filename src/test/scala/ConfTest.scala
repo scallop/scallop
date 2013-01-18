@@ -484,5 +484,19 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.output() should equal ("-")
     Conf.input() should equal (List("-"))
   }
+  
+  test ("default value of option should be lazily evaluated") {
+    val conf = new ScallopConf(Seq("-a", "4")) {
+      val apples = opt[Int](default = { sys.error("boom"); None })
+    }
+    conf.apples() should equal (4)
+  }
+
+  test ("default value of trailing arg should be lazily evaluated") {
+    val conf = new ScallopConf(Seq("4")) {
+      val apples = trailArg[Int](default = { sys.error("boom"); None })
+    }
+    conf.apples() should equal (4)
+  }
 
 }
