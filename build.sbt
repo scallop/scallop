@@ -72,3 +72,11 @@ pomExtra := (
 scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/Rogach/scallop/tree/master/€{FILE_PATH}.scala")
 
 parallelExecution in Test := false
+
+site.settings
+
+site.includeScaladoc("")
+
+ghpages.settings
+
+git.remoteRepo := "git@github.com:Rogach/scallop.git"

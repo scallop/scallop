@@ -233,7 +233,7 @@ case class Scallop(
       name: String,
       short: Char = 0.toChar,
       descr: String = "",
-      default: Option[A] = None,
+      default: () => Option[A] = () => None,
       validate: A => Boolean = ((_:A) => true),
       required: Boolean = false,
       argName: String = "arg",
@@ -243,8 +243,10 @@ case class Scallop(
     if (name.head.isDigit) throw new IllegalOptionParameters("First character of the option name must not be a digit: %s" format name)
     val defaultA = 
       if (conv == flagConverter)
-        if (default == Some(true)) Some(true)
-        else Some(false)
+        { () =>
+          if (default() == Some(true)) Some(true)
+          else Some(false)
+        }
       else default
     val eShort = if (short == 0.toChar || noshort) None else Some(short)
     val validator = { (tt:TypeTag[_], a:Any) => 
@@ -305,14 +307,16 @@ case class Scallop(
       name: String,
       required: Boolean = true,
       descr: String = "",
-      default: Option[A] = None,
+      default: () => Option[A] = () => None,
       validate: A => Boolean = ((_:A) => true),
       hidden: Boolean = false)
       (implicit conv: ValueConverter[A]): Scallop = {
     val defaultA = 
       if (conv == flagConverter)
-        if (default == Some(true)) Some(true)
-        else Some(false)
+        { () =>
+          if (default() == Some(true)) Some(true)
+          else Some(false)
+        }
       else default
     val validator = { (tt: TypeTag[_], a:Any) => 
       if (conv.tag.tpe <:< tt.tpe) validate(a.asInstanceOf[A])
@@ -329,7 +333,7 @@ case class Scallop(
 
   def toggle(
       name: String,
-      default: Option[Boolean] = None,
+      default: () => Option[Boolean] = () => None,
       short: Char = 0.toChar,
       noshort: Boolean = false,
       prefix: String = "no",
@@ -481,7 +485,7 @@ case class Scallop(
         val args = parsed.opts.filter(_._1 == opt).map(_._2)
         opt.converter.parse(args).right
           .getOrElse(if (opt.required)  throw new MajorInternalException else None)
-          .orElse(opt.default)
+          .orElse(opt.default())
       }.getOrElse(throw new UnknownOption(name)).asInstanceOf[Option[A]]
     }
   }
@@ -548,7 +552,7 @@ case class Scallop(
       val args = parsed.opts filter (_._1 == o) map (_._2)
       val res = o.converter.parse(args)
       if (res.isLeft) throw new WrongOptionFormat(o.name, args.map(_._2.mkString(" ")).mkString(" "))
-      if (o.required && !res.right.get.isDefined && !o.default.isDefined) 
+      if (o.required && !res.right.get.isDefined && !o.default().isDefined) 
         throw new RequiredOptionNotFound(o.name)
       // validaiton
       if (!(get(o.name)(o.converter.tag) map (v => o.validator(o.converter.tag,v)) getOrElse true))

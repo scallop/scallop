@@ -32,7 +32,7 @@ trait CliOption {
   
   def validator: (TypeTag[_], Any) => Boolean
   
-  def default: Option[Any]
+  def default: () => Option[Any]
   
   /** If true, then this option is not shown in help printout. */
   def hidden: Boolean
@@ -51,7 +51,7 @@ case class SimpleOption(
     descr: String,
     required: Boolean,
     converter: ValueConverter[_],
-    default: Option[Any],
+    default: () => Option[Any],
     validator: (TypeTag[_], Any) => Boolean,
     argName: String,
     hidden: Boolean,
@@ -69,7 +69,7 @@ case class SimpleOption(
   def helpInfo(sh: List[Char]) = List((
     argLine(sh),
     descr,
-    (if (converter.tag.tpe <:< typeTag[Boolean].tpe) None else default.map(_.toString))  // we don't need to remind user of default flag value, do we?
+    (if (converter.tag.tpe <:< typeTag[Boolean].tpe) None else default().map(_.toString))  // we don't need to remind user of default flag value, do we?
   ))
 }
 
@@ -88,7 +88,7 @@ case class PropertyOption(
   def shortNames = List(short)
   def requiredShortNames = shortNames
   def validator = (a,b) => true
-  def default = Some(Map())
+  def default = () => Some(Map())
   def required = false
   
   def argLine(sh: List[Char]): String =
@@ -111,7 +111,7 @@ case class LongNamedPropertyOption(
   def shortNames = Nil
   def requiredShortNames = Nil
   def validator = (a,b) => true
-  def default = Some(Map())
+  def default = () => Some(Map())
   def required = false
 
   def argLine(sh: List[Char]) =
@@ -126,7 +126,7 @@ case class TrailingArgsOption(
     descr: String,
     converter: ValueConverter[_],
     validator: (TypeTag[_],Any) => Boolean,
-    default: Option[Any],
+    default: () => Option[Any],
     hidden: Boolean)
   extends CliOption {
 
@@ -138,12 +138,12 @@ case class TrailingArgsOption(
   def argLine(sh: List[Char]): String = 
     "%s (%s)" format (name, (if (required) "required" else "not required"))
   
-  def helpInfo(sh: List[Char]) = List((argLine(sh), descr, default.map(_.toString)))
+  def helpInfo(sh: List[Char]) = List((argLine(sh), descr, default().map(_.toString)))
 }
 
 case class ToggleOption(
     name: String,
-    default: Option[Boolean],
+    default: () => Option[Boolean],
     short: Option[Char],
     noshort: Boolean,
     prefix: String,
