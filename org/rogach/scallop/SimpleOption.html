@@ -25,7 +25,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">SimpleOption</span><span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Char" class="extype">Char</span>]</span>, <span name="descr">descr: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>, <span name="validator">validator: (Manifest[_], <span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="argName">argName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result"> extends <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="name">SimpleOption</span><span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Char" class="extype">Char</span>]</span>, <span name="descr">descr: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: () ⇒ <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>, <span name="validator">validator: (Manifest[_], <span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="argName">argName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result"> extends <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -65,7 +65,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">SimpleOption</span><span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Char" class="extype">Char</span>]</span>, <span name="descr">descr: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>, <span name="validator">validator: (Manifest[_], <span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="argName">argName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
+        <span class="name">SimpleOption</span><span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Char" class="extype">Char</span>]</span>, <span name="descr">descr: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: () ⇒ <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>, <span name="validator">validator: (Manifest[_], <span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="argName">argName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
       </span>
       </h4>
       
@@ -215,14 +215,14 @@
       <p class="shortcomment cmt">Converter for pure string arguments to the needed type of this option.</p><div class="fullcomment"><div class="comment cmt"><p>Converter for pure string arguments to the needed type of this option.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.SimpleOption" class="extype" href="">SimpleOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.SimpleOption#default" data-isabs="false">
-      <a id="default:Option[Any]"></a>
+      <a id="default:() ⇒ Option[Any]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">default</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>
+        <span class="name">default</span><span class="result">: () ⇒ <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.SimpleOption" class="extype" href="">SimpleOption</a> → <a name="org.rogach.scallop.CliOption" class="extype" href="CliOption.html">CliOption</a></dd></dl></div>

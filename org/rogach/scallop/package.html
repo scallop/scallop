@@ -165,7 +165,7 @@ after all subclasses initialization.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="SimpleOption.html"><span class="name">SimpleOption</span></a><span class="params">(<span name="name">name: String</span>, <span name="short">short: Option[Char]</span>, <span name="descr">descr: String</span>, <span name="required">required: Boolean</span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: Option[Any]</span>, <span name="validator">validator: (Manifest[_], Any) ⇒ Boolean</span>, <span name="argName">argName: String</span>, <span name="hidden">hidden: Boolean</span>, <span name="noshort">noshort: Boolean</span>)</span><span class="result"> extends CliOption with Product with Serializable</span>
+        <a href="SimpleOption.html"><span class="name">SimpleOption</span></a><span class="params">(<span name="name">name: String</span>, <span name="short">short: Option[Char]</span>, <span name="descr">descr: String</span>, <span name="required">required: Boolean</span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="default">default: () ⇒ Option[Any]</span>, <span name="validator">validator: (Manifest[_], Any) ⇒ Boolean</span>, <span name="argName">argName: String</span>, <span name="hidden">hidden: Boolean</span>, <span name="noshort">noshort: Boolean</span>)</span><span class="result"> extends CliOption with Product with Serializable</span>
       </span>
       </h4>
       
@@ -189,7 +189,7 @@ after all subclasses initialization.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ToggleOption.html"><span class="name">ToggleOption</span></a><span class="params">(<span name="name">name: String</span>, <span name="default">default: Option[Boolean]</span>, <span name="short">short: Option[Char]</span>, <span name="noshort">noshort: Boolean</span>, <span name="prefix">prefix: String</span>, <span name="descrYes">descrYes: String</span>, <span name="descrNo">descrNo: String</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends CliOption with Product with Serializable</span>
+        <a href="ToggleOption.html"><span class="name">ToggleOption</span></a><span class="params">(<span name="name">name: String</span>, <span name="default">default: () ⇒ Option[Boolean]</span>, <span name="short">short: Option[Char]</span>, <span name="noshort">noshort: Boolean</span>, <span name="prefix">prefix: String</span>, <span name="descrYes">descrYes: String</span>, <span name="descrNo">descrNo: String</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends CliOption with Product with Serializable</span>
       </span>
       </h4>
       
@@ -201,7 +201,7 @@ after all subclasses initialization.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="TrailingArgsOption.html"><span class="name">TrailingArgsOption</span></a><span class="params">(<span name="name">name: String</span>, <span name="required">required: Boolean</span>, <span name="descr">descr: String</span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="validator">validator: (Manifest[_], Any) ⇒ Boolean</span>, <span name="default">default: Option[Any]</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends CliOption with Product with Serializable</span>
+        <a href="TrailingArgsOption.html"><span class="name">TrailingArgsOption</span></a><span class="params">(<span name="name">name: String</span>, <span name="required">required: Boolean</span>, <span name="descr">descr: String</span>, <span name="converter">converter: org.rogach.scallop.ValueConverter[_]</span>, <span name="validator">validator: (Manifest[_], Any) ⇒ Boolean</span>, <span name="default">default: () ⇒ Option[Any]</span>, <span name="hidden">hidden: Boolean</span>)</span><span class="result"> extends CliOption with Product with Serializable</span>
       </span>
       </h4>
       

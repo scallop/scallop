@@ -587,14 +587,14 @@ and contains info on proporties and options. It does not contain info about trai
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#opt" data-isabs="false">
-      <a id="opt[A](String,Char,String,Option[A],(A) ⇒ Boolean,Boolean,String,Boolean,Boolean)(ValueConverter[A]):Scallop"></a>
+      <a id="opt[A](String,Char,String,() ⇒ Option[A],(A) ⇒ Boolean,Boolean,String,Boolean,Boolean)(ValueConverter[A]):Scallop"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">opt</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[A]</span>, <span name="validate">validate: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="argName">argName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
+        <span class="name">opt</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="name">name: String</span>, <span name="short">short: <span name="scala.Char" class="extype">Char</span></span>, <span name="descr">descr: String</span>, <span name="default">default: () ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>, <span name="validate">validate: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="argName">argName: String</span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add a new option definition to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add a new option definition to this builder.
@@ -799,26 +799,26 @@ and contains info on proporties and options. It does not contain info about trai
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a> → AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#toggle" data-isabs="false">
-      <a id="toggle(String,Option[Boolean],Char,Boolean,String,String,String,Boolean):Scallop"></a>
+      <a id="toggle(String,() ⇒ Option[Boolean],Char,Boolean,String,String,String,Boolean):Scallop"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toggle</span><span class="params">(<span name="name">name: String</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>, <span name="short">short: <span name="scala.Char" class="extype">Char</span> = <span class="symbol">0.toChar</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>, <span name="prefix">prefix: String = <span class="symbol">&quot;no&quot;</span></span>, <span name="descrYes">descrYes: String = <span class="symbol">&quot;&quot;</span></span>, <span name="descrNo">descrNo: String = <span class="symbol">&quot;&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
+        <span class="name">toggle</span><span class="params">(<span name="name">name: String</span>, <span name="default">default: () ⇒ <span name="scala.Option" class="extype">Option</span>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">() =&gt; None</a></span></span></span>, <span name="short">short: <span name="scala.Char" class="extype">Char</span> = <span class="symbol">0.toChar</span></span>, <span name="noshort">noshort: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>, <span name="prefix">prefix: String = <span class="symbol">&quot;no&quot;</span></span>, <span name="descrYes">descrYes: String = <span class="symbol">&quot;&quot;</span></span>, <span name="descrNo">descrNo: String = <span class="symbol">&quot;&quot;</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
       </span>
       </h4>
       
     </li><li visbl="pub" name="org.rogach.scallop.Scallop#trailArg" data-isabs="false">
-      <a id="trailArg[A](String,Boolean,String,Option[A],(A) ⇒ Boolean,Boolean)(ValueConverter[A]):Scallop"></a>
+      <a id="trailArg[A](String,Boolean,String,() ⇒ Option[A],(A) ⇒ Boolean,Boolean)(ValueConverter[A]):Scallop"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trailArg</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="name">name: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="descr">descr: String</span>, <span name="default">default: <span name="scala.Option" class="extype">Option</span>[A]</span>, <span name="validate">validate: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
+        <span class="name">trailArg</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="name">name: String</span>, <span name="required">required: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="descr">descr: String</span>, <span name="default">default: () ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>, <span name="validate">validate: (A) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="hidden">hidden: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a name="org.rogach.scallop.ValueConverter" class="extype" href="ValueConverter.html">ValueConverter</a>[A]</span>)</span><span class="result">: <a name="org.rogach.scallop.Scallop" class="extype" href="">Scallop</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Add new trailing argument definition to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add new trailing argument definition to this builder.
