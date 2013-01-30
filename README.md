@@ -41,12 +41,12 @@ object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
   val size:ScallopOption[Double] = trailArg[Double](required = false)
 }
 // that's it. Completely type-safe and convenient.
-Conf.count() should equal (4)
-Conf.properties("fruit") should equal (Some("apple"))
-Conf.size.get should equal (Some(7.2))
+assert(Conf.count() == 4)
+assert(Conf.properties("fruit") == Some("apple"))
+assert(Conf.size.get == Some(7.2))
 // passing into other functions
 def someInternalFunc(conf:Conf.type) {
-  conf.count() should equal (4)
+  assert(conf.count() == 4)
 }
 someInternalFunc(Conf)
 ```
