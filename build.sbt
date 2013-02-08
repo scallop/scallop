@@ -68,3 +68,9 @@ site.includeScaladoc("")
 ghpages.settings
 
 git.remoteRepo := "git@github.com:Rogach/scallop.git"
+
+// fix for paths to source files in scaladoc
+doc in Compile <<= (doc in Compile) map { in =>
+  Seq("bash","-c",""" for x in $(find target/scala-2.9.2/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
+  in
+}
