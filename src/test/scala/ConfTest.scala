@@ -21,7 +21,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     // that's it. Completely type-safe and convenient.
     Conf.count() should equal (4)
-    Conf.properties("fruit") should equal (Some("apple"))
+    Conf.properties("fruit") should equal ("apple")
     Conf.size.get should equal (Some(7.2))
     // passing into other functions
     def someInternalFunc(conf:Conf.type) {
@@ -67,9 +67,9 @@ class ConfTest extends FunSuite with ShouldMatchers {
       val properties = props[String]('D')
       verify
     }
-    Conf.properties("key1") should equal (Some("value1"))
-    Conf.properties("key2") should equal (Some("value2"))
-    Conf.propMap[String]('D') should equal (Map("key1" -> "value1", "key2" -> "value2"))
+    Conf.properties.get("key1") should equal (Some("value1"))
+    Conf.properties.get("key2") should equal (Some("value2"))
+    Conf.properties should equal (Map("key1" -> "value1", "key2" -> "value2"))
   }
   
   test ("trailing args") {
@@ -375,40 +375,40 @@ class ConfTest extends FunSuite with ShouldMatchers {
     object Conf extends ScallopConf(Seq("-Akey1=1,key2=2")) {
       val app = props[Int]('A')
     }
-    Conf.app("key1") should equal (Some(1))
-    Conf.app("key2") should equal (Some(2))
+    Conf.app("key1") should equal (1)
+    Conf.app.get("key2") should equal (Some(2))
   }
   
   test ("short-named property args with commas and spaces") {
     object Conf extends ScallopConf(Seq("-A","key1=1",",","key2=2")) {
       val app = props[Int]('A')
     }
-    Conf.app("key1") should equal (Some(1))
-    Conf.app("key2") should equal (Some(2))
+    Conf.app.get("key1") should equal (Some(1))
+    Conf.app.get("key2") should equal (Some(2))
   }
 
   test ("short-named property args with commas and spaces 2") {
     object Conf extends ScallopConf(Seq("-A","key1=1,","key2=2")) {
       val app = props[Int]('A')
     }
-    Conf.app("key1") should equal (Some(1))
-    Conf.app("key2") should equal (Some(2))
+    Conf.app.get("key1") should equal (Some(1))
+    Conf.app.get("key2") should equal (Some(2))
   }
   
   test ("long-named property args") {
     object Conf extends ScallopConf(Seq("--Apples","key1=1","key2=2")) {
       val app = propsLong[Int]("Apples")
     }
-    Conf.app("key1") should equal (Some(1))
-    Conf.app("key2") should equal (Some(2))
+    Conf.app.get("key1") should equal (Some(1))
+    Conf.app.get("key2") should equal (Some(2))
   }
   
   test ("long-named property args with commas and spaces") {
     object Conf extends ScallopConf(Seq("--Apples","key1=1",",","key2=2")) {
       val app = propsLong[Int]("Apples")
     }
-    Conf.app("key1") should equal (Some(1))
-    Conf.app("key2") should equal (Some(2))
+    Conf.app.get("key1") should equal (Some(1))
+    Conf.app.get("key2") should equal (Some(2))
   }
 
   test ("toggle options - positive, long") {

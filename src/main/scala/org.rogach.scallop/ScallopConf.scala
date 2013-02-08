@@ -140,13 +140,13 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       keyName: String = "key",
       valueName: String = "value",
       hidden: Boolean = false)
-      (implicit conv: ValueConverter[Map[String,A]]):(String => Option[A]) = {
+      (implicit conv: ValueConverter[Map[String,A]]): Map[String, A] = {
     editBuilder(_.props(name, descr, keyName, valueName, hidden)(conv))
     val n = getName(name.toString)
-    (key:String) => {
+    new LazyMap ({() =>
       verified_?
-      rootConfig.builder(n)(conv.tag).get(key)
-    }
+      rootConfig.builder(n)(conv.tag)
+    })
   }
 
   def propsLong[A](
@@ -155,13 +155,13 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       keyName: String = "key",
       valueName: String = "value",
       hidden: Boolean = false)
-      (implicit conv: ValueConverter[Map[String,A]]):(String => Option[A]) = {
+      (implicit conv: ValueConverter[Map[String,A]]): Map[String, A] = {
     editBuilder(_.propsLong(name, descr, keyName, valueName, hidden)(conv))
     val n = getName(name)
-    (key:String) => {
+    new LazyMap ({() =>
       verified_?
-      rootConfig.builder(n)(conv.tag).get(key)
-    }
+      rootConfig.builder(n)(conv.tag)
+    })
   }
 
   
@@ -314,16 +314,6 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   
   // === some getters for convenience ===
   
-  /** Get all data for propety as Map.
-    *
-    * @param name Propety definition identifier.
-    * @return All key-value pairs for this property in a map.
-    */
-  def propMap[A](name: Char)(implicit tt: TypeTag[Map[String,A]]) = {
-    verified_?
-    rootConfig.builder(name.toString)(tt)
-  }
-
   /** Get summary of current parser state.
     *
     * @return a list of all options in the builder, and corresponding values for them.

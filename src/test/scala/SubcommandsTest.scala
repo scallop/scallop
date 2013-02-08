@@ -194,5 +194,14 @@ class SubcommandsTest extends UsefulMatchers {
     }
     Conf.help.command() ==== "tree"
   }
+  
+  test ("properties on subcommand") {
+    object Conf extends ScallopConf(Seq("sub", "-Dkey1=value1")) {
+      val sub = new Subcommand("sub") {
+        val properties = props[String]('D')
+      }
+    }
+    Conf.sub.properties ==== Map("key1" -> "value1")
+  }
 
 }
