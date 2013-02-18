@@ -120,7 +120,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.opt(resolvedName, short, descr, () => default, validate, required, argName, hidden, noshort)(conv))
     val n = getName(resolvedName)
     new ScallopOption[A](n) {
-      override lazy val fn = {verified_?; rootConfig.builder.get[A](name)(conv.manifest)}
+      override lazy val fn = { (x: String) => verified_?; rootConfig.builder.get[A](x)(conv.manifest)}
       override lazy val supplied = {verified_?; rootConfig.builder.isSupplied(name)}
     }
   }              
@@ -183,7 +183,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.trailArg(nm, required, descr, () => default, validate, hidden)(conv))
     val n = getName(nm)
     new ScallopOption[A](n) { 
-      override lazy val fn = {verified_?; rootConfig.builder.get[A](name)(conv.manifest)}
+      override lazy val fn = { (x: String) => verified_?; rootConfig.builder.get[A](x)(conv.manifest)}
       override lazy val supplied = {verified_?; rootConfig.builder.isSupplied(name)}
     }
   }
@@ -216,7 +216,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.toggle(name, () => default, short, noshort, prefix, descrYes, descrNo, hidden))
     val n = getName(name)
     new ScallopOption[Boolean](n) {
-      override lazy val fn = {verified_?; rootConfig.builder.get[Boolean](name)}
+      override lazy val fn = { (x: String) => verified_?; rootConfig.builder.get[Boolean](x)}
       override lazy val supplied = {verified_?; rootConfig.builder.isSupplied(name)}
     }
   }
@@ -374,7 +374,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
             val newShortName = m.getName.flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
             val newFullName = getName(newShortName)
             val shortGenName = '\t' +: opt.name.reverse.takeWhile('\t'!=).reverse // the old, generated version of name, without prefixes from parent builders
-            editBuilder(e => e.copy(opts = e.opts.map { o => 
+            editBuilder(e => e.copy(opts = e.opts.map { o =>
               if (o.name == shortGenName) {
                 o match {
                   case so: SimpleOption => so.copy(name = newShortName)

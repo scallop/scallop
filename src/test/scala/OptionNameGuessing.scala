@@ -43,4 +43,19 @@ class OptionNameGuessing extends UsefulMatchers {
     }
     Conf.tree.apples() should equal (3)
   }
+  
+  test ("replacing of the name in mapped ScallopOptions") {
+    object Conf extends ScallopConf(Nil) { 
+      val xs = opt[Int](default = Some(0)) map (1+) 
+    }
+    Conf.xs.get ==== Some(1)
+  }
+  
+  test ("replacing of the name in doubly mapped ScallopOptions") {
+    object Conf extends ScallopConf(Nil) { 
+      val xs = opt[Int](default = Some(0)) map (1+) map (_.toString)
+    }
+    Conf.xs.get ==== Some("1")
+  }
+
 }
