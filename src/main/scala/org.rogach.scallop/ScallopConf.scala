@@ -59,14 +59,14 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   
   /** Retrieves the choosen subcommand. */
   def subcommand: Option[ScallopConf] = {
-    verified_?
+    assertVerified
     assert(rootConfig == this, "You shouldn't call 'subcommand' on subcommand object")
     builder.getSubcommandName.map(n => subconfigs.find(_.commandname == n).get)
   }
   
   /** Retrieves the list of the chosen nested subcommands. */
   def subcommands: List[ScallopConf] = {
-    verified_?
+    assertVerified
     assert(rootConfig == this, "You shouldn't call 'subcommands' on subcommand object")
 
     var config = this
@@ -120,8 +120,8 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.opt(resolvedName, short, descr, () => default, validate, required, argName, hidden, noshort)(conv))
     val n = getName(resolvedName)
     new ScallopOption[A](n) {
-      override lazy val fn = { (x: String) => verified_?; rootConfig.builder.get[A](x)(conv.manifest)}
-      override lazy val supplied = {verified_?; rootConfig.builder.isSupplied(name)}
+      override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[A](x)(conv.manifest)}
+      override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
     }
   }              
 
@@ -143,7 +143,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.props(name, descr, keyName, valueName, hidden)(conv))
     val n = getName(name.toString)
     new LazyMap ({() =>
-      verified_?
+      assertVerified
       rootConfig.builder(n)(conv.manifest)
     })
   }
@@ -158,7 +158,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.propsLong(name, descr, keyName, valueName, hidden)(conv))
     val n = getName(name)
     new LazyMap ({() =>
-      verified_?
+      assertVerified
       rootConfig.builder(n)(conv.manifest)
     })
   }
@@ -183,8 +183,8 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.trailArg(nm, required, descr, () => default, validate, hidden)(conv))
     val n = getName(nm)
     new ScallopOption[A](n) { 
-      override lazy val fn = { (x: String) => verified_?; rootConfig.builder.get[A](x)(conv.manifest)}
-      override lazy val supplied = {verified_?; rootConfig.builder.isSupplied(name)}
+      override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[A](x)(conv.manifest)}
+      override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
     }
   }
 
@@ -216,8 +216,8 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.toggle(name, () => default, short, noshort, prefix, descrYes, descrNo, hidden))
     val n = getName(name)
     new ScallopOption[Boolean](n) {
-      override lazy val fn = { (x: String) => verified_?; rootConfig.builder.get[Boolean](x)}
-      override lazy val supplied = {verified_?; rootConfig.builder.isSupplied(name)}
+      override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[Boolean](x)}
+      override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
     }
   }
 
@@ -279,9 +279,8 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   }
   
   /** Checks that this Conf object is verified. If it is not, throws an exception. */
-  def verified_? = {
-    if (verified) true
-    else {
+  def assertVerified {
+    if (!verified) {
       ScallopConf.cleanUp
       throw new IncompleteBuildException()
     }
@@ -318,7 +317,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @return a list of all options in the builder, and corresponding values for them.
     */
   def summary = {
-    verified_?
+    assertVerified
     builder.summary
   }
 
