@@ -12,8 +12,13 @@ Scallop supports:
 * Powerful matching on trailing args
 * Subcommands
 
-It should be noted that the option builder is completely immutable (thus thread-safe), so you can reuse it, delegate
+It should be noted that the option builder is completely
+immutable (thus thread-safe), so you can reuse it, delegate
 argument construction to sub-modules, etc. 
+
+For more info and information on usage, you can look into the [project wiki](https://github.com/Rogach/scallop/wiki) or consult the [API docs](http://rogach.github.com/scallop/#org.rogach.scallop.package).
+
+Also, I wrote a [blog post](http://rogach-scala.blogspot.com/2012/04/better-cli-option-parsing-in-scala.html) and [another one](http://rogach-scala.blogspot.com/2012/04/configuration-objects-in-scallop.html) about Scallop.
 
 Installation
 ============
@@ -51,11 +56,7 @@ def someInternalFunc(conf:Conf.type) {
 someInternalFunc(Conf)
 ```
 
-For more info, you can look into the [project wiki](https://github.com/Rogach/scallop/wiki) or consult the [API docs](http://rogach.github.com/scallop/#org.rogach.scallop.package).
-
 For more examples, you can look at Scallop's [test suite](https://github.com/Rogach/scallop/tree/master/src/test/scala).
-
-Also, I wrote a [blog post](http://rogach-scala.blogspot.com/2012/04/better-cli-option-parsing-in-scala.html) and [another one](http://rogach-scala.blogspot.com/2012/04/configuration-objects-in-scallop.html) about Scallop.
 
 Fancy things
 ============
