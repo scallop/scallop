@@ -21,6 +21,7 @@ object Scallop {
   *
   * @param args Arguments to parse.
   * @param opts Options definitions.
+  * @param mainOpts Names of options, that are to be printed first in the help printout
   * @param vers Version string to display in help.
   * @param bann Banner (summary of this program and command-line usage) to display in help.
   * @param foot Footer - displayed after options.
@@ -33,6 +34,7 @@ object Scallop {
 case class Scallop(
     args: Seq[String] = Nil,
     opts: List[CliOption] = Nil,
+    mainOpts: List[String] = Nil,
     vers: Option[String] = None,
     bann: Option[String] = None,
     foot: Option[String] = None,
@@ -440,8 +442,21 @@ case class Scallop(
       hidden = false,
       noshort = true)
 
-    val optsToFormat = (opts filter (!_.isPositional) filter (!_.hidden) sortBy (_.name.toLowerCase)) ++ List(helpOpt, versionOpt)
-    val optsHelp = Formatter format (optsToFormat flatMap (o => o.helpInfo(getOptionShortNames(o))), helpWidth)
+    val optsToFormat = 
+      mainOpts.map(mo => opts.find(_.name == mo)) ++ mainOpts.headOption.map(_=>List(None)).getOrElse(Nil) ++
+      (opts
+        filter (!_.isPositional)
+        filter (!_.hidden)
+        filter (o => mainOpts.forall(o.name!=))
+        sortBy (_.name.toLowerCase)
+        map (o => Some(o))) ++ 
+      List(Some(helpOpt), Some(versionOpt))
+    val optsHelp = Formatter format (
+      optsToFormat flatMap {
+        case None => List(None)
+        case Some(o) => o.helpInfo(getOptionShortNames(o)).map(Some(_))
+      },
+      helpWidth)
     val subcommandsHelp = if (shortSubcommandsHelp) {
       subbuilders.headOption.map { _ =>
         val maxCommandLength = subbuilders.map(_._1.size).max
@@ -456,7 +471,9 @@ case class Scallop(
       }.mkString("\n")
       if (subHelp.nonEmpty) "\n\n" + subHelp else subHelp
     }
-    val trailHelp = Formatter format (opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)), helpWidth)
+    val trailHelp = Formatter format (
+      opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)) map (Some(_)),
+      helpWidth)
     if (opts filter (_.isPositional) isEmpty) {
       optsHelp + subcommandsHelp
     } else {

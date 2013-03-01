@@ -78,9 +78,11 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     configs
   }
   
-  def getName(name: String): String = {
-    (ScallopConf.confs.value.map(_.commandname).mkString("\0") + "\0" + name).stripPrefix("\0")
-  }
+  /** Get current prefix to command name (consists of parent builder names, separated by null char) */
+  private def getPrefix = ScallopConf.confs.value.map(_.commandname).mkString("\0") + "\0" stripPrefix "\0"
+
+  def getName(name: String): String =
+    getPrefix + name
 
   var verified = false
 
@@ -123,7 +125,18 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[A](x)(conv.manifest)}
       override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
     }
-  }              
+  }
+  
+  private var _mainOptions: () => Seq[String] = () => Nil
+  /** Options, that are to be printed first in the help printout */
+  def mainOptions = _mainOptions()
+  /** Set options, that are to be printed first in the help printout */ 
+  def mainOptions_=(newMainOptions: => Seq[ScallopOption[_]]) = {
+    val prefix = getPrefix
+    _mainOptions = () => {
+      newMainOptions.map(_.name.stripPrefix(prefix))
+    }
+  }
 
   /** Add new property option definition to this config object, and get a handle for option retreiving.
     * 
@@ -222,7 +235,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   }
 
   /** Veryfy that this config object is properly configured. */
-  def verify() {
+  private[scallop] def verify() {
     try {
       verified = true
       builder.verify
@@ -385,6 +398,8 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
           }
         }
     }
+    // now, when we fixed option names, we can push mainOptions into the builder
+    editBuilder(_.copy(mainOpts = _mainOptions().toList))
     if (ScallopConf.confs.value.size > 1) {
       ScallopConf.confs.value = ScallopConf.confs.value.init
       ScallopConf.confs.value.last.editBuilder(_.addSubBuilder(commandname, builder))

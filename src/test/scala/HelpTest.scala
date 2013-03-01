@@ -163,5 +163,43 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         |  submarine   
         |""".stripMargin
   }
+  
+  test ("splitting commands list into 'main' and 'other' options") {
+    object Conf extends ScallopConf(Nil) {
+      mainOptions = Seq(bananas, apples)
+      val apples     = opt[Int](descr = "amount of apples")
+      val bananas    = opt[Int](descr = "amount of bananas")
+      val coconuts   = opt[Int](descr = "amount of coconuts")
+      val dewberries = opt[Int](descr = "amount of dewberries")
+    }
+    Conf.builder.help ==== 
+      """  -b, --bananas  <arg>      amount of bananas
+        |  -a, --apples  <arg>       amount of apples
+        |
+        |  -c, --coconuts  <arg>     amount of coconuts
+        |  -d, --dewberries  <arg>   amount of dewberries
+        |      --help                Show help message
+        |      --version             Show version of this program""".stripMargin
+  }
+
+  test ("splitting commands list into 'main' and 'other' options (in subcommands)") {
+    object Conf extends ScallopConf(Nil) {
+      val plant = new Subcommand("plant") {
+        mainOptions = Seq(bananas, apples)
+        val apples     = opt[Int](descr = "amount of apples")
+        val bananas    = opt[Int](descr = "amount of bananas")
+        val coconuts   = opt[Int](descr = "amount of coconuts")
+        val dewberries = opt[Int](descr = "amount of dewberries")
+      }
+    }
+    Conf.plant.builder.help ==== 
+      """  -b, --bananas  <arg>      amount of bananas
+        |  -a, --apples  <arg>       amount of apples
+        |
+        |  -c, --coconuts  <arg>     amount of coconuts
+        |  -d, --dewberries  <arg>   amount of dewberries
+        |      --help                Show help message
+        |      --version             Show version of this program""".stripMargin
+  }
 
 }

@@ -26,7 +26,6 @@ class LoadTest extends FunSuite with ShouldMatchers {
     object Conf extends ScallopConf(List("-a", "1", "-c", "2.0")) {
       val apples = opt[Int]("apples")
       val carrots = opt[Double]("carrots")
-      verify
       val bananas = 1
     }
     def time(fn: => Int) = {
