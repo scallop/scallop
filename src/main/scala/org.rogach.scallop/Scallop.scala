@@ -419,28 +419,36 @@ case class Scallop(
     */
   def help: String = {
     // --help and --version do not go through normal pipeline, so we need to hardcode them here
-    val helpOpt = SimpleOption(
-      name = "help",
-      short = None, 
-      descr = "Show help message", 
-      required = false, 
-      converter = flagConverter, 
-      default = () => None, 
-      validator = (_,_) => true, 
-      argName = "",
-      hidden = false,
-      noshort = true)
-    val versionOpt = SimpleOption(
-      name = "version",
-      short = None, 
-      descr = "Show version of this program", 
-      required = false, 
-      converter = flagConverter, 
-      default = () => None, 
-      validator = (_,_) => true, 
-      argName = "",
-      hidden = false,
-      noshort = true)
+    val helpOpt = 
+      opts.find(_.name == "help").getOrElse(
+        SimpleOption(
+          name = "help",
+          short = None, 
+          descr = "Show help message", 
+          required = false, 
+          converter = flagConverter, 
+          default = () => None, 
+          validator = (_,_) => true, 
+          argName = "",
+          hidden = false,
+          noshort = true
+        )
+      )
+    val versionOpt = 
+      opts.find(_.name == "version").getOrElse(
+        SimpleOption(
+          name = "version",
+          short = None, 
+          descr = "Show version of this program", 
+          required = false, 
+          converter = flagConverter, 
+          default = () => None, 
+          validator = (_,_) => true, 
+          argName = "",
+          hidden = false,
+          noshort = true
+        )
+      )
 
     val optsToFormat = 
       mainOpts.map(mo => opts.find(_.name == mo)) ++ mainOpts.headOption.map(_=>List(None)).getOrElse(Nil) ++
@@ -448,6 +456,7 @@ case class Scallop(
         filter (!_.isPositional)
         filter (!_.hidden)
         filter (o => mainOpts.forall(o.name!=))
+        filter (o => o.name != "help" && o.name != "version")
         sortBy (_.name.toLowerCase)
         map (o => Some(o))) ++ 
       List(Some(helpOpt), Some(versionOpt))

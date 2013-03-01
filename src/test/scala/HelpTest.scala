@@ -201,5 +201,15 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         |      --help                Show help message
         |      --version             Show version of this program""".stripMargin
   }
+  
+  test ("user-provided help & version option takes precedence over hardcoded one") {
+    object Conf extends ScallopConf(Nil) {
+      val help = opt[Boolean](noshort = true, descr = "custom help descr")
+      val version = opt[Boolean](noshort = true, descr = "custom version descr")
+    }
+    Conf.builder.help ====
+      """      --help      custom help descr
+        |      --version   custom version descr""".stripMargin
+  }
 
 }
