@@ -33,7 +33,7 @@ object build extends Build {
     val snapshotIndex = {
       import dispatch._
       Http(url("https://oss.sonatype.org/content/repositories/snapshots/org/rogach/scallop_2.9.2/") OK as.tagsoup.NodeSeq).map { x =>
-        val vRgx = ("""%s~(\d+)~SNAPSHOT""" format eVersion).r
+        val vRgx = (""".*%s~(\d+)~SNAPSHOT.*""" format eVersion).r
         x \\ "a" map (_.text) collect { case vRgx(v) => v.toInt}
       }.apply.sorted.lastOption.map(1+).getOrElse(1)
     }
