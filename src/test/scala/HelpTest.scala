@@ -32,22 +32,27 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     }
     out should equal ("""0.1.2
                         |some rubbish
-                        |  -a, --apples  <arg>   fresh apples! (default = 3) 
-                        |  -v, --verbose         very verbose 
-                        |      --noverbose       turn off 
+                        |  -a, --apples  <arg>   fresh apples! (default = 3)
+                        |  -v, --verbose         very verbose
+                        |      --noverbose       turn off
+                        |      --help            Show help message
+                        |      --version         Show version of this program
                         |
                         |Subcommand: tree
-                        |  -b, --branches  <arg>   how many branches? 
+                        |  -b, --branches  <arg>   how many branches?
+                        |      --help              Show help message
                         |
                         | trailing arguments:
-                        |  trail (required)   Which trail do you choose? 
+                        |  trail (required)   Which trail do you choose?
                         |Subcommand: peach
                         |plant the fruit-bearing peach tree
-                        |  -p, --peaches  <arg>   how many peaches? 
+                        |  -p, --peaches  <arg>   how many peaches?
+                        |      --help             Show help message
                         |Latin name: Prunus persica
                         |
                         |Subcommand: palm
-                        |  -l, --leaves  <arg>   how many leaves? 
+                        |  -l, --leaves  <arg>   how many leaves?
+                        |      --help            Show help message
                         |and some more
                         |""".stripMargin)
   }
@@ -55,10 +60,15 @@ class HelpTest extends UsefulMatchers with CapturingTest {
   test ("help wrapping") {
     val opts = Scallop()
       .opt[Boolean]("apples", descr = "********* ********* ********* ********* ********* *********")
-    opts.setHelpWidth(80).help should equal ("""  -a, --apples   ********* ********* ********* ********* ********* ********* """)
-    opts.setHelpWidth(40).help should equal ("""  -a, --apples   ********* ********* 
-                                               |                 ********* ********* 
-                                               |                 ********* ********* """.stripMargin)
+    opts.setHelpWidth(80).help should equal ("""  -a, --apples    ********* ********* ********* ********* ********* *********
+                                               |      --help      Show help message
+                                               |      --version   Show version of this program""".stripMargin)
+    opts.setHelpWidth(40).help should equal ("""  -a, --apples    ********* *********
+                                               |                  ********* *********
+                                               |                  ********* *********
+                                               |      --help      Show help message
+                                               |      --version   Show version of this
+                                               |                  program""".stripMargin)
   }
   
   test ("version printing") {
@@ -93,10 +103,12 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     err ==== ""
     out ==== 
      """Planting a tree
-       |  -a, --apples  <arg>   how many apples? 
+       |  -a, --apples  <arg>   how many apples?
+       |      --help            Show help message
+       |      --version         Show version of this program
        |
        | trailing arguments:
-       |  jang (required)    
+       |  jang (required)   
        |finish planting.
        |""".stripMargin
   }
@@ -115,7 +127,9 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     exits ==== List(0)
     err ==== ""
     out ==== 
-     """  -a, --apples  <arg>   how many apples? 
+     """  -a, --apples  <arg>   how many apples?
+       |      --help            Show help message
+       |      --version         Show version of this program
        |""".stripMargin
     
   }
@@ -139,7 +153,9 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     }
     out ====
       """Planting a tree.
-        |  -b, --bananas  <arg>    
+        |  -b, --bananas  <arg>   
+        |      --help             Show help message
+        |      --version          Show version of this program
         |
         |Subcommands:
         |  tree        Plant a normal, regular tree

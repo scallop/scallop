@@ -30,7 +30,7 @@ object Formatter {
         text = text.init :+ (text.last + w)
       } else text :+= (w + " ")
     }
-    text
+    text.map(_.dropRight(1)) // remove those ugly trailing spaces
   }
 
 }

@@ -413,10 +413,35 @@ case class Scallop(
   def setHelpWidth(w: Int) = this.copy(helpWidth = Some(w))
   
   /** Get help on options from this builder. The resulting help is carefully formatted to required number of columns (default = 80, change with .setHelpWidth method),
-    * and contains info on proporties and options. It does not contain info about trailing arguments.
+    * and contains info on proporties, options and trailing arguments.
     */
   def help: String = {
-    val optsHelp = Formatter format (opts filter (!_.isPositional) filter (!_.hidden) sortBy (_.name.toLowerCase) flatMap (o => o.helpInfo(getOptionShortNames(o))), helpWidth)
+    // --help and --version do not go through normal pipeline, so we need to hardcode them here
+    val helpOpt = SimpleOption(
+      name = "help",
+      short = None, 
+      descr = "Show help message", 
+      required = false, 
+      converter = flagConverter, 
+      default = () => None, 
+      validator = (_,_) => true, 
+      argName = "",
+      hidden = false,
+      noshort = true)
+    val versionOpt = SimpleOption(
+      name = "version",
+      short = None, 
+      descr = "Show version of this program", 
+      required = false, 
+      converter = flagConverter, 
+      default = () => None, 
+      validator = (_,_) => true, 
+      argName = "",
+      hidden = false,
+      noshort = true)
+
+    val optsToFormat = (opts filter (!_.isPositional) filter (!_.hidden) sortBy (_.name.toLowerCase)) ++ List(helpOpt, versionOpt)
+    val optsHelp = Formatter format (optsToFormat flatMap (o => o.helpInfo(getOptionShortNames(o))), helpWidth)
     val subcommandsHelp = if (shortSubcommandsHelp) {
       subbuilders.headOption.map { _ =>
         val maxCommandLength = subbuilders.map(_._1.size).max
@@ -424,7 +449,10 @@ case class Scallop(
       }.getOrElse("")
     } else {
       val subHelp = subbuilders.map { case (sn, sub) =>
-        ("Subcommand: %s" format sn) + "\n" + sub.bann.map(_+"\n").getOrElse("") + sub.help + sub.foot.map("\n"+_).getOrElse("")
+        ("Subcommand: %s" format sn) + "\n" + 
+        sub.bann.map(_+"\n").getOrElse("") + 
+        sub.help.split("\n").filter(!_.trim.startsWith("--version")).mkString("\n") + 
+        sub.foot.map("\n"+_).getOrElse("")
       }.mkString("\n")
       if (subHelp.nonEmpty) "\n\n" + subHelp else subHelp
     }

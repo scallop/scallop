@@ -463,8 +463,8 @@ class ConfTest extends FunSuite with ShouldMatchers {
   test ("help formatter test") {
     val text = Formatter.wrap("supress all output, including output from scripts (stderr from scripts is still printed)".split(" "), 76)
     val expected =  (List(
-      "supress all output, including output from scripts (stderr from scripts is ",
-      "still printed) "
+      "supress all output, including output from scripts (stderr from scripts is",
+      "still printed)"
     ))
     text should equal (expected)
   }
