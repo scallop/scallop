@@ -221,16 +221,21 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @param hidden If set to true, then this option will not be present in auto-generated help.
     */
   def toggle(
-      name: String,
+      name: String = null,
       default: => Option[Boolean] = None,
-      short: Char = 0.toChar,
+      short: Char = '\0',
       noshort: Boolean = false,
       prefix: String = "no",
       descrYes: String = "",
       descrNo: String = "",
       hidden: Boolean = false): ScallopOption[Boolean] = {
-    editBuilder(_.toggle(name, () => default, short, noshort, prefix, descrYes, descrNo, hidden))
-    val n = getName(name)
+    val resolvedName =
+      if (name == null) {
+        if (guessOptionName) genName()
+        else throw new IllegalArgumentException("You should supply a name for your toggle!")
+      } else name
+    editBuilder(_.toggle(resolvedName, () => default, short, noshort, prefix, descrYes, descrNo, hidden))
+    val n = getName(resolvedName)
     new ScallopOption[Boolean](n) {
       override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[Boolean](x)}
       override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
@@ -394,6 +399,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
                 o match {
                   case so: SimpleOption => so.copy(name = newShortName)
                   case to: TrailingArgsOption => to.copy(name = newShortName)
+                  case to: ToggleOption => to.copy(name = newShortName)
                   case _ => o
                 }
               } else o

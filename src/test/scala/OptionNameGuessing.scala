@@ -70,4 +70,20 @@ class OptionNameGuessing extends UsefulMatchers {
     Conf.trailing2.get should be (Some(List("foo", "bar", "baz", "bippy")))
   }
 
+  test("toggle name guessing") {
+    object Conf extends ScallopConf(List("--foo", "--nobippy", "-s")) {
+      val foo = toggle()
+      val zoop = toggle()
+      val bippy = toggle()
+      val scooby = toggle()
+    }
+    Conf.foo.name should be ("foo")
+    Conf.zoop.name should be ("zoop")
+    Conf.bippy.name should be ("bippy")
+    Conf.foo.get should be (Some(true))
+    Conf.zoop.get should be (None)
+    Conf.bippy.get should be (Some(false))
+    Conf.scooby.get should be (Some(true))
+  }
+
 }
