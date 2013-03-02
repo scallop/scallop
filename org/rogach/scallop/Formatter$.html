@@ -190,17 +190,18 @@
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.rogach.scallop.Formatter#format" data-isabs="false">
-      <a id="format(List[(String, String, Option[String])],Option[Int]):String"></a>
+      <a id="format(List[Option[(String, String, Option[String])]],Option[Int]):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">format</span><span class="params">(<span name="s">s: List[(String, String, <span name="scala.Option" class="extype">Option</span>[String])]</span>, <span name="width">width: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Int" class="extype">Int</span>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: String</span>
+        <span class="name">format</span><span class="params">(<span name="s">s: List[<span name="scala.Option" class="extype">Option</span>[(String, String, <span name="scala.Option" class="extype">Option</span>[String])]]</span>, <span name="width">width: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Int" class="extype">Int</span>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: String</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Accepts a list of (argument line, option description, optional default value).</p><div class="fullcomment"><div class="comment cmt"><p>Accepts a list of (argument line, option description, optional default value).
+      <p class="shortcomment cmt">Accepts a list of Option(argument line, option description, optional default value).</p><div class="fullcomment"><div class="comment cmt"><p>Accepts a list of Option(argument line, option description, optional default value). If None, empty line
+is inserted.
 Also accepts optional width, to which the result must be formatted.
 </p></div></div>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
