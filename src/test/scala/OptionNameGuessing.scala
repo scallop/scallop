@@ -58,4 +58,16 @@ class OptionNameGuessing extends UsefulMatchers {
     Conf.xs.get ==== Some("1")
   }
 
+  test("trailArg name guessing") {
+    object Conf extends ScallopConf(List("1", "foo", "bar", "baz", "bippy")) {
+      val trailing1 = trailArg[Int]()
+      val trailing2 = trailArg[List[String]]()
+      verify()
+    }
+    Conf.trailing1.name should be ("trailing1")
+    Conf.trailing2.name should be ("trailing2")
+    Conf.trailing1.get should be (Some(1))
+    Conf.trailing2.get should be (Some(List("foo", "bar", "baz", "bippy")))
+  }
+
 }

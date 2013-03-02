@@ -184,17 +184,20 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @param default If this argument is not required and not found in the argument list, use this value.
     */
   def trailArg[A](
-      name: => String = ("trailArg " + (1 to 10).map(_ => (97 to 122)(math.random * 26 toInt).toChar).mkString),
+      name: String = null,
       descr: String = "",
       validate: A => Boolean = (_:A) => true,
       required: Boolean = true,
       default: => Option[A] = None,
       hidden: Boolean = false)
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
-    // here, we generate some random name, since it does not matter
-    val nm = name
-    editBuilder(_.trailArg(nm, required, descr, () => default, validate, hidden)(conv))
-    val n = getName(nm)
+    val resolvedName =
+      if (name == null) {
+        if (guessOptionName) genName()
+        else throw new IllegalArgumentException("You should supply a name for your trailArg!")
+      } else name
+    editBuilder(_.trailArg(resolvedName, required, descr, () => default, validate, hidden)(conv))
+    val n = getName(resolvedName)
     new ScallopOption[A](n) { 
       override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[A](x)(conv.manifest)}
       override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
@@ -390,6 +393,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
               if (o.name == shortGenName) {
                 o match {
                   case so: SimpleOption => so.copy(name = newShortName)
+                  case to: TrailingArgsOption => to.copy(name = newShortName)
                   case _ => o
                 }
               } else o
