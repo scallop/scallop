@@ -26,7 +26,7 @@ Installation
 Add following to your build.sbt:
 
 ```scala
-libraryDependencies += "org.rogach" %% "scallop" % "0.8.0"
+libraryDependencies += "org.rogach" %% "scallop" % "0.8.1"
 ```
 
 Quick example
