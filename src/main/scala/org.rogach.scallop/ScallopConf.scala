@@ -60,14 +60,14 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   
   /** Retrieves the choosen subcommand. */
   def subcommand: Option[ScallopConf] = {
-    verified_?
+    assertVerified
     assert(rootConfig == this, "You shouldn't call 'subcommand' on subcommand object")
     builder.getSubcommandName.map(n => subconfigs.find(_.commandname == n).get)
   }
   
   /** Retrieves the list of the chosen nested subcommands. */
   def subcommands: List[ScallopConf] = {
-    verified_?
+    assertVerified
     assert(rootConfig == this, "You shouldn't call 'subcommands' on subcommand object")
 
     var config = this
@@ -79,9 +79,11 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     configs
   }
   
-  def getName(name: String): String = {
-    (ScallopConf.confs.value.map(_.commandname).mkString("\0") + "\0" + name).stripPrefix("\0")
-  }
+  /** Get current prefix to command name (consists of parent builder names, separated by null char) */
+  private def getPrefix = ScallopConf.confs.value.map(_.commandname).mkString("\0") + "\0" stripPrefix "\0"
+
+  def getName(name: String): String =
+    getPrefix + name
 
   var verified = false
 
@@ -121,10 +123,21 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.opt(resolvedName, short, descr, () => default, validate, required, argName, hidden, noshort)(conv))
     val n = getName(resolvedName)
     new ScallopOption[A](n) {
-      override lazy val fn = {verified_?; rootConfig.builder.get[A](name)(conv.tag)}
-      override lazy val supplied = {verified_?; rootConfig.builder.isSupplied(name)}
+      override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[A](x)(conv.tag)}
+      override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
     }
-  }              
+  }
+  
+  private var _mainOptions: () => Seq[String] = () => Nil
+  /** Options, that are to be printed first in the help printout */
+  def mainOptions = _mainOptions()
+  /** Set options, that are to be printed first in the help printout */ 
+  def mainOptions_=(newMainOptions: => Seq[ScallopOption[_]]) = {
+    val prefix = getPrefix
+    _mainOptions = () => {
+      newMainOptions.map(_.name.stripPrefix(prefix))
+    }
+  }
 
   /** Add new property option definition to this config object, and get a handle for option retreiving.
     * 
@@ -135,7 +148,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @return A holder for retreival of the values.
     */
   def props[A](
-      name: Char,
+      name: Char = 'D',
       descr: String = "",
       keyName: String = "key",
       valueName: String = "value",
@@ -144,13 +157,13 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.props(name, descr, keyName, valueName, hidden)(conv))
     val n = getName(name.toString)
     new LazyMap ({() =>
-      verified_?
+      assertVerified
       rootConfig.builder(n)(conv.tag)
     })
   }
 
   def propsLong[A](
-      name: String,
+      name: String = "Props",
       descr: String = "",
       keyName: String = "key",
       valueName: String = "value",
@@ -159,7 +172,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.propsLong(name, descr, keyName, valueName, hidden)(conv))
     val n = getName(name)
     new LazyMap ({() =>
-      verified_?
+      assertVerified
       rootConfig.builder(n)(conv.tag)
     })
   }
@@ -172,20 +185,23 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @param default If this argument is not required and not found in the argument list, use this value.
     */
   def trailArg[A](
-      name: => String = ("trailArg " + (1 to 10).map(_ => (97 to 122)(math.random * 26 toInt).toChar).mkString),
+      name: String = null,
       descr: String = "",
       validate: A => Boolean = (_:A) => true,
       required: Boolean = true,
       default: => Option[A] = None,
       hidden: Boolean = false)
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
-    // here, we generate some random name, since it does not matter
-    val nm = name
-    editBuilder(_.trailArg(nm, required, descr, () => default, validate, hidden)(conv))
-    val n = getName(nm)
+    val resolvedName =
+      if (name == null) {
+        if (guessOptionName) genName()
+        else throw new IllegalArgumentException("You should supply a name for your trailArg!")
+      } else name
+    editBuilder(_.trailArg(resolvedName, required, descr, () => default, validate, hidden)(conv))
+    val n = getName(resolvedName)
     new ScallopOption[A](n) { 
-      override lazy val fn = {verified_?; rootConfig.builder.get[A](name)(conv.tag)}
-      override lazy val supplied = {verified_?; rootConfig.builder.isSupplied(name)}
+      override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[A](x)(conv.tag)}
+      override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
     }
   }
 
@@ -206,24 +222,29 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @param hidden If set to true, then this option will not be present in auto-generated help.
     */
   def toggle(
-      name: String,
+      name: String = null,
       default: => Option[Boolean] = None,
-      short: Char = 0.toChar,
+      short: Char = '\0',
       noshort: Boolean = false,
       prefix: String = "no",
       descrYes: String = "",
       descrNo: String = "",
       hidden: Boolean = false): ScallopOption[Boolean] = {
-    editBuilder(_.toggle(name, () => default, short, noshort, prefix, descrYes, descrNo, hidden))
-    val n = getName(name)
+    val resolvedName =
+      if (name == null) {
+        if (guessOptionName) genName()
+        else throw new IllegalArgumentException("You should supply a name for your toggle!")
+      } else name
+    editBuilder(_.toggle(resolvedName, () => default, short, noshort, prefix, descrYes, descrNo, hidden))
+    val n = getName(resolvedName)
     new ScallopOption[Boolean](n) {
-      override lazy val fn = {verified_?; rootConfig.builder.get[Boolean](name)}
-      override lazy val supplied = {verified_?; rootConfig.builder.isSupplied(name)}
+      override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[Boolean](x)}
+      override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
     }
   }
 
   /** Veryfy that this config object is properly configured. */
-  def verify() {
+  private[scallop] def verify() {
     try {
       verified = true
       builder.verify
@@ -280,9 +301,8 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   }
   
   /** Checks that this Conf object is verified. If it is not, throws an exception. */
-  def verified_? = {
-    if (verified) true
-    else {
+  def assertVerified() {
+    if (!verified) {
       ScallopConf.cleanUp
       throw new IncompleteBuildException()
     }
@@ -319,7 +339,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @return a list of all options in the builder, and corresponding values for them.
     */
   def summary = {
-    verified_?
+    assertVerified
     builder.summary
   }
 
@@ -375,10 +395,12 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
             val newShortName = m.getName.flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
             val newFullName = getName(newShortName)
             val shortGenName = '\t' +: opt.name.reverse.takeWhile('\t'!=).reverse // the old, generated version of name, without prefixes from parent builders
-            editBuilder(e => e.copy(opts = e.opts.map { o => 
+            editBuilder(e => e.copy(opts = e.opts.map { o =>
               if (o.name == shortGenName) {
                 o match {
                   case so: SimpleOption => so.copy(name = newShortName)
+                  case to: TrailingArgsOption => to.copy(name = newShortName)
+                  case to: ToggleOption => to.copy(name = newShortName)
                   case _ => o
                 }
               } else o
@@ -387,6 +409,8 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
           }
         }
     }
+    // now, when we fixed option names, we can push mainOptions into the builder
+    editBuilder(_.copy(mainOpts = _mainOptions().toList))
     if (ScallopConf.confs.value.size > 1) {
       ScallopConf.confs.value = ScallopConf.confs.value.init
       ScallopConf.confs.value.last.editBuilder(_.addSubBuilder(commandname, builder))

@@ -21,6 +21,7 @@ object Scallop {
   *
   * @param args Arguments to parse.
   * @param opts Options definitions.
+  * @param mainOpts Names of options, that are to be printed first in the help printout
   * @param vers Version string to display in help.
   * @param bann Banner (summary of this program and command-line usage) to display in help.
   * @param foot Footer - displayed after options.
@@ -33,6 +34,7 @@ object Scallop {
 case class Scallop(
     args: Seq[String] = Nil,
     opts: List[CliOption] = Nil,
+    mainOpts: List[String] = Nil,
     vers: Option[String] = None,
     bann: Option[String] = None,
     foot: Option[String] = None,
@@ -410,10 +412,57 @@ case class Scallop(
   def setHelpWidth(w: Int) = this.copy(helpWidth = Some(w))
   
   /** Get help on options from this builder. The resulting help is carefully formatted to required number of columns (default = 80, change with .setHelpWidth method),
-    * and contains info on proporties and options. It does not contain info about trailing arguments.
+    * and contains info on proporties, options and trailing arguments.
     */
   def help: String = {
-    val optsHelp = Formatter format (opts filter (!_.isPositional) filter (!_.hidden) sortBy (_.name.toLowerCase) flatMap (o => o.helpInfo(getOptionShortNames(o))), helpWidth)
+    // --help and --version do not go through normal pipeline, so we need to hardcode them here
+    val helpOpt = 
+      opts.find(_.name == "help").getOrElse(
+        SimpleOption(
+          name = "help",
+          short = None, 
+          descr = "Show help message", 
+          required = false, 
+          converter = flagConverter, 
+          default = () => None, 
+          validator = (_,_) => true, 
+          argName = "",
+          hidden = false,
+          noshort = true
+        )
+      )
+    val versionOpt = 
+      opts.find(_.name == "version").getOrElse(
+        SimpleOption(
+          name = "version",
+          short = None, 
+          descr = "Show version of this program", 
+          required = false, 
+          converter = flagConverter, 
+          default = () => None, 
+          validator = (_,_) => true, 
+          argName = "",
+          hidden = false,
+          noshort = true
+        )
+      )
+
+    val optsToFormat = 
+      mainOpts.map(mo => opts.find(_.name == mo)) ++ mainOpts.headOption.map(_=>List(None)).getOrElse(Nil) ++
+      (opts
+        filter (!_.isPositional)
+        filter (!_.hidden)
+        filter (o => mainOpts.forall(o.name!=))
+        filter (o => o.name != "help" && o.name != "version")
+        sortBy (_.name.toLowerCase)
+        map (o => Some(o))) ++ 
+      List(Some(helpOpt), Some(versionOpt))
+    val optsHelp = Formatter format (
+      optsToFormat flatMap {
+        case None => List(None)
+        case Some(o) => o.helpInfo(getOptionShortNames(o)).map(Some(_))
+      },
+      helpWidth)
     val subcommandsHelp = if (shortSubcommandsHelp) {
       subbuilders.headOption.map { _ =>
         val maxCommandLength = subbuilders.map(_._1.size).max
@@ -421,11 +470,16 @@ case class Scallop(
       }.getOrElse("")
     } else {
       val subHelp = subbuilders.map { case (sn, sub) =>
-        ("Subcommand: %s" format sn) + "\n" + sub.bann.map(_+"\n").getOrElse("") + sub.help + sub.foot.map("\n"+_).getOrElse("")
+        ("Subcommand: %s" format sn) + "\n" + 
+        sub.bann.map(_+"\n").getOrElse("") + 
+        sub.help.split("\n").filter(!_.trim.startsWith("--version")).mkString("\n") + 
+        sub.foot.map("\n"+_).getOrElse("")
       }.mkString("\n")
       if (subHelp.nonEmpty) "\n\n" + subHelp else subHelp
     }
-    val trailHelp = Formatter format (opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)), helpWidth)
+    val trailHelp = Formatter format (
+      opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)) map (Some(_)),
+      helpWidth)
     if (opts filter (_.isPositional) isEmpty) {
       optsHelp + subcommandsHelp
     } else {

@@ -4,8 +4,8 @@ package org.rogach.scallop
   *
   * Basically, this is a lazy option - it batches up all operations,
   * and evaluates the value only as the last resort.
-  * @param nm Name for the option, can be None (then it's determined by reflection during config verification)
-  * @param fn source of the actual value 
+  * @param nm Name for the option
+  * @param fn source of the actual value
   * @param supplied function, that is capable of testing whether the value was explicitly
   *                 found in argument list.
   */
@@ -13,17 +13,17 @@ abstract class ScallopOption[A](nm: String) { opt =>
   
   private[scallop] var _name = nm
 
-  lazy val fn: Option[A] = None
+  lazy val fn: String => Option[A] = x => None
   lazy val supplied: Boolean = false
 
   /** Name for the option */
   def name = _name
 
   /** Retreive the underlying value as an option */
-  def get = fn
+  def get = fn(name)
   
   /** Retreive the underlying value. Use only if you are completely sure that there is a value. */
-  def apply() = fn.get
+  def apply() = get.get
   
   /** Tests whether the underlying value was explicitly supplied by user. */
   def isSupplied = supplied
@@ -36,7 +36,7 @@ abstract class ScallopOption[A](nm: String) { opt =>
     */
   def collect[B](pf: PartialFunction[A,B]) =
     new ScallopOption[B](name) {
-      override lazy val fn = opt.get.collect(pf)
+      override lazy val fn = (x: String) => opt.fn(x).collect(pf)
       override lazy val supplied = opt.supplied
     }
   
@@ -47,7 +47,7 @@ abstract class ScallopOption[A](nm: String) { opt =>
     */
   def filter(p: A => Boolean) =
     new ScallopOption[A](name) {
-      override lazy val fn = opt.get.filter(p)
+      override lazy val fn = (x: String) => opt.fn(x).filter(p)
       override lazy val supplied = opt.supplied
     }
 
@@ -58,7 +58,7 @@ abstract class ScallopOption[A](nm: String) { opt =>
     */
   def filterNot(p: A => Boolean) =
     new ScallopOption[A](name) {
-      override lazy val fn = opt.get.filterNot(p)
+      override lazy val fn = (x: String) => opt.fn(x).filterNot(p)
       override lazy val supplied = opt.supplied
     }
     
@@ -79,7 +79,7 @@ abstract class ScallopOption[A](nm: String) { opt =>
     */
   def map[B](f: A => B) = 
     new ScallopOption[B](name) { 
-      override lazy val fn = opt.get.map(f)
+      override lazy val fn = (x: String) => opt.fn(x).map(f)
       override lazy val supplied = opt.supplied
     }
 
@@ -92,11 +92,12 @@ abstract class ScallopOption[A](nm: String) { opt =>
     */
   def flatMap[B](f: A => ScallopOption[B]): ScallopOption[B] = 
     new ScallopOption[B](name) {
-      override lazy val fn: Option[B] = 
-        if (opt.isEmpty) 
+      override lazy val fn: String => Option[B] = { x =>
+        if (opt.fn(x).isEmpty) 
           None
-        else 
-          f(opt()).get
+        else
+          f(opt.fn(x).get).get
+      }
       override lazy val supplied = false
     }
     
@@ -108,7 +109,7 @@ abstract class ScallopOption[A](nm: String) { opt =>
     */
   def orElse[B >: A](alternative: => Option[B]) =
     new ScallopOption[B](name) {
-      override lazy val fn = opt.get.orElse(alternative)
+      override lazy val fn = (x: String) => opt.fn(x).orElse(alternative)
       override lazy val supplied = opt.supplied
     }
     
