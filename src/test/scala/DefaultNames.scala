@@ -1,0 +1,18 @@
+package org.rogach.scallop
+
+import org.scalatest.FunSuite
+import org.scalatest.matchers.ShouldMatchers
+import org.rogach.scallop._
+import org.rogach.scallop.exceptions._
+
+class DefaultNames extends UsefulMatchers with CapturingTest with ShouldMatchers {
+
+  test("default for props") {
+    object Conf extends ScallopConf(List("-D", "foo=bar,", "bar=baz,", "baz=bippy")) {
+      val properties = props[String]()
+      verify()
+    }
+    Conf.properties should equal (Map("foo"->"bar", "bar"->"baz", "baz"->"bippy"))
+  }
+
+}

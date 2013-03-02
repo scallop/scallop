@@ -147,7 +147,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @return A holder for retreival of the values.
     */
   def props[A](
-      name: Char,
+      name: Char = 'D',
       descr: String = "",
       keyName: String = "key",
       valueName: String = "value",
