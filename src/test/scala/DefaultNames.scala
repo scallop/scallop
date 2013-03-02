@@ -15,4 +15,11 @@ class DefaultNames extends UsefulMatchers with CapturingTest with ShouldMatchers
     Conf.properties should equal (Map("foo"->"bar", "bar"->"baz", "baz"->"bippy"))
   }
 
+  test("default name for propsLong") {
+    object Conf extends ScallopConf(List("--Props", "foo=bar", "bar=baz")) {
+      val properties = propsLong[String]()
+    }
+    Conf.properties should equal (Map("foo" -> "bar", "bar" -> "baz"))
+  }
+
 }

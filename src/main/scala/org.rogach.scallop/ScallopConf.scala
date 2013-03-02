@@ -162,7 +162,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   }
 
   def propsLong[A](
-      name: String,
+      name: String = "Props",
       descr: String = "",
       keyName: String = "key",
       valueName: String = "value",
