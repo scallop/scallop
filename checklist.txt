@@ -6,7 +6,7 @@ Release
 * +test
 * +publish
 * Commit the changes.
-* switch branch to for-2.10, merge master, compile, test, publish
+* switch branch to for-2.9, merge master, compile, test, publish
 * Tag the release (on master).
 * Close the release in Nexus UI.
 * Push latest version to github. (push --all; push --tags)
