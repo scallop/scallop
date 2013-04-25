@@ -14,7 +14,7 @@ object build extends Build {
   println("git branch: %s" format branch)
   
   val vers = 
-    if (branch == "master" || branch == "for-2.10")
+    if (branch == "master" || branch == "for-2.9")
       readmeVersion
     else {
       val n = readmeVersion.split("\\.")
