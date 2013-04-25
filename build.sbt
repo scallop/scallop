@@ -4,7 +4,7 @@ organization := "org.rogach"
 
 name := "scallop"
 
-scalaVersion := "2.10.0"
+scalaVersion := "2.10.1"
 
 scalacOptions ++= Seq(
   "-deprecation", 
@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "1.9.1" % "test"
 )
 
-crossScalaVersions := Seq("2.10.0")
+crossScalaVersions := Seq("2.10.1")
 
 unmanagedClasspath in Compile += file("dummy")
 
@@ -83,6 +83,6 @@ git.remoteRepo := "git@github.com:Rogach/scallop.git"
 
 // fix for paths to source files in scaladoc
 doc in Compile <<= (doc in Compile) map { in =>
-  Seq("bash","-c",""" for x in $(find target/scala-2.9.2/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
+  Seq("bash","-c",""" for x in $(find target/scala-2.10/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
   in
 }

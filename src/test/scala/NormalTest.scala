@@ -479,7 +479,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       val opts = Scallop(List("-a","1"))
         .opt[Int]("apples")
         .opt[Int]("bananas")
-        .validationSet(l => if (l.contains("apples") && l.contains("bananas")) Right() else Left(""))
+        .validationSet(l => if (l.contains("apples") && l.contains("bananas")) Right(()) else Left(""))
         .verify
     }
   }
