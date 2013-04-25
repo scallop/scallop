@@ -2,24 +2,39 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.rogach.scallop.exceptions</title>
+          <title>exceptions - org.rogach.scallop.exceptions</title>
+          <meta name="description" content="exceptions - org.rogach.scallop.exceptions" />
+          <meta name="keywords" content="exceptions org.rogach.scallop.exceptions" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link type="text/css" media="screen" rel="stylesheet" href="../../../../lib/template.css" />
-      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
       <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'org.rogach.scallop.exceptions.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
     
         </head>
-        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="value">
+        <body class="value">
       <div id="definition">
         <img src="../../../../lib/package_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../../package.html">org</a>.<a name="org.rogach" class="extype" href="../../package.html">rogach</a>.<a name="org.rogach.scallop" class="extype" href="../package.html">scallop</a></p>
+        <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.rogach">rogach</a>.<a href="../package.html" class="extype" name="org.rogach.scallop">scallop</a></p>
         <h1>exceptions</h1>
       </div>
 
-      <h4 class="signature" id="signature">
+      <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">package</span>
@@ -29,11 +44,11 @@
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"></div>
-    
+          <div id="comment" class="fullcommenttop"></div>
+        
 
       <div id="mbrsel">
-        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
         
         
         <div id="visbl">
@@ -46,9 +61,10 @@
         <div id="allMembers">
         
 
-        <div class="types members" id="types">
+        <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.rogach.scallop.exceptions.Help" data-isabs="false">
+              <ol><li name="org.rogach.scallop.exceptions.Help" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HelpextendsThrowablewithScallopResultwithProductwithSerializable"></a>
       <a id="Help:Help"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -56,11 +72,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Help.html"><span class="name">Help</span></a><span class="params">(<span name="command">command: String</span>)</span><span class="result"> extends Throwable with ScallopResult with Product with Serializable</span>
+        <a href="Help.html"><span class="name">Help</span></a><span class="params">(<span name="command">command: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Throwable">Throwable</span> with <a href="ScallopResult.html" class="extype" name="org.rogach.scallop.exceptions.ScallopResult">ScallopResult</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when user requested help output (via &quot;--help&quot;)</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.IdenticalOptionNames" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.IdenticalOptionNames" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IdenticalOptionNamesextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="IdenticalOptionNames:IdenticalOptionNames"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -68,12 +85,13 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="IdenticalOptionNames.html"><span class="name">IdenticalOptionNames</span></a><span class="params">(<span name="mess">mess: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
+        <a href="IdenticalOptionNames.html"><span class="name">IdenticalOptionNames</span></a><span class="params">(<span name="mess">mess: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when several options and/or trailing arguments have identical names
     in definition - making it impossible to distinguish between them.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.IllegalOptionParameters" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.IllegalOptionParameters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IllegalOptionParametersextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="IllegalOptionParameters:IllegalOptionParameters"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -81,11 +99,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="IllegalOptionParameters.html"><span class="name">IllegalOptionParameters</span></a><span class="params">(<span name="mess">mess: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
+        <a href="IllegalOptionParameters.html"><span class="name">IllegalOptionParameters</span></a><span class="params">(<span name="mess">mess: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when user tried to create an option with some illegal parameters</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.IncompleteBuildException" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.IncompleteBuildException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IncompleteBuildExceptionextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="IncompleteBuildException:IncompleteBuildException"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -93,12 +112,13 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="IncompleteBuildException.html"><span class="name">IncompleteBuildException</span></a><span class="params">()</span><span class="result"> extends ScallopException with Product with Serializable</span>
+        <a href="IncompleteBuildException.html"><span class="name">IncompleteBuildException</span></a><span class="params">()</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when user tried to extract the value of an option before the call
     to verify in ScallopConf.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.MajorInternalException" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.MajorInternalException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MajorInternalExceptionextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="MajorInternalException:MajorInternalException"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -106,11 +126,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="MajorInternalException.html"><span class="name">MajorInternalException</span></a><span class="params">()</span><span class="result"> extends ScallopException with Product with Serializable</span>
+        <a href="MajorInternalException.html"><span class="name">MajorInternalException</span></a><span class="params">()</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">This is a special case of exception - the one you should never see.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.OptionSetValidationFailure" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.OptionSetValidationFailure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OptionSetValidationFailureextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="OptionSetValidationFailure:OptionSetValidationFailure"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -118,11 +139,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="OptionSetValidationFailure.html"><span class="name">OptionSetValidationFailure</span></a><span class="params">(<span name="mess">mess: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
+        <a href="OptionSetValidationFailure.html"><span class="name">OptionSetValidationFailure</span></a><span class="params">(<span name="mess">mess: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Trown when some validation for option set failed.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.RequiredOptionNotFound" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.RequiredOptionNotFound" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RequiredOptionNotFoundextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="RequiredOptionNotFound:RequiredOptionNotFound"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -130,12 +152,13 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="RequiredOptionNotFound.html"><span class="name">RequiredOptionNotFound</span></a><span class="params">(<span name="name">name: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
+        <a href="RequiredOptionNotFound.html"><span class="name">RequiredOptionNotFound</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when parser failed to find arguments to option (marked as 'required')
     in the input arguments.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.ScallopException" data-isabs="true">
+    </li><li name="org.rogach.scallop.exceptions.ScallopException" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ScallopExceptionextendsExceptionwithScallopResult"></a>
       <a id="ScallopException:ScallopException"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -143,11 +166,12 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="ScallopException.html"><span class="name">ScallopException</span></a><span class="result"> extends Exception with ScallopResult</span>
+        <a href="ScallopException.html"><span class="name">ScallopException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="ScallopResult.html" class="extype" name="org.rogach.scallop.exceptions.ScallopResult">ScallopResult</a></span>
       </span>
       </h4>
       <p class="comment cmt">Parent class for all exceptions thrown from this library.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.ScallopResult" data-isabs="true">
+    </li><li name="org.rogach.scallop.exceptions.ScallopResult" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ScallopResultextendsAnyRef"></a>
       <a id="ScallopResult:ScallopResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -155,11 +179,12 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ScallopResult.html"><span class="name">ScallopResult</span></a><span class="result"> extends AnyRef</span>
+        <a href="ScallopResult.html"><span class="name">ScallopResult</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       <p class="comment cmt">Parent trait for all not-positive results that can be resulted from this library (including help and exits)</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.TrailingArgsParseException" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.TrailingArgsParseException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TrailingArgsParseExceptionextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="TrailingArgsParseException:TrailingArgsParseException"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -167,12 +192,13 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="TrailingArgsParseException.html"><span class="name">TrailingArgsParseException</span></a><span class="params">(<span name="failedArgs">failedArgs: Seq[String]</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
+        <a href="TrailingArgsParseException.html"><span class="name">TrailingArgsParseException</span></a><span class="params">(<span name="failedArgs">failedArgs: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when Scallop fails to parse the argument line (usually when there
     are some problems with trailing args).</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.UnknownOption" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.UnknownOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnknownOptionextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="UnknownOption:UnknownOption"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -180,12 +206,13 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="UnknownOption.html"><span class="name">UnknownOption</span></a><span class="params">(<span name="optionName">optionName: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
+        <a href="UnknownOption.html"><span class="name">UnknownOption</span></a><span class="params">(<span name="optionName">optionName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when user provides Scallop with unknown option name in the arguments
     or requests unknown option result from parser.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.ValidationFailure" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.ValidationFailure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ValidationFailureextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="ValidationFailure:ValidationFailure"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -193,11 +220,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ValidationFailure.html"><span class="name">ValidationFailure</span></a><span class="params">(<span name="mess">mess: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
+        <a href="ValidationFailure.html"><span class="name">ValidationFailure</span></a><span class="params">(<span name="mess">mess: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when the validation failed on some option.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.WrongOptionFormat" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.WrongOptionFormat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WrongOptionFormatextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="WrongOptionFormat:WrongOptionFormat"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -205,12 +233,13 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="WrongOptionFormat.html"><span class="name">WrongOptionFormat</span></a><span class="params">(<span name="optionName">optionName: String</span>, <span name="args">args: String</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
+        <a href="WrongOptionFormat.html"><span class="name">WrongOptionFormat</span></a><span class="params">(<span name="optionName">optionName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="args">args: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when arguments to some option do not satisfy that option's
     value converter (it returns Left in such case).</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.WrongTypeRequest" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.WrongTypeRequest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WrongTypeRequestextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="WrongTypeRequest:WrongTypeRequest"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -218,7 +247,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="WrongTypeRequest.html"><span class="name">WrongTypeRequest</span></a><span class="params">(<span name="requested">requested: Manifest[_]</span>, <span name="required">required: Manifest[_]</span>)</span><span class="result"> extends ScallopException with Product with Serializable</span>
+        <a href="WrongTypeRequest.html"><span class="name">WrongTypeRequest</span></a><span class="params">(<span name="requested">requested: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[_]</span>, <span name="required">required: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[_]</span>)</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when the user requests wrong type of option argument from Scallop.</p>
@@ -227,9 +256,10 @@
 
         
 
-        <div class="values members" id="values">
+        <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="org.rogach.scallop.exceptions.Exit" data-isabs="false">
+              <ol><li name="org.rogach.scallop.exceptions.Exit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Exit"></a>
       <a id="Exit:Exit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -237,11 +267,12 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Exit$.html"><span class="name">Exit</span></a><span class="result"> extends AnyRef</span>
+        <a href="Exit$.html"><span class="name">Exit</span></a>
       </span>
       </h4>
       <p class="comment cmt">Extractor object, for matching on both Help and Version results.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.ScallopException" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.ScallopException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScallopException"></a>
       <a id="ScallopException:ScallopException"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -249,11 +280,12 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="ScallopException$.html"><span class="name">ScallopException</span></a><span class="result"> extends Serializable</span>
+        <a href="ScallopException$.html"><span class="name">ScallopException</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Extractor object, for matching on all exceptions.</p>
-    </li><li visbl="pub" name="org.rogach.scallop.exceptions.Version" data-isabs="false">
+    </li><li name="org.rogach.scallop.exceptions.Version" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Version"></a>
       <a id="Version:Version"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -261,7 +293,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Version$.html"><span class="name">Version</span></a><span class="result"> extends Throwable with ScallopResult with Product with Serializable</span>
+        <a href="Version$.html"><span class="name">Version</span></a><span class="result"> extends <span class="extype" name="scala.Throwable">Throwable</span> with <a href="ScallopResult.html" class="extype" name="org.rogach.scallop.exceptions.ScallopResult">ScallopResult</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Thrown when user requested version printout (via &quot;--version&quot;)</p>
@@ -269,10 +301,20 @@
             </div>
 
         
+
+        
         </div>
 
         <div id="inheritedMembers">
         
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
         </div>
 
       </div>
