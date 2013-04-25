@@ -14,7 +14,7 @@ class Usability extends UsefulMatchers {
       }
     } catch {
       case WrongOptionFormat("apples", "asdf") => s = true
-      case _ =>
+      case _: Throwable =>
     }
     s ==== true
   }

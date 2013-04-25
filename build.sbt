@@ -4,9 +4,19 @@ organization := "org.rogach"
 
 name := "scallop"
 
-scalaVersion := "2.9.2"
+scalaVersion := "2.10.0"
 
-scalacOptions ++= Seq("-deprecation", "-unchecked")
+scalacOptions ++= Seq(
+  "-deprecation", 
+  "-unchecked", 
+  "-feature",
+  "-language:postfixOps",
+  "-language:reflectiveCalls",
+  "-language:existentials",
+  "-language:implicitConversions",
+  "-Xlint",
+  "-Ywarn-all"
+)
 
 seq(Revolver.settings: _*)
 
@@ -18,9 +28,11 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "1.9.1" % "test"
 )
 
-crossScalaVersions := Seq("2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1", "2.9.2", "2.9.3")
+crossScalaVersions := Seq("2.10.0")
 
 unmanagedClasspath in Compile += file("dummy")
+
+libraryDependencies <+= scalaVersion(sv => "org.scala-lang" % "scala-reflect" % sv)
 
 publishTo <<= version { v: String =>
   val nexus = "https://oss.sonatype.org/"

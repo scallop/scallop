@@ -2,6 +2,7 @@ package org.rogach.scallop
 
 import exceptions._
 import scala.util.DynamicVariable
+import reflect.runtime.universe._
 
 object ScallopConf {
   val rootConf = new DynamicVariable[ScallopConf](null)
@@ -13,7 +14,7 @@ object ScallopConf {
 }
 
 class Subcommand(val commandName: String) extends ScallopConf(Nil, commandName) {
-  1 + 1 // to get the initialization work. Else, it seems that delayedInit is never invoked with this, and the count is broken.
+  () // to get the initialization to work. Else, it seems that delayedInit is never invoked with this, and the count is broken.
   
   /** Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled.
     */
@@ -122,7 +123,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.opt(resolvedName, short, descr, () => default, validate, required, argName, hidden, noshort)(conv))
     val n = getName(resolvedName)
     new ScallopOption[A](n) {
-      override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[A](x)(conv.manifest)}
+      override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[A](x)(conv.tag)}
       override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
     }
   }
@@ -157,7 +158,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     val n = getName(name.toString)
     new LazyMap ({() =>
       assertVerified
-      rootConfig.builder(n)(conv.manifest)
+      rootConfig.builder(n)(conv.tag)
     })
   }
 
@@ -172,7 +173,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     val n = getName(name)
     new LazyMap ({() =>
       assertVerified
-      rootConfig.builder(n)(conv.manifest)
+      rootConfig.builder(n)(conv.tag)
     })
   }
 
@@ -199,7 +200,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     editBuilder(_.trailArg(resolvedName, required, descr, () => default, validate, hidden)(conv))
     val n = getName(resolvedName)
     new ScallopOption[A](n) { 
-      override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[A](x)(conv.manifest)}
+      override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[A](x)(conv.tag)}
       override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
     }
   }
@@ -254,7 +255,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
         }
       }
     } catch { 
-      case e => onError(e)
+      case e: Throwable => onError(e)
     } finally {
       ScallopConf.cleanUp
     }
@@ -300,7 +301,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   }
   
   /** Checks that this Conf object is verified. If it is not, throws an exception. */
-  def assertVerified {
+  def assertVerified() {
     if (!verified) {
       ScallopConf.cleanUp
       throw new IncompleteBuildException()
@@ -438,7 +439,7 @@ abstract class LazyScallopConf(args: Seq[String]) extends ScallopConf(args) {
       verify
     } catch {
       case e: ScallopResult if fn.isDefinedAt(e)=> fn(e)
-      case e => throw e
+      case e: Throwable => throw e
     }
   }
 

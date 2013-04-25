@@ -1,5 +1,7 @@
 package org.rogach
 
+import reflect.runtime.universe._
+
 package object scallop {
   implicit val flagConverter = new ValueConverter[Boolean] {
     def parse(s: List[(String, List[String])]) = s match {
@@ -7,20 +9,20 @@ package object scallop {
       case Nil => Right(None)
       case _ => Left(Unit)
     }
-    val manifest = implicitly[Manifest[Boolean]]
+    val tag = typeTag[Boolean]
     val argType = ArgType.FLAG
   }
 
-  def singleArgConverter[A](conv: String => A)(implicit m: Manifest[A]) = new ValueConverter[A] {
+  def singleArgConverter[A](conv: String => A)(implicit tt: TypeTag[A]) = new ValueConverter[A] {
     def parse(s: List[(String, List[String])]) = {
       s match {
         case (_, i :: Nil) :: Nil =>
-          try { Right(Some(conv(i))) } catch { case _ => Left(Unit) }
+          try { Right(Some(conv(i))) } catch { case _: Throwable => Left(Unit) }
         case Nil => Right(None)
         case _ => Left(Unit)
       }
     }
-    val manifest = m
+    val tag = tt
     val argType = ArgType.SINGLE
   }
   implicit val byteConverter = singleArgConverter[Byte](_.toByte)
@@ -32,17 +34,17 @@ package object scallop {
   implicit val charConverter = singleArgConverter[Char](_.head)
   implicit val stringConverter = singleArgConverter[String](a=>a)
 
-  def listArgConverter[A](conv: String => A)(implicit m: Manifest[List[A]])  = new ValueConverter[List[A]] {
+  def listArgConverter[A](conv: String => A)(implicit tt: TypeTag[List[A]])  = new ValueConverter[List[A]] {
     def parse(s:List[(String, List[String])]) = {
       try {
         val l = s.map(_._2).flatten.map(i => conv(i))
         if (l.isEmpty) Right(None)
         else Right(Some(l))
-      } catch { case _ =>
+      } catch { case _: Throwable =>
         Left(Unit)
       }
     }
-    val manifest = m
+    val tag = tt
     val argType = ArgType.LIST
   }
   implicit val byteListConverter = listArgConverter[Byte](_.toByte)
@@ -53,18 +55,18 @@ package object scallop {
   implicit val doubleListConverter = listArgConverter[Double](_.toDouble)
   implicit val stringListConverter = listArgConverter[String](a => a)
 
-  def propsConverter[A](conv: ValueConverter[A])(implicit m: Manifest[Map[String,A]]): ValueConverter[Map[String,A]] = new ValueConverter[Map[String,A]] {
+  def propsConverter[A](conv: ValueConverter[A])(implicit tt: TypeTag[Map[String,A]]): ValueConverter[Map[String,A]] = new ValueConverter[Map[String,A]] {
     val rgx = """([^=]+)=(.*)""".r
     def parse(s:List[(String, List[String])]) = {
       try {
         Right(Some(s.map(_._2).flatten.map(_.trim).filter(","!=).flatMap(_ split "," filter (_.trim.size > 0)).map {
           case rgx(key,value) => (key, conv.parse(List(("",List(value)))).right.get.get)
         }.toMap))
-      } catch { case _ =>
+      } catch { case _: Throwable =>
         Left(Unit)
       }
     }
-    val manifest = m
+    val tag = tt
     val argType = ArgType.LIST
   }
   implicit val bytePropsConverter = propsConverter[Byte](byteConverter)
