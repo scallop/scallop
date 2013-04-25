@@ -10,11 +10,11 @@ package object scallop {
     val manifest = implicitly[Manifest[Boolean]]
     val argType = ArgType.FLAG
   }
-  
+
   def singleArgConverter[A](conv: String => A)(implicit m: Manifest[A]) = new ValueConverter[A] {
     def parse(s: List[(String, List[String])]) = {
       s match {
-        case (_, i :: Nil) :: Nil => 
+        case (_, i :: Nil) :: Nil =>
           try { Right(Some(conv(i))) } catch { case _ => Left(Unit) }
         case Nil => Right(None)
         case _ => Left(Unit)
@@ -31,12 +31,12 @@ package object scallop {
   implicit val doubleConverter = singleArgConverter[Double](_.toDouble)
   implicit val charConverter = singleArgConverter[Char](_.head)
   implicit val stringConverter = singleArgConverter[String](a=>a)
-  
+
   def listArgConverter[A](conv: String => A)(implicit m: Manifest[List[A]])  = new ValueConverter[List[A]] {
     def parse(s:List[(String, List[String])]) = {
       try {
         val l = s.map(_._2).flatten.map(i => conv(i))
-        if (l.isEmpty) Right(Some(Nil))
+        if (l.isEmpty) Right(None)
         else Right(Some(l))
       } catch { case _ =>
         Left(Unit)
@@ -52,7 +52,7 @@ package object scallop {
   implicit val floatListConverter = listArgConverter[Float](_.toFloat)
   implicit val doubleListConverter = listArgConverter[Double](_.toDouble)
   implicit val stringListConverter = listArgConverter[String](a => a)
-  
+
   def propsConverter[A](conv: ValueConverter[A])(implicit m: Manifest[Map[String,A]]): ValueConverter[Map[String,A]] = new ValueConverter[Map[String,A]] {
     val rgx = """([^=]+)=(.*)""".r
     def parse(s:List[(String, List[String])]) = {
@@ -75,5 +75,5 @@ package object scallop {
   implicit val doublePropsConverter = propsConverter[Double](doubleConverter)
   implicit val charPropsConverter = propsConverter[Char](charConverter)
   implicit val stringPropsConverter = propsConverter[String](stringConverter)
-  
+
 }

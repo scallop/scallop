@@ -4,13 +4,13 @@ import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
 class NormalTest extends FunSuite with ShouldMatchers {
-  
+
   test ("main") {
 val opts = Scallop(List("-d","--num-limbs","1"))
   .version("test 1.2.3 (c) 2012 Mr Placeholder") // --version option is provided for you
                                        // in "verify" stage it would print this message and exit
   .banner("""Usage: test [OPTION]... [pet-name]
-            |test is an awesome program, which does something funny      
+            |test is an awesome program, which does something funny
             |Options:
             |""".stripMargin) // --help is provided, will also exit after printing version,
                               // banner, options usage, and footer
@@ -18,17 +18,17 @@ val opts = Scallop(List("-d","--num-limbs","1"))
   .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
   .opt("monkeys", default = () => Some(2), short = 'm') // you can add the default option
                                                   // the type will be inferred
-  .opt[Int]("num-limbs", 'k', 
+  .opt[Int]("num-limbs", 'k',
     "number of libms", required = true) // you can override the default short-option character
   .opt[List[Double]]("params") // default converters are provided for all primitives
                                // and for lists of primitives
   .opt[String]("debug", hidden = true) // hidden parameters are not printed in help
   .props[String]('D',"some key-value pairs") // yes, property args can have types on their values too
   .args(List("-Dalpha=1","-D","betta=2","gamma=3", "Pigeon")) // you can add parameters a bit later
-  .trailArg[String]("pet name") // you can specify what do you want to get from the end of 
+  .trailArg[String]("pet name") // you can specify what do you want to get from the end of
                                 // args list
   .verify
-  
+
 opts.get[Boolean]("donkey") should equal (Some(true))
 opts[Int]("monkeys") should equal (2)
 opts[Int]("num-limbs") should equal (1)
@@ -45,20 +45,20 @@ println(opts.summary) // returns summary of parser status (with current arg valu
 
 //opts.args(List("--help")).verify
   }
-  
+
   test ("no values") {
     Scallop().verify
     Scallop(Array[String]()).verify
     Scallop(List()).verify
   }
-  
+
   test ("long flag") {
     val opts = Scallop(List("--angel"))
       .opt[Boolean]("angel")
       .verify
     opts[Boolean]("angel") should equal (true)
   }
-  
+
   test ("short flag, explicit name") {
     val opts = Scallop(List("-a"))
       .opt[Boolean]("angel", short = 'a')
@@ -72,7 +72,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       .verify
     opts[Boolean]("angel") should equal (true)
   }
-  
+
   test ("two short flags, implicit name") {
     val opts = Scallop(List("-a"))
       .opt[Boolean]("angel")
@@ -81,7 +81,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts[Boolean]("angel") should equal (true)
     opts[Boolean]("baboon") should equal (false)
   }
-  
+
   test ("two short flags, implicit name, required value") {
     val opts = Scallop(List("-a"))
       .opt[Boolean]("angel", required = true)
@@ -90,7 +90,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts[Boolean]("angel") should equal (true)
     opts[Boolean]("baboon") should equal (false)
   }
- 
+
   test ("one missing int, short opt") {
     val opts = Scallop(List())
       .opt[Int]("angels")
@@ -125,7 +125,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       .verify
     opts.get[Byte]("angels") should equal (Some(42))
   }
-  
+
   test ("one double, long opt") {
     val opts = Scallop(List("--angels","42"))
       .opt[Double]("angels")
@@ -140,7 +140,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts.get[String]("angels") should equal (Some("aoeu"))
   }
 
-  
+
   test ("list of ints, long opt") {
     val opts = Scallop(List("--angels","42","12","345"))
       .opt[List[Int]]("angels")
@@ -169,9 +169,9 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       .verify
     opts[List[Int]]("ang") should equal (List(5,10))
   }
-  
+
   // properties testing
-  
+
   test ("no value") {
     val opts = Scallop()
       .props[String]('D')
@@ -200,23 +200,23 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts.prop[String]('D',"aoeu") should equal (Some("htns"))
     opts.prop[String]('D',"qjk") should equal (Some("gcr"))
   }
-  
+
   test ("two plain props to a map") {
     val opts = Scallop(List("-D", "aoeu=htns", "qjk=gcr"))
       .props[String]('D')
       .verify
     opts[Map[String,String]]('D') should equal (Map("aoeu" -> "htns", "qjk" -> "gcr"))
   }
-  
+
   test ("empty prop") {
     val opts = Scallop(Nil)
       .props[String]('E')
       .verify
     opts.prop[String]('E',"nokey") should equal (None)
   }
-  
+
   // --- typed props ---
-  
+
   test ("typed int prop") {
     val opts = Scallop(List("-Ekey1=1","key2=2"))
       .props[Int]('E')
@@ -225,7 +225,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts.prop[Int]('E',"key2") should equal (Some(2))
     opts[Map[String,Int]]('E') should equal (Map("key1" -> 1, "key2" -> 2))
   }
-  
+
   test ("typed double prop") {
     val opts = Scallop(List("-Ekey1=1.1","key2=2.3"))
       .props[Double]('E')
@@ -233,7 +233,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts.prop[Double]('E',"key1") should equal (Some(1.1))
     opts.prop[Double]('E',"key2") should equal (Some(2.3))
   }
-  
+
   test ("opt implicit name clash with prop name") {
     val opts = Scallop(List("-D", "aoeu=htn"))
       .props[String]('D')
@@ -241,7 +241,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       .verify
     opts.get[String]("Dark") should equal (None)
   }
-  
+
   test ("trail options - after single long-named argument") {
     val opts = Scallop(List("--echo", "42", "rabbit"))
       .opt[Int]("echo")
@@ -263,7 +263,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
   test ("trail options - after two arguments") {
     val opts = Scallop(List("-d","--num-limbs","1","Pigeon"))
       .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
-      .opt[Int]("num-limbs", 'k', 
+      .opt[Int]("num-limbs", 'k',
         "number of libms", required = true) // you can override the default short-option character
       .trailArg[String]("pet-name")
       .verify
@@ -289,23 +289,23 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts.prop[String]('E',"key") should equal ((Some("value")))
     opts[List[String]]("rubbish") should equal (List("rabbit", "key2=value2"))
   }
-  
+
   test ("trail options - after list argument") {
     val opts = Scallop(List("--echo","42","43"))
       .opt[List[Int]]("echo")
       .trailArg[List[Int]]("numbers")
       .verify
-    opts.get[List[Int]]("echo") should equal (Some(List(42, 43)))
-    opts[List[Int]]("numbers") should equal (Nil)
+    opts.get[List[Int]]("echo") should equal (Some(List(42)))
+    opts.get[List[Int]]("numbers") should equal (Some(List(43)))
   }
-  
+
   test ("trail options - after list argument, optional") {
     val opts = Scallop(List("--echo","42","43"))
       .opt[List[Int]]("echo")
       .trailArg[List[Int]]("numbers", required = false)
       .verify
     opts.get[List[Int]]("echo") should equal (Some(List(42,43)))
-    opts.get[List[Int]]("numbers") should equal (Some(Nil))
+    opts.get[List[Int]]("numbers") should equal (None)
   }
 
   test ("trail options - after list argument, single optional value") {
@@ -325,7 +325,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts.get[List[Int]]("numbers") should equal (Some(List(42,43)))
     opts[Boolean]("echo") should equal (true)
   }
-  
+
   test ("trail options - one required, one optional - both provided") {
     val opts = Scallop(List("first","second"))
       .trailArg[String]("name")
@@ -334,7 +334,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts[String]("name") should equal ("first")
     opts.get[String]("surname") should equal (Some("second"))
   }
-  
+
   test ("trail options - one required, one optional - one provided") {
     val opts = Scallop(List("first"))
       .trailArg[String]("name")
@@ -343,23 +343,23 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts[String]("name") should equal ("first")
     opts.get[String]("surname") should equal (None)
   }
-  
+
   test ("trail option - with default value, provided") {
     val opts = Scallop(List("first"))
       .trailArg[String]("name", required = false, default = () => Some("aoeu"))
       .verify
     opts[String]("name") should equal ("first")
   }
-  
+
   test ("trail option - with default value, not provided") {
     val opts = Scallop(Nil)
       .trailArg[String]("name", required = false, default = () => Some("aoeu"))
       .verify
     opts[String]("name") should equal ("aoeu")
   }
-  
+
   test ("trail options - tricky case") {
-    val opts = Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3", 
+    val opts = Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3",
                             "first", "1","2","3","second","4","5","6"))
       .props[String]('E')
       .trailArg[String]("first list name")
@@ -373,7 +373,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts[List[Int]]("first list values") should equal (List(1,2,3))
     opts[List[Double]]("second list values") should equal (List[Double](4,5,6))
   }
-  
+
   test ("custom converter example") {
     case class Person(name:String, phone:String)
     val personConverter = new ValueConverter[Person] {
@@ -384,9 +384,9 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       // parse returns Left, if there was an error while parsing
       // if no option was found, it returns Right(None)
       // and if option was found, it returns Right(...)
-      def parse(s:List[(String, List[String])]):Either[Unit,Option[Person]] = 
+      def parse(s:List[(String, List[String])]):Either[Unit,Option[Person]] =
         s match {
-          case (_, nameRgx(name) :: phoneRgx(phone) :: Nil) :: Nil => 
+          case (_, nameRgx(name) :: phoneRgx(phone) :: Nil) :: Nil =>
             Right(Some(Person(name,phone))) // successfully found our person
           case Nil => Right(None) // no person found
           case _ => Left(Unit) // error when parsing
@@ -399,7 +399,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       .verify
     opts[Person]("person") should equal (Person("Pete", "123-45"))
   }
-  
+
   test ("is supplied - option value was supplied") {
     val opts = Scallop(List("-a", "1"))
       .opt[Int]("apples")
@@ -420,7 +420,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       .verify
     opts.isSupplied("apples") should equal (false)
   }
-  
+
   test ("is supplied - trail arg value was supplied") {
     val opts = Scallop(List("first"))
       .trailArg[String]("file", required = false)
@@ -450,21 +450,21 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts.get[Int]("bananas") should equal (None)
     opts.get[Int]("bags") should equal (Some(1))
   }
-  
+
   test ("negative number in option parameters") {
     val opts = Scallop(List("-a","-1"))
       .opt[Int]("apples")
       .verify
     opts.get[Int]("apples") should equal (Some(-1))
   }
-  
+
   test ("correct validation") {
     val opts = Scallop(List("-a","1"))
       .opt[Int]("apples", validate = (0<))
       .verify
     opts[Int]("apples") should equal (1)
   }
-  
+
   test ("option set validation - success") {
     val opts = Scallop(List("-a","1","-b","2"))
       .opt[Int]("apples")
@@ -490,6 +490,5 @@ println(opts.summary) // returns summary of parser status (with current arg valu
                               |      --help            Show help message
                               |      --version         Show version of this program""".stripMargin)
   }
-  
-}
 
+}

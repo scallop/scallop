@@ -10,7 +10,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
 
   test ("full example") {
     object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
-      // all options that are applicable to builder (like description, default, etc) 
+      // all options that are applicable to builder (like description, default, etc)
       // are applicable here as well
       val count:ScallopOption[Int] = opt[Int]("count", descr = "count the trees", required = true)
                     .map(1+) // also here work all standard Option methods -
@@ -29,12 +29,12 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     someInternalFunc(Conf)
   }
-  
+
   test ("output help") {
     object Conf extends ScallopConf(Seq()) {
       version("test 1.2.3 (c) 2012 Mr Placeholder")
       banner("""Usage: test [OPTION]... [tree|palm] [OPTION]... [tree-name]
-               |test is an awesome program, which does something funny      
+               |test is an awesome program, which does something funny
                |Options:
                |""".stripMargin)
       footer("\nFor all other tricks, consult the documentation!")
@@ -61,7 +61,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     Conf.apples() should equal (3)
   }
-  
+
   test ("prorerty args") {
     object Conf extends ScallopConf(List("-Dkey1=value1", "key2=value2")) {
       val properties = props[String]('D')
@@ -71,7 +71,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.properties.get("key2") should equal (Some("value2"))
     Conf.properties should equal (Map("key1" -> "value1", "key2" -> "value2"))
   }
-  
+
   test ("trailing args") {
     object Conf extends ScallopConf(List("filename1","filename2")) {
       val file1 = trailArg[String]()
@@ -81,21 +81,21 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.file1() should equal ("filename1")
     Conf.file2.get should equal (Some("filename2"))
   }
-  
-  test ("trailing args - empty list arg") {
+
+  test ("trailing args - non-required, empty list arg") {
     object Conf extends ScallopConf(Nil) {
-      val files = trailArg[List[String]]()
+      val files = trailArg[List[String]](required = false)
     }
-    Conf.files() should equal (Nil)
+    Conf.files.get should equal (None)
   }
-  
+
   test ("trailing args - empty list arg after flag option") {
     object Conf extends ScallopConf(Seq("-v")) {
       val verbose = opt[Boolean]("verbose")
-      val files = trailArg[List[String]]()
+      val files = trailArg[List[String]](required = false)
     }
     Conf.verbose() should equal (true)
-    Conf.files() should equal (Nil)
+    Conf.files.get should equal (None)
   }
 
   test ("trailing args - non-empty list arg") {
@@ -134,7 +134,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
       Conf
     }
   }
-  
+
   test ("option operations - collect") {
     object Conf extends ScallopConf(List("-a","3","-b","5")) {
       val apples = opt[Int]("apples")
@@ -159,7 +159,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.applesOrElse2.get should equal (Some(1))
     Conf.bananas.get should equal (None)
   }
-  
+
   test ("printing ScallopOption") {
     object Conf extends ScallopConf(List("-a","3")) {
       val apples = opt[Int]("apples")
@@ -167,7 +167,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     Conf.apples.toString should equal ("ScallopSome(3)")
   }
-  
+
   test ("is supplied - option value was supplied") {
     object Conf extends ScallopConf(List("-a","3")) {
       val apples = opt[Int]("apples")
@@ -175,7 +175,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     Conf.apples.isSupplied should equal (true)
   }
-  
+
   test ("is supplied - option value was not supplied") {
     object Conf extends ScallopConf(Nil) {
       val apples = opt[Int]("apples")
@@ -183,7 +183,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     Conf.apples.isSupplied should equal (false)
   }
-  
+
   test ("toggle flag option") {
     object Conf extends ScallopConf(List("-a")) {
       val apples = opt[Boolean]("apples").map(!_)
@@ -203,7 +203,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.bananas.get should equal (None)
     Conf.bags.get should equal (Some(1))
   }
-  
+
   test ("correct validation") {
     object Conf extends ScallopConf(List("-a","1")) {
       val apples = opt[Int]("apples", validate = (0<))
@@ -211,7 +211,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     Conf.apples() should equal (1)
   }
- 
+
   test ("failing validation") {
     intercept[ValidationFailure] {
       object Conf extends ScallopConf(List("-a","1")) {
@@ -221,8 +221,8 @@ class ConfTest extends FunSuite with ShouldMatchers {
       Conf
     }
   }
-  
-  test ("option set validation, mutually exclusive options, success") { 
+
+  test ("option set validation, mutually exclusive options, success") {
     object Conf extends ScallopConf(List("-a","1")){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
@@ -232,7 +232,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf
   }
 
-  test ("option set validation, mutually exclusive options, failure") { 
+  test ("option set validation, mutually exclusive options, failure") {
     intercept[OptionSetValidationFailure] {
       object Conf extends ScallopConf(List("-a", "1", "-b", "2")){
         val apples = opt[Int]("apples")
@@ -244,7 +244,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
   }
 
-  test ("option set validation, codependent options, success") { 
+  test ("option set validation, codependent options, success") {
     object Conf extends ScallopConf(List("-a","1","-b","2")){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
@@ -253,8 +253,8 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     Conf
   }
-  
-  test ("option set validation, codependent options, failure") { 
+
+  test ("option set validation, codependent options, failure") {
     intercept[OptionSetValidationFailure] {
       object Conf extends ScallopConf(List("-a", "1")){
         val apples = opt[Int]("apples")
@@ -265,7 +265,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
       Conf
     }
   }
-  
+
   test ("mutually exclusive flag options - validation success") {
     object Conf extends ScallopConf(List("-a")) {
       val apples = opt[Boolean]("apples")
@@ -297,7 +297,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.apples() should equal (true)
     Conf.bananas() should equal (true)
   }
-  
+
   test ("custom validation - success") {
     object Conf extends ScallopConf(List("-a","14","-b","3")) {
       val apples = opt[Int]("apples")
@@ -324,8 +324,8 @@ class ConfTest extends FunSuite with ShouldMatchers {
       }
       Conf
     }
-  }  
-  
+  }
+
   test ("numbers in option names") {
     object Conf extends ScallopConf(Seq("-a", "1")) {
       val apples1 = opt[Int]("apples1")
@@ -334,13 +334,13 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
     Conf.apples1.get should equal (Some(1))
   }
-  
+
   test ("for comprehensions for ScallopOptions") {
     object Conf extends ScallopConf(Seq("-a","3","-b","2")) {
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
       val weight = for {
-        a <- apples 
+        a <- apples
         if a > 2
         b <- bananas
       } yield a * 2 + b * 3
@@ -358,7 +358,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.verified should equal (true)
     Conf.apples() should equal (1)
   }
-  
+
   test ("automatic verification, with deeper hierarcy") {
     class AppleConf(args:Seq[String]) extends ScallopConf(args) {
       val apples = opt[Int]("apples")
@@ -370,7 +370,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.apples() should equal (1)
     Conf.bananas() should equal (3)
   }
-  
+
   test ("short-named property args with commas") {
     object Conf extends ScallopConf(Seq("-Akey1=1,key2=2")) {
       val app = props[Int]('A')
@@ -378,7 +378,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.app("key1") should equal (1)
     Conf.app.get("key2") should equal (Some(2))
   }
-  
+
   test ("short-named property args with commas and spaces") {
     object Conf extends ScallopConf(Seq("-A","key1=1",",","key2=2")) {
       val app = props[Int]('A')
@@ -394,7 +394,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.app.get("key1") should equal (Some(1))
     Conf.app.get("key2") should equal (Some(2))
   }
-  
+
   test ("long-named property args") {
     object Conf extends ScallopConf(Seq("--Apples","key1=1","key2=2")) {
       val app = propsLong[Int]("Apples")
@@ -402,7 +402,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.app.get("key1") should equal (Some(1))
     Conf.app.get("key2") should equal (Some(2))
   }
-  
+
   test ("long-named property args with commas and spaces") {
     object Conf extends ScallopConf(Seq("--Apples","key1=1",",","key2=2")) {
       val app = propsLong[Int]("Apples")
@@ -418,39 +418,39 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.verbose() should equal (true)
     Conf.verbose.isSupplied should equal (true)
   }
-  
+
   test ("toggle options - negative, long") {
     object Conf extends ScallopConf(Seq("--noverbose")) {
       val verbose = toggle("verbose")
     }
     Conf.verbose() should equal (false)
     Conf.verbose.isSupplied should equal (true)
-  }  
-  
+  }
+
   test ("toggle options - short") {
     object Conf extends ScallopConf(Seq("-v")) {
       val verbose = toggle("verbose")
     }
     Conf.verbose() should equal (true)
     Conf.verbose.isSupplied should equal (true)
-  }  
-  
+  }
+
   test ("toggle options - not supplied") {
     object Conf extends ScallopConf(Seq()) {
       val verbose = toggle("verbose")
     }
     Conf.verbose.get should equal (None)
     Conf.verbose.isSupplied should equal (false)
-  }  
-  
+  }
+
   test ("toggle options - not supplied, with default") {
     object Conf extends ScallopConf(Seq()) {
       val verbose = toggle("verbose", default = Some(true))
     }
     Conf.verbose.get should equal (Some(true))
     Conf.verbose.isSupplied should equal (false)
-  }  
-  
+  }
+
   test ("forced end of options parsing (--)") {
     object Conf extends ScallopConf(Seq("-a","1","--","-b","2")) {
       val apples = opt[Int]("apples")
@@ -484,7 +484,7 @@ class ConfTest extends FunSuite with ShouldMatchers {
     Conf.output() should equal ("-")
     Conf.input() should equal (List("-"))
   }
-  
+
   test ("default value of option should be lazily evaluated") {
     val conf = new ScallopConf(Seq("-a", "4")) {
       val apples = opt[Int](default = { sys.error("boom"); None })
@@ -497,6 +497,13 @@ class ConfTest extends FunSuite with ShouldMatchers {
       val apples = trailArg[Int](default = { sys.error("boom"); None })
     }
     conf.apples() should equal (4)
+  }
+
+  test ("if no arguments provided for list option, default should be returned") {
+    val conf = new ScallopConf(Seq()) {
+      val apples = opt[List[Int]](default = Some(List(1)))
+    }
+    conf.apples() should equal (List(1))
   }
 
 }
