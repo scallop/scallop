@@ -78,4 +78,13 @@ package object scallop {
   implicit val charPropsConverter = propsConverter[Char](charConverter)
   implicit val stringPropsConverter = propsConverter[String](stringConverter)
 
+  val tallyConverter = new ValueConverter[Int] {
+    def parse(s: List[(String, List[String])]) = {
+      if (s.nonEmpty) Right(Some(s.size))
+      else Right(None)
+    }
+    val tag = implicitly[TypeTag[Int]]
+    val argType = ArgType.FLAG
+  }
+
 }

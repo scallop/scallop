@@ -15,7 +15,7 @@ object ScallopConf {
 
 class Subcommand(val commandName: String) extends ScallopConf(Nil, commandName) {
   () // to get the initialization to work. Else, it seems that delayedInit is never invoked with this, and the count is broken.
-  
+
   /** Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled.
     */
   def descr(d: String) {
@@ -29,7 +29,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     ScallopConf.rootConf.value = this
   }
   val rootConfig = ScallopConf.rootConf.value
-  
+
   if (ScallopConf.confs.value.isEmpty) {
     // If this is the root config, init the root builder
     ScallopConf.confs.value = this :: Nil
@@ -37,11 +37,11 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     // if it is the subcommand config, add new builder to the list
     ScallopConf.confs.value = ScallopConf.confs.value :+ this
   }
-  
+
   def editBuilder(fn: Scallop => Scallop) {
     builder = fn(builder)
   }
-  
+
   var builder = Scallop(args)
 
   // machinery to support option name guessing
@@ -51,20 +51,20 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   def guessOptionName = _guessOptionName
   /** If set to true, scallop would try to guess missing option names from the names of their fields. */
   def guessOptionName_=(v: Boolean) { _guessOptionName = v }
-  
+
   private[this] var gen = 0
   private[this] def genName() = { gen += 1; "\t%d" format gen }
 
   /** List of sub-configs of this config. */
   var subconfigs = List[ScallopConf]()
-  
+
   /** Retrieves the choosen subcommand. */
   def subcommand: Option[ScallopConf] = {
     assertVerified
     assert(rootConfig == this, "You shouldn't call 'subcommand' on subcommand object")
     builder.getSubcommandName.map(n => subconfigs.find(_.commandname == n).get)
   }
-  
+
   /** Retrieves the list of the chosen nested subcommands. */
   def subcommands: List[ScallopConf] = {
     assertVerified
@@ -78,7 +78,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     }
     configs
   }
-  
+
   /** Get current prefix to command name (consists of parent builder names, separated by null char) */
   private def getPrefix = ScallopConf.confs.value.map(_.commandname).mkString("\0") + "\0" stripPrefix "\0"
 
@@ -112,7 +112,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
 
     // guessing name, if needed
-    val resolvedName = 
+    val resolvedName =
       if (name == null)
         if (guessOptionName) {
           genName() // generate unique name, that will be replaced during verification with guessed name
@@ -127,11 +127,11 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
     }
   }
-  
+
   private var _mainOptions: () => Seq[String] = () => Nil
   /** Options, that are to be printed first in the help printout */
   def mainOptions = _mainOptions()
-  /** Set options, that are to be printed first in the help printout */ 
+  /** Set options, that are to be printed first in the help printout */
   def mainOptions_=(newMainOptions: => Seq[ScallopOption[_]]) = {
     val prefix = getPrefix
     _mainOptions = () => {
@@ -139,8 +139,32 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     }
   }
 
+  def tally(
+      name: String = null,
+      short: Char = 0.toChar,
+      descr: String = "",
+      hidden: Boolean = false,
+      noshort: Boolean = false): ScallopOption[Int] = {
+
+    // guessing name, if needed
+    val resolvedName =
+      if (name == null)
+        if (guessOptionName) genName()
+        else throw new IllegalArgumentException("You should supply a name for your option!")
+      else name
+
+    editBuilder(
+      _.opt[Int](resolvedName, short, descr, () => Some(0), _ => true,
+                 false, "", hidden, noshort)(tallyConverter))
+    val n = getName(resolvedName)
+    new ScallopOption[Int](n) {
+      override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[Int](x)(implicitly[TypeTag[Int]])}
+      override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
+    }
+  }
+
   /** Add new property option definition to this config object, and get a handle for option retreiving.
-    * 
+    *
     * @param name Char, that will be used as prefix for property arguments.
     * @param descr Description for this property option, for help description.
     * @param keyName Name for 'key' part of this option arg name, as it will appear in help option definition. Defaults to "key".
@@ -177,7 +201,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     })
   }
 
-  
+
   /** Add new trailing argument definition to this config, and get a holder for it's value.
     *
     * @param name Name for new definition, used for identification.
@@ -199,7 +223,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       } else name
     editBuilder(_.trailArg(resolvedName, required, descr, () => default, validate, hidden)(conv))
     val n = getName(resolvedName)
-    new ScallopOption[A](n) { 
+    new ScallopOption[A](n) {
       override lazy val fn = { (x: String) => assertVerified; rootConfig.builder.get[A](x)(conv.tag)}
       override lazy val supplied = {assertVerified; rootConfig.builder.isSupplied(name)}
     }
@@ -208,7 +232,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   /** Add new toggle option definition to this config, and get a holder for it's value.
     *
     * Toggle options are just glorified flag options. For example, if you will ask for a
-    * toggle option with name "verbose", it will be invocable in three ways - 
+    * toggle option with name "verbose", it will be invocable in three ways -
     * "--verbose", "--noverbose", "-v".
     *
     * @param name Name of this option
@@ -216,7 +240,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @param short Overload the char that will be used as short option name. Defaults to first character of the name.
     * @param noshort If set to true, then this option will not have any short name.
     * @param profix Prefix to name of the option, that will be used for "negative" version of the
-                    option. 
+                    option.
     * @param descrYes Description for positive variant of this option.
     * @param descrNo Description for negative variant of this option.
     * @param hidden If set to true, then this option will not be present in auto-generated help.
@@ -254,16 +278,16 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
           case Left(err) => throw new ValidationFailure(err)
         }
       }
-    } catch { 
+    } catch {
       case e: Throwable => onError(e)
     } finally {
       ScallopConf.cleanUp
     }
   }
-  
+
   /** This name would be included in output when reporting errors. */
   var printedName = "scallop"
-  
+
   /** This function is called with the error message when ScallopException
     * occurs. By default, this function prints message (prefixed by *printedName*) to stdout,
     * coloring the output if possible, then calls `sys.exit(1)`.
@@ -286,20 +310,20 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     */
   protected def onError(e: Throwable): Unit = e match {
     case r: ScallopResult if !throwError.value => r match {
-      case Help("") => 
+      case Help("") =>
         builder.printHelp
         sys.exit(0)
       case Help(subname) =>
         builder.findSubbuilder(subname).get.printHelp
         sys.exit(0)
-      case Version => 
+      case Version =>
         builder.vers.foreach(println)
         sys.exit(0)
       case ScallopException(message) => errorMessageHandler(message)
     }
     case e => throw e
   }
-  
+
   /** Checks that this Conf object is verified. If it is not, throws an exception. */
   def assertVerified() {
     if (!verified) {
@@ -307,7 +331,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       throw new IncompleteBuildException()
     }
   }
-  
+
   /** In the verify stage, checks that only one or zero of the provided options have values supplied in arguments.
     *
     * @param list list of mutually exclusive options
@@ -318,7 +342,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       else Right(Unit)
     })
   }
-  
+
   /** In the verify stage, checks that either all or none of the provided options have values supplied in arguments.
     *
     * @param list list of codependent options
@@ -330,10 +354,10 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       else Right(Unit)
     })
   }
-  
-  
+
+
   // === some getters for convenience ===
-  
+
   /** Get summary of current parser state.
     *
     * @return a list of all options in the builder, and corresponding values for them.
@@ -353,7 +377,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   def version(v: String) {
     editBuilder(_.version(v))
   }
-  
+
   /** Add a banner string to option builder.
     *
     * @param b Banner string.
@@ -361,7 +385,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   def banner(b: String) {
     editBuilder(_.banner(b))
   }
-  
+
   /** Add a footer string to this builder.
     *
     * @param f footer string.
@@ -376,11 +400,11 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   def helpWidth(w: Int) {
     editBuilder(_.setHelpWidth(w))
   }
-  
+
   def shortSubcommandsHelp(v: Boolean = true) {
     editBuilder(_.copy(shortSubcommandsHelp = v))
   }
-  
+
   final def afterInit {
     if (guessOptionName) {
       this.getClass.getMethods
@@ -424,7 +448,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       }
     }
   }
-  
+
 }
 
 /** This configuration object allows user to specify custom error handling in its "initialize" method.
@@ -444,7 +468,7 @@ abstract class LazyScallopConf(args: Seq[String]) extends ScallopConf(args) {
   }
 
   override def onError(e: Throwable) = throw e
-  
+
 }
 
 /** Convenience variable to permit testing. */
