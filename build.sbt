@@ -17,7 +17,7 @@ scalacOptions ++= Seq(
   "-Ywarn-all"
 )
 
-seq(Revolver.settings: _*)
+Revolver.settings
 
 resolvers += "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
 
