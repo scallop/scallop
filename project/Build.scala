@@ -1,6 +1,7 @@
 import sbt._
 import Keys._
 import fmpp.FmppPlugin._
+import com.typesafe.sbt.pgp.PgpKeys._
 import org.eclipse.jgit.lib._
 
 object build extends Build {
@@ -35,7 +36,7 @@ object build extends Build {
 
     val snapshotIndex = {
       import dispatch._
-      Http(url("https://oss.sonatype.org/content/repositories/snapshots/org/rogach/scallop_2.9.2/") OK as.tagsoup.NodeSeq).map { x =>
+      Http(url("https://oss.sonatype.org/content/repositories/snapshots/org/rogach/scallop_2.10/") OK as.tagsoup.NodeSeq).map { x =>
         val vRgx = (""".*%s~(\d+)~SNAPSHOT.*""" format eVersion).r
         x \\ "a" map (_.text) collect { case vRgx(v) => v.toInt}
       }.apply.sorted.lastOption.map(1+).getOrElse(1)
@@ -46,7 +47,7 @@ object build extends Build {
 
     crossVersions.foreach { scalaVers =>
       Project.runTask(
-        publish in Compile,
+        publishSigned in Compile,
         extracted.append(List(version := snapshotVersion, scalaVersion := scalaVers), state),
         true)
     }
