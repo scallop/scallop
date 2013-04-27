@@ -39,6 +39,20 @@ publishTo <<= version { v: String =>
     Some("releases" at nexus + "service/local/staging/deploy/maven2")
 }
 
+licenses := Seq(
+  "MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")
+)
+
+homepage := Some(url("https://github.com/Rogach/scallop"))
+
+scmInfo := Some(
+  ScmInfo(
+    browseUrl = url("http://github.com/Rogach/scallop"),
+    connection = "scm:git:git@github.com:Rogach/scallop.git"
+  )
+)
+
+
 publishMavenStyle := true
 
 publishArtifact in Test := false
@@ -46,17 +60,6 @@ publishArtifact in Test := false
 pomIncludeRepository := { x => false }
 
 pomExtra := (
-  <url>https://github.com/Rogach/scallop</url>
-  <licenses>
-    <license>
-      <name>MIT License</name>
-      <url>http://www.opensource.org/licenses/mit-license.php</url>
-    </license>
-  </licenses>
-  <scm>
-    <url>git@github.com:Rogach/scallop.git</url>
-    <connection>scm:git:git@github.com:Rogach/scallop.git</connection>
-  </scm>
   <developers>
     <developer>
       <id>rogach</id>
