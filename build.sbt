@@ -1,4 +1,3 @@
-import AssemblyKeys._
 
 organization := "org.rogach"
 
@@ -19,8 +18,6 @@ scalacOptions ++= Seq(
 )
 
 seq(Revolver.settings: _*)
-
-seq(assemblySettings: _*)
 
 resolvers += "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
 
