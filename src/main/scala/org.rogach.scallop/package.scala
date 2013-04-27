@@ -80,8 +80,9 @@ package object scallop {
 
   val tallyConverter = new ValueConverter[Int] {
     def parse(s: List[(String, List[String])]) = {
-      if (s.nonEmpty) Right(Some(s.size))
-      else Right(None)
+      if (s.exists(_._2.nonEmpty)) Left(Unit)
+      else if (s.nonEmpty) Right(Some(s.size))
+           else Right(None)
     }
     val tag = implicitly[TypeTag[Int]]
     val argType = ArgType.FLAG

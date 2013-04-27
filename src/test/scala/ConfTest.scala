@@ -535,4 +535,13 @@ class ConfTest extends FunSuite with ShouldMatchers {
     conf.apples() should equal (2)
   }
 
+  test ("tally no-args") {
+    intercept[WrongOptionFormat] {
+      val conf = new ScallopConf(Seq("-a", "stuff", "--verbose")) {
+        val apples = tally()
+        val verbose = opt[Boolean]()
+      }
+    }
+  }
+
 }
