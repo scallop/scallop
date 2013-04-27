@@ -1,10 +1,8 @@
-resolvers ++= Seq(
-  "jgit-repo" at "http://download.eclipse.org/jgit/maven"
-)
 
 libraryDependencies ++= Seq(
   "net.databinder.dispatch" %% "dispatch-core" % "0.9.5",
-  "net.databinder.dispatch" %% "dispatch-tagsoup" % "0.9.5"
+  "net.databinder.dispatch" %% "dispatch-tagsoup" % "0.9.5",
+  "org.eclipse.jgit" % "org.eclipse.jgit" % "2.3.1.201302201838-r"
 )
 
 addSbtPlugin("io.spray" % "sbt-revolver" % "0.6.2")
