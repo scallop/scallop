@@ -506,4 +506,42 @@ class ConfTest extends FunSuite with ShouldMatchers {
     conf.apples() should equal (List(1))
   }
 
+  test ("empty tally") {
+    val conf = new ScallopConf(Seq()) {
+      val apples = tally()
+    }
+    conf.apples() should equal (0)
+    conf.apples.isSupplied should equal (false)
+  }
+
+  test ("one-arg tally") {
+    val conf = new ScallopConf(Seq("-a")) {
+      val apples = tally()
+    }
+    conf.apples() should equal (1)
+  }
+
+  test ("two-arg tally") {
+    val conf = new ScallopConf(Seq("-a", "-a")) {
+      val apples = tally()
+    }
+    conf.apples() should equal (2)
+  }
+
+  test ("collapsed two-arg tally") {
+    val conf = new ScallopConf(Seq("-aa")) {
+      val apples = tally()
+    }
+    conf.apples() should equal (2)
+  }
+
+  test ("tally no-args") {
+    intercept[WrongOptionFormat] {
+      val conf = new ScallopConf(Seq("-a", "stuff", "--verbose")) {
+        val apples = tally()
+        val verbose = opt[Boolean]()
+      }
+    }
+  }
+
 }

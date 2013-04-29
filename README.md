@@ -14,7 +14,7 @@ Scallop supports:
 
 It should be noted that the option builder is completely
 immutable (thus thread-safe), so you can reuse it, delegate
-argument construction to sub-modules, etc. 
+argument construction to sub-modules, etc.
 
 For more info and information on usage, you can look into the [project wiki](https://github.com/Rogach/scallop/wiki) or consult the [API docs](http://rogach.github.io/scallop/#org.rogach.scallop.package).
 
@@ -26,7 +26,7 @@ Installation
 Add following to your build.sbt:
 
 ```scala
-libraryDependencies += "org.rogach" %% "scallop" % "0.9.0"
+libraryDependencies += "org.rogach" %% "scallop" % "0.9.1"
 ```
 
 Quick example
@@ -36,7 +36,7 @@ Quick example
 import org.rogach.scallop._;
 
 object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
-  // all options that are applicable to builder (like description, default, etc) 
+  // all options that are applicable to builder (like description, default, etc)
   // are applicable here as well
   val count:ScallopOption[Int] = opt[Int]("count", descr = "count the trees", required = true)
                 .map(1+) // also here work all standard Option methods -
@@ -65,7 +65,7 @@ Scallop supports quite powerful matching on trailing arguments. For example:
 
 ```scala
 object Conf extends ScallopConf(
-       List("-Ekey1=value1", "key2=value2", "key3=value3", 
+       List("-Ekey1=value1", "key2=value2", "key3=value3",
             "first", "1","2","3","second","4","5","6")) {
   val props = props[String]('E')
   val firstListName = trailArg[String]()
