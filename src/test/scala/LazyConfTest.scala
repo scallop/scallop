@@ -12,7 +12,7 @@ class LazyConfTest extends UsefulMatchers {
       conf.apples()
     }
   }
-  
+
   test ("catch exit on help") {
     var s = false
     val conf = new LazyScallopConf(Seq("--help")) {}
@@ -21,29 +21,29 @@ class LazyConfTest extends UsefulMatchers {
     }
     s ==== true
   }
-  
+
   test ("catch exit on version") {
     var s = false
     val conf = new LazyScallopConf(Seq("--version")) {
-      version("0.1.2.3")  
+      version("0.1.2.3")
     }
     conf.initialize {
       case Version => s = true
     }
     s ==== true
   }
-  
+
   test ("catch exit") {
     var s = false
     val conf = new LazyScallopConf(Seq("--version")) {
-      version("0.1.2.3")  
+      version("0.1.2.3")
     }
     conf.initialize {
       case Exit() => s = true
     }
     s ==== true
   }
-  
+
   test ("catch all exceptions") {
     var s = false
     new LazyScallopConf(Seq()) {
@@ -53,5 +53,5 @@ class LazyConfTest extends UsefulMatchers {
     }
     s ==== true
   }
-  
+
 }

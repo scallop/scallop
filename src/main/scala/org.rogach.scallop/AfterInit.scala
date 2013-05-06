@@ -1,6 +1,6 @@
 package org.rogach.scallop
 
-/** Magic trait, that makes it possible to run code from superclass 
+/** Magic trait, that makes it possible to run code from superclass
   * after all subclasses initialization.
   */
 trait AfterInit extends DelayedInit {

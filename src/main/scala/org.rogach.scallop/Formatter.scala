@@ -6,14 +6,14 @@ object Formatter {
   private val COLUMN_PADDING = 3
   private val DEFAULT_WIDTH = 80
   private val INDENT = 2
-  
+
   /** Accepts a list of Option(argument line, option description, optional default value). If None, empty line
     * is inserted.
     * Also accepts optional width, to which the result must be formatted.
     */
   def format(s: List[Option[(String, String, Option[String])]], width: Option[Int] = None): String = {
     val neededWidth = width getOrElse DEFAULT_WIDTH
-    val argWidth = if (s.isEmpty || s.head.isEmpty) 0 
+    val argWidth = if (s.isEmpty || s.head.isEmpty) 0
                    else s.map(_.map(_._1).getOrElse("")).map(a => if (a.startsWith("--")) "    " + a else a).map(_.size).max
     s.flatMap {
       case Some((arg, descr, defVal)) =>
@@ -27,7 +27,7 @@ object Formatter {
         List("")
     }.mkString("\n")
   }
-  
+
   /** Carefully wraps the text to the needed width. */
   def wrap(s: Seq[String], width: Int): List[String] = {
     var text = List[String]("")

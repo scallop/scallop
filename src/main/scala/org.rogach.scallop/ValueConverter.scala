@@ -4,7 +4,7 @@ import scala.reflect.runtime.universe.TypeTag
 
 /** Converter from list of plain strings to something meaningful. */
 trait ValueConverter[A] { parent =>
-  
+
   /** Takes a list of arguments to all option invocations:
     * for example, "-a 1 2 -a 3 4 5" would produce List(("a",List(1,2)),("a",List(3,4,5))).
     * <ul>
@@ -14,26 +14,24 @@ trait ValueConverter[A] { parent =>
     * </ul>
     */
   def parse(s: List[(String,List[String])]): Either[Unit,Option[A]]
-  
+
   /** TypeTag, holding the type for this builder. */
   val tag: TypeTag[A]
-  
+
   /** Type of parsed argument list. */
-  val argType: ArgType.V 
-  
+  val argType: ArgType.V
+
   /** Maps the converter to another value:
     *
-    * {{{ 
+    * {{{
     * intConverter.map(2 +) // and you get a "biased converter"
-    * }}} 
+    * }}}
     */
   def map[B](fn: A => B)(implicit tt: TypeTag[B]) = new ValueConverter[B] { child =>
     def parse(s: List[(String,List[String])]) = parent.parse(s).right.map(_.map(fn))
     val tag = tt
     val argType = parent.argType
   }
-  
-}
 
   def flatMap[B](fn: A => Either[Unit, Option[B]])(implicit tt: TypeTag[B]) =
     new ValueConverter[B] { child =>

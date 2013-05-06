@@ -16,7 +16,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
       opts.get[Double]("angels") should equal (Some(42))
     }
   }
-  
+
   test("wrong arg type parameter") {
     val opts = Scallop(List("--angels","42","34"))
       .opt[List[Int]]("angels")
@@ -34,14 +34,14 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
       opts[Double]("angels") should equal (42)
     }
   }
-  
+
   test ("options parse failure") {
-    intercept[TrailingArgsParseException] { 
+    intercept[TrailingArgsParseException] {
       val opts = Scallop(List("42"))
         .verify
     }
   }
-  
+
   test ("long option clash") {
     intercept[IdenticalOptionNames] {
       val opts = Scallop()
@@ -73,7 +73,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
         .verify
     }
   }
-  
+
   test ("option verification failure") {
     intercept[WrongOptionFormat] {
       val opts = Scallop(List("-a","1.2", "-b"))
@@ -90,7 +90,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
         .verify
     }
   }
-  
+
   test ("props name clash") {
     intercept[IdenticalOptionNames] {
       val opts = Scallop()
@@ -115,7 +115,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
       .verify
     }
   }
-  
+
   test ("unknown option requested") {
     intercept[UnknownOption] {
       val opts = Scallop()
@@ -124,7 +124,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
     }
 
   }
-  
+
   test ("no option type provided") {
     val opts = Scallop(List("--angels","42"))
       .opt[Int]("angels")
@@ -133,7 +133,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
       opts.get("angels") should equal (Some(42))
     }
   }
-  
+
   test ("excess arguments") {
     intercept[TrailingArgsParseException] {
       val opts = Scallop(List("1","2"))
@@ -141,7 +141,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
         .verify
     }
   }
-  
+
   test ("validation failure") {
     intercept[ValidationFailure] {
       val opts = Scallop(List("-a","1"))
@@ -149,7 +149,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
         .verify
     }
   }
-  
+
   test ("option identifier clash") {
     intercept[IdenticalOptionNames] {
       val opts = Scallop(Nil)
@@ -158,7 +158,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
         .verify
     }
   }
-  
+
   test ("subcommand parse failure") {
     object Conf extends ScallopConf(Seq("tree", "a")) {
       val tree = new Subcommand("tree") {
