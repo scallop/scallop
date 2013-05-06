@@ -35,3 +35,15 @@ trait ValueConverter[A] { parent =>
   
 }
 
+  def flatMap[B](fn: A => Either[Unit, Option[B]])(implicit tt: TypeTag[B]) =
+    new ValueConverter[B] { child =>
+      def parse(s: List[(String,List[String])]) =
+        parent.parse(s).right.flatMap {
+          case None => Right(None)
+          case Some(a) => fn(a)
+        }
+      val tag = tt
+      val argType = parent.argType
+    }
+
+}
