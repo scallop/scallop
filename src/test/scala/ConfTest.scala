@@ -544,4 +544,11 @@ class ConfTest extends FunSuite with ShouldMatchers {
     }
   }
 
+  test ("empty list arg before empty trailing option") {
+    val conf = new ScallopConf(Seq("-a")) {
+      val apples = opt[List[String]](default = Some(Nil))
+    }
+    conf.apples() === List()
+  }
+
 }

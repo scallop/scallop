@@ -47,7 +47,7 @@ case class Scallop(
   type Parsed = List[(CliOption, (String, List[String]))]
   
   case class ParseResult(
-    opts: List[(CliOption, (String, List[String]))] = Nil,
+    opts: Parsed = Nil,
     subcommand: Option[String] = None,
     subcommandArgs: List[String] = Nil
   )
@@ -86,7 +86,8 @@ case class Scallop(
               } else {
                 throw new WrongOptionFormat(o.name, args.mkString)
               }
-            case ArgType.LIST   => parseRest
+            case ArgType.LIST if args.isEmpty => List(o -> ((invoc, Nil)))
+            case ArgType.LIST => parseRest
           }
         case None => parseRest
       }
