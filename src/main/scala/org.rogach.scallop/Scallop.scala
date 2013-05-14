@@ -585,13 +585,6 @@ case class Scallop(
 
     parsed
 
-    // validate option sets
-    optionSetValidations map (
-      _(getAllSuppliedOptionNames)
-    ) find (_.isLeft) map { l =>
-      throw new OptionSetValidationFailure(l.left.get)
-    }
-
     // verify subcommand parsing
     parsed.subcommand.map { sn =>
       subbuilders.find(_._1 == sn).map { case (sn, sub)=>
@@ -614,6 +607,13 @@ case class Scallop(
       if (!(get(o.name)(o.converter.tag) map (v => o.validator(o.converter.tag,v)) getOrElse true))
         throw new ValidationFailure("Validation failure for '%s' option parameters: %s" format (o.name, args.map(_._2.mkString(" ")).mkString(" ")))
 
+    }
+
+    // validate option sets
+    optionSetValidations map (
+      _(getAllSuppliedOptionNames)
+    ) find (_.isLeft) map { l =>
+      throw new OptionSetValidationFailure(l.left.get)
     }
 
     this
