@@ -21,6 +21,9 @@ trait ValueConverter[A] { parent =>
   /** Type of parsed argument list. */
   val argType: ArgType.V
 
+  /** Transformation of argument name to argument definition in help. */
+  def argFormat(name: String): String = argType.fn(name)
+
   /** Maps the converter to another value:
     *
     * {{{

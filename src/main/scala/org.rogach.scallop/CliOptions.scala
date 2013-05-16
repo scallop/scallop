@@ -64,7 +64,7 @@ case class SimpleOption(
   def requiredShortNames = if (noshort) Nil else short.toList
 
   def argLine(sh: List[Char]): String = {
-    (List(sh.map("-" +), List("--" + name)).flatten.mkString(", ") + "  " + converter.argType.fn(argName)).trim
+    (List(sh.map("-" +), List("--" + name)).flatten.mkString(", ") + "  " + converter.argFormat(argName)).trim
   }
   def helpInfo(sh: List[Char]) = List((
     argLine(sh),
