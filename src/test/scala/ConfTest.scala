@@ -326,6 +326,32 @@ class ConfTest extends FunSuite with ShouldMatchers with UsefulMatchers {
     }
   }
 
+  test ("custom opt validation - success") {
+    object Conf extends ScallopConf(List("-a", "14")) {
+      val apples = opt[Int]()
+      val bananas = opt[Int]()
+      validateOpt (apples, bananas) {
+        case (Some(a), None) => Right(Unit)
+        case _ => Left("err")
+      }
+    }
+    Conf
+  }
+
+  test ("custom opt validation - failure") {
+    intercept[ValidationFailure] {
+      object Conf extends ScallopConf(List("-a", "14", "-b", "4")) {
+        val apples = opt[Int]()
+        val bananas = opt[Int]()
+        validateOpt (apples, bananas) {
+          case (Some(a), None) => Right(Unit)
+          case _ => Left("err")
+        }
+      }
+      Conf
+    }
+  }
+
   test ("numbers in option names") {
     object Conf extends ScallopConf(Seq("-a", "1")) {
       val apples1 = opt[Int]("apples1")
