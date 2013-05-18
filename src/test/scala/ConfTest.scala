@@ -5,7 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
-class ConfTest extends FunSuite with ShouldMatchers {
+class ConfTest extends FunSuite with ShouldMatchers with UsefulMatchers {
   throwError.value = true
 
   test ("full example") {
@@ -548,7 +548,23 @@ class ConfTest extends FunSuite with ShouldMatchers {
     val conf = new ScallopConf(Seq("-a")) {
       val apples = opt[List[String]](default = Some(Nil))
     }
-    conf.apples() === List()
+    conf.apples() ==== List()
+  }
+
+  test ("multiple list option before normal option should keep ordering") {
+    val conf = new ScallopConf(Seq("-l", "1", "-l", "2", "-o", "3")) {
+      val l = opt[List[String]]()
+      val o = opt[Int]()
+    }
+    conf.l() ==== List("1","2")
+  }
+
+  test ("multiple list option before optional trail arg should keep ordering") {
+    val conf = new ScallopConf(Seq("-l", "1", "-l", "2", "--", "0")) {
+      val l = opt[List[String]]()
+      val t = trailArg[Int](required = false)
+    }
+    conf.l() ==== List("1","2")
   }
 
 }

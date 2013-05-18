@@ -103,7 +103,7 @@ case class Scallop(
           // get the converter, proceed to trailing args parsing
           acc ::: goParseRest(args.tail, Some((args.head.drop(2),opt)))
         } else {
-          parse( acc = (opt -> ((args.head.drop(2), before.toList))) :: acc,
+          parse( acc = acc :+ (opt -> ((args.head.drop(2), before.toList))),
                  args = after)
         }
       } else {
@@ -115,7 +115,7 @@ case class Scallop(
             // get the converter, proceed to trailing args parsing
             acc ::: goParseRest(args.tail, Some((args.head.drop(1), opt)))
           } else {
-            parse( acc = (opt -> ((args.head.drop(1), before.toList))) :: acc,
+            parse( acc = acc :+ (opt -> ((args.head.drop(1), before.toList))),
                    args = after)
           }
         } else {
