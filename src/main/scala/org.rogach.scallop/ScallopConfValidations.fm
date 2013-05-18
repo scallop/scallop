@@ -5,7 +5,7 @@ import exceptions._
 /** Helper trait for generaton of `validate` methods on ScallopConf. */
 trait ScallopConfValidations { this: ScallopConf =>
 
-  protected var validations: List[Function0[Either[String,Unit]]] = Nil
+  protected var validations: List[Function0[Either[String, Unit]]] = Nil
 
 <#macro lc num>
   <#list 1..num as h><#nested h><#if num != h>,</#if></#list>
@@ -16,13 +16,26 @@ trait ScallopConfValidations { this: ScallopConf =>
     * Automatically defines co-dependent relationship on these options.
     * @param fn Validation function. In case of error, it should return Left with the error message.
     */
-  def validate [<@lc i ; j>A${j}</@lc>] ( <@lc i ; j> o${j}: ScallopOption[A${j}] </@lc> ) (fn: (<@lc i ; j> A${j} </@lc>) => Either[String,Unit]) {
+  def validate [<@lc i ; j>A${j}</@lc>] ( <@lc i ; j> o${j}: ScallopOption[A${j}] </@lc> ) (fn: (<@lc i ; j> A${j} </@lc>) => Either[String, Unit]) {
     codependent ( <@lc i ; j> o${j} </@lc> )
-    validations :+= new Function0[Either[String,Unit]] {
+    validations :+= new Function0[Either[String, Unit]] {
       def apply = {
         if (o1.isSupplied)
           fn( <@lc i ; j> o${j}() </@lc> )
         else Right(Unit)
+      }
+    }
+  }
+</#list>
+
+<#list 1..7 as i>
+  /** Adds a validation function to this configuration. This function will be run after all other verification steps.
+    * @param fn Validation function. In case of error, it should return Left with the error message.
+    */
+  def validateOpt [<@lc i ; j>A${j}</@lc>] ( <@lc i ; j> o${j}: ScallopOption[A${j}] </@lc> ) (fn: (<@lc i ; j> Option[A${j}] </@lc>) => Either[String, Unit]) {
+    validations :+= new Function0[Either[String, Unit]] {
+      def apply = {
+        fn( <@lc i ; j> o${j}.get </@lc> )
       }
     }
   }

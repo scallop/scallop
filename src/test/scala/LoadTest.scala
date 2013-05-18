@@ -4,7 +4,7 @@ import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
 class LoadTest extends FunSuite with ShouldMatchers {
-  
+
   ignore ("trail options") {
     val start = System.currentTimeMillis
     val opts = Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3"))
@@ -21,7 +21,7 @@ class LoadTest extends FunSuite with ShouldMatchers {
     val end = System.currentTimeMillis
     assert (end - start < 100, "Time bound broken: %d ms" format (end - start))
   }
-  
+
   ignore ("retrieving options") {
     object Conf extends ScallopConf(List("-a", "1", "-c", "2.0")) {
       val apples = opt[Int]("apples")
@@ -40,7 +40,7 @@ class LoadTest extends FunSuite with ShouldMatchers {
     val t = time(Conf.apples())
     assert(t < 100, "Time bound broken: %d ms" format t)
   }
-  
+
   test ("too many options") {
     val opts = List.fill(10000)(List("-a","1")).flatten
     object Conf extends ScallopConf(opts) {

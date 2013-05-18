@@ -6,7 +6,7 @@ sealed trait ScallopResult
 /** Thrown when user requested help output (via "--help") */
 case class Help(command: String) extends Throwable with ScallopResult
 /** Thrown when user requested version printout (via "--version") */
-case object Version extends Throwable with ScallopResult 
+case object Version extends Throwable with ScallopResult
 /** Extractor object, for matching on both Help and Version results. */
 object Exit {
   def unapply(r: ScallopResult) = r match {
@@ -26,26 +26,26 @@ object ScallopException {
 }
 
 /** Thrown when the user requests wrong type of option argument from Scallop. */
-case class WrongTypeRequest(requested: Manifest[_], required: Manifest[_]) 
+case class WrongTypeRequest(requested: Manifest[_], required: Manifest[_])
   extends ScallopException("Requested '%s' instead of '%s'" format (requested, required))
-/** Thrown when Scallop fails to parse the argument line (usually when there   
+/** Thrown when Scallop fails to parse the argument line (usually when there
     are some problems with trailing args). */
-case class TrailingArgsParseException(failedArgs: Seq[String]) 
+case class TrailingArgsParseException(failedArgs: Seq[String])
   extends ScallopException("Failed to parse the trailing argument list: '%s'" format failedArgs.mkString(" "))
 /** Thrown when several options and/or trailing arguments have identical names
     in definition - making it impossible to distinguish between them. */
 case class IdenticalOptionNames(mess:String) extends ScallopException(mess)
 /** Thrown when user provides Scallop with unknown option name in the arguments
     or requests unknown option result from parser. */
-case class UnknownOption(optionName: String) 
+case class UnknownOption(optionName: String)
   extends ScallopException("Unknown option '%s'" format optionName)
 /** Thrown when arguments to some option do not satisfy that option's
     value converter (it returns Left in such case). */
-case class WrongOptionFormat(optionName: String, args: String) 
+case class WrongOptionFormat(optionName: String, args: String)
   extends ScallopException("Wrong format for option '%s': '%s'" format (optionName, args))
 /** Thrown when parser failed to find arguments to option (marked as 'required')
     in the input arguments. */
-case class RequiredOptionNotFound(name: String) 
+case class RequiredOptionNotFound(name: String)
   extends ScallopException("Required option '%s' not found" format name)
 /** Thrown when user tried to extract the value of an option before the call
     to verify in ScallopConf. */

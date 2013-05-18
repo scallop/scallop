@@ -271,17 +271,26 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     try {
       verified = true
       builder.verify
-      validations foreach { v =>
-        v() match {
-          case Right(_) =>
-          case Left(err) => throw new ValidationFailure(err)
-        }
-      }
+      runValidations()
     } catch {
       case e => onError(e)
     } finally {
       ScallopConf.cleanUp
     }
+  }
+
+  private[scallop] def runValidations() {
+    validations foreach { v =>
+      v() match {
+        case Right(_) =>
+        case Left(err) => throw new ValidationFailure(err)
+      }
+    }
+
+    for {
+      subBuilder <- builder.getSubbuilder
+      subConfig <- subconfigs.find(_.builder == subBuilder)
+    } subConfig.runValidations
   }
 
   /** This name would be included in output when reporting errors. */

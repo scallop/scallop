@@ -18,5 +18,5 @@ class Usability extends UsefulMatchers {
     }
     s ==== true
   }
-  
+
 }

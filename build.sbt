@@ -1,4 +1,3 @@
-
 organization := "org.rogach"
 
 name := "scallop"
@@ -6,8 +5,6 @@ name := "scallop"
 scalaVersion := "2.9.2"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked")
-
-Revolver.settings
 
 resolvers += "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
 

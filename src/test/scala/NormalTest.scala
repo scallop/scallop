@@ -486,7 +486,7 @@ println(opts.summary) // returns summary of parser status (with current arg valu
   test ("help printing") {
     val opts = Scallop(List("--help"))
       .opt[Int]("apples")
-    opts.help should equal ("""  -a, --apples  <arg>   
+    opts.help should equal ("""  -a, --apples  <arg>
                               |      --help            Show help message
                               |      --version         Show version of this program""".stripMargin)
   }

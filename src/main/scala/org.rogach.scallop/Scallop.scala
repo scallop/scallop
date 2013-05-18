@@ -5,13 +5,13 @@ import org.rogach.scallop.exceptions._
 
 /** The creator and god of all parsers :) */
 object Scallop {
-  
+
   /** Create the new parser with some arguments already inserted.
     *
     * @param args Args to pre-insert.
     */
   def apply(args: Seq[String]): Scallop = new Scallop(args)
-  
+
   /** Create the default empty parser, fresh as mountain air. */
   def apply(): Scallop = apply(Nil)
 
@@ -45,9 +45,9 @@ case class Scallop(
     subbuilders: List[(String, Scallop)] = Nil) {
 
   type Parsed = List[(CliOption, (String, List[String]))]
-  
+
   case class ParseResult(
-    opts: List[(CliOption, (String, List[String]))] = Nil,
+    opts: Parsed = Nil,
     subcommand: Option[String] = None,
     subcommandArgs: List[String] = Nil
   )
@@ -62,23 +62,23 @@ case class Scallop(
   @annotation.tailrec
   private def parse(acc: Parsed, args: Seq[String]): Parsed = {
 
-    def goParseRest(args: Seq[String], opt: Option[(String, CliOption)]): Parsed = { 
+    def goParseRest(args: Seq[String], opt: Option[(String, CliOption)]): Parsed = {
       def parseRest = {
         parseTrailingArgs(
           args.toList,
           opt.map(o=> (o._2.converter, true)).toList ::: opts.filter(_.isPositional).map(o => (o.converter, o.required))
-        ) map { res => 
-          (opt.toList ::: opts.filter(_.isPositional).map(("",_))) zip res filter { 
-            case ((invoc, opt), p) => !opt.isPositional || p.size > 0 
-          } 
+        ) map { res =>
+          (opt.toList ::: opts.filter(_.isPositional).map(("",_))) zip res filter {
+            case ((invoc, opt), p) => !opt.isPositional || p.size > 0
+          }
         } getOrElse (throw new TrailingArgsParseException(args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
      }
-     
+
      opt match {
         case Some((invoc, o)) =>
           // short-circuit parsing when there are no trailing args - to get better error messages
           o.converter.argType match {
-            case ArgType.FLAG   => 
+            case ArgType.FLAG   =>
               (o, (invoc, Nil)) :: goParseRest(args, None)
             case ArgType.SINGLE =>
               if (args.size > 0) {
@@ -86,7 +86,8 @@ case class Scallop(
               } else {
                 throw new WrongOptionFormat(o.name, args.mkString)
               }
-            case ArgType.LIST   => parseRest
+            case ArgType.LIST if args.isEmpty => List(o -> ((invoc, Nil)))
+            case ArgType.LIST => parseRest
           }
         case None => parseRest
       }
@@ -102,19 +103,19 @@ case class Scallop(
           // get the converter, proceed to trailing args parsing
           acc ::: goParseRest(args.tail, Some((args.head.drop(2),opt)))
         } else {
-          parse( acc = (opt -> (args.head.drop(2), before.toList)) :: acc,
+          parse( acc = acc :+ (opt -> ((args.head.drop(2), before.toList))),
                  args = after)
         }
       } else {
         if (args.head.size == 2) {
-          val opt = getOptionWithShortName(args.head(1)) getOrElse 
+          val opt = getOptionWithShortName(args.head(1)) getOrElse
                     (throw new UnknownOption(args.head.drop(1)))
           val (before, after) = args.tail.span(isArgument)
           if (after.isEmpty) {
             // get the converter, proceed to trailing args parsing
             acc ::: goParseRest(args.tail, Some((args.head.drop(1), opt)))
           } else {
-            parse( acc = (opt -> (args.head.drop(1), before.toList)) :: acc,
+            parse( acc = acc :+ (opt -> ((args.head.drop(1), before.toList))),
                    args = after)
           }
         } else {
@@ -133,38 +134,35 @@ case class Scallop(
       acc ::: goParseRest(trailArgs, None)
     }
   }
-  
+
   /** Find an option, that responds to this short name. */
   def getOptionWithShortName(c: Char): Option[CliOption] = {
     opts find (_.requiredShortNames.contains(c)) orElse {
       opts find (_.shortNames.contains(c))
     }
   }
-  
+
   def getOptionShortNames(opt: CliOption): List[Char] = {
     (opt.shortNames ++ opt.requiredShortNames).distinct.filter(sh => getOptionWithShortName(sh).get == opt)
   }
-  
-  /** Result of parsing */ 
+
+  /** Result of parsing */
   private lazy val parsed: ParseResult = if (args.headOption map("@--" ==) getOrElse false) {
     // read options from stdin
-    val argList = 
+    val argList =
       io.Source.fromInputStream(java.lang.System.in).getLines.toList
       .flatMap(_.split(" ").filter(_.size > 0))
     parse(argList)
   } else if (args.headOption map(_ startsWith "@") getOrElse false) {
     // read options from a file (canned config)
-    val argList = 
+    val argList =
       io.Source.fromFile(args.head.drop(1)).getLines.toList
       .flatMap(_.split(" ").filter(_.size > 0))
     parse(argList)
   } else parse(args)
 
-  /** cache for option&property values returned from this builder. */
-//  private var getCache = scala.collection.mutable.Map[(String,Manifest[_]),Any]()
-
   /** Tests whether this string contains option name, not some number. */
-  private def isOptionName(s: String) = 
+  private def isOptionName(s: String) =
     if (s.startsWith("-"))
       if (s.size > 1)
         !s(1).isDigit
@@ -172,10 +170,10 @@ case class Scallop(
         false
       else true
     else false
-  
+
   /** Tests whether this string contains option parameter, not option call. */
   private def isArgument(s: String) = !isOptionName(s)
-  
+
   /** Parses the trailing arguments (including the arguments to last option).
     *
     * Uses simple backtraking algorithm.
@@ -193,9 +191,9 @@ case class Scallop(
       val remainders = convs.head._1.argType match {
         case ArgType.FLAG => List(args) // all of them
         case ArgType.SINGLE => // either the full list or it's tail - we can match only one argument
-          if (convs.head._2) 
+          if (convs.head._2)
             if (args.isEmpty) List(Nil) else List(args.tail)
-          else 
+          else
             if (args.isEmpty) List(Nil) else List(args.tail, args)
         case ArgType.LIST =>
           args.tails.toList.reverse
@@ -205,10 +203,10 @@ case class Scallop(
         if (p.isEmpty && !convs.head._2) { // will it match an empty list?
             val next = parseTrailingArgs(rem, convs.tail)
             if (next.isDefined) Some(p :: next.get)
-            else None 
+            else None
         } else {
           convs.head._1.parse(List(("",p))) match {
-            case Right(a) if a.isDefined => 
+            case Right(a) if a.isDefined =>
               val next = parseTrailingArgs(rem, convs.tail)
               if (next.isDefined) Some(p :: next.get)
               else None
@@ -218,11 +216,11 @@ case class Scallop(
       } find (_.isDefined) getOrElse (None)
     }
   }
-  
+
   /** Add a new option definition to this builder.
     *
     * @param name Name for new option, used as long option name in parsing, and for option identification.
-    * @param short Overload the char that will be used as short option name. 
+    * @param short Overload the char that will be used as short option name.
                    Defaults to first character of the name.
     * @param descr Description for this option, for help description.
     * @param default Default value to use if option is not found in input arguments
@@ -246,7 +244,7 @@ case class Scallop(
       noshort: Boolean = false)
       (implicit conv: ValueConverter[A]): Scallop = {
     if (name.head.isDigit) throw new IllegalOptionParameters("First character of the option name must not be a digit: %s" format name)
-    val defaultA = 
+    val defaultA =
       if (conv == flagConverter)
         { () =>
           if (default() == Some(true)) Some(true)
@@ -254,23 +252,23 @@ case class Scallop(
         }
       else default
     val eShort = if (short == 0.toChar || noshort) None else Some(short)
-    val validator = { (m:Manifest[_], a:Any) => 
+    val validator = { (m:Manifest[_], a:Any) =>
       if (m >:> conv.manifest) validate(a.asInstanceOf[A])
       else false
     }
-    this.copy(opts = opts :+ SimpleOption(name, 
+    this.copy(opts = opts :+ SimpleOption(name,
                                           eShort,
                                           descr,
-                                          required, 
-                                          conv, 
-                                          defaultA, 
+                                          required,
+                                          conv,
+                                          defaultA,
                                           validator,
                                           argName,
                                           hidden,
                                           noshort))
   }
-  
-  
+
+
   /** Add new property option definition to this builder.
     *
     * @param name Char, that will be used as prefix for property arguments.
@@ -286,7 +284,7 @@ case class Scallop(
       hidden: Boolean = false)
       (implicit conv: ValueConverter[Map[String,A]]): Scallop =
     this.copy(opts = opts :+ PropertyOption(name.toString, name, descr, conv, keyName, valueName, hidden))
-  
+
   def propsLong[A](
       name: String,
       descr: String = "",
@@ -316,14 +314,14 @@ case class Scallop(
       validate: A => Boolean = ((_:A) => true),
       hidden: Boolean = false)
       (implicit conv: ValueConverter[A]): Scallop = {
-    val defaultA = 
+    val defaultA =
       if (conv == flagConverter)
         { () =>
           if (default() == Some(true)) Some(true)
           else Some(false)
         }
       else default
-    val validator = { (m:Manifest[_], a:Any) => 
+    val validator = { (m:Manifest[_], a:Any) =>
       if (m >:> conv.manifest) validate(a.asInstanceOf[A])
       else false
     }
@@ -355,13 +353,13 @@ case class Scallop(
                                           descrNo,
                                           hidden))
   }
-  
+
   /** Adds a subbuilder (subcommand) to this builder.
     * @param name All arguments after this string would be routed to this builder.
     */
   def addSubBuilder(name: String, builder: Scallop) = this.copy(subbuilders = subbuilders :+ (name -> builder))
-  
-  /** Traverses the tree of subbuilders, using the provided name. 
+
+  /** Traverses the tree of subbuilders, using the provided name.
     * @param name Names of subcommand names, that lead to the needed builder, separated by \\0.
     */
   def findSubbuilder(name: String): Option[Scallop] = {
@@ -373,12 +371,18 @@ case class Scallop(
 
   /** Retrieves name of the subcommand that was found in input arguments. */
   def getSubcommandName = parsed.subcommand
-  
+
+  /** Retrieves the subbuilder object,
+    * that matches the name of the subcommand found in input arguments. */
+  def getSubbuilder: Option[Scallop] = parsed.subcommand.flatMap { sn =>
+    subbuilders.find(_._1 == sn).map(_._2)
+  }
+
   /** Returns the list of subcommand names, recursively. */
   def getSubcommandNames: List[String] = {
     parsed.subcommand.map(subName => subbuilders.find(_._1 == subName).map(s => s._1 :: s._2.args(parsed.subcommandArgs).getSubcommandNames).getOrElse(Nil)).getOrElse(Nil)
   }
-  
+
   /** Retrieves a list of all supplied options (including options from subbuilders). */
   def getAllSuppliedOptionNames: List[String] = {
     opts.map(_.name).filter(isSupplied) ::: parsed.subcommand.map(subName => subbuilders.find(_._1 == subName).map(s => s._2.args(parsed.subcommandArgs)).get.getAllSuppliedOptionNames.map(subName + "\0" + _)).getOrElse(Nil)
@@ -391,66 +395,66 @@ case class Scallop(
     */
   def validationSet(fn: List[String] => Either[String, Unit]) =
     this.copy(optionSetValidations = optionSetValidations :+ fn)
-    
+
   /** Add version string to this builder.
     *
     * @param v Version string, to be printed before all other things in help.
     */
   def version(v: String) = this.copy(vers = Some(v))
-  
+
   /** Add banner string to this builder. Banner should describe your program and provide a short
     * summary on it's usage.
     *
     * @param b Banner string, can contain multiple lines. Note this is not formatted to 80 characters!
     */
   def banner(b: String) = this.copy(bann = Some(b))
-  
+
   /** Add footer string to this builder. Footer will be printed in help after option definitions.
     *
     * @param f Footer string, can contain multiple lines. Note this is not formatted to 80 characters!
     */
   def footer(f: String) = this.copy(foot = Some(f))
-  
+
   /** Explicitly sets the needed width for the help printout. */
   def setHelpWidth(w: Int) = this.copy(helpWidth = Some(w))
-  
+
   /** Get help on options from this builder. The resulting help is carefully formatted to required number of columns (default = 80, change with .setHelpWidth method),
     * and contains info on proporties, options and trailing arguments.
     */
   def help: String = {
     // --help and --version do not go through normal pipeline, so we need to hardcode them here
-    val helpOpt = 
+    val helpOpt =
       opts.find(_.name == "help").getOrElse(
         SimpleOption(
           name = "help",
-          short = None, 
-          descr = "Show help message", 
-          required = false, 
-          converter = flagConverter, 
-          default = () => None, 
-          validator = (_,_) => true, 
+          short = None,
+          descr = "Show help message",
+          required = false,
+          converter = flagConverter,
+          default = () => None,
+          validator = (_,_) => true,
           argName = "",
           hidden = false,
           noshort = true
         )
       )
-    val versionOpt = 
+    val versionOpt =
       opts.find(_.name == "version").getOrElse(
         SimpleOption(
           name = "version",
-          short = None, 
-          descr = "Show version of this program", 
-          required = false, 
-          converter = flagConverter, 
-          default = () => None, 
-          validator = (_,_) => true, 
+          short = None,
+          descr = "Show version of this program",
+          required = false,
+          converter = flagConverter,
+          default = () => None,
+          validator = (_,_) => true,
           argName = "",
           hidden = false,
           noshort = true
         )
       )
 
-    val optsToFormat = 
+    val optsToFormat =
       mainOpts.map(mo => opts.find(_.name == mo)) ++ mainOpts.headOption.map(_=>List(None)).getOrElse(Nil) ++
       (opts
         filter (!_.isPositional)
@@ -458,7 +462,7 @@ case class Scallop(
         filter (o => mainOpts.forall(o.name!=))
         filter (o => o.name != "help" && o.name != "version")
         sortBy (_.name.toLowerCase)
-        map (o => Some(o))) ++ 
+        map (o => Some(o))) ++
       List(Some(helpOpt), Some(versionOpt))
     val optsHelp = Formatter format (
       optsToFormat flatMap {
@@ -473,9 +477,9 @@ case class Scallop(
       }.getOrElse("")
     } else {
       val subHelp = subbuilders.map { case (sn, sub) =>
-        ("Subcommand: %s" format sn) + "\n" + 
-        sub.bann.map(_+"\n").getOrElse("") + 
-        sub.help.split("\n").filter(!_.trim.startsWith("--version")).mkString("\n") + 
+        ("Subcommand: %s" format sn) + "\n" +
+        sub.bann.map(_+"\n").getOrElse("") +
+        sub.help.split("\n").filter(!_.trim.startsWith("--version")).mkString("\n") +
         sub.foot.map("\n"+_).getOrElse("")
       }.mkString("\n")
       if (subHelp.nonEmpty) "\n\n" + subHelp else subHelp
@@ -483,13 +487,14 @@ case class Scallop(
     val trailHelp = Formatter format (
       opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)) map (Some(_)),
       helpWidth)
-    if (opts filter (_.isPositional) isEmpty) {
+    val formattedHelp = if (opts filter (_.isPositional) isEmpty) {
       optsHelp + subcommandsHelp
     } else {
       optsHelp + "\n\n trailing arguments:\n" + trailHelp + subcommandsHelp
     }
+    formattedHelp.replaceAll(" +(\n)| +$", "$1") // remove trailing whitespace
   }
-    
+
   /** Print help message (with version, banner, option usage and footer) to stdout. */
   def printHelp() = {
     vers foreach println
@@ -497,7 +502,7 @@ case class Scallop(
     println(help)
     foot foreach println
   }
-  
+
   /** Add some more arguments to this builder. They are appended to the end of the original list.
     *
     * @param a arg list to add
@@ -525,7 +530,7 @@ case class Scallop(
       } getOrElse(throw new UnknownOption(name))
     }
   }
-  
+
    /** Get the value of option (or trailing arg) as Option.
      * @param name Name for option.
      * @param m Manifest for requested type. Usually found implicitly.
@@ -546,27 +551,27 @@ case class Scallop(
       }.getOrElse(throw new UnknownOption(name)).asInstanceOf[Option[A]]
     }
   }
-  
+
   def get[A](name: Char)(implicit m: Manifest[A]): Option[A] = get(name.toString)(m)
-    
+
   /** Get the value of option. If option is not found, this will throw an exception.
     *
     * @param name Name for option.
     * @param m Manifest for requested type. Usually found implicitly.
     */
   def apply[A](name: String)(implicit m: Manifest[A]): A = get(name)(m).get
-  
+
   def apply[A](name: Char)(implicit m: Manifest[A]): A = apply(name.toString)(m)
-  
+
   def prop[A](name: Char, key: String)(implicit m: Manifest[Map[String, A]]): Option[A] = apply(name)(m).get(key)
-  
+
   /** Verify the builder. Parses arguments, makes sure no definitions clash, no garbage or unknown options are present,
     * and all present arguments are in proper format. It is recommended to call this method before using the results.
-    * 
+    *
     * If there is "--help" or "--version" option present, it prints help or version statement and exits.
     */
   def verify: Scallop = {
-    // option identifiers must not clash 
+    // option identifiers must not clash
     opts map (_.name) groupBy (a=>a) filter (_._2.size > 1) foreach
       (a => throw new IdenticalOptionNames("Option identifier '%s' is not unique" format a._1))
     // long options names must not clash
@@ -583,16 +588,9 @@ case class Scallop(
     if (vers.isDefined && args.contains("--version")) {
       throw Version
     }
-    
+
     parsed
-   
-    // validate option sets
-    optionSetValidations map (
-      _(getAllSuppliedOptionNames)
-    ) find (_.isLeft) map { l =>
-      throw new OptionSetValidationFailure(l.left.get)
-    }
-    
+
     // verify subcommand parsing
     parsed.subcommand.map { sn =>
       subbuilders.find(_._1 == sn).map { case (sn, sub)=>
@@ -604,12 +602,12 @@ case class Scallop(
         }
       }
     }
-    
+
     opts foreach { o =>
       val args = parsed.opts filter (_._1 == o) map (_._2)
       val res = o.converter.parse(args)
       if (res.isLeft) throw new WrongOptionFormat(o.name, args.map(_._2.mkString(" ")).mkString(" "))
-      if (o.required && !res.right.get.isDefined && !o.default().isDefined) 
+      if (o.required && !res.right.get.isDefined && !o.default().isDefined)
         throw new RequiredOptionNotFound(o.name)
       // validaiton
       if (!(get(o.name)(o.converter.manifest) map (v => o.validator(o.converter.manifest,v)) getOrElse true))
@@ -617,16 +615,23 @@ case class Scallop(
 
     }
 
+    // validate option sets
+    optionSetValidations map (
+      _(getAllSuppliedOptionNames)
+    ) find (_.isLeft) map { l =>
+      throw new OptionSetValidationFailure(l.left.get)
+    }
+
     this
   }
-  
+
   /** Get summary of current parser state.
     *
     * Returns a list of all options in the builder, and corresponding values for them.
     */
   def summary: String = {
     ("Scallop(%s)" format args.mkString(", ")) + "\n" +
-    opts.map(o => 
+    opts.map(o =>
       " %s  %s => %s" format ((if (isSupplied(o.name)) "*" else " "),
                               o.name,
                               get(o.name)(o.converter.manifest).getOrElse("$None$"))
@@ -634,6 +639,5 @@ case class Scallop(
       ("subcommand: %s\n" format sn) + subbuilders.find(_._1 == sn).get._2.args(parsed.subcommandArgs).summary
     }.getOrElse("")
   }
-  
-}
 
+}

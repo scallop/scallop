@@ -5,5 +5,5 @@ import org.rogach.scallop.exceptions._
 
 class StrangeBugs extends UsefulMatchers {
   throwError.value = true
-  
+
 }
