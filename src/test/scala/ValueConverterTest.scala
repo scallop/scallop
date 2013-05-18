@@ -3,7 +3,7 @@ package org.rogach.scallop
 import org.scalatest.FunSuite
 import scala.reflect.runtime.universe.TypeTag
 
-class ValueConverterTest extends FunSuite {
+class ValueConverterTest extends FunSuite with UsefulMatchers {
   throwError.value = true
 
   test ("optional value - flatMap way") {
@@ -17,11 +17,14 @@ class ValueConverterTest extends FunSuite {
       val foo = opt[Option[String]]()
     }
     val conf1 = getcf(Nil)
-    conf1.foo.get === None
+    conf1.foo.get ==== None
+
     val conf2 = getcf(List("-f"))
-    conf2.foo.get === Some(None)
+    // bad corner case - flatMap doesn't apply when previous converter returned None
+    conf2.foo.get ==== None
+
     val conf3 = getcf(List("-f", "bar"))
-    conf3.foo.get === Some(Some("bar"))
+    conf3.foo.get ==== Some(Some("bar"))
   }
 
   /** https://github.com/Rogach/scallop/issues/57 */
