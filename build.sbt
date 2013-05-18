@@ -1,4 +1,3 @@
-
 organization := "org.rogach"
 
 name := "scallop"
@@ -6,8 +5,8 @@ name := "scallop"
 scalaVersion := "2.10.1"
 
 scalacOptions ++= Seq(
-  "-deprecation", 
-  "-unchecked", 
+  "-deprecation",
+  "-unchecked",
   "-feature",
   "-language:postfixOps",
   "-language:reflectiveCalls",
@@ -16,8 +15,6 @@ scalacOptions ++= Seq(
   "-Xlint",
   "-Ywarn-all"
 )
-
-Revolver.settings
 
 resolvers += "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
 
