@@ -272,7 +272,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     try {
       verified = true
       builder.verify
-      validations foreach { v =>
+      (validations ++ subconfigs.map(_.validations).flatten) foreach { v =>
         v() match {
           case Right(_) =>
           case Left(err) => throw new ValidationFailure(err)

@@ -593,4 +593,44 @@ class ConfTest extends FunSuite with ShouldMatchers with UsefulMatchers {
     conf.l() ==== List("1","2")
   }
 
+  test ("verification on subconfigs") {
+    intercept[WrongOptionFormat] {
+      val conf = new ScallopConf(Seq("tree", "-a", "b")) {
+        val tree = new Subcommand("tree") {
+          val apples = opt[Int]()
+        }
+      }
+    }
+  }
+
+  test ("validation failure on subconfigs") {
+    intercept[ValidationFailure] {
+      val conf = new ScallopConf(Seq("tree", "-a", "1", "-b", "5")) {
+        val tree = new Subcommand("tree") {
+          val apples = opt[Int]()
+          val bananas = opt[Int]()
+          validate(apples, bananas) { (a, b) =>
+            if (a + b >= 3) Left("tree: a + b must be < 3")
+            else Right(Unit)
+          }
+        }
+      }
+    }
+  }
+
+  test ("validationOpt failure on subconfigs") {
+    intercept[ValidationFailure] {
+      val conf = new ScallopConf(Seq("tree", "-a", "1")) {
+        val tree = new Subcommand("tree") {
+          val apples = opt[Int]()
+          val bananas = opt[Int]()
+          validateOpt(apples, bananas) {
+            case (Some(a), Some(b)) => Right(Unit)
+            case _ => Left("both a and b must be supplied")
+          }
+        }
+      }
+    }
+  }
+
 }
