@@ -1,0 +1,17 @@
+
+New changes since version `0.7.0`:
+
+* Default values of simple options and trailing args are now lazily evaluated ([#38](https://github.com/Rogach/scallop/issues/38))
+* Now `ScallopConf.props` and `ScallopConf.propsLong`
+  return a `Map` instead of `(String => Option[A])` ([#39](https://github.com/Rogach/scallop/issues/39))
+* Improvements in help output: `--help` and `--version` are now always included in output,
+  and developer can specify what options should go to the top of the list
+  (via mainOptions on [ScallopConf](http://rogach.github.io/scallop/#org.rogach.scallop.ScallopConf)) ([#46](https://github.com/Rogach/scallop/issues/46))
+* Also, help output is now clear of trailing whitespace
+* Improved option name guessing - now works with properties and trailing arguments
+  ([#47](https://github.com/Rogach/scallop/issues/47), thanks to [Christopher Hodapp](https://github.com/clhodapp))
+* New option type: "tally". Counts the amount of time the option was invoked,
+  useful for setting verbosity level (like `-vvv`) ([#50](https://github.com/Rogach/scallop/issues/50))
+* Added `flatMap` on [ValueConverter](http://rogach.github.io/scallop/#org.rogach.scallop.ValueConverter) ([#53](https://github.com/Rogach/scallop/issues/53))
+* Added `validateOpt` on [ScallopConf](http://rogach.github.io/scallop/#org.rogach.scallop.ScallopConf) to enable more flexible validation of arguments ([#55](https://github.com/Rogach/scallop/issues/55))
+* Bugfixes ([#40](https://github.com/Rogach/scallop/issues/40), [#51](https://github.com/Rogach/scallop/issues/51), [#57](https://github.com/Rogach/scallop/issues/57), [#59](https://github.com/Rogach/scallop/issues/59), [#60](https://github.com/Rogach/scallop/issues/60))
