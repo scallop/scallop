@@ -114,7 +114,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Scallop$ParseResult.html"><span class="name">ParseResult</span></a><span class="params">(<span name="opts">opts: <span class="extype" name="scala.List">List</span>[(<a href="CliOption.html" class="extype" name="org.rogach.scallop.CliOption">CliOption</a>, (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]))] = <span class="symbol">immutable.this.Nil</span></span>, <span name="subcommand">subcommand: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="subcommandArgs">subcommandArgs: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">immutable.this.Nil</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Scallop$ParseResult.html"><span class="name">ParseResult</span></a><span class="params">(<span name="opts">opts: <a href="#Parsed=List[(org.rogach.scallop.CliOption,(String,List[String]))]" class="extmbr" name="org.rogach.scallop.Scallop.Parsed">Parsed</a> = <span class="symbol">immutable.this.Nil</span></span>, <span name="subcommand">subcommand: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="subcommandArgs">subcommandArgs: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">immutable.this.Nil</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -494,6 +494,20 @@ summary on it's usage.
       </span>
       </h4>
       <p class="shortcomment cmt">Find an option, that responds to this short name.</p>
+    </li><li name="org.rogach.scallop.Scallop#getSubbuilder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getSubbuilder:Option[org.rogach.scallop.Scallop]"></a>
+      <a id="getSubbuilder:Option[Scallop]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getSubbuilder</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Retrieves the subbuilder object,
+that matches the name of the subcommand found in input arguments.</p>
     </li><li name="org.rogach.scallop.Scallop#getSubcommandName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="getSubcommandName:Option[String]"></a>
       <a id="getSubcommandName:Option[String]"></a>
