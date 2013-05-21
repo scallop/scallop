@@ -59,6 +59,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
   test ("help wrapping") {
     val opts = Scallop()
+      .version("")
       .opt[Boolean]("apples", descr = "********* ********* ********* ********* ********* *********")
     opts.setHelpWidth(80).help should equal ("""  -a, --apples    ********* ********* ********* ********* ********* *********
                                                |      --help      Show help message
@@ -105,7 +106,6 @@ class HelpTest extends UsefulMatchers with CapturingTest {
      """Planting a tree
        |  -a, --apples  <arg>   how many apples?
        |      --help            Show help message
-       |      --version         Show version of this program
        |
        | trailing arguments:
        |  jang (required)
@@ -129,7 +129,6 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     out ====
      """  -a, --apples  <arg>   how many apples?
        |      --help            Show help message
-       |      --version         Show version of this program
        |""".stripMargin
 
   }
@@ -155,7 +154,6 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       """Planting a tree.
         |  -b, --bananas  <arg>
         |      --help             Show help message
-        |      --version          Show version of this program
         |
         |Subcommands:
         |  tree        Plant a normal, regular tree
@@ -178,8 +176,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         |
         |  -c, --coconuts  <arg>     amount of coconuts
         |  -d, --dewberries  <arg>   amount of dewberries
-        |      --help                Show help message
-        |      --version             Show version of this program""".stripMargin
+        |      --help                Show help message""".stripMargin
   }
 
   test ("splitting commands list into 'main' and 'other' options (in subcommands)") {
@@ -198,8 +195,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         |
         |  -c, --coconuts  <arg>     amount of coconuts
         |  -d, --dewberries  <arg>   amount of dewberries
-        |      --help                Show help message
-        |      --version             Show version of this program""".stripMargin
+        |      --help                Show help message""".stripMargin
   }
 
   test ("user-provided help & version option takes precedence over hardcoded one") {
