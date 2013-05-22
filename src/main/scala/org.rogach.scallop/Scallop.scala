@@ -477,7 +477,8 @@ case class Scallop(
       }.getOrElse("")
     } else {
       val subHelp = subbuilders.map { case (sn, sub) =>
-        ("Subcommand: %s" format sn) + "\n" +
+        val subDescr = if (sub.descr.nonEmpty) " - " + sub.descr else ""
+        ("Subcommand: %s%s" format (sn, subDescr)) + "\n" +
         sub.bann.map(_+"\n").getOrElse("") +
         sub.help.split("\n").filter(!_.trim.startsWith("--version")).mkString("\n") +
         sub.foot.map("\n"+_).getOrElse("")

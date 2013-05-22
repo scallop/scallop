@@ -57,6 +57,33 @@ class HelpTest extends UsefulMatchers with CapturingTest {
                         |""".stripMargin)
   }
 
+  test ("subcommand description in output") {
+    val (out, err) = captureOutput {
+      val exits = trapExit {
+        object Conf extends ScallopConf(List("--help")) {
+          version("0.1.2")
+          val apples = opt[Int]("apples", descr = "fresh apples!")
+          val tree = new Subcommand("tree") {
+            descr("some tree")
+            val branches = opt[Int]("branches", descr = "how many branches?")
+          }
+          verify
+        }
+        Conf
+      }
+      exits.size should equal (1)
+    }
+    out should equal ("""0.1.2
+                        |  -a, --apples  <arg>   fresh apples!
+                        |      --help            Show help message
+                        |      --version         Show version of this program
+                        |
+                        |Subcommand: tree - some tree
+                        |  -b, --branches  <arg>   how many branches?
+                        |      --help              Show help message
+                        |""".stripMargin)
+  }
+
   test ("help wrapping") {
     val opts = Scallop()
       .version("")
