@@ -439,7 +439,7 @@ case class Scallop(
         )
       )
     val versionOpt =
-      opts.find(_.name == "version").getOrElse(
+      opts.find(_.name == "version").orElse(vers.map { _ =>
         SimpleOption(
           name = "version",
           short = None,
@@ -452,7 +452,7 @@ case class Scallop(
           hidden = false,
           noshort = true
         )
-      )
+      })
 
     val optsToFormat =
       mainOpts.map(mo => opts.find(_.name == mo)) ++ mainOpts.headOption.map(_=>List(None)).getOrElse(Nil) ++
@@ -463,7 +463,7 @@ case class Scallop(
         filter (o => o.name != "help" && o.name != "version")
         sortBy (_.name.toLowerCase)
         map (o => Some(o))) ++
-      List(Some(helpOpt), Some(versionOpt))
+      List(Some(helpOpt), versionOpt).filter(_.isDefined)
     val optsHelp = Formatter format (
       optsToFormat flatMap {
         case None => List(None)
@@ -477,7 +477,8 @@ case class Scallop(
       }.getOrElse("")
     } else {
       val subHelp = subbuilders.map { case (sn, sub) =>
-        ("Subcommand: %s" format sn) + "\n" +
+        val subDescr = if (sub.descr.nonEmpty) " - " + sub.descr else ""
+        ("Subcommand: %s%s" format (sn, subDescr)) + "\n" +
         sub.bann.map(_+"\n").getOrElse("") +
         sub.help.split("\n").filter(!_.trim.startsWith("--version")).mkString("\n") +
         sub.foot.map("\n"+_).getOrElse("")
