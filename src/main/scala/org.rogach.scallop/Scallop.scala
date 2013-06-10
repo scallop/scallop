@@ -26,7 +26,6 @@ object Scallop {
   * @param bann Banner (summary of this program and command-line usage) to display in help.
   * @param foot Footer - displayed after options.
   * @param descr Short description - used for subcommands
-  * @param optionSetValidations Validations, that enforce some rules on groups of options
   * @param helpWidth Width, to which the help output will be formatted (note that banner, footer, version and description are not affected!)
   * @param shortSubcommandsHelp If true, then help output from this builder wouldn't list full help for subcommands, only short description
   * @param subbuilders subcommands in this builder
@@ -39,7 +38,6 @@ case class Scallop(
     bann: Option[String] = None,
     foot: Option[String] = None,
     descr: String = "",
-    optionSetValidations: List[List[String]=>Either[String, Unit]] = Nil,
     helpWidth: Option[Int] = None,
     shortSubcommandsHelp: Boolean = false,
     subbuilders: List[(String, Scallop)] = Nil) {
@@ -388,14 +386,6 @@ case class Scallop(
     opts.map(_.name).filter(isSupplied) ::: parsed.subcommand.map(subName => subbuilders.find(_._1 == subName).map(s => s._2.args(parsed.subcommandArgs)).get.getAllSuppliedOptionNames.map(subName + "\0" + _)).getOrElse(Nil)
   }
 
-  /** Add a validation for supplied option set.
-    *
-    * @param fn A function, that accepts the list of names of options, that are supplied.
-    *           It should return a Left with error message in case of validation failure.
-    */
-  def validationSet(fn: List[String] => Either[String, Unit]) =
-    this.copy(optionSetValidations = optionSetValidations :+ fn)
-
   /** Add version string to this builder.
     *
     * @param v Version string, to be printed before all other things in help.
@@ -614,13 +604,6 @@ case class Scallop(
       if (!(get(o.name)(o.converter.tag) map (v => o.validator(o.converter.tag,v)) getOrElse true))
         throw new ValidationFailure("Validation failure for '%s' option parameters: %s" format (o.name, args.map(_._2.mkString(" ")).mkString(" ")))
 
-    }
-
-    // validate option sets
-    optionSetValidations map (
-      _(getAllSuppliedOptionNames)
-    ) find (_.isLeft) map { l =>
-      throw new OptionSetValidationFailure(l.left.get)
     }
 
     this
