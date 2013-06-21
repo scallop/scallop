@@ -126,7 +126,7 @@ class SubcommandsTest extends UsefulMatchers {
         codependent(apples, bananas)
       }
     }
-    intercept[OptionSetValidationFailure] {
+    intercept[ValidationFailure] {
       Conf
     }
   }
@@ -151,7 +151,7 @@ class SubcommandsTest extends UsefulMatchers {
       }
       codependent(apples, tree.bananas)
     }
-    intercept[OptionSetValidationFailure] {
+    intercept[ValidationFailure] {
       Conf
     }
   }

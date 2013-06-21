@@ -466,24 +466,6 @@ println(opts.summary) // returns summary of parser status (with current arg valu
     opts[Int]("apples") should equal (1)
   }
 
-  test ("option set validation - success") {
-    val opts = Scallop(List("-a","1","-b","2"))
-      .opt[Int]("apples")
-      .opt[Int]("bananas")
-      .validationSet(l => if (l.contains("apples") && l.contains("bananas")) Right(Unit) else Left(""))
-      .verify
-  }
-
-  test ("option set validation - failure") {
-    intercept[OptionSetValidationFailure] {
-      val opts = Scallop(List("-a","1"))
-        .opt[Int]("apples")
-        .opt[Int]("bananas")
-        .validationSet(l => if (l.contains("apples") && l.contains("bananas")) Right(()) else Left(""))
-        .verify
-    }
-  }
-
   test ("help printing") {
     val opts = Scallop(List("--help"))
       .version("")
