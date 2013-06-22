@@ -59,7 +59,6 @@ case class Scallop(
   }
   @annotation.tailrec
   private def parse(acc: Parsed, args: Seq[String]): Parsed = {
-
     def goParseRest(args: Seq[String], opt: Option[(String, CliOption)]): Parsed = {
       def parseRest = {
         parseTrailingArgs(
@@ -70,9 +69,9 @@ case class Scallop(
             case ((invoc, opt), p) => !opt.isPositional || p.size > 0
           }
         } getOrElse (throw new TrailingArgsParseException(args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
-     }
+      }
 
-     opt match {
+      opt match {
         case Some((invoc, o)) =>
           // short-circuit parsing when there are no trailing args - to get better error messages
           o.converter.argType match {
