@@ -340,29 +340,81 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     }
   }
 
+  private[scallop] def addValidation(fn: => Either[String, Unit]) {
+    validations :+= new Function0[Either[String, Unit]] {
+      def apply = fn
+    }
+  }
+
+  /** In the verify stage, if opt was supplied, checks that at least one of the options in list are also supplied.
+    *
+    * @param opt option, that depends on any of options in list
+    * @param list list of dependencies (at least one will need to be present)
+    */
+  def dependsOnAny(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
+    if (opt.isSupplied && !list.exists(_.isSupplied)) {
+      Left("When specifying '%s', at least one of the following options must be provided: %s"
+        format (opt.name, list.map(_.name).mkString(", ")))
+    } else Right(Unit)
+  }
+
+  /** In the verify stage, if opt was supplied, checks that all of the options in list are also supplied.
+    *
+    * @param opt option, that depends on all of options in list
+    * @param list list of dependencies (all will need to be present)
+    */
+  def dependsOnAll(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
+    if (opt.isSupplied && !list.forall(_.isSupplied)) {
+      Left("When specifying '%s', all of the following options must also be provided: %s"
+        format (opt.name, list.map(_.name).mkString(", ")))
+    } else Right(Unit)
+  }
+
+  /** In the verify stage, if opt was supplied, checks that all of the options in list are not supplied.
+    *
+    * @param opt option, that conflicts with all of options in list
+    * @param list list of dependencies (all will need to be absent)
+    */
+  def conflicts(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
+    if (opt.isSupplied && list.exists(_.isSupplied)) {
+      val conflict = list.find(_.isSupplied).get
+      Left("Option '%s' conflicts with option '%s'" format (opt.name, conflict.name))
+    } else Right(Unit)
+  }
+
+  /** In the verify stage, checks that one, and only one, option in the list is supplied.
+    *
+    * @param list list of conflicting options (exactly one must be present)
+    */
+  def requireOne(list: ScallopOption[_]*) = addValidation {
+    if (list.count(_.isSupplied) != 1) {
+      Left("There should be exactly one of the following options: %s"
+        format list.map(_.name).mkString(", "))
+    } else Right(Unit)
+  }
+
   /** In the verify stage, checks that only one or zero of the provided options have values supplied in arguments.
     *
     * @param list list of mutually exclusive options
     */
-  def mutuallyExclusive(list: ScallopOption[_]*) {
-    editBuilder(_.validationSet { l =>
-      if (list.map(_.name).count(l.contains) > 1) Left("There should be only one or zero of the following options: %s" format list.map(_.name).mkString(", "))
-      else Right(Unit)
-    })
+  def mutuallyExclusive(list: ScallopOption[_]*) = addValidation {
+    if (list.count(_.isSupplied) > 1) {
+      Left("There should be only one or zero of the following options: %s"
+        format list.map(_.name).mkString(", "))
+    } else Right(Unit)
   }
 
   /** In the verify stage, checks that either all or none of the provided options have values supplied in arguments.
     *
     * @param list list of codependent options
     */
-  def codependent(list: ScallopOption[_]*) {
-    rootConfig.editBuilder(_.validationSet { l =>
-      val c = list map (_.name) count (l.contains)
-      if (c != 0 && c != list.size) Left("Ether all or none of the following options should be supplied, because they are co-dependent: %s" format list.map(_.name).mkString(", "))
-      else Right(Unit)
-    })
+  def codependent(list: ScallopOption[_]*) = addValidation {
+    val c = list.count(_.isSupplied)
+    if (c != 0 && c != list.size) {
+      Left("Ether all or none of the following options should be supplied, because they are co-dependent: %s"
+        format list.map(_.name).mkString(", "))
+    } else Right(Unit)
   }
-
 
   // === some getters for convenience ===
 
@@ -480,4 +532,4 @@ abstract class LazyScallopConf(args: Seq[String]) extends ScallopConf(args) {
 }
 
 /** Convenience variable to permit testing. */
-private[scallop] object throwError extends util.DynamicVariable[Boolean](false)
+object throwError extends util.DynamicVariable[Boolean](false)
