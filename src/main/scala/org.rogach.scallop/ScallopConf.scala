@@ -533,4 +533,4 @@ abstract class LazyScallopConf(args: Seq[String]) extends ScallopConf(args) {
 }
 
 /** Convenience variable to permit testing. */
-private[scallop] object throwError extends util.DynamicVariable[Boolean](false)
+object throwError extends util.DynamicVariable[Boolean](false)
