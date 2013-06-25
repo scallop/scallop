@@ -298,6 +298,21 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopConf#conflicts" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="conflicts(opt:org.rogach.scallop.ScallopOption[_],list:List[org.rogach.scallop.ScallopOption[_]]):Unit"></a>
+      <a id="conflicts(ScallopOption[_],List[ScallopOption[_]]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">conflicts</span><span class="params">(<span name="opt">opt: <a href="ScallopOption.html" class="extype" name="org.rogach.scallop.ScallopOption">ScallopOption</a>[_]</span>, <span name="list">list: <span class="extype" name="scala.List">List</span>[<a href="ScallopOption.html" class="extype" name="org.rogach.scallop.ScallopOption">ScallopOption</a>[_]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">In the verify stage, if opt was supplied, checks that all of the options in list are not supplied.</p><div class="fullcomment"><div class="comment cmt"><p>In the verify stage, if opt was supplied, checks that all of the options in list are not supplied.
+</p></div><dl class="paramcmts block"><dt class="param">opt</dt><dd class="cmt"><p>option, that conflicts with all of options in list</p></dd><dt class="param">list</dt><dd class="cmt"><p>list of dependencies (all will need to be absent)
+</p></dd></dl></div>
     </li><li name="org.rogach.scallop.AfterInit#delayedInit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="delayedInit(x:=&gt;Unit):Unit"></a>
       <a id="delayedInit(⇒Unit):Unit"></a>
@@ -311,6 +326,36 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AfterInit.html" class="extype" name="org.rogach.scallop.AfterInit">AfterInit</a> → DelayedInit</dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopConf#dependsOnAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dependsOnAll(opt:org.rogach.scallop.ScallopOption[_],list:List[org.rogach.scallop.ScallopOption[_]]):Unit"></a>
+      <a id="dependsOnAll(ScallopOption[_],List[ScallopOption[_]]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dependsOnAll</span><span class="params">(<span name="opt">opt: <a href="ScallopOption.html" class="extype" name="org.rogach.scallop.ScallopOption">ScallopOption</a>[_]</span>, <span name="list">list: <span class="extype" name="scala.List">List</span>[<a href="ScallopOption.html" class="extype" name="org.rogach.scallop.ScallopOption">ScallopOption</a>[_]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">In the verify stage, if opt was supplied, checks that all of the options in list are also supplied.</p><div class="fullcomment"><div class="comment cmt"><p>In the verify stage, if opt was supplied, checks that all of the options in list are also supplied.
+</p></div><dl class="paramcmts block"><dt class="param">opt</dt><dd class="cmt"><p>option, that depends on all of options in list</p></dd><dt class="param">list</dt><dd class="cmt"><p>list of dependencies (all will need to be present)
+</p></dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopConf#dependsOnAny" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dependsOnAny(opt:org.rogach.scallop.ScallopOption[_],list:List[org.rogach.scallop.ScallopOption[_]]):Unit"></a>
+      <a id="dependsOnAny(ScallopOption[_],List[ScallopOption[_]]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dependsOnAny</span><span class="params">(<span name="opt">opt: <a href="ScallopOption.html" class="extype" name="org.rogach.scallop.ScallopOption">ScallopOption</a>[_]</span>, <span name="list">list: <span class="extype" name="scala.List">List</span>[<a href="ScallopOption.html" class="extype" name="org.rogach.scallop.ScallopOption">ScallopOption</a>[_]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">In the verify stage, if opt was supplied, checks that at least one of the options in list are also supplied.</p><div class="fullcomment"><div class="comment cmt"><p>In the verify stage, if opt was supplied, checks that at least one of the options in list are also supplied.
+</p></div><dl class="paramcmts block"><dt class="param">opt</dt><dd class="cmt"><p>option, that depends on any of options in list</p></dd><dt class="param">list</dt><dd class="cmt"><p>list of dependencies (at least one will need to be present)
+</p></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#editBuilder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="editBuilder(fn:org.rogach.scallop.Scallop=&gt;org.rogach.scallop.Scallop):Unit"></a>
       <a id="editBuilder((Scallop)⇒Scallop):Unit"></a>
@@ -657,6 +702,21 @@ standard Scallop errors, letting all other pass through.
       </span>
       </h4>
       
+    </li><li name="org.rogach.scallop.ScallopConf#requireOne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="requireOne(list:org.rogach.scallop.ScallopOption[_]*):Unit"></a>
+      <a id="requireOne(ScallopOption[_]*):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">requireOne</span><span class="params">(<span name="list">list: <a href="ScallopOption.html" class="extype" name="org.rogach.scallop.ScallopOption">ScallopOption</a>[_]*</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">In the verify stage, checks that one, and only one, option in the list is supplied.</p><div class="fullcomment"><div class="comment cmt"><p>In the verify stage, checks that one, and only one, option in the list is supplied.
+</p></div><dl class="paramcmts block"><dt class="param">list</dt><dd class="cmt"><p>list of conflicting options (exactly one must be present)
+</p></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#rootConfig" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="rootConfig:org.rogach.scallop.ScallopConf"></a>
       <a id="rootConfig:ScallopConf"></a>
