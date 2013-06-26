@@ -2,6 +2,7 @@ package org.rogach
 
 import reflect.runtime.universe._
 import java.io.File
+import java.net.{URL, URI}
 
 package object scallop {
   implicit val flagConverter = new ValueConverter[Boolean] {
@@ -37,6 +38,10 @@ package object scallop {
   implicit val fileConverter = stringConverter.map(new File(_)).flatMap { f =>
     if (f.exists) Right(Some(f)) else Left("file '%s' doesn't exist" format f)
   }
+  implicit val urlConverter = stringConverter.map(new URL(_))
+  implicit val uriConverter = stringConverter.map(new URI(_))
+  implicit val bigIntConverter = stringConverter.map(BigInt(_))
+  implicit val bigDecimalConverter = stringConverter.map(BigDecimal(_))
 
   def listArgConverter[A](conv: String => A)(implicit tt: TypeTag[List[A]])  = new ValueConverter[List[A]] {
     def parse(s:List[(String, List[String])]) = {
