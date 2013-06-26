@@ -1,6 +1,7 @@
 package org.rogach
 
 import reflect.runtime.universe._
+import java.io.File
 
 package object scallop {
   implicit val flagConverter = new ValueConverter[Boolean] {
@@ -86,6 +87,10 @@ package object scallop {
     }
     val tag = implicitly[TypeTag[Int]]
     val argType = ArgType.FLAG
+  }
+
+  val fileConverter = stringConverter.map(new File(_)).flatMap { f =>
+    if (f.exists) Right(Some(f)) else Left("file '%s' doesn't exist" format f)
   }
 
 }
