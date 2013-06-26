@@ -81,7 +81,7 @@ case class Scallop(
               if (args.size > 0) {
                 (o, (invoc, args.take(1).toList)) :: goParseRest(args.tail, None)
               } else {
-                throw new WrongOptionFormat(o.name, args.mkString)
+                throw new WrongOptionFormat(o.name, args.mkString, "you should provide exactly one argument")
               }
             case ArgType.LIST if args.isEmpty => List(o -> ((invoc, Nil)))
             case ArgType.LIST => parseRest
@@ -117,7 +117,7 @@ case class Scallop(
           }
         } else {
           val opt = getOptionWithShortName(args.head(1)) getOrElse
-                    (throw new UnknownOption(args.head.drop(1)))
+                    (throw new UnknownOption(args.head(1).toString))
           if (opt.converter.argType != ArgType.FLAG) {
             parse(acc, args.head.take(2) +: args.head.drop(2) +: args.tail)
           } else {
@@ -596,7 +596,9 @@ case class Scallop(
     opts foreach { o =>
       val args = parsed.opts filter (_._1 == o) map (_._2)
       val res = o.converter.parse(args)
-      if (res.isLeft) throw new WrongOptionFormat(o.name, args.map(_._2.mkString(" ")).mkString(" "))
+      res.left.foreach { msg =>
+        throw new WrongOptionFormat(o.name, args.map(_._2.mkString(" ")).mkString(" "), msg)
+      }
       if (o.required && !res.right.get.isDefined && !o.default().isDefined)
         throw new RequiredOptionNotFound(o.name)
       // validaiton

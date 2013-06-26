@@ -172,7 +172,7 @@ case class ToggleOption(
         case Nil => Right(None)
         case ("", Nil) :: Nil => Right(Some(true)) // it is called this way only when parsing trailing args
                                                    // but such hack may cause some problems in the future
-        case _ => Left(Unit)
+        case _ => Left("wrong arguments format")
       }
     }
     val tag = typeTag[Boolean]

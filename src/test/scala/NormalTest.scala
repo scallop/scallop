@@ -385,12 +385,12 @@ println(opts.summary) // returns summary of parser status (with current arg valu
       // parse returns Left, if there was an error while parsing
       // if no option was found, it returns Right(None)
       // and if option was found, it returns Right(...)
-      def parse(s:List[(String, List[String])]):Either[Unit,Option[Person]] =
+      def parse(s:List[(String, List[String])]):Either[String,Option[Person]] =
         s match {
           case (_, nameRgx(name) :: phoneRgx(phone) :: Nil) :: Nil =>
             Right(Some(Person(name,phone))) // successfully found our person
           case Nil => Right(None) // no person found
-          case _ => Left(Unit) // error when parsing
+          case _ => Left("wrong arguments format") // error when parsing
         }
       val tag = typeTag[Person] // some magic to make typing work
       val argType = org.rogach.scallop.ArgType.LIST

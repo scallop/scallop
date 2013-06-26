@@ -7,7 +7,7 @@ package object scallop {
     def parse(s: List[(String, List[String])]) = s match {
       case (_,Nil) :: Nil => Right(Some(true))
       case Nil => Right(None)
-      case _ => Left(Unit)
+      case _ => Left("too many arguments for flag option")
     }
     val tag = typeTag[Boolean]
     val argType = ArgType.FLAG
@@ -17,9 +17,9 @@ package object scallop {
     def parse(s: List[(String, List[String])]) = {
       s match {
         case (_, i :: Nil) :: Nil =>
-          try { Right(Some(conv(i))) } catch { case _: Throwable => Left(Unit) }
+          try { Right(Some(conv(i))) } catch { case _: Throwable => Left("wrong arguments format") }
         case Nil => Right(None)
-        case _ => Left(Unit)
+        case _ => Left("you should provide exactly one argument for this option")
       }
     }
     val tag = tt
@@ -41,7 +41,7 @@ package object scallop {
         if (l.isEmpty) Right(None)
         else Right(Some(l))
       } catch { case _: Throwable =>
-        Left(Unit)
+        Left("wrong arguments format")
       }
     }
     val tag = tt
@@ -63,7 +63,7 @@ package object scallop {
           case rgx(key,value) => (key, conv.parse(List(("",List(value)))).right.get.get)
         }.toMap))
       } catch { case _: Throwable =>
-        Left(Unit)
+        Left("wrong arguments format")
       }
     }
     val tag = tt
@@ -80,7 +80,7 @@ package object scallop {
 
   val tallyConverter = new ValueConverter[Int] {
     def parse(s: List[(String, List[String])]) = {
-      if (s.exists(_._2.nonEmpty)) Left(Unit)
+      if (s.exists(_._2.nonEmpty)) Left("this option doesn't need arguments")
       else if (s.nonEmpty) Right(Some(s.size))
            else Right(None)
     }

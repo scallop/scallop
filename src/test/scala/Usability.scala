@@ -6,17 +6,12 @@ class Usability extends UsefulMatchers {
   throwError.value = true
 
   test ("printing error message for single argument") {
-    var s = false
-    try {
+    expectException(WrongOptionFormat("apples", "asdf", "wrong arguments format")) {
       val conf = new ScallopConf(Seq("-a","asdf")) {
         val apples = opt[Int]("apples")
         val bananas = opt[Int]("bananas")
       }
-    } catch {
-      case WrongOptionFormat("apples", "asdf") => s = true
-      case _: Throwable =>
     }
-    s ==== true
   }
 
 }
