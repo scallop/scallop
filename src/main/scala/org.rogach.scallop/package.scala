@@ -34,6 +34,9 @@ package object scallop {
   implicit val doubleConverter = singleArgConverter[Double](_.toDouble)
   implicit val charConverter = singleArgConverter[Char](_.head)
   implicit val stringConverter = singleArgConverter[String](a=>a)
+  implicit val fileConverter = stringConverter.map(new File(_)).flatMap { f =>
+    if (f.exists) Right(Some(f)) else Left("file '%s' doesn't exist" format f)
+  }
 
   def listArgConverter[A](conv: String => A)(implicit tt: TypeTag[List[A]])  = new ValueConverter[List[A]] {
     def parse(s:List[(String, List[String])]) = {
@@ -87,10 +90,6 @@ package object scallop {
     }
     val tag = implicitly[TypeTag[Int]]
     val argType = ArgType.FLAG
-  }
-
-  val fileConverter = stringConverter.map(new File(_)).flatMap { f =>
-    if (f.exists) Right(Some(f)) else Left("file '%s' doesn't exist" format f)
   }
 
 }
