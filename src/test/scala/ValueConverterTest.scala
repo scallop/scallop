@@ -54,4 +54,26 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
     }
   }
 
+  test("optDefault - no call") {
+    val conf = new ScallopConf() {
+      val apples = opt[Int]()(optDefault(5))
+    }
+    conf.apples.get ==== None
+    conf.apples.isSupplied ==== false
+  }
+  test("optDefault - empty call") {
+    val conf = new ScallopConf(Seq("-a")) {
+      val apples = opt[Int]()(optDefault(5))
+    }
+    conf.apples.get ==== Some(5)
+    conf.apples.isSupplied ==== true
+  }
+  test("optDefault - arg provided") {
+    val conf = new ScallopConf(Seq("-a", "7")) {
+      val apples = opt[Int]()(optDefault(5))
+    }
+    conf.apples.get ==== Some(7)
+    conf.apples.isSupplied ==== true
+  }
+
 }

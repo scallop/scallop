@@ -97,4 +97,18 @@ package object scallop {
     val argType = ArgType.FLAG
   }
 
+  def optDefault[A](default: A)(implicit conv: ValueConverter[A]) =
+    new ValueConverter[A] {
+      def parse(s: List[(String, List[String])]) = {
+        s match {
+          case Nil => Right(None)
+          case (_, Nil) :: Nil => Right(Some(default))
+          case call @ ((_, v :: Nil) :: Nil) => conv.parse(call)
+          case _ => Left("Too many arguments")
+        }
+      }
+      val tag = conv.tag
+      val argType = ArgType.LIST
+    }
+
 }
