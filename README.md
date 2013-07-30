@@ -72,7 +72,6 @@ object Conf extends ScallopConf(
   val firstList = trailArg[List[Int]]()
   val secondListName = trailArg[String]()
   val secondList = trailArg[List[Double]]()
-  verify
 }
 Conf.props("key1") should equal (Some("value1"))
 Conf.firstListName() should equal ("first")
