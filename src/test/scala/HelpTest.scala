@@ -235,4 +235,19 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         |      --version   custom version descr""".stripMargin
   }
 
+  test ("user-provided help option works with short-named argument") {
+    val (out, err) = captureOutput {
+      val exits = trapExit {
+        object Conf extends ScallopConf(Seq("-?")) {
+          val help = opt[Boolean](short = '?', descr = "custom help descr")
+        }
+        Conf
+      }
+      exits.size ==== 1
+    }
+    out ====
+      """  -?, --help   custom help descr
+        |""".stripMargin
+  }
+
 }

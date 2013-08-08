@@ -15,6 +15,34 @@ object Scallop {
   /** Create the default empty parser, fresh as mountain air. */
   def apply(): Scallop = apply(Nil)
 
+  private[scallop] def builtinHelpOpt =
+    SimpleOption(
+      name = "help",
+      short = None,
+      descr = "Show help message",
+      required = false,
+      converter = flagConverter,
+      default = () => None,
+      validator = (_,_) => true,
+      argName = "",
+      hidden = false,
+      noshort = true
+    )
+
+  private[scallop] def builtinVersionOpt =
+    SimpleOption(
+      name = "version",
+      short = None,
+      descr = "Show version of this program",
+      required = false,
+      converter = flagConverter,
+      default = () => None,
+      validator = (_,_) => true,
+      argName = "",
+      hidden = false,
+      noshort = true
+
+    )
 }
 
 /** The main builder class.
@@ -412,36 +440,8 @@ case class Scallop(
     */
   def help: String = {
     // --help and --version do not go through normal pipeline, so we need to hardcode them here
-    val helpOpt =
-      opts.find(_.name == "help").getOrElse(
-        SimpleOption(
-          name = "help",
-          short = None,
-          descr = "Show help message",
-          required = false,
-          converter = flagConverter,
-          default = () => None,
-          validator = (_,_) => true,
-          argName = "",
-          hidden = false,
-          noshort = true
-        )
-      )
-    val versionOpt =
-      opts.find(_.name == "version").orElse(vers.map { _ =>
-        SimpleOption(
-          name = "version",
-          short = None,
-          descr = "Show version of this program",
-          required = false,
-          converter = flagConverter,
-          default = () => None,
-          validator = (_,_) => true,
-          argName = "",
-          hidden = false,
-          noshort = true
-        )
-      })
+    val helpOpt = opts.find(_.name == "help").getOrElse(Scallop.builtinHelpOpt)
+    val versionOpt = opts.find(_.name == "version").orElse(vers.map(_ => Scallop.builtinVersionOpt))
 
     val optsToFormat =
       mainOpts.map(mo => opts.find(_.name == mo)) ++ mainOpts.headOption.map(_=>List(None)).getOrElse(Nil) ++
@@ -571,12 +571,27 @@ case class Scallop(
     opts flatMap (o => (o.requiredShortNames).distinct) groupBy (a=>a) filter (_._2.size > 1) foreach
       (a => throw new IdenticalOptionNames("Short option name '%s' is not unique" format a._1))
 
-    if (args.headOption == Some("--help")) {
+
+    val helpOpt = opts.find(_.name == "help").getOrElse(Scallop.builtinHelpOpt)
+    val shortHelpOpt = helpOpt match {
+      case o: SimpleOption => o.short
+      case _ => None
+    }
+    if (args.headOption == Some("--" + helpOpt.name) ||
+        shortHelpOpt.map(s => args.headOption == Some("-" + s)).getOrElse(false)) {
       throw Help("")
     }
 
-    if (vers.isDefined && args.contains("--version")) {
-      throw Version
+    vers.foreach { _ =>
+      val versionOpt = opts.find(_.name == "version").getOrElse(Scallop.builtinVersionOpt)
+      val shortVersionOpt = versionOpt match {
+        case o: SimpleOption => o.short
+        case _ => None
+      }
+      if (args.contains("--" + versionOpt.name) ||
+          shortVersionOpt.map(s => args.contains("-" + s)).getOrElse(false)) {
+        throw Version
+      }
     }
 
     parsed
