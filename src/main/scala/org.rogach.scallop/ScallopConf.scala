@@ -267,7 +267,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     }
   }
 
-  /** Veryfy that this config object is properly configured. */
+  /** Verify that this config object is properly configured. */
   private[scallop] def verify() {
     try {
       verified = true
