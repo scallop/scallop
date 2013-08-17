@@ -436,9 +436,11 @@ case class Scallop(
   def setHelpWidth(w: Int) = this.copy(helpWidth = Some(w))
 
   /** Get help on options from this builder. The resulting help is carefully formatted to required number of columns (default = 80, change with .setHelpWidth method),
-    * and contains info on proporties, options and trailing arguments.
+    * and contains info on properties, options and trailing arguments.
     */
-  def help: String = {
+  def help: String = help("")
+
+  private def help(subcommandPrefix: String): String = {
     // --help and --version do not go through normal pipeline, so we need to hardcode them here
     val helpOpt = opts.find(_.name == "help").getOrElse(Scallop.builtinHelpOpt)
     val versionOpt = opts.find(_.name == "version").orElse(vers.map(_ => Scallop.builtinVersionOpt))
@@ -467,9 +469,10 @@ case class Scallop(
     } else {
       val subHelp = subbuilders.map { case (sn, sub) =>
         val subDescr = if (sub.descr.nonEmpty) " - " + sub.descr else ""
-        ("Subcommand: %s%s" format (sn, subDescr)) + "\n" +
+        ("Subcommand: %s%s%s" format (subcommandPrefix, sn, subDescr)) + "\n" +
         sub.bann.map(_+"\n").getOrElse("") +
-        sub.help.split("\n").filter(!_.trim.startsWith("--version")).mkString("\n") +
+        sub.help(subcommandPrefix + sn + " ").split("\n").
+          filter(!_.trim.startsWith("--version")).mkString("\n") +
         sub.foot.map("\n"+_).getOrElse("")
       }.mkString("\n")
       if (subHelp.nonEmpty) "\n\n" + subHelp else subHelp
