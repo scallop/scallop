@@ -250,4 +250,47 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         |""".stripMargin
   }
 
+  test ("nested subcommands are reflected in help") {
+    val (out, err) = captureOutput {
+      val exits = trapExit {
+        object Conf extends ScallopConf(List("--help")) {
+          val tree = new Subcommand("tree") {
+            val branches = opt[Int]("branches", descr = "how many branches?")
+            val trail = trailArg[String]("trail", descr = "Which trail do you choose?")
+
+            val peach = new Subcommand("peach") {
+              banner("plant the fruit-bearing peach tree")
+              val peaches = opt[Int]("peaches", descr = "how many peaches?")
+              val palm = new Subcommand("palm") {
+                val leaves = opt[Int]("leaves", descr = "how many leaves?")
+              }
+              footer("Latin name: Prunus persica\n")
+            }
+          }
+          verify
+        }
+        Conf
+      }
+      exits.size should equal (1)
+    }
+    out should equal ("""      --help   Show help message
+                        |
+                        |Subcommand: tree
+                        |  -b, --branches  <arg>   how many branches?
+                        |      --help              Show help message
+                        |
+                        | trailing arguments:
+                        |  trail (required)   Which trail do you choose?
+                        |
+                        |Subcommand: tree peach
+                        |plant the fruit-bearing peach tree
+                        |  -p, --peaches  <arg>   how many peaches?
+                        |      --help             Show help message
+                        |
+                        |Subcommand: tree peach palm
+                        |  -l, --leaves  <arg>   how many leaves?
+                        |      --help            Show help message
+                        |Latin name: Prunus persica
+                        |""".stripMargin)
+  }
 }
