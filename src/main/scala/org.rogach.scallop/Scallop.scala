@@ -15,6 +15,34 @@ object Scallop {
   /** Create the default empty parser, fresh as mountain air. */
   def apply(): Scallop = apply(Nil)
 
+  private[scallop] def builtinHelpOpt =
+    SimpleOption(
+      name = "help",
+      short = None,
+      descr = "Show help message",
+      required = false,
+      converter = flagConverter,
+      default = () => None,
+      validator = (_,_) => true,
+      argName = "",
+      hidden = false,
+      noshort = true
+    )
+
+  private[scallop] def builtinVersionOpt =
+    SimpleOption(
+      name = "version",
+      short = None,
+      descr = "Show version of this program",
+      required = false,
+      converter = flagConverter,
+      default = () => None,
+      validator = (_,_) => true,
+      argName = "",
+      hidden = false,
+      noshort = true
+
+    )
 }
 
 /** The main builder class.
@@ -81,7 +109,7 @@ case class Scallop(
               if (args.size > 0) {
                 (o, (invoc, args.take(1).toList)) :: goParseRest(args.tail, None)
               } else {
-                throw new WrongOptionFormat(o.name, args.mkString)
+                throw new WrongOptionFormat(o.name, args.mkString, "you should provide exactly one argument")
               }
             case ArgType.LIST if args.isEmpty => List(o -> ((invoc, Nil)))
             case ArgType.LIST => parseRest
@@ -117,7 +145,7 @@ case class Scallop(
           }
         } else {
           val opt = getOptionWithShortName(args.head(1)) getOrElse
-                    (throw new UnknownOption(args.head.drop(1)))
+                    (throw new UnknownOption(args.head(1).toString))
           if (opt.converter.argType != ArgType.FLAG) {
             parse(acc, args.head.take(2) +: args.head.drop(2) +: args.tail)
           } else {
@@ -408,40 +436,14 @@ case class Scallop(
   def setHelpWidth(w: Int) = this.copy(helpWidth = Some(w))
 
   /** Get help on options from this builder. The resulting help is carefully formatted to required number of columns (default = 80, change with .setHelpWidth method),
-    * and contains info on proporties, options and trailing arguments.
+    * and contains info on properties, options and trailing arguments.
     */
-  def help: String = {
+  def help: String = help("")
+
+  private def help(subcommandPrefix: String): String = {
     // --help and --version do not go through normal pipeline, so we need to hardcode them here
-    val helpOpt =
-      opts.find(_.name == "help").getOrElse(
-        SimpleOption(
-          name = "help",
-          short = None,
-          descr = "Show help message",
-          required = false,
-          converter = flagConverter,
-          default = () => None,
-          validator = (_,_) => true,
-          argName = "",
-          hidden = false,
-          noshort = true
-        )
-      )
-    val versionOpt =
-      opts.find(_.name == "version").orElse(vers.map { _ =>
-        SimpleOption(
-          name = "version",
-          short = None,
-          descr = "Show version of this program",
-          required = false,
-          converter = flagConverter,
-          default = () => None,
-          validator = (_,_) => true,
-          argName = "",
-          hidden = false,
-          noshort = true
-        )
-      })
+    val helpOpt = opts.find(_.name == "help").getOrElse(Scallop.builtinHelpOpt)
+    val versionOpt = opts.find(_.name == "version").orElse(vers.map(_ => Scallop.builtinVersionOpt))
 
     val optsToFormat =
       mainOpts.map(mo => opts.find(_.name == mo)) ++ mainOpts.headOption.map(_=>List(None)).getOrElse(Nil) ++
@@ -467,9 +469,10 @@ case class Scallop(
     } else {
       val subHelp = subbuilders.map { case (sn, sub) =>
         val subDescr = if (sub.descr.nonEmpty) " - " + sub.descr else ""
-        ("Subcommand: %s%s" format (sn, subDescr)) + "\n" +
+        ("Subcommand: %s%s%s" format (subcommandPrefix, sn, subDescr)) + "\n" +
         sub.bann.map(_+"\n").getOrElse("") +
-        sub.help.split("\n").filter(!_.trim.startsWith("--version")).mkString("\n") +
+        sub.help(subcommandPrefix + sn + " ").split("\n").
+          filter(!_.trim.startsWith("--version")).mkString("\n") +
         sub.foot.map("\n"+_).getOrElse("")
       }.mkString("\n")
       if (subHelp.nonEmpty) "\n\n" + subHelp else subHelp
@@ -571,12 +574,27 @@ case class Scallop(
     opts flatMap (o => (o.requiredShortNames).distinct) groupBy (a=>a) filter (_._2.size > 1) foreach
       (a => throw new IdenticalOptionNames("Short option name '%s' is not unique" format a._1))
 
-    if (args.headOption == Some("--help")) {
+
+    val helpOpt = opts.find(_.name == "help").getOrElse(Scallop.builtinHelpOpt)
+    val shortHelpOpt = helpOpt match {
+      case o: SimpleOption => o.short
+      case _ => None
+    }
+    if (args.headOption == Some("--" + helpOpt.name) ||
+        shortHelpOpt.map(s => args.headOption == Some("-" + s)).getOrElse(false)) {
       throw Help("")
     }
 
-    if (vers.isDefined && args.contains("--version")) {
-      throw Version
+    vers.foreach { _ =>
+      val versionOpt = opts.find(_.name == "version").getOrElse(Scallop.builtinVersionOpt)
+      val shortVersionOpt = versionOpt match {
+        case o: SimpleOption => o.short
+        case _ => None
+      }
+      if (args.contains("--" + versionOpt.name) ||
+          shortVersionOpt.map(s => args.contains("-" + s)).getOrElse(false)) {
+        throw Version
+      }
     }
 
     parsed
@@ -596,7 +614,9 @@ case class Scallop(
     opts foreach { o =>
       val args = parsed.opts filter (_._1 == o) map (_._2)
       val res = o.converter.parse(args)
-      if (res.isLeft) throw new WrongOptionFormat(o.name, args.map(_._2.mkString(" ")).mkString(" "))
+      res.left.foreach { msg =>
+        throw new WrongOptionFormat(o.name, args.map(_._2.mkString(" ")).mkString(" "), msg)
+      }
       if (o.required && !res.right.get.isDefined && !o.default().isDefined)
         throw new RequiredOptionNotFound(o.name)
       // validaiton

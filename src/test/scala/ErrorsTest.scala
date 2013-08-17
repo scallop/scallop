@@ -5,7 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
-class ErrorsTest extends FunSuite with ShouldMatchers {
+class ErrorsTest extends FunSuite with ShouldMatchers with UsefulMatchers {
   throwError.value = true
 
   test("wrong arg type") {
@@ -36,14 +36,14 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
 
   test ("options parse failure") {
-    intercept[TrailingArgsParseException] {
+    expectException(TrailingArgsParseException(Seq("42"))) {
       val opts = Scallop(List("42"))
         .verify
     }
   }
 
   test ("long option clash") {
-    intercept[IdenticalOptionNames] {
+    expectException(IdenticalOptionNames("Option identifier 'ang' is not unique")) {
       val opts = Scallop()
         .opt[Int]("ang")
         .opt[Int]("ang")
@@ -52,7 +52,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
 
   test ("short option clash") {
-    intercept[IdenticalOptionNames] {
+    expectException(IdenticalOptionNames("Short option name 'o' is not unique")) {
       val opts = Scallop()
         .opt[Int]("opt1", short = 'o')
         .opt[Int]("opt2", short = 'o')
@@ -61,21 +61,21 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
 
   test ("unknown short option") {
-    intercept[UnknownOption] {
+    expectException(UnknownOption("a")) {
       val opts = Scallop(List("-a"))
         .verify
     }
   }
 
   test ("unknown long option") {
-    intercept[UnknownOption] {
+    expectException(UnknownOption("ang")) {
       val opts = Scallop(List("--ang"))
         .verify
     }
   }
 
   test ("option verification failure") {
-    intercept[WrongOptionFormat] {
+    expectException(WrongOptionFormat("ang", "1.2", "wrong arguments format")) {
       val opts = Scallop(List("-a","1.2", "-b"))
         .opt[Int]("ang")
         .opt[Boolean]("bang")
@@ -84,7 +84,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
 
   test ("required option missing") {
-    intercept[RequiredOptionNotFound] {
+    expectException(RequiredOptionNotFound("ang")) {
       val opts = Scallop(List())
         .opt[Int]("ang", required = true)
         .verify
@@ -92,7 +92,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
 
   test ("props name clash") {
-    intercept[IdenticalOptionNames] {
+    expectException(IdenticalOptionNames("Option identifier 'E' is not unique")) {
       val opts = Scallop()
         .props[String]('E')
         .props[String]('E')
@@ -101,7 +101,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
 
   test ("opts & props name clash") {
-    intercept[IdenticalOptionNames] {
+    expectException(IdenticalOptionNames("Short option name 'E' is not unique")) {
       val opts = Scallop()
         .props[String]('E')
         .opt[Int]("eng", short = 'E')
@@ -110,14 +110,14 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
 
   test ("unknown prop name") {
-    intercept[UnknownOption] {
+    expectException(UnknownOption("E")) {
       val opts = Scallop(List("-Eaoeu=aoeu"))
       .verify
     }
   }
 
   test ("unknown option requested") {
-    intercept[UnknownOption] {
+    expectException(UnknownOption("aoeu")) {
       val opts = Scallop()
         .verify
       opts[Int]("aoeu")
@@ -135,7 +135,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
 
   test ("excess arguments") {
-    intercept[TrailingArgsParseException] {
+    expectException(TrailingArgsParseException(Seq("1","2"))) {
       val opts = Scallop(List("1","2"))
         .trailArg[Int]("first")
         .verify
@@ -143,7 +143,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
 
   test ("validation failure") {
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("Validation failure for 'apples' option parameters: 1")) {
       val opts = Scallop(List("-a","1"))
         .opt[Int]("apples", validate = (0>))
         .verify
@@ -151,7 +151,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
   }
 
   test ("option identifier clash") {
-    intercept[IdenticalOptionNames] {
+    expectException(IdenticalOptionNames("Option identifier 'tasks' is not unique")) {
       val opts = Scallop(Nil)
         .opt[Boolean]("tasks")
         .trailArg[List[String]]("tasks")
@@ -165,7 +165,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
         val apples = trailArg[List[Int]]()
       }
     }
-    intercept[TrailingArgsParseException] {
+    expectException(TrailingArgsParseException(Seq("a"))) {
       Conf
     }
   }
@@ -174,7 +174,7 @@ class ErrorsTest extends FunSuite with ShouldMatchers {
     object Conf extends ScallopConf(Seq("-a")) {
       val apples = opt[Int]("apples")
     }
-    intercept[WrongOptionFormat] {
+    expectException(WrongOptionFormat("apples", "", "you should provide exactly one argument")) {
       Conf
     }
   }

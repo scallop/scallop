@@ -10,7 +10,7 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
       conv.flatMap {
         case Nil => Right(None)
         case v :: Nil => Right(Option(Option(v)))
-        case _ => Left(Unit)
+        case _ => Left("wrong option format")
       }
     def getcf(args: Seq[String]) = new ScallopConf(args) {
       val foo = opt[Option[String]]()
@@ -48,9 +48,31 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
 
     }
 
-    intercept[WrongOptionFormat] {
+    expectException(WrongOptionFormat("from", "201305xx", "wrong arguments format")) {
       getcf(List("-f", "201305xx", "-t", "20130515")).from()
     }
+  }
+
+  test("optDefault - no call") {
+    val conf = new ScallopConf() {
+      val apples = opt[Int]()(optDefault(5))
+    }
+    conf.apples.get ==== None
+    conf.apples.isSupplied ==== false
+  }
+  test("optDefault - empty call") {
+    val conf = new ScallopConf(Seq("-a")) {
+      val apples = opt[Int]()(optDefault(5))
+    }
+    conf.apples.get ==== Some(5)
+    conf.apples.isSupplied ==== true
+  }
+  test("optDefault - arg provided") {
+    val conf = new ScallopConf(Seq("-a", "7")) {
+      val apples = opt[Int]()(optDefault(5))
+    }
+    conf.apples.get ==== Some(7)
+    conf.apples.isSupplied ==== true
   }
 
 }

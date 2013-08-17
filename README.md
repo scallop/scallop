@@ -26,7 +26,7 @@ Installation
 Add following to your build.sbt:
 
 ```scala
-libraryDependencies += "org.rogach" %% "scallop" % "0.9.3"
+libraryDependencies += "org.rogach" %% "scallop" % "0.9.4"
 ```
 
 Quick example
@@ -72,7 +72,6 @@ object Conf extends ScallopConf(
   val firstList = trailArg[List[Int]]()
   val secondListName = trailArg[String]()
   val secondList = trailArg[List[Double]]()
-  verify
 }
 Conf.props("key1") should equal (Some("value1"))
 Conf.firstListName() should equal ("first")

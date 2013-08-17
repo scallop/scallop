@@ -18,6 +18,8 @@ abstract class ScallopOption[A](nm: String) { opt =>
 
   /** Name for the option */
   def name = _name
+  /** Name for the option, which can be presented to human user */
+  def humanName = _name.replace("\0", ":")
 
   /** Retreive the underlying value as an option */
   def get = fn(name)

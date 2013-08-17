@@ -126,7 +126,7 @@ class SubcommandsTest extends UsefulMatchers {
         codependent(apples, bananas)
       }
     }
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("Either all or none of the following options should be supplied, because they are co-dependent: tree:apples, tree:bananas")) {
       Conf
     }
   }
@@ -151,7 +151,7 @@ class SubcommandsTest extends UsefulMatchers {
       }
       codependent(apples, tree.bananas)
     }
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("Either all or none of the following options should be supplied, because they are co-dependent: apples, tree:bananas")) {
       Conf
     }
   }

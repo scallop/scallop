@@ -41,8 +41,8 @@ case class UnknownOption(optionName: String)
   extends ScallopException("Unknown option '%s'" format optionName)
 /** Thrown when arguments to some option do not satisfy that option's
     value converter (it returns Left in such case). */
-case class WrongOptionFormat(optionName: String, args: String)
-  extends ScallopException("Wrong format for option '%s': '%s'" format (optionName, args))
+case class WrongOptionFormat(optionName: String, args: String, msg: String)
+  extends ScallopException("Bad arguments for option '%s': '%s' - %s" format (optionName, args, msg))
 /** Thrown when parser failed to find arguments to option (marked as 'required')
     in the input arguments. */
 case class RequiredOptionNotFound(name: String)

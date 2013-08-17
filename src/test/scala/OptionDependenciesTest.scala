@@ -24,7 +24,7 @@ class OptionDependenciesTest extends FunSuite with ShouldMatchers with UsefulMat
       val coconuts = opt[Int]("coconuts")
       dependsOnAny(apples, List(bananas, coconuts))
     }
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("When specifying 'apples', at least one of the following options must be provided: bananas, coconuts")) {
       Conf
     }
   }
@@ -63,7 +63,7 @@ class OptionDependenciesTest extends FunSuite with ShouldMatchers with UsefulMat
       val coconuts = opt[Int]("coconuts")
       dependsOnAll(apples, List(bananas, coconuts))
     }
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("When specifying 'apples', all of the following options must also be provided: bananas, coconuts")) {
       Conf
     }
   }
@@ -74,7 +74,7 @@ class OptionDependenciesTest extends FunSuite with ShouldMatchers with UsefulMat
       val coconuts = opt[Int]("coconuts")
       dependsOnAll(apples, List(bananas, coconuts))
     }
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("When specifying 'apples', all of the following options must also be provided: bananas, coconuts")) {
       Conf
     }
   }
@@ -111,18 +111,18 @@ class OptionDependenciesTest extends FunSuite with ShouldMatchers with UsefulMat
       val bananas = opt[Int]("bananas")
       conflicts(apples, List(bananas))
     }
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("Option 'apples' conflicts with option 'bananas'")) {
       Conf
     }
   }
-  
+
   test("requireOne - failure, no options are provided") {
     object Conf extends ScallopConf(List()){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
       requireOne(apples, bananas)
     }
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("There should be exactly one of the following options: apples, bananas")) {
       Conf
     }
   }
@@ -140,7 +140,7 @@ class OptionDependenciesTest extends FunSuite with ShouldMatchers with UsefulMat
       val bananas = opt[Int]("bananas")
       requireOne(apples, bananas)
     }
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("There should be exactly one of the following options: apples, bananas")) {
       Conf
     }
   }
@@ -160,7 +160,7 @@ class OptionDependenciesTest extends FunSuite with ShouldMatchers with UsefulMat
       val bananas = opt[Int]("bananas")
       mutuallyExclusive(apples, bananas)
     }
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("There should be only one or zero of the following options: apples, bananas")) {
       Conf
     }
   }
@@ -180,7 +180,7 @@ class OptionDependenciesTest extends FunSuite with ShouldMatchers with UsefulMat
       val bananas = opt[Int]("bananas")
       codependent(apples, bananas)
     }
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("Either all or none of the following options should be supplied, because they are co-dependent: apples, bananas")) {
       Conf
     }
   }
@@ -200,7 +200,7 @@ class OptionDependenciesTest extends FunSuite with ShouldMatchers with UsefulMat
       val bananas = opt[Boolean]("bananas")
       mutuallyExclusive(apples,bananas)
     }
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("There should be only one or zero of the following options: apples, bananas")) {
       Conf
     }
   }

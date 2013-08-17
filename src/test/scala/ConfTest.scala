@@ -126,7 +126,7 @@ class ConfTest extends FunSuite with ShouldMatchers with UsefulMatchers {
   }
 
   test ("extracting values before call to verify") {
-    intercept[IncompleteBuildException] {
+    expectException(IncompleteBuildException()) {
       object Conf extends ScallopConf(List("-a")) {
         val apples = opt[Boolean]("apples").apply()
         verify
@@ -213,7 +213,7 @@ class ConfTest extends FunSuite with ShouldMatchers with UsefulMatchers {
   }
 
   test ("failing validation") {
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("Validation failure for 'apples' option parameters: 1")) {
       object Conf extends ScallopConf(List("-a","1")) {
         val apples = opt[Int]("apples", validate = (0>))
         verify
@@ -246,7 +246,7 @@ class ConfTest extends FunSuite with ShouldMatchers with UsefulMatchers {
   }
 
   test ("custom validation - failure") {
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("Something is wrong with composition :)")) {
       object Conf extends ScallopConf(List("-a","15","-b","3")) {
         val apples = opt[Int]("apples")
         val bananas = opt[Int]("bananas")
@@ -273,7 +273,7 @@ class ConfTest extends FunSuite with ShouldMatchers with UsefulMatchers {
   }
 
   test ("custom opt validation - failure") {
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("err")) {
       object Conf extends ScallopConf(List("-a", "14", "-b", "4")) {
         val apples = opt[Int]()
         val bananas = opt[Int]()
@@ -496,7 +496,7 @@ class ConfTest extends FunSuite with ShouldMatchers with UsefulMatchers {
   }
 
   test ("tally no-args") {
-    intercept[WrongOptionFormat] {
+    expectException(WrongOptionFormat("apples", "stuff", "this option doesn't need arguments")) {
       val conf = new ScallopConf(Seq("-a", "stuff", "--verbose")) {
         val apples = tally()
         val verbose = opt[Boolean]()
@@ -528,7 +528,7 @@ class ConfTest extends FunSuite with ShouldMatchers with UsefulMatchers {
   }
 
   test ("verification on subconfigs") {
-    intercept[WrongOptionFormat] {
+    expectException(WrongOptionFormat("apples", "b", "wrong arguments format")) {
       val conf = new ScallopConf(Seq("tree", "-a", "b")) {
         val tree = new Subcommand("tree") {
           val apples = opt[Int]()
@@ -538,7 +538,7 @@ class ConfTest extends FunSuite with ShouldMatchers with UsefulMatchers {
   }
 
   test ("validation failure on subconfigs") {
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("tree: a + b must be < 3")) {
       val conf = new ScallopConf(Seq("tree", "-a", "1", "-b", "5")) {
         val tree = new Subcommand("tree") {
           val apples = opt[Int]()
@@ -553,7 +553,7 @@ class ConfTest extends FunSuite with ShouldMatchers with UsefulMatchers {
   }
 
   test ("validationOpt failure on subconfigs") {
-    intercept[ValidationFailure] {
+    expectException(ValidationFailure("both a and b must be supplied")) {
       val conf = new ScallopConf(Seq("tree", "-a", "1")) {
         val tree = new Subcommand("tree") {
           val apples = opt[Int]()

@@ -266,7 +266,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     }
   }
 
-  /** Veryfy that this config object is properly configured. */
+  /** Verify that this config object is properly configured. */
   private[scallop] def verify() {
     try {
       verified = true
@@ -354,7 +354,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   def dependsOnAny(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
     if (opt.isSupplied && !list.exists(_.isSupplied)) {
       Left("When specifying '%s', at least one of the following options must be provided: %s"
-        format (opt.name, list.map(_.name).mkString(", ")))
+        format (opt.humanName, list.map(_.humanName).mkString(", ")))
     } else Right(Unit)
   }
 
@@ -366,7 +366,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   def dependsOnAll(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
     if (opt.isSupplied && !list.forall(_.isSupplied)) {
       Left("When specifying '%s', all of the following options must also be provided: %s"
-        format (opt.name, list.map(_.name).mkString(", ")))
+        format (opt.humanName, list.map(_.humanName).mkString(", ")))
     } else Right(Unit)
   }
 
@@ -378,7 +378,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   def conflicts(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
     if (opt.isSupplied && list.exists(_.isSupplied)) {
       val conflict = list.find(_.isSupplied).get
-      Left("Option '%s' conflicts with option '%s'" format (opt.name, conflict.name))
+      Left("Option '%s' conflicts with option '%s'" format (opt.humanName, conflict.humanName))
     } else Right(Unit)
   }
 
@@ -389,7 +389,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   def requireOne(list: ScallopOption[_]*) = addValidation {
     if (list.count(_.isSupplied) != 1) {
       Left("There should be exactly one of the following options: %s"
-        format list.map(_.name).mkString(", "))
+        format list.map(_.humanName).mkString(", "))
     } else Right(Unit)
   }
 
@@ -400,7 +400,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   def mutuallyExclusive(list: ScallopOption[_]*) = addValidation {
     if (list.count(_.isSupplied) > 1) {
       Left("There should be only one or zero of the following options: %s"
-        format list.map(_.name).mkString(", "))
+        format list.map(_.humanName).mkString(", "))
     } else Right(Unit)
   }
 
@@ -411,8 +411,8 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   def codependent(list: ScallopOption[_]*) = addValidation {
     val c = list.count(_.isSupplied)
     if (c != 0 && c != list.size) {
-      Left("Ether all or none of the following options should be supplied, because they are co-dependent: %s"
-        format list.map(_.name).mkString(", "))
+      Left("Either all or none of the following options should be supplied, because they are co-dependent: %s"
+        format list.map(_.humanName).mkString(", "))
     } else Right(Unit)
   }
 

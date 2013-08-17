@@ -13,7 +13,7 @@ trait ValueConverter[A] { parent =>
     * <li> if option was found, it returns Right(...). </li>
     * </ul>
     */
-  def parse(s: List[(String,List[String])]): Either[Unit,Option[A]]
+  def parse(s: List[(String, List[String])]): Either[String, Option[A]]
 
   /** Manifest, holding the type for this builder. */
   val manifest: Manifest[A]
@@ -36,7 +36,7 @@ trait ValueConverter[A] { parent =>
     val argType = parent.argType
   }
 
-  def flatMap[B](fn: A => Either[Unit, Option[B]])(implicit m: Manifest[B]) =
+  def flatMap[B](fn: A => Either[String, Option[B]])(implicit m: Manifest[B]) =
     new ValueConverter[B] { child =>
       def parse(s: List[(String,List[String])]) =
         parent.parse(s).right.flatMap {

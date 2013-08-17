@@ -1,11 +1,14 @@
 package org.rogach
 
+import java.io.File
+import java.net.{URL, URI}
+
 package object scallop {
   implicit val flagConverter = new ValueConverter[Boolean] {
     def parse(s: List[(String, List[String])]) = s match {
       case (_,Nil) :: Nil => Right(Some(true))
       case Nil => Right(None)
-      case _ => Left(Unit)
+      case _ => Left("too many arguments for flag option")
     }
     val manifest = implicitly[Manifest[Boolean]]
     val argType = ArgType.FLAG
@@ -15,9 +18,9 @@ package object scallop {
     def parse(s: List[(String, List[String])]) = {
       s match {
         case (_, i :: Nil) :: Nil =>
-          try { Right(Some(conv(i))) } catch { case _ => Left(Unit) }
+          try { Right(Some(conv(i))) } catch { case _: Throwable => Left("wrong arguments format") }
         case Nil => Right(None)
-        case _ => Left(Unit)
+        case _ => Left("you should provide exactly one argument for this option")
       }
     }
     val manifest = m
@@ -31,6 +34,13 @@ package object scallop {
   implicit val doubleConverter = singleArgConverter[Double](_.toDouble)
   implicit val charConverter = singleArgConverter[Char](_.head)
   implicit val stringConverter = singleArgConverter[String](a=>a)
+  implicit val fileConverter = stringConverter.map(new File(_)).flatMap { f =>
+    if (f.exists) Right(Some(f)) else Left("file '%s' doesn't exist" format f)
+  }
+  implicit val urlConverter = stringConverter.map(new URL(_))
+  implicit val uriConverter = stringConverter.map(new URI(_))
+  implicit val bigIntConverter = stringConverter.map(BigInt(_))
+  implicit val bigDecimalConverter = stringConverter.map(BigDecimal(_))
 
   def listArgConverter[A](conv: String => A)(implicit m: Manifest[List[A]])  = new ValueConverter[List[A]] {
     def parse(s:List[(String, List[String])]) = {
@@ -39,7 +49,7 @@ package object scallop {
         if (l.isEmpty) Right(None)
         else Right(Some(l))
       } catch { case _ =>
-        Left(Unit)
+        Left("wrong arguments format")
       }
     }
     val manifest = m
@@ -61,7 +71,7 @@ package object scallop {
           case rgx(key,value) => (key, conv.parse(List(("",List(value)))).right.get.get)
         }.toMap))
       } catch { case _ =>
-        Left(Unit)
+        Left("wrong arguments format")
       }
     }
     val manifest = m
@@ -78,12 +88,26 @@ package object scallop {
 
   val tallyConverter = new ValueConverter[Int] {
     def parse(s: List[(String, List[String])]) = {
-      if (s.exists(_._2.nonEmpty)) Left(Unit)
+      if (s.exists(_._2.nonEmpty)) Left("this option doesn't need arguments")
       else if (s.nonEmpty) Right(Some(s.size))
            else Right(None)
     }
     val manifest = implicitly[Manifest[Int]]
     val argType = ArgType.FLAG
   }
+
+  def optDefault[A](default: A)(implicit conv: ValueConverter[A]) =
+    new ValueConverter[A] {
+      def parse(s: List[(String, List[String])]) = {
+        s match {
+          case Nil => Right(None)
+          case (_, Nil) :: Nil => Right(Some(default))
+          case call @ ((_, v :: Nil) :: Nil) => conv.parse(call)
+          case _ => Left("Too many arguments")
+        }
+      }
+      val manifest = conv.manifest
+      val argType = ArgType.LIST
+    }
 
 }

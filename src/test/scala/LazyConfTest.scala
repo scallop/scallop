@@ -8,7 +8,7 @@ class LazyConfTest extends UsefulMatchers {
     val conf = new LazyScallopConf(Seq("-a", "1")) {
       val apples = opt[Int]("apples")
     }
-    intercept[IncompleteBuildException] {
+    expectException(IncompleteBuildException()) {
       conf.apples()
     }
   }
