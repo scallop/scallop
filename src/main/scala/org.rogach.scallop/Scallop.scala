@@ -436,7 +436,7 @@ case class Scallop(
   def setHelpWidth(w: Int) = this.copy(helpWidth = Some(w))
 
   /** Get help on options from this builder. The resulting help is carefully formatted to required number of columns (default = 80, change with .setHelpWidth method),
-    * and contains info on proporties, options and trailing arguments.
+    * and contains info on properties, options and trailing arguments.
     */
   def help: String = {
     // --help and --version do not go through normal pipeline, so we need to hardcode them here
