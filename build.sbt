@@ -2,7 +2,7 @@ organization := "org.rogach"
 
 name := "scallop"
 
-scalaVersion := "2.10.1"
+scalaVersion := "2.10.3"
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -21,8 +21,6 @@ resolvers += "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "1.9.1" % "test"
 )
-
-crossScalaVersions := Seq("2.10.1")
 
 unmanagedClasspath in Compile += file("dummy")
 
