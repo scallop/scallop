@@ -41,6 +41,11 @@ scmInfo := Some(
 pomExtra := (
   <developers>
     <developer>
+      <id>clhodapp</id>
+      <name>Chris Hodapp</name>
+      <url>http:/clhodapp.net</url>
+    </developer>
+    <developer>
       <id>rogach</id>
       <name>Platon Pronko</name>
       <url>http://rogach.org</url>
