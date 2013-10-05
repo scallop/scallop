@@ -29,12 +29,12 @@ licenses := Seq(
   "MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")
 )
 
-homepage := Some(url("https://github.com/Rogach/scallop"))
+homepage := Some(url("https://github.com/scallop/scallop"))
 
 scmInfo := Some(
   ScmInfo(
-    browseUrl = url("http://github.com/Rogach/scallop"),
-    connection = "scm:git:git@github.com:Rogach/scallop.git"
+    browseUrl = url("http://github.com/scallop/scallop"),
+    connection = "scm:git:git@github.com:scallop/scallop.git"
   )
 )
 
@@ -48,7 +48,7 @@ pomExtra := (
   </developers>
 )
 
-scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/Rogach/scallop/tree/master/€{FILE_PATH}.scala")
+scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/scallop/scallop/tree/master/€{FILE_PATH}.scala")
 
 parallelExecution in Test := false
 
@@ -58,7 +58,7 @@ site.includeScaladoc("")
 
 ghpages.settings
 
-git.remoteRepo := "git@github.com:Rogach/scallop.git"
+git.remoteRepo := "git@github.com:scallop/scallop.git"
 
 // fix for paths to source files in scaladoc
 doc in Compile := {
