@@ -1,6 +1,4 @@
 
-import org.eclipse.jgit.lib._
-
 organization := "org.rogach"
 
 name := "scallop"
@@ -20,23 +18,12 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "1.9.1" % "test"
+  "org.scalatest" %% "scalatest" % "1.9.1" % "test",
+  "org.scala-lang" % "scala-reflect" % scalaVersion.value
 )
 
 val versRgx = """[0-9]+\.[0-9]+\.[0-9]+""".r
 val vers = versRgx.findFirstIn(io.Source.fromFile("README.md").getLines.toList.filter(_.contains("libraryDependencies")).mkString).get
-
-unmanagedClasspath in Compile += file("dummy")
-
-libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value
-
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (version.value.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
 
 licenses := Seq(
   "MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")
@@ -50,13 +37,6 @@ scmInfo := Some(
     connection = "scm:git:git@github.com:Rogach/scallop.git"
   )
 )
-
-
-publishMavenStyle := true
-
-publishArtifact in Test := false
-
-pomIncludeRepository := { x => false }
 
 pomExtra := (
   <developers>
