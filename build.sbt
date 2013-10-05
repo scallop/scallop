@@ -28,11 +28,11 @@ val vers = versRgx.findFirstIn(io.Source.fromFile("README.md").getLines.toList.f
 
 unmanagedClasspath in Compile += file("dummy")
 
-libraryDependencies <+= scalaVersion(sv => "org.scala-lang" % "scala-reflect" % sv)
+libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value
 
-publishTo <<= version { v: String =>
+publishTo := {
   val nexus = "https://oss.sonatype.org/"
-  if (v.trim.endsWith("SNAPSHOT"))
+  if (version.value.trim.endsWith("SNAPSHOT"))
     Some("snapshots" at nexus + "content/repositories/snapshots")
   else
     Some("releases" at nexus + "service/local/staging/deploy/maven2")
@@ -81,9 +81,9 @@ ghpages.settings
 git.remoteRepo := "git@github.com:Rogach/scallop.git"
 
 // fix for paths to source files in scaladoc
-doc in Compile <<= (doc in Compile) map { in =>
+doc in Compile := {
   Seq("bash","-c",""" for x in $(find target/scala-2.10/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
-  in
+  (doc in Compile).value
 }
 
 lazy val root = Project("main", file("."),
