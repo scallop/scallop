@@ -23,7 +23,8 @@ libraryDependencies ++= Seq(
 )
 
 val versRgx = """[0-9]+\.[0-9]+\.[0-9]+""".r
-val vers = versRgx.findFirstIn(io.Source.fromFile("README.md").getLines.toList.filter(_.contains("libraryDependencies")).mkString).get
+
+version := versRgx.findFirstIn(io.Source.fromFile("README.md").getLines.filter(_.contains("libraryDependencies")).mkString).get
 
 licenses := Seq(
   "MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")
@@ -74,6 +75,5 @@ doc in Compile := {
 lazy val root = Project("main", file("."),
                         settings =
                           Defaults.defaultSettings ++
-                          fmppSettings ++
-                          Seq(version := vers)
+                          fmppSettings
                           ) .configs(Fmpp)
