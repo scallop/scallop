@@ -1,3 +1,6 @@
+
+import org.eclipse.jgit.lib._
+
 organization := "org.rogach"
 
 name := "scallop"
@@ -16,11 +19,12 @@ scalacOptions ++= Seq(
   "-Ywarn-all"
 )
 
-resolvers += "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
-
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "1.9.1" % "test"
 )
+
+val versRgx = """[0-9]+\.[0-9]+\.[0-9]+""".r
+val vers = versRgx.findFirstIn(io.Source.fromFile("README.md").getLines.toList.filter(_.contains("libraryDependencies")).mkString).get
 
 unmanagedClasspath in Compile += file("dummy")
 
@@ -81,3 +85,10 @@ doc in Compile <<= (doc in Compile) map { in =>
   Seq("bash","-c",""" for x in $(find target/scala-2.10/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
   in
 }
+
+lazy val root = Project("main", file("."),
+                        settings =
+                          Defaults.defaultSettings ++
+                          fmppSettings ++
+                          Seq(version := vers)
+                          ) .configs(Fmpp)
