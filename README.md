@@ -80,7 +80,7 @@ Conf.firstList() should equal (List(1,2,3))
 Conf.secondList() should equal (List[Double](4,5,6))
 ```
 
-In this case, Scallops backtracking parser is clever enough to distinguish the boundaries of the arguments lists.
+In this case, Scallop's backtracking parser is clever enough to distinguish the boundaries of the arguments lists.
 
 Also, Scallop supports parsing of subcommands. Not only subcommands, but nested subcommands!
 
