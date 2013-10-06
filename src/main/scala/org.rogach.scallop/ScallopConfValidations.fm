@@ -5,7 +5,7 @@ import exceptions._
 /** Helper trait for generaton of `validate` methods on ScallopConf. */
 trait ScallopConfValidations { this: ScallopConf =>
 
-  protected var validations: List[Function0[Either[String, Unit]]] = Nil
+  protected var validations: List[() => Either[String, Unit]] = Nil
 
 <#macro lc num><#if num == 0><#else><#list 1..num as h><#nested h><#if num != h>,</#if></#list></#if></#macro>
 
@@ -20,10 +20,8 @@ trait ScallopConfValidations { this: ScallopConf =>
     */
   def validate <@tp i ; j> A${j} </@tp> ( <@lc i ; j> o${j}: ScallopOption[A${j}] </@lc> ) (fn: (<@lc i ; j> A${j} </@lc>) => Either[String, Unit]) {
     <@nz i>codependent ( <@lc i ; j> o${j} </@lc> )</@nz>
-    validations :+= new Function0[Either[String, Unit]] {
-      def apply = {
-        fn( <@lc i ; j> o${j}() </@lc> )
-      }
+    validations :+= { () =>
+      fn( <@lc i ; j> o${j}() </@lc> )
     }
   }
 </#list>
@@ -33,10 +31,8 @@ trait ScallopConfValidations { this: ScallopConf =>
     * @param fn Validation function. In case of error, it should return Left with the error message.
     */
   def validateOpt <@tp i ; j>A${j}</@tp> ( <@lc i ; j> o${j}: ScallopOption[A${j}] </@lc> ) (fn: (<@lc i ; j> Option[A${j}] </@lc>) => Either[String, Unit]) {
-    validations :+= new Function0[Either[String, Unit]] {
-      def apply = {
-        fn( <@lc i ; j> o${j}.get </@lc> )
-      }
+    validations :+= { () =>
+      fn( <@lc i ; j> o${j}.get </@lc> )
     }
   }
 </#list>

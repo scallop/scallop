@@ -342,9 +342,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   }
 
   private[scallop] def addValidation(fn: => Either[String, Unit]) {
-    validations :+= new Function0[Either[String, Unit]] {
-      def apply = fn
-    }
+    validations :+= (() => fn)
   }
 
   /** In the verify stage, if opt was supplied, checks that at least one of the options in list are also supplied.
