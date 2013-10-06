@@ -1,1 +1,0 @@
-[Scallop](https://github.com/rogach/scallop) is a simple (yet powerful) command-line arguments parsing library for Scala.
