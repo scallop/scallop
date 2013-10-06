@@ -72,8 +72,6 @@ doc in Compile := {
   (doc in Compile).value
 }
 
-lazy val root = Project("main", file("."),
-                        settings =
-                          Defaults.defaultSettings ++
-                          fmppSettings
-                          ) .configs(Fmpp)
+fmppSettings
+
+lazy val root = project.in(file(".")).configs(Fmpp)
