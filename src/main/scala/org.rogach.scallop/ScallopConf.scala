@@ -180,7 +180,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       (implicit conv: ValueConverter[Map[String,A]]): Map[String, A] = {
     editBuilder(_.props(name, descr, keyName, valueName, hidden)(conv))
     val n = getName(name.toString)
-    new LazyMap ({() =>
+    new LazyMap({
       assertVerified
       rootConfig.builder(n)(conv.tag)
     })
@@ -195,7 +195,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       (implicit conv: ValueConverter[Map[String,A]]): Map[String, A] = {
     editBuilder(_.propsLong(name, descr, keyName, valueName, hidden)(conv))
     val n = getName(name)
-    new LazyMap ({() =>
+    new LazyMap({
       assertVerified
       rootConfig.builder(n)(conv.tag)
     })
