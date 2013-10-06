@@ -30,39 +30,33 @@ abstract class ScallopOption[A](nm: String) { opt =>
   /** Tests whether the underlying value was explicitly supplied by user. */
   def isSupplied = supplied
 
+  private def mapResult[B](transformer: Option[A] => Option[B]) =
+    new ScallopOption[B](name) {
+      override lazy val fn = opt.fn andThen transformer
+      override lazy val supplied = opt.supplied
+    }
+
   /** Returns ScallopOption, that contains the result of applying ```pf```
     * to the value, if this option is non-empty and pf is defined for that value.
     * Returns empty ScallopOption otherwise.
     *
     * @param pf the partial function
     */
-  def collect[B](pf: PartialFunction[A,B]) =
-    new ScallopOption[B](name) {
-      override lazy val fn = (x: String) => opt.fn(x).collect(pf)
-      override lazy val supplied = opt.supplied
-    }
+  def collect[B](pf: PartialFunction[A,B]) = mapResult(_.collect(pf))
 
   /** Returns ScallopOption, that contains the value if applying
     * predicate p to this value returned true. No value otherwise.
     *
     * @param p the predicate used for testing
     */
-  def filter(p: A => Boolean) =
-    new ScallopOption[A](name) {
-      override lazy val fn = (x: String) => opt.fn(x).filter(p)
-      override lazy val supplied = opt.supplied
-    }
+  def filter(p: A => Boolean) = mapResult(_.filter(p))
 
   /** Returns ScallopOption, that contains the value if applying
     * predicate p to this value returned false. No value otherwise.
     *
     * @param p the predicate used for testing
     */
-  def filterNot(p: A => Boolean) =
-    new ScallopOption[A](name) {
-      override lazy val fn = (x: String) => opt.fn(x).filterNot(p)
-      override lazy val supplied = opt.supplied
-    }
+  def filterNot(p: A => Boolean) = mapResult(_.filterNot(p))
 
   def withFilter(p: A => Boolean) = new WithFilter(p)
 
@@ -79,11 +73,7 @@ abstract class ScallopOption[A](nm: String) { opt =>
     *
     * @param f the function to apply
     */
-  def map[B](f: A => B) =
-    new ScallopOption[B](name) {
-      override lazy val fn = (x: String) => opt.fn(x).map(f)
-      override lazy val supplied = opt.supplied
-    }
+  def map[B](f: A => B) = mapResult(_.map(f))
 
   /** Apply the given procedure f to the option's value, if it is nonempty.
     */
@@ -93,15 +83,7 @@ abstract class ScallopOption[A](nm: String) { opt =>
     * this option is non-empty.
     */
   def flatMap[B](f: A => ScallopOption[B]): ScallopOption[B] =
-    new ScallopOption[B](name) {
-      override lazy val fn: String => Option[B] = { x =>
-        if (opt.fn(x).isEmpty)
-          None
-        else
-          f(opt.fn(x).get).get
-      }
-      override lazy val supplied = false
-    }
+    mapResult(_.flatMap(x => f(x).get))
 
   /** Returns ScallopOption with this value if it is non-empty,
     * or with the value of the alternative option. If it is
@@ -109,11 +91,7 @@ abstract class ScallopOption[A](nm: String) { opt =>
     *
     * @param alternative the alternative expression
     */
-  def orElse[B >: A](alternative: => Option[B]) =
-    new ScallopOption[B](name) {
-      override lazy val fn = (x: String) => opt.fn(x).orElse(alternative)
-      override lazy val supplied = opt.supplied
-    }
+  def orElse[B >: A](alternative: => Option[B]) = mapResult(_.orElse(alternative))
 
   /** A convenience method to check whether the underlying option
     * is defined. Just an alias for opt.get.isDefined.
