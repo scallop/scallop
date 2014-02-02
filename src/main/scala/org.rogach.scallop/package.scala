@@ -68,9 +68,13 @@ package object scallop {
     val rgx = """([^=]+)=(.*)""".r
     def parse(s:List[(String, List[String])]) = {
       try {
-        Right(Some(s.map(_._2).flatten.map(_.trim).filter(","!=).flatMap(_ split "," filter (_.trim.size > 0)).map {
-          case rgx(key,value) => (key, conv.parse(List(("",List(value)))).right.get.get)
-        }.toMap))
+        Right {
+					val m = s.map(_._2).flatten.map(_.trim).filter(","!=).flatMap(_ split "," filter (_.trim.size > 0)).map {
+						case rgx(key,value) => (key, conv.parse(List(("",List(value)))).right.get.get)
+					}.toMap
+					if (m.nonEmpty) Some(m)
+					else None
+				}
       } catch { case _: Throwable =>
         Left("wrong arguments format")
       }

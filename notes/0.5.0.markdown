@@ -1,9 +1,0 @@
-This version includes the following improvements:
-
-* new, prettier help output format
-* help output width can be customised
-* several bug fixes (concerning verification and trailing arguments)
-* "--" now serves as a switch to end optons parsing - everything after it is considered to be trailing arguments
-* nested subcommands support
-
-The library now goes into "stable" phase - that is, I will fix bugs, but won't add new ones, unless someone [asks me to](https://github.com/Rogach/scallop/issues/new?title=new%20feature).

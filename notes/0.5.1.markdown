@@ -1,3 +1,0 @@
-This is a minor version, that adds only one small improvement:
-
-* Printing of default values in help output (thanks to Adam for suggestion)
