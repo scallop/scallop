@@ -1,7 +1,0 @@
-This version includes the following improvements:
-
-* added cross-publishing for Scala 2.9.2
-* fixed bug with help and version info printing
-* added reading of options from stdin or from file
-* fitted ScallopOption to be usable in for-comprehensions
-* Removed the need to call `verify` at the end of each ScallopConf object - it now happens auto-magically

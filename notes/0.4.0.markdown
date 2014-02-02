@@ -1,9 +1,0 @@
-This version includes the following improvements:
-
-* Scallop now is published to Sonatype repository.
-* Added long-named properties.
-* Property arguments can be now separated with commas (-P first=1, second=2).
-* Added new option type: 'toggle'.
-* Trailing arguments now are explained in help printout.
-
-If you need some extra features, [feel free to ask](https://github.com/Rogach/scallop/issues/new).

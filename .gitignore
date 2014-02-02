@@ -1,6 +1,2 @@
-target/
-.bzr/
-.bzrignore
-*.~[0-9]~
-.#*
-.cache
+/target
+/project/**/target

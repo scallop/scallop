@@ -179,7 +179,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       (implicit conv: ValueConverter[Map[String,A]]): Map[String, A] = {
     editBuilder(_.props(name, descr, keyName, valueName, hidden)(conv))
     val n = getName(name.toString)
-    new LazyMap ({() =>
+    new LazyMap({
       assertVerified
       rootConfig.builder(n)(conv.manifest)
     })
@@ -194,7 +194,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       (implicit conv: ValueConverter[Map[String,A]]): Map[String, A] = {
     editBuilder(_.propsLong(name, descr, keyName, valueName, hidden)(conv))
     val n = getName(name)
-    new LazyMap ({() =>
+    new LazyMap({
       assertVerified
       rootConfig.builder(n)(conv.manifest)
     })
@@ -341,9 +341,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   }
 
   private[scallop] def addValidation(fn: => Either[String, Unit]) {
-    validations :+= new Function0[Either[String, Unit]] {
-      def apply = fn
-    }
+    validations :+= (() => fn)
   }
 
   /** In the verify stage, if opt was supplied, checks that at least one of the options in list are also supplied.
