@@ -3,7 +3,7 @@ organization := "org.rogach"
 
 name := "scallop"
 
-scalaVersion := "2.11.0-M8"
+scalaVersion := "2.11.0"
 
 resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
@@ -15,12 +15,11 @@ scalacOptions ++= Seq(
   "-language:reflectiveCalls",
   "-language:existentials",
   "-language:implicitConversions",
-  "-Xlint",
-  "-Ywarn-all"
+  "-Xlint"
 )
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "2.1.RC1" % "test",
+  "org.scalatest" %% "scalatest" % "2.1.3" % "test",
   "org.scala-lang" % "scala-reflect" % scalaVersion.value
 )
 
