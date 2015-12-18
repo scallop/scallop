@@ -56,7 +56,7 @@ def someInternalFunc(conf:Conf.type) {
 someInternalFunc(Conf)
 ```
 
-For more examples, you can look at Scallop's [test suite](https://github.com/Rogach/scallop/tree/master/src/test/scala).
+For more examples, you can look at Scallop's [test suite](./src/test/scala).
 
 Fancy things
 ============
@@ -109,4 +109,4 @@ Thanks
 Notes
 =====
 
-Scallop is distributed under [MIT license](https://github.com/Rogach/scallop/blob/master/license.txt).
+Scallop is distributed under [MIT license](./license.txt).
