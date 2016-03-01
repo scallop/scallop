@@ -1,11 +1,11 @@
 package org.rogach.scallop
 
 import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
-class DefaultNames extends UsefulMatchers with CapturingTest with ShouldMatchers {
+class DefaultNames extends UsefulMatchers with CapturingTest with Matchers {
 
   test("default for props") {
     object Conf extends ScallopConf(List("-D", "foo=bar,", "bar=baz,", "baz=bippy")) {

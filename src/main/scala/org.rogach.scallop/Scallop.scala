@@ -259,7 +259,7 @@ case class Scallop(
     */
   def opt[A](
       name: String,
-      short: Char = 0.toChar,
+      short: Char = '\u0000',
       descr: String = "",
       default: () => Option[A] = () => None,
       validate: A => Boolean = ((_:A) => true),
@@ -276,7 +276,7 @@ case class Scallop(
           else Some(false)
         }
       else default
-    val eShort = if (short == 0.toChar || noshort) None else Some(short)
+    val eShort = if (short == '\u0000' || noshort) None else Some(short)
     val validator = { (tt:TypeTag[_], a:Any) =>
       if (conv.tag.tpe <:< tt.tpe) validate(a.asInstanceOf[A])
       else false
@@ -362,13 +362,13 @@ case class Scallop(
   def toggle(
       name: String,
       default: () => Option[Boolean] = () => None,
-      short: Char = 0.toChar,
+      short: Char = '\u0000',
       noshort: Boolean = false,
       prefix: String = "no",
       descrYes: String = "",
       descrNo: String = "",
       hidden: Boolean = false) = {
-    val eShort = if (short == 0.toChar || noshort) None else Some(short)
+    val eShort = if (short == '\u0000' || noshort) None else Some(short)
     this.copy(opts = opts :+ ToggleOption(name,
                                           default,
                                           eShort,
@@ -388,8 +388,8 @@ case class Scallop(
     * @param name Names of subcommand names, that lead to the needed builder, separated by \\0.
     */
   def findSubbuilder(name: String): Option[Scallop] = {
-    if (name.contains("\0")) {
-      val (firstSub, rest) = name.span('\0'!=)
+    if (name.contains('\u0000')) {
+      val (firstSub, rest) = name.span('\u0000'!=)
       subbuilders.find(_._1 == firstSub).flatMap(_._2.findSubbuilder(rest.tail))
     } else subbuilders.find(_._1 == name).map(_._2)
   }
@@ -410,7 +410,7 @@ case class Scallop(
 
   /** Retrieves a list of all supplied options (including options from subbuilders). */
   def getAllSuppliedOptionNames: List[String] = {
-    opts.map(_.name).filter(isSupplied) ::: parsed.subcommand.map(subName => subbuilders.find(_._1 == subName).map(s => s._2.args(parsed.subcommandArgs)).get.getAllSuppliedOptionNames.map(subName + "\0" + _)).getOrElse(Nil)
+    opts.map(_.name).filter(isSupplied) ::: parsed.subcommand.map(subName => subbuilders.find(_._1 == subName).map(s => s._2.args(parsed.subcommandArgs)).get.getAllSuppliedOptionNames.map(subName + "\u0000" + _)).getOrElse(Nil)
   }
 
   /** Add version string to this builder.
@@ -507,13 +507,13 @@ case class Scallop(
     * @param name Identifier of option or trailing arg definition
     */
   def isSupplied(name: String): Boolean = {
-    if (name.contains('\0')) {
+    if (name.contains('\u0000')) {
       // delegating to subbuilder
       parsed.subcommand.map { subc =>
-        if (subc == name.takeWhile('\0'!=)) {
+        if (subc == name.takeWhile('\u0000'!=)) {
           subbuilders.find(_._1 == subc)
-          .map(_._2.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\0'!=).drop(1)))
-          .getOrElse(throw new UnknownOption(name.replace("\0",".")))
+          .map(_._2.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\u0000'!=).drop(1)))
+          .getOrElse(throw new UnknownOption(name.replace("\u0000",".")))
         } else false // only current subcommand can have supplied arguments
       }.getOrElse(false) // no subcommands, so their options are definitely not supplied
     } else {
@@ -529,10 +529,10 @@ case class Scallop(
      * @param tt TypeTag for requested type. Usually found implicitly.
      */
   def get[A](name: String)(implicit tt: TypeTag[A]): Option[A] = {
-    if (name.contains('\0')) {
+    if (name.contains('\u0000')) {
       // delegating to subbuilder
-      subbuilders.find(_._1 == name.takeWhile('\0'!=)).map(_._2.args(parsed.subcommandArgs).get(name.dropWhile('\0'!=).drop(1))(tt))
-        .getOrElse(throw new UnknownOption(name.replace("\0","."))).asInstanceOf[Option[A]]
+      subbuilders.find(_._1 == name.takeWhile('\u0000'!=)).map(_._2.args(parsed.subcommandArgs).get(name.dropWhile('\u0000'!=).drop(1))(tt))
+        .getOrElse(throw new UnknownOption(name.replace("\u0000","."))).asInstanceOf[Option[A]]
     } else {
       opts.find(_.name == name).map{ opt =>
         if (!(opt.converter.tag.tpe <:< tt.tpe))
@@ -606,7 +606,7 @@ case class Scallop(
           sub.args(parsed.subcommandArgs).verify
         } catch {
           case Help("") => throw Help(sn)
-          case h @ Help(subname) => throw Help(sn + "\0" + subname)
+          case h @ Help(subname) => throw Help(sn + "\u0000" + subname)
         }
       }
     }
@@ -637,7 +637,7 @@ case class Scallop(
     opts.map(o =>
       " %s  %s => %s" format ((if (isSupplied(o.name)) "*" else " "),
                               o.name,
-                              get(o.name)(o.converter.tag).getOrElse("$None$"))
+                              get(o.name)(o.converter.tag).getOrElse("<None>"))
     ).mkString("\n") + "\n" + parsed.subcommand.map { sn =>
       ("subcommand: %s\n" format sn) + subbuilders.find(_._1 == sn).get._2.args(parsed.subcommandArgs).summary
     }.getOrElse("")

@@ -35,7 +35,7 @@ class StrangeTest extends UsefulMatchers with CapturingTest {
     }
     exits ==== List(1)
     err ==== ""
-    out ==== "[\033[31mbeans\033[0m] Error: Required option 'beans' not found\n"
+    out ==== "[\u001b[31mbeans\u001b[0m] Error: Required option 'beans' not found\n"
   }
 
 }

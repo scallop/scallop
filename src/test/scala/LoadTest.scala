@@ -1,9 +1,9 @@
 import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
-class LoadTest extends FunSuite with ShouldMatchers {
+class LoadTest extends FunSuite with Matchers {
 
   ignore ("trail options") {
     val start = System.currentTimeMillis

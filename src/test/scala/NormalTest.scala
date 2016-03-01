@@ -1,10 +1,10 @@
 import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 import reflect.runtime.universe._
 
-class NormalTest extends FunSuite with ShouldMatchers {
+class NormalTest extends FunSuite with Matchers {
 
   test ("main") {
 val opts = Scallop(List("-d","--num-limbs","1"))

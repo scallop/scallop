@@ -1,11 +1,10 @@
 package org.rogach.scallop
 
 import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
-class OptionDependenciesTest extends FunSuite with ShouldMatchers with UsefulMatchers {
+class OptionDependenciesTest extends FunSuite with UsefulMatchers {
   throwError.value = true
 
   test("dependsOnAny - success, option is not provided") {

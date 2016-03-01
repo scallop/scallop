@@ -1,7 +1,6 @@
 package org.rogach.scallop
 
 import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
@@ -17,7 +16,7 @@ class SubcommandsTest extends UsefulMatchers {
       .args(Seq("-a","tree","-b"))
       .verify
     opts.get[Boolean]("apples") should equal (Some(true))
-    opts.get[Boolean]("tree\0bananas") should equal (Some(true))
+    opts.get[Boolean]("tree\u0000bananas") should equal (Some(true))
     opts.getSubcommandName should equal (Some("tree"))
   }
 

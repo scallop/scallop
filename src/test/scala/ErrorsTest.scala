@@ -1,11 +1,11 @@
 package org.rogach.scallop
 
 import org.scalatest.FunSuite
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
-class ErrorsTest extends FunSuite with ShouldMatchers with UsefulMatchers {
+class ErrorsTest extends FunSuite with Matchers with UsefulMatchers {
   throwError.value = true
 
   test("wrong arg type") {

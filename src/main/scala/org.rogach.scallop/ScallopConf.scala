@@ -80,7 +80,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   }
 
   /** Get current prefix to command name (consists of parent builder names, separated by null char) */
-  private def getPrefix = ScallopConf.confs.value.map(_.commandname).mkString("\0") + "\0" stripPrefix "\0"
+  private def getPrefix = ScallopConf.confs.value.map(_.commandname).mkString("\u0000") + "\u0000" stripPrefix "\u0000"
 
   def getName(name: String): String =
     getPrefix + name
@@ -101,7 +101,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     */
   def opt[A](
       name: String = null,
-      short: Char = 0.toChar,
+      short: Char = '\u0000',
       descr: String = "",
       default: => Option[A] = None,
       validate: A => Boolean = (_:A) => true,
@@ -141,7 +141,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
 
   def tally(
       name: String = null,
-      short: Char = 0.toChar,
+      short: Char = '\u0000',
       descr: String = "",
       hidden: Boolean = false,
       noshort: Boolean = false): ScallopOption[Int] = {
@@ -248,7 +248,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   def toggle(
       name: String = null,
       default: => Option[Boolean] = None,
-      short: Char = '\0',
+      short: Char = '\u0000',
       noshort: Boolean = false,
       prefix: String = "no",
       descrYes: String = "",
@@ -274,7 +274,8 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       builder.verify
       runValidations()
     } catch {
-      case e: Throwable => onError(e)
+      case e: Throwable =>
+        onError(e)
     } finally {
       ScallopConf.cleanUp
     }
@@ -308,7 +309,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       // no colors on output
       println("[%s] Error: %s" format (printedName, message))
     } else {
-      println("[\033[31m%s\033[0m] Error: %s" format (printedName, message))
+      println("[\u001b[31m%s\u001b[0m] Error: %s" format (printedName, message))
     }
     sys.exit(1)
   }
