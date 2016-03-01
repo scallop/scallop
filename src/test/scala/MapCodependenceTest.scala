@@ -1,4 +1,3 @@
-
 package org.rogach.scallop
 
 import org.scalatest.FunSuite

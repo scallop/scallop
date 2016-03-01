@@ -1,9 +1,8 @@
-
 organization := "org.rogach"
 
 name := "scallop"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.7"
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -13,12 +12,11 @@ scalacOptions ++= Seq(
   "-language:reflectiveCalls",
   "-language:existentials",
   "-language:implicitConversions",
-  "-Xlint",
-  "-Ywarn-all"
+  "-Xlint"
 )
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "1.9.1" % "test",
+  "org.scalatest" %% "scalatest" % "2.2.6" % "test",
   "org.scala-lang" % "scala-reflect" % scalaVersion.value
 )
 
@@ -72,6 +70,4 @@ doc in Compile := {
   (doc in Compile).value
 }
 
-fmppSettings
-
-lazy val root = project.in(file(".")).configs(Fmpp)
+enablePlugins(spray.boilerplate.BoilerplatePlugin)
