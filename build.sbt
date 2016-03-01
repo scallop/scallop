@@ -54,7 +54,7 @@ pomExtra := (
   </developers>
 )
 
-scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/scallop/scallop/tree/master/€{FILE_PATH}.scala")
+scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/scallop/scallop/blob/develop/€{FILE_PATH}.scala")
 
 parallelExecution in Test := false
 
@@ -68,7 +68,7 @@ git.remoteRepo := "git@github.com:scallop/scallop.git"
 
 // fix for paths to source files in scaladoc
 doc in Compile := {
-  Seq("bash","-c",""" for x in $(find target/scala-2.10/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
+  Seq("bash","-c",""" for x in $(find target/scala-2.11/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
   (doc in Compile).value
 }
 
