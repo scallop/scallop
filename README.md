@@ -14,7 +14,7 @@ Scallop supports:
 
 For more info and information on usage, you can look into the [project wiki](https://github.com/scallop/scallop/wiki) or consult the [API docs](http://scallop.github.io/scallop/#org.rogach.scallop.package).
 
-Also, I wrote a [blog post](http://rogach-scala.blogspot.com/2012/04/better-cli-option-parsing-in-scala.html) and [another one](http://rogach-scala.blogspot.com/2012/04/configuration-objects-in-scallop.html) about Scallop.
+Also, I wrote a [blog post](http://blog.rogach.org/2012/04/better-cli-option-parsing-in-scala.html) and [another one](http://blog.rogach.org/2012/04/configuration-objects-in-scallop.html) about Scallop.
 
 Installation
 ============
