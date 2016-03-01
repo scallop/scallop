@@ -69,12 +69,12 @@ package object scallop {
     def parse(s:List[(String, List[String])]) = {
       try {
         Right {
-					val m = s.map(_._2).flatten.map(_.trim).filter(","!=).flatMap(_ split "," filter (_.trim.size > 0)).map {
-						case rgx(key,value) => (key, conv.parse(List(("",List(value)))).right.get.get)
-					}.toMap
-					if (m.nonEmpty) Some(m)
-					else None
-				}
+          val m = s.map(_._2).flatten.map(_.trim).filter(","!=).flatMap(_ split "," filter (_.trim.size > 0)).map {
+            case rgx(key,value) => (key, conv.parse(List(("",List(value)))).right.get.get)
+          }.toMap
+          if (m.nonEmpty) Some(m)
+          else None
+        }
       } catch { case _: Throwable =>
         Left("wrong arguments format")
       }

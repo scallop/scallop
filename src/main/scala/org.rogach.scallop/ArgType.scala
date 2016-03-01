@@ -16,4 +16,3 @@ object ArgType extends Enumeration {
   /** Option takes any number of arguments. (.opt[List[Int]]) */
   val LIST = V("<" + _ + ">...")
 }
-
