@@ -12,10 +12,6 @@ Scallop supports:
 * Powerful matching on trailing args
 * Subcommands
 
-It should be noted that the option builder is completely
-immutable (thus thread-safe), so you can reuse it, delegate
-argument construction to sub-modules, etc.
-
 For more info and information on usage, you can look into the [project wiki](https://github.com/scallop/scallop/wiki) or consult the [API docs](http://scallop.github.io/scallop/#org.rogach.scallop.package).
 
 Also, I wrote a [blog post](http://rogach-scala.blogspot.com/2012/04/better-cli-option-parsing-in-scala.html) and [another one](http://rogach-scala.blogspot.com/2012/04/configuration-objects-in-scallop.html) about Scallop.
