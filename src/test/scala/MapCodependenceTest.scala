@@ -5,19 +5,16 @@ import org.scalatest.matchers.ShouldMatchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
-class MapCodependenceTest extends FunSuite {
-
-  case object Err extends Exception
+class MapCodependenceTest extends FunSuite with UsefulMatchers {
 
   class TestConf(args: Seq[String]) extends ScallopConf(args) {
     val apples = opt[Boolean]("apples")
     val bananas = opt[Map[String,String]]("bananas")
     codependent(apples, bananas)
-    errorMessageHandler = error => throw Err
   }
 
   test("failing codependency including unsupplied map") {
-    intercept[Err.type] {
+    expectException(ValidationFailure("Either all or none of the following options should be supplied, because they are co-dependent: apples, bananas")) {
       new TestConf(Seq("--apples"))
     }
   }
