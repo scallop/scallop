@@ -44,7 +44,7 @@ pomExtra := (
     <developer>
       <id>clhodapp</id>
       <name>Chris Hodapp</name>
-      <url>http:/clhodapp.net</url>
+      <url>http://clhodapp.net</url>
     </developer>
     <developer>
       <id>rogach</id>
@@ -53,6 +53,20 @@ pomExtra := (
     </developer>
   </developers>
 )
+
+pomIncludeRepository := { x => false }
+
+publishTo := {
+   val snapshot = false
+   if (snapshot)
+     Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
+   else
+     Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
+}
+
+publishMavenStyle := true
+
+publishArtifact in Test := false
 
 scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/scallop/scallop/blob/develop/€{FILE_PATH}.scala")
 
