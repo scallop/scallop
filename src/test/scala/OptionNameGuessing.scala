@@ -15,6 +15,15 @@ class OptionNameGuessing extends UsefulMatchers {
     Conf.bananaso.get should equal (None)
   }
 
+  test ("shadowing with derived option") {
+    object Conf extends ScallopConf(Seq("--apples", "1")) {
+      val apples = opt[Int]()
+      val applesPlus = apples.map(2+)
+    }
+    Conf.apples() should equal (1)
+    Conf.applesPlus() should equal (3)
+  }
+
   test ("tricky") {
     object Conf extends ScallopConf(Seq("-a", "1")) {
       val appleso = opt[Int]()

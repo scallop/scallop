@@ -478,10 +478,9 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
           val opt = m.invoke(this).asInstanceOf[ScallopOption[_]]
           (m, opt)
         }
-        .sortBy(_._2._transformCount)
         .filter(_._2.name.contains("\t"))
 
-      val nameMap = methodsAndOptions.map { case (m, opt) =>
+      val nameMap = methodsAndOptions.sortBy(-_._2._transformCount).map { case (m, opt) =>
         val newShortName = m.getName.flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
         val newFullName = getName(newShortName)
         // the old, generated version of name, without prefixes from parent builders
