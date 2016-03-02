@@ -5,11 +5,9 @@ package org.rogach.scallop
   * Basically, this is a lazy option - it batches up all operations,
   * and evaluates the value only as the last resort.
   * @param nm Name for the option
-  * @param fn source of the actual value
-  * @param supplied function, that is capable of testing whether the value was explicitly
-  *                 found in argument list.
+  * @param _transformCount Count of .map, .filter, etc. operations applied to this option
   */
-abstract class ScallopOption[A](nm: String) { opt =>
+abstract class ScallopOption[A](nm: String, val _transformCount: Int = 0) { opt =>
 
   private[scallop] var _name = nm
 
@@ -31,7 +29,7 @@ abstract class ScallopOption[A](nm: String) { opt =>
   def isSupplied = supplied
 
   private def mapResult[B](transformer: Option[A] => Option[B]) =
-    new ScallopOption[B](name) {
+    new ScallopOption[B](name, _transformCount + 1) {
       override lazy val fn = opt.fn andThen transformer
       override lazy val supplied = opt.supplied
     }

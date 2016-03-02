@@ -24,6 +24,7 @@ class OptionNameGuessing extends UsefulMatchers {
       val aaa = opt[Int]()
     }
     Conf.appleso() should equal (1)
+    Conf.applesPlus() should equal (3)
     Conf.bananaso.get should equal (None)
     Conf.aaa.get should equal (None)
   }

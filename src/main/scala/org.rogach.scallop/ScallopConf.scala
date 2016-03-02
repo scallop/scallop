@@ -467,31 +467,42 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
 
   final def afterInit {
     if (guessOptionName) {
-      this.getClass.getMethods
+      val methodsAndOptions =
+        this.getClass.getMethods
         .filterNot(classOf[ScallopConf].getMethods.toSet)
         .filterNot(_.getName.endsWith("$eq"))
         .filterNot(_.getName.endsWith("$outer"))
         .filter(_.getReturnType == classOf[ScallopOption[_]])
         .filter(_.getParameterTypes.isEmpty)
-        .foreach { m =>
+        .map { m =>
           val opt = m.invoke(this).asInstanceOf[ScallopOption[_]]
-          if (opt.name.contains("\t")) {
-            val newShortName = m.getName.flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
-            val newFullName = getName(newShortName)
-            val shortGenName = '\t' +: opt.name.reverse.takeWhile('\t'!=).reverse // the old, generated version of name, without prefixes from parent builders
-            editBuilder(e => e.copy(opts = e.opts.map { o =>
-              if (o.name == shortGenName) {
-                o match {
-                  case so: SimpleOption => so.copy(name = newShortName)
-                  case to: TrailingArgsOption => to.copy(name = newShortName)
-                  case to: ToggleOption => to.copy(name = newShortName)
-                  case _ => o
-                }
-              } else o
-            }))
-            opt._name = newFullName
-          }
+          (m, opt)
         }
+        .sortBy(_._2._transformCount)
+        .filter(_._2.name.contains("\t"))
+
+      val nameMap = methodsAndOptions.map { case (m, opt) =>
+        val newShortName = m.getName.flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
+        val newFullName = getName(newShortName)
+        // the old, generated version of name, without prefixes from parent builders
+        val shortGenName = '\t' +: opt.name.reverse.takeWhile('\t'!=).reverse
+        (opt.name, (shortGenName, newShortName, newFullName))
+      }.toMap
+
+      methodsAndOptions.foreach { case (m, opt) =>
+        val (shortGenName, newShortName, newFullName) = nameMap(opt.name)
+        editBuilder(e => e.copy(opts = e.opts.map { o =>
+          if (o.name == shortGenName) {
+            o match {
+              case so: SimpleOption => so.copy(name = newShortName)
+              case to: TrailingArgsOption => to.copy(name = newShortName)
+              case to: ToggleOption => to.copy(name = newShortName)
+              case _ => o
+            }
+          } else o
+        }))
+        opt._name = newFullName
+      }
     }
     // now, when we fixed option names, we can push mainOptions into the builder
     editBuilder(_.copy(mainOpts = _mainOptions().toList))
