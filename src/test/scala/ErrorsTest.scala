@@ -36,7 +36,7 @@ class ErrorsTest extends FunSuite with Matchers with UsefulMatchers {
   }
 
   test ("options parse failure") {
-    expectException(TrailingArgsParseException(Seq("42"))) {
+    expectException(ExcessArguments(Seq("42"))) {
       val opts = Scallop(List("42"))
         .verify
     }
@@ -135,7 +135,7 @@ class ErrorsTest extends FunSuite with Matchers with UsefulMatchers {
   }
 
   test ("excess arguments") {
-    expectException(TrailingArgsParseException(Seq("1","2"))) {
+    expectException(ExcessArguments(Seq("2"))) {
       val opts = Scallop(List("1","2"))
         .trailArg[Int]("first")
         .verify
@@ -165,7 +165,7 @@ class ErrorsTest extends FunSuite with Matchers with UsefulMatchers {
         val apples = trailArg[List[Int]]()
       }
     }
-    expectException(TrailingArgsParseException(Seq("a"))) {
+    expectException(WrongOptionFormat("apples", "a", "wrong arguments format")) {
       Conf
     }
   }

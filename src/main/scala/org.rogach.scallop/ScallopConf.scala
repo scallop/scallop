@@ -503,8 +503,14 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
         opt._name = newFullName
       }
     }
+
+    if (builder.opts.exists(_.name.startsWith("\t"))) {
+      throw new OptionNameGuessingFailure()
+    }
+
     // now, when we fixed option names, we can push mainOptions into the builder
     editBuilder(_.copy(mainOpts = _mainOptions().toList))
+
     if (ScallopConf.confs.value.size > 1) {
       ScallopConf.confs.value = ScallopConf.confs.value.init
       ScallopConf.confs.value.last.editBuilder(_.addSubBuilder(commandname, builder))

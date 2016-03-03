@@ -89,14 +89,32 @@ case class Scallop(
   private def parse(acc: Parsed, args: Seq[String]): Parsed = {
     def goParseRest(args: Seq[String], opt: Option[(String, CliOption)]): Parsed = {
       def parseRest = {
-        parseTrailingArgs(
-          args.toList,
-          opt.map(o=> (o._2.converter, true)).toList ::: opts.filter(_.isPositional).map(o => (o.converter, o.required))
-        ) map { res =>
-          (opt.toList ::: opts.filter(_.isPositional).map(("",_))) zip res filter {
-            case ((invoc, opt), p) => !opt.isPositional || p.size > 0
-          }
-        } getOrElse (throw new TrailingArgsParseException(args)) map { case ((invoc, opt), p) => (opt, (invoc, p)) }
+        val trailingOptions =
+          opt.map(o => (o._2, o._1, true)).toList :::
+          opts.filter(_.isPositional).map(o => (o, "", o.required))
+        val trailingConverters = trailingOptions.map {
+          case (opt, invocation, required) => (opt.converter, invocation, required)
+        }
+
+        val res = TrailingArgumentsParser.parse(args.toList, trailingConverters)
+        res match {
+          case TrailingArgumentsParser.ParseResult(_, _, excess) if excess.nonEmpty =>
+            throw ExcessArguments(excess)
+
+          case TrailingArgumentsParser.ParseResult(result, _, _) if result.exists(_.isLeft) =>
+            val ((option, _, _), Left((message, args))) =
+              trailingOptions.zip(result).find(_._2.isLeft).get
+            throw WrongOptionFormat(option.name, args.mkString(" "), message)
+
+          case TrailingArgumentsParser.ParseResult(result, _, _) =>
+            trailingOptions.zip(result).flatMap {
+              case ((option, invocation, required), Right(args)) =>
+                if (args.nonEmpty || required) {
+                  List((option, (invocation, args)))
+                } else Nil
+              case _ => throw MajorInternalException()
+            }
+        }
       }
 
       opt match {
@@ -199,48 +217,6 @@ case class Scallop(
   /** Tests whether this string contains option parameter, not option call. */
   private def isArgument(s: String) = !isOptionName(s)
 
-  /** Parses the trailing arguments (including the arguments to last option).
-    *
-    * Uses simple backtraking algorithm.
-    * @param args arguments to parse
-    * @param convs list of converters and the flags, indicating if that converter must match
-    * @return None if match fails, a list of argument lists otherwise. The size of returned list is equal to size of
-    *         converter list.
-    */
-  private def parseTrailingArgs(args: List[String], convs: List[(ValueConverter[_], Boolean)]): Option[List[List[String]]] = {
-    if (convs.isEmpty) {
-      if (args.isEmpty) Some(Nil)
-      else None // some arguments are still left, and there are no converters to match them => no match
-    } else {
-      // the remainders of arguments, to be matched by subsequent converters
-      val remainders = convs.head._1.argType match {
-        case ArgType.FLAG => List(args) // all of them
-        case ArgType.SINGLE => // either the full list or it's tail - we can match only one argument
-          if (convs.head._2)
-            if (args.isEmpty) List(Nil) else List(args.tail)
-          else
-            if (args.isEmpty) List(Nil) else List(args.tail, args)
-        case ArgType.LIST =>
-          args.tails.toList.reverse
-      }
-      remainders.view map { rem =>
-        val p = args.take(args.size - rem.size) // to be matched by current converter
-        if (p.isEmpty && !convs.head._2) { // will it match an empty list?
-            val next = parseTrailingArgs(rem, convs.tail)
-            if (next.isDefined) Some(p :: next.get)
-            else None
-        } else {
-          convs.head._1.parse(List(("",p))) match {
-            case Right(a) if a.isDefined =>
-              val next = parseTrailingArgs(rem, convs.tail)
-              if (next.isDefined) Some(p :: next.get)
-              else None
-            case _ => None
-          }
-        }
-      } find (_.isDefined) getOrElse (None)
-    }
-  }
 
   /** Add a new option definition to this builder.
     *

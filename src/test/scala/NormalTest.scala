@@ -1,3 +1,5 @@
+package org.rogach.scallop
+
 import org.scalatest.FunSuite
 import org.scalatest.Matchers
 import org.rogach.scallop._
