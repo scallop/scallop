@@ -6,47 +6,74 @@ import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 import reflect.runtime.universe._
 
-class NormalTest extends FunSuite with Matchers {
+class NormalTest extends FunSuite with Matchers with CapturingTest {
 
   test ("main") {
-val opts = Scallop(List("-d","--num-limbs","1"))
-  .version("test 1.2.3 (c) 2012 Mr Placeholder") // --version option is provided for you
-                                       // in "verify" stage it would print this message and exit
-  .banner("""Usage: test [OPTION]... [pet-name]
-            |test is an awesome program, which does something funny
-            |Options:
-            |""".stripMargin) // --help is provided, will also exit after printing version,
-                              // banner, options usage, and footer
-  .footer("\nFor all other tricks, consult the documentation!")
-  .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
-  .opt("monkeys", default = () => Some(2), short = 'm') // you can add the default option
-                                                  // the type will be inferred
-  .opt[Int]("num-limbs", 'k',
-    "number of libms", required = true) // you can override the default short-option character
-  .opt[List[Double]]("params") // default converters are provided for all primitives
-                               // and for lists of primitives
-  .opt[String]("debug", hidden = true) // hidden parameters are not printed in help
-  .props[String]('D',"some key-value pairs") // yes, property args can have types on their values too
-  .args(List("-Dalpha=1","-D","betta=2","gamma=3", "Pigeon")) // you can add parameters a bit later
-  .trailArg[String]("pet name") // you can specify what do you want to get from the end of
-                                // args list
-  .verify
+    val opts = Scallop(List("-d","--num-limbs","1"))
+      .version("test 1.2.3 (c) 2012 Mr Placeholder") // --version option is provided for you
+                                           // in "verify" stage it would print this message and exit
+      .banner("""Usage: test [OPTION]... [pet-name]
+                |test is an awesome program, which does something funny
+                |Options:
+                |""".stripMargin) // --help is provided, will also exit after printing version,
+                                  // banner, options usage, and footer
+      .footer("\nFor all other tricks, consult the documentation!")
+      .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
+      .opt("monkeys", default = () => Some(2), short = 'm') // you can add the default option
+                                                      // the type will be inferred
+      .opt[Int]("num-limbs", 'k',
+        "number of libms", required = true) // you can override the default short-option character
+      .opt[List[Double]]("params") // default converters are provided for all primitives
+                                   // and for lists of primitives
+      .opt[String]("debug", hidden = true) // hidden parameters are not printed in help
+      .props[String]('D',"some key-value pairs") // yes, property args can have types on their values too
+      .args(List("-Dalpha=1","-D","betta=2","gamma=3", "Pigeon")) // you can add parameters a bit later
+      .trailArg[String]("pet name") // you can specify what do you want to get from the end of
+                                    // args list
+      .verify
 
-opts.get[Boolean]("donkey") should equal (Some(true))
-opts[Int]("monkeys") should equal (2)
-opts[Int]("num-limbs") should equal (1)
-opts.prop[String]('D',"alpha") should equal (Some("1"))
-opts[String]("pet name") should equal ("Pigeon")
-intercept[WrongTypeRequest] {
-  opts[Double]("monkeys") // this will throw an exception at runtime
-                          // because the wrong type is requested
-}
+    opts.get[Boolean]("donkey") should equal (Some(true))
+    opts[Int]("monkeys") should equal (2)
+    opts[Int]("num-limbs") should equal (1)
+    opts.prop[String]('D',"alpha") should equal (Some("1"))
+    opts[String]("pet name") should equal ("Pigeon")
+    intercept[WrongTypeRequest] {
+      opts[Double]("monkeys") // this will throw an exception at runtime
+                              // because the wrong type is requested
+    }
 
-opts.printHelp
-println
-println(opts.summary) // returns summary of parser status (with current arg values)
+    val (helpOut, helpErr) = captureOutput {
+      opts.printHelp
+    }
+    helpOut shouldBe """test 1.2.3 (c) 2012 Mr Placeholder
+Usage: test [OPTION]... [pet-name]
+test is an awesome program, which does something funny
+Options:
 
-//opts.args(List("--help")).verify
+  -Dkey=value [key=value]...   some key-value pairs
+  -d, --donkey                 use donkey mode
+  -m, --monkeys  <arg>          (default = 2)
+  -k, --num-limbs  <arg>       number of libms
+  -p, --params  <arg>...
+      --help                   Show help message
+      --version                Show version of this program
+
+ trailing arguments:
+  pet name (required)
+
+For all other tricks, consult the documentation!
+"""
+    helpErr shouldBe ""
+
+    opts.summary shouldBe """Scallop(-d, --num-limbs, 1, -Dalpha=1, -D, betta=2, gamma=3, Pigeon)
+ *  donkey => true
+    monkeys => 2
+ *  num-limbs => 1
+    params => <None>
+    debug => <None>
+ *  D => Map(alpha -> 1, betta -> 2, gamma -> 3)
+ *  pet name => Pigeon
+"""
   }
 
   test ("no values") {

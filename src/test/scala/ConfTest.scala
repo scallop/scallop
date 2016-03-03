@@ -5,7 +5,7 @@ import org.scalatest.Matchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
-class ConfTest extends FunSuite with Matchers with UsefulMatchers {
+class ConfTest extends FunSuite with Matchers with UsefulMatchers with CapturingTest {
   throwError.value = true
 
   test ("full example") {
@@ -51,7 +51,36 @@ class ConfTest extends FunSuite with Matchers with UsefulMatchers {
         val name = trailArg[String]("tree name", descr = "palm name")
       }
     }
-    Conf.builder.printHelp
+    val (out, err) = captureOutput {
+      Conf.builder.printHelp
+    }
+    out shouldBe """test 1.2.3 (c) 2012 Mr Placeholder
+Usage: test [OPTION]... [tree|palm] [OPTION]... [tree-name]
+test is an awesome program, which does something funny
+Options:
+
+  -a, --amount  <arg>          how many objects do you need?
+  -Dkey=value [key=value]...   some key-value pairs
+  -v, --verbose                use more verbose output
+      --help                   Show help message
+      --version                Show version of this program
+
+Subcommand: tree
+  -h, --height  <arg>   how tall should the tree be?
+      --help            Show help message
+
+ trailing arguments:
+  tree name (required)   tree name
+Subcommand: palm
+  -h, --height  <arg>   how tall should the palm be?
+      --help            Show help message
+
+ trailing arguments:
+  tree name (required)   palm name
+
+For all other tricks, consult the documentation!
+"""
+    err shouldBe ""
   }
 
   test ("simple arg") {
