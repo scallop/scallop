@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/scallop/scallop/blob/develop/src/main/scala/org.rogach.scallop/ScallopConf.scala" target="_blank">ScallopConf.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a>, <a href="AfterInit.html" class="extype" name="org.rogach.scallop.AfterInit">AfterInit</a>, <span class="extype" name="scala.DelayedInit">DelayedInit</span>, <a href="ScallopConfValidations.html" class="extype" name="org.rogach.scallop.ScallopConfValidations">ScallopConfValidations</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a>, <a href="ScallopConfValidations.html" class="extype" name="org.rogach.scallop.ScallopConfValidations">ScallopConfValidations</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.rogach.scallop.Subcommand"><span>Subcommand</span></li><li class="in" name="org.rogach.scallop.ScallopConf"><span>ScallopConf</span></li><li class="in" name="org.rogach.scallop.AfterInit"><span>AfterInit</span></li><li class="in" name="scala.DelayedInit"><span>DelayedInit</span></li><li class="in" name="org.rogach.scallop.ScallopConfValidations"><span>ScallopConfValidations</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.rogach.scallop.Subcommand"><span>Subcommand</span></li><li class="in" name="org.rogach.scallop.ScallopConf"><span>ScallopConf</span></li><li class="in" name="org.rogach.scallop.ScallopConfValidations"><span>ScallopConfValidations</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -165,23 +165,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.rogach.scallop.ScallopConf#afterInit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="afterInit():Unit"></a>
-      <a id="afterInit():Unit"></a>
+    </li><li name="org.rogach.scallop.ScallopConf#addSubcommand" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="addSubcommand(conf:org.rogach.scallop.Subcommand):Unit"></a>
+      <a id="addSubcommand(Subcommand):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">afterInit</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">addSubcommand</span><span class="params">(<span name="conf">conf: <a href="" class="extype" name="org.rogach.scallop.Subcommand">Subcommand</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.Subcommand@afterInit():Unit" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.Subcommand@addSubcommand(conf:org.rogach.scallop.Subcommand):Unit" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a> → <a href="AfterInit.html" class="extype" name="org.rogach.scallop.AfterInit">AfterInit</a></dd></dl></div>
+      <p class="shortcomment cmt">Add subcommand to this config</p><div class="fullcomment"><div class="comment cmt"><p>Add subcommand to this config</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#args" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="args:Seq[String]"></a>
       <a id="args:Seq[String]"></a>
@@ -361,23 +361,6 @@
     </span>
       <p class="shortcomment cmt">In the verify stage, if opt was supplied, checks that all of the options in list are not supplied.</p><div class="fullcomment"><div class="comment cmt"><p>In the verify stage, if opt was supplied, checks that all of the options in list are not supplied.
 </p></div><dl class="paramcmts block"><dt class="param">opt</dt><dd class="cmt"><p>option, that conflicts with all of options in list</p></dd><dt class="param">list</dt><dd class="cmt"><p>list of dependencies (all will need to be absent)</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
-    </li><li name="org.rogach.scallop.AfterInit#delayedInit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="delayedInit(x:=&gt;Unit):Unit"></a>
-      <a id="delayedInit(⇒Unit):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">delayedInit</span><span class="params">(<span name="x">x: ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.Subcommand@delayedInit(x:=&gt;Unit):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AfterInit.html" class="extype" name="org.rogach.scallop.AfterInit">AfterInit</a> → DelayedInit</dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#dependsOnAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="dependsOnAll(opt:org.rogach.scallop.ScallopOption[_],list:List[org.rogach.scallop.ScallopOption[_]]):Unit"></a>
       <a id="dependsOnAll(ScallopOption[_],List[ScallopOption[_]]):Unit"></a>
@@ -562,23 +545,6 @@ coloring the output if possible, then calls <code>sys.exit(1)</code>.</p><p>Upda
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.rogach.scallop.ScallopConf#getName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getName(name:String):String"></a>
-      <a id="getName(String):String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getName</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.Subcommand@getName(name:String):String" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#guessOptionName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="guessOptionName:Boolean"></a>
       <a id="guessOptionName:Boolean"></a>
@@ -666,6 +632,23 @@ to determine it from terminal width or defaults to 80 characters.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopConf#isRootConfig" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isRootConfig:Boolean"></a>
+      <a id="isRootConfig:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isRootConfig</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.Subcommand@isRootConfig:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">true if this config does not represent a subcommand</p><div class="fullcomment"><div class="comment cmt"><p>true if this config does not represent a subcommand</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#mainOptions" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="mainOptions:Seq[String]"></a>
       <a id="mainOptions:Seq[String]"></a>
@@ -769,6 +752,24 @@ to determine it from terminal width or defaults to 80 characters.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopConf#number" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="number(name:String,descr:String,validate:Long=&gt;Boolean,required:Boolean,default:=&gt;Option[Long],hidden:Boolean)(implicitconv:org.rogach.scallop.ValueConverter[Long]):org.rogach.scallop.ScallopOption[Long]"></a>
+      <a id="number(String,String,(Long)⇒Boolean,Boolean,⇒Option[Long],Boolean)(ValueConverter[Long]):ScallopOption[Long]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">number</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">null</span></span>, <span name="descr">descr: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="validate">validate: (<span class="extype" name="scala.Long">Long</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">(_:Long) =&gt; true</span></span>, <span name="required">required: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="default">default: ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Long">Long</span>] = <span class="symbol">None</span></span>, <span name="hidden">hidden: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="scala.Long">Long</span>]</span>)</span><span class="result">: <a href="ScallopOption.html" class="extype" name="org.rogach.scallop.ScallopOption">ScallopOption</a>[<span class="extype" name="scala.Long">Long</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.Subcommand@number(name:String,descr:String,validate:Long=&gt;Boolean,required:Boolean,default:=&gt;Option[Long],hidden:Boolean)(implicitconv:org.rogach.scallop.ValueConverter[Long]):org.rogach.scallop.ScallopOption[Long]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Add new number argument definition to this config and get a holder for it's value.</p><div class="fullcomment"><div class="comment cmt"><p>Add new number argument definition to this config and get a holder for it's value.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new definition, used for identification.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, for help text.</p></dd><dt class="param">validate</dt><dd class="cmt"><p>The function that validates the parsed value.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this trailing argument required? Defaults to true.</p></dd><dt class="param">default</dt><dd class="cmt"><p>If this argument is not required and not found in the argument list, use this value.</p></dd><dt class="param">hidden</dt><dd class="cmt"><p>If set to true then this option will not be present in auto-generated help.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#onError" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="onError(e:Throwable):Unit"></a>
       <a id="onError(Throwable):Unit"></a>
@@ -808,6 +809,23 @@ standard Scallop errors, letting all other pass through.
     </span>
       <p class="shortcomment cmt">Add a new option definition to this config and get a holder for the value.</p><div class="fullcomment"><div class="comment cmt"><p>Add a new option definition to this config and get a holder for the value.
 </p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new option, used as long option name in parsing, and for option identification.</p></dd><dt class="param">short</dt><dd class="cmt"><p>Overload the char that will be used as short option name. Defaults to first character of the name.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, for help description.</p></dd><dt class="param">default</dt><dd class="cmt"><p>Default value to use if option is not found in input arguments (if you provide this, you can omit the type on method).</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this option required? Defaults to false.</p></dd><dt class="param">argName</dt><dd class="cmt"><p>The name for this option argument, as it will appear in help. Defaults to &quot;arg&quot;.</p></dd><dt class="param">noshort</dt><dd class="cmt"><p>If set to true, then this option does not have any short name.</p></dd><dt class="param">conv</dt><dd class="cmt"><p>The converter for this option. Usually found implicitly.</p></dd><dt>returns</dt><dd class="cmt"><p>A holder for parsed value</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopConf#parentConfig" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parentConfig:org.rogach.scallop.ScallopConf"></a>
+      <a id="parentConfig:ScallopConf"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parentConfig</span><span class="result">: <a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.Subcommand@parentConfig:org.rogach.scallop.ScallopConf" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Pointer to parent ScallopConf</p><div class="fullcomment"><div class="comment cmt"><p>Pointer to parent ScallopConf</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#printHelp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printHelp():Unit"></a>
       <a id="printHelp():Unit"></a>
@@ -895,23 +913,6 @@ standard Scallop errors, letting all other pass through.
     </span>
       <p class="shortcomment cmt">In the verify stage, checks that one, and only one, option in the list is supplied.</p><div class="fullcomment"><div class="comment cmt"><p>In the verify stage, checks that one, and only one, option in the list is supplied.
 </p></div><dl class="paramcmts block"><dt class="param">list</dt><dd class="cmt"><p>list of conflicting options (exactly one must be present)</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
-    </li><li name="org.rogach.scallop.ScallopConf#rootConfig" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="rootConfig:org.rogach.scallop.ScallopConf"></a>
-      <a id="rootConfig:ScallopConf"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">rootConfig</span><span class="result">: <a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.Subcommand@rootConfig:org.rogach.scallop.ScallopConf" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#shortSubcommandsHelp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="shortSubcommandsHelp(v:Boolean):Unit"></a>
       <a id="shortSubcommandsHelp(Boolean):Unit"></a>
@@ -963,23 +964,23 @@ standard Scallop errors, letting all other pass through.
       </a>
     </span>
       <p class="shortcomment cmt">Retrieves the list of the chosen nested subcommands.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves the list of the chosen nested subcommands.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
-    </li><li name="org.rogach.scallop.ScallopConf#subconfigs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="subconfigs:List[org.rogach.scallop.ScallopConf]"></a>
-      <a id="subconfigs:List[ScallopConf]"></a>
+    </li><li name="org.rogach.scallop.ScallopConf#subconfigs" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="subconfigs:Seq[org.rogach.scallop.ScallopConf]"></a>
+      <a id="subconfigs:Seq[ScallopConf]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">subconfigs</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[<a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a>]</span>
+        <span class="name">subconfigs</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.Subcommand@subconfigs:List[org.rogach.scallop.ScallopConf]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.Subcommand@subconfigs:Seq[org.rogach.scallop.ScallopConf]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">List of sub-configs of this config.</p><div class="fullcomment"><div class="comment cmt"><p>List of sub-configs of this config.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
+      <p class="shortcomment cmt">List of sub-configs of this config.</p><div class="fullcomment"><div class="comment cmt"><p>List of sub-configs of this config.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#summary" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="summary:String"></a>
       <a id="summary:String"></a>
@@ -1068,7 +1069,8 @@ standard Scallop errors, letting all other pass through.
       <p class="shortcomment cmt">Add new toggle option definition to this config, and get a holder for it's value.</p><div class="fullcomment"><div class="comment cmt"><p>Add new toggle option definition to this config, and get a holder for it's value.</p><p>Toggle options are just glorified flag options. For example, if you will ask for a
 toggle option with name &quot;verbose&quot;, it will be invocable in three ways -
 &quot;--verbose&quot;, &quot;--noverbose&quot;, &quot;-v&quot;.
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name of this option</p></dd><dt class="param">default</dt><dd class="cmt"><p>default value for this option</p></dd><dt class="param">short</dt><dd class="cmt"><p>Overload the char that will be used as short option name. Defaults to first character of the name.</p></dd><dt class="param">noshort</dt><dd class="cmt"><p>If set to true, then this option will not have any short name.</p></dd><dt class="param">descrYes</dt><dd class="cmt"><p>Description for positive variant of this option.</p></dd><dt class="param">descrNo</dt><dd class="cmt"><p>Description for negative variant of this option.</p></dd><dt class="param">hidden</dt><dd class="cmt"><p>If set to true, then this option will not be present in auto-generated help.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name of this option</p></dd><dt class="param">default</dt><dd class="cmt"><p>default value for this option</p></dd><dt class="param">short</dt><dd class="cmt"><p>Overload the char that will be used as short option name. Defaults to first character of the name.</p></dd><dt class="param">noshort</dt><dd class="cmt"><p>If set to true, then this option will not have any short name.</p></dd><dt class="param">prefix</dt><dd class="cmt"><p>Prefix to name of the option, that will be used for &quot;negative&quot; version of the
+                    option.</p></dd><dt class="param">descrYes</dt><dd class="cmt"><p>Description for positive variant of this option.</p></dd><dt class="param">descrNo</dt><dd class="cmt"><p>Description for negative variant of this option.</p></dd><dt class="param">hidden</dt><dd class="cmt"><p>If set to true, then this option will not be present in auto-generated help.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#trailArg" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trailArg[A](name:String,descr:String,validate:A=&gt;Boolean,required:Boolean,default:=&gt;Option[A],hidden:Boolean)(implicitconv:org.rogach.scallop.ValueConverter[A]):org.rogach.scallop.ScallopOption[A]"></a>
       <a id="trailArg[A](String,String,(A)⇒Boolean,Boolean,⇒Option[A],Boolean)(ValueConverter[A]):ScallopOption[A]"></a>
@@ -1086,7 +1088,7 @@ toggle option with name &quot;verbose&quot;, it will be invocable in three ways 
       </a>
     </span>
       <p class="shortcomment cmt">Add new trailing argument definition to this config, and get a holder for it's value.</p><div class="fullcomment"><div class="comment cmt"><p>Add new trailing argument definition to this config, and get a holder for it's value.
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new definition, used for identification.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this trailing argument required? Defaults to true.</p></dd><dt class="param">default</dt><dd class="cmt"><p>If this argument is not required and not found in the argument list, use this value.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new definition, used for identification.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, for help text.</p></dd><dt class="param">validate</dt><dd class="cmt"><p>The function that validates the parsed value.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this trailing argument required? Defaults to true.</p></dd><dt class="param">default</dt><dd class="cmt"><p>If this argument is not required and not found in the argument list, use this value.</p></dd><dt class="param">hidden</dt><dd class="cmt"><p>If set to true then this option will not be present in auto-generated help.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConfValidations#validate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="validate[A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22](o1:org.rogach.scallop.ScallopOption[A1],o2:org.rogach.scallop.ScallopOption[A2],o3:org.rogach.scallop.ScallopOption[A3],o4:org.rogach.scallop.ScallopOption[A4],o5:org.rogach.scallop.ScallopOption[A5],o6:org.rogach.scallop.ScallopOption[A6],o7:org.rogach.scallop.ScallopOption[A7],o8:org.rogach.scallop.ScallopOption[A8],o9:org.rogach.scallop.ScallopOption[A9],o10:org.rogach.scallop.ScallopOption[A10],o11:org.rogach.scallop.ScallopOption[A11],o12:org.rogach.scallop.ScallopOption[A12],o13:org.rogach.scallop.ScallopOption[A13],o14:org.rogach.scallop.ScallopOption[A14],o15:org.rogach.scallop.ScallopOption[A15],o16:org.rogach.scallop.ScallopOption[A16],o17:org.rogach.scallop.ScallopOption[A17],o18:org.rogach.scallop.ScallopOption[A18],o19:org.rogach.scallop.ScallopOption[A19],o20:org.rogach.scallop.ScallopOption[A20],o21:org.rogach.scallop.ScallopOption[A21],o22:org.rogach.scallop.ScallopOption[A22])(fn:(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22)=&gt;Either[String,Unit]):Unit"></a>
       <a id="validate[A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22](ScallopOption[A1],ScallopOption[A2],ScallopOption[A3],ScallopOption[A4],ScallopOption[A5],ScallopOption[A6],ScallopOption[A7],ScallopOption[A8],ScallopOption[A9],ScallopOption[A10],ScallopOption[A11],ScallopOption[A12],ScallopOption[A13],ScallopOption[A14],ScallopOption[A15],ScallopOption[A16],ScallopOption[A17],ScallopOption[A18],ScallopOption[A19],ScallopOption[A20],ScallopOption[A21],ScallopOption[A22])((A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22)⇒Either[String,Unit]):Unit"></a>
@@ -1891,6 +1893,40 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopConf#verify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="verify():Unit"></a>
+      <a id="verify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">verify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.Subcommand@verify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopConf#verifyConf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="verifyConf():Unit"></a>
+      <a id="verifyConf():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">verifyConf</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.Subcommand@verifyConf():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#version" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="version(v:String):Unit"></a>
       <a id="version(String):Unit"></a>
@@ -1989,10 +2025,6 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
         <div id="inheritedMembers">
         <div class="parent" name="org.rogach.scallop.ScallopConf">
               <h3>Inherited from <a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></h3>
-            </div><div class="parent" name="org.rogach.scallop.AfterInit">
-              <h3>Inherited from <a href="AfterInit.html" class="extype" name="org.rogach.scallop.AfterInit">AfterInit</a></h3>
-            </div><div class="parent" name="scala.DelayedInit">
-              <h3>Inherited from <span class="extype" name="scala.DelayedInit">DelayedInit</span></h3>
             </div><div class="parent" name="org.rogach.scallop.ScallopConfValidations">
               <h3>Inherited from <a href="ScallopConfValidations.html" class="extype" name="org.rogach.scallop.ScallopConfValidations">ScallopConfValidations</a></h3>
             </div><div class="parent" name="scala.AnyRef">

@@ -90,7 +90,7 @@ and evaluates the value only as the last resort.</p></div><dl class="attributes 
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="org.rogach.scallop.ScallopOption#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(nm:String):org.rogach.scallop.ScallopOption[A]"></a>
+      <a id="&lt;init&gt;(nm:String,_transformCount:Int):org.rogach.scallop.ScallopOption[A]"></a>
       <a id="&lt;init&gt;:ScallopOption[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -98,14 +98,14 @@ and evaluates the value only as the last resort.</p></div><dl class="attributes 
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ScallopOption</span><span class="params">(<span name="nm">nm: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+        <span class="name">ScallopOption</span><span class="params">(<span name="nm">nm: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="_transformCount">_transformCount: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.ScallopOption@&lt;init&gt;(nm:String):org.rogach.scallop.ScallopOption[A]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.ScallopOption@&lt;init&gt;(nm:String,_transformCount:Int):org.rogach.scallop.ScallopOption[A]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">nm</dt><dd class="cmt"><p>Name for the option</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">nm</dt><dd class="cmt"><p>Name for the option</p></dd><dt class="param">_transformCount</dt><dd class="cmt"><p>Count of .map, .filter, etc. operations applied to this option</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -186,6 +186,23 @@ and evaluates the value only as the last resort.</p></div><dl class="attributes 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopOption#_transformCount" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_transformCount:Int"></a>
+      <a id="_transformCount:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">_transformCount</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.ScallopOption@_transformCount:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Count of .map, .filter, etc.</p><div class="fullcomment"><div class="comment cmt"><p>Count of .map, .filter, etc. operations applied to this option</p></div></div>
     </li><li name="org.rogach.scallop.ScallopOption#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="apply():A"></a>
       <a id="apply():A"></a>
@@ -464,23 +481,6 @@ this option is non-empty.</p>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.rogach.scallop.ScallopOption#humanName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="humanName:String"></a>
-      <a id="humanName:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">humanName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.ScallopOption@humanName:String" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Name for the option, which can be presented to human user</p>
     </li><li name="org.rogach.scallop.ScallopOption#isDefined" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDefined:Boolean"></a>
       <a id="isDefined:Boolean"></a>

@@ -66,7 +66,24 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="org.rogach.scallop.exceptions.Help" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="org.rogach.scallop.exceptions.ExcessArguments" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ExcessArgumentsextendsScallopExceptionwithProductwithSerializable"></a>
+      <a id="ExcessArguments:ExcessArguments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ExcessArguments.html"><span class="name">ExcessArguments</span></a><span class="params">(<span name="args">args: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.package@ExcessArgumentsextendsScallopExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Thrown when user provides excess arguments that can't be matched by trailing arg options</p>
+    </li><li name="org.rogach.scallop.exceptions.Help" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="HelpextendsThrowablewithScallopResultwithProductwithSerializable"></a>
       <a id="Help:Help"></a>
       <h4 class="signature">
@@ -155,6 +172,23 @@
       <p class="shortcomment cmt">This is a special case of exception - the one you should never see.</p><div class="fullcomment"><div class="comment cmt"><p>This is a special case of exception - the one you should never see.
     If you actually saw it, there is a sure bug lurking somewhere. In such cases, please
     file a bug on project page!</p></div></div>
+    </li><li name="org.rogach.scallop.exceptions.OptionNameGuessingFailure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OptionNameGuessingFailureextendsScallopExceptionwithProductwithSerializable"></a>
+      <a id="OptionNameGuessingFailure:OptionNameGuessingFailure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OptionNameGuessingFailure.html"><span class="name">OptionNameGuessingFailure</span></a><span class="params">()</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.package@OptionNameGuessingFailureextendsScallopExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Thrown when option guessing fails on one of the options.</p>
     </li><li name="org.rogach.scallop.exceptions.RequiredOptionNotFound" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="RequiredOptionNotFoundextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="RequiredOptionNotFound:RequiredOptionNotFound"></a>
@@ -207,24 +241,6 @@
       </a>
     </span>
       <p class="shortcomment cmt">Parent trait for all not-positive results that can be resulted from this library (including help and exits)</p>
-    </li><li name="org.rogach.scallop.exceptions.TrailingArgsParseException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TrailingArgsParseExceptionextendsScallopExceptionwithProductwithSerializable"></a>
-      <a id="TrailingArgsParseException:TrailingArgsParseException"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="TrailingArgsParseException.html"><span class="name">TrailingArgsParseException</span></a><span class="params">(<span name="failedArgs">failedArgs: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.package@TrailingArgsParseExceptionextendsScallopExceptionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Thrown when Scallop fails to parse the argument line (usually when there
-    are some problems with trailing args).</p>
     </li><li name="org.rogach.scallop.exceptions.UnknownOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="UnknownOptionextendsScallopExceptionwithProductwithSerializable"></a>
       <a id="UnknownOption:UnknownOption"></a>

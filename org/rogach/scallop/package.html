@@ -88,30 +88,12 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="org.rogach.scallop.AfterInit" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="AfterInitextendsDelayedInit"></a>
-      <a id="AfterInit:AfterInit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="AfterInit.html"><span class="name">AfterInit</span></a><span class="result"> extends <span class="extype" name="scala.DelayedInit">DelayedInit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.package@AfterInitextendsDelayedInit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Magic trait, that makes it possible to run code from superclass
-after all subclasses initialization.</p>
-    </li><li name="org.rogach.scallop.CliOption" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="org.rogach.scallop.CliOption" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="CliOptionextendsAnyRef"></a>
       <a id="CliOption:CliOption"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">sealed </span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
@@ -140,25 +122,6 @@ after all subclasses initialization.</p>
       </a>
     </span>
       <p class="shortcomment cmt">A class, that lazily encapsulates a map inside.</p>
-    </li><li name="org.rogach.scallop.LazyScallopConf" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="LazyScallopConfextendsScallopConf"></a>
-      <a id="LazyScallopConf:LazyScallopConf"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="LazyScallopConf.html"><span class="name">LazyScallopConf</span></a><span class="result"> extends <a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.package@LazyScallopConfextendsScallopConf" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">This configuration object allows user to specify custom error handling in its &quot;initialize&quot; method.</p><div class="fullcomment"><div class="comment cmt"><p>This configuration object allows user to specify custom error handling in its &quot;initialize&quot; method.
-That method returs the proper ScallopConf, which then can be queried for options.
-</p></div></div>
     </li><li name="org.rogach.scallop.LongNamedPropertyOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LongNamedPropertyOptionextendsCliOptionwithProductwithSerializable"></a>
       <a id="LongNamedPropertyOption:LongNamedPropertyOption"></a>
@@ -172,6 +135,23 @@ That method returs the proper ScallopConf, which then can be queried for options
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#org.rogach.scallop.package@LongNamedPropertyOptionextendsCliOptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.rogach.scallop.NumberArgOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NumberArgOptionextendsCliOptionwithProductwithSerializable"></a>
+      <a id="NumberArgOption:NumberArgOption"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NumberArgOption.html"><span class="name">NumberArgOption</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="required">required: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="descr">descr: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="converter">converter: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="scala.Long">Long</span>]</span>, <span name="validator">validator: (<span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[_], <span class="extype" name="scala.Any">Any</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="default">default: () ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Long">Long</span>]</span>, <span name="hidden">hidden: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="CliOption.html" class="extype" name="org.rogach.scallop.CliOption">CliOption</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.package@NumberArgOptionextendsCliOptionwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -212,7 +192,7 @@ That method returs the proper ScallopConf, which then can be queried for options
       <p class="shortcomment cmt">The main builder class.</p><div class="fullcomment"><div class="comment cmt"><p>The main builder class.
 </p></div><dl class="paramcmts block"><dt class="param">args</dt><dd class="cmt"><p>Arguments to parse.</p></dd><dt class="param">opts</dt><dd class="cmt"><p>Options definitions.</p></dd><dt class="param">mainOpts</dt><dd class="cmt"><p>Names of options, that are to be printed first in the help printout</p></dd><dt class="param">vers</dt><dd class="cmt"><p>Version string to display in help.</p></dd><dt class="param">bann</dt><dd class="cmt"><p>Banner (summary of this program and command-line usage) to display in help.</p></dd><dt class="param">foot</dt><dd class="cmt"><p>Footer - displayed after options.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Short description - used for subcommands</p></dd><dt class="param">helpWidth</dt><dd class="cmt"><p>Width, to which the help output will be formatted (note that banner, footer, version and description are not affected!)</p></dd><dt class="param">shortSubcommandsHelp</dt><dd class="cmt"><p>If true, then help output from this builder wouldn't list full help for subcommands, only short description</p></dd><dt class="param">subbuilders</dt><dd class="cmt"><p>subcommands in this builder</p></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ScallopConfextendsScallopConfValidationswithAfterInit"></a>
+      <a id="ScallopConfextendsScallopConfValidations"></a>
       <a id="ScallopConf:ScallopConf"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -220,10 +200,10 @@ That method returs the proper ScallopConf, which then can be queried for options
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="ScallopConf.html"><span class="name">ScallopConf</span></a><span class="result"> extends <a href="ScallopConfValidations.html" class="extype" name="org.rogach.scallop.ScallopConfValidations">ScallopConfValidations</a> with <a href="AfterInit.html" class="extype" name="org.rogach.scallop.AfterInit">AfterInit</a></span>
+        <a href="ScallopConf.html"><span class="name">ScallopConf</span></a><span class="result"> extends <a href="ScallopConfValidations.html" class="extype" name="org.rogach.scallop.ScallopConfValidations">ScallopConfValidations</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.package@ScallopConfextendsScallopConfValidationswithAfterInit" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.package@ScallopConfextendsScallopConfValidations" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -406,23 +386,25 @@ and evaluates the value only as the last resort.</p></div></div>
       </a>
     </span>
       <p class="shortcomment cmt">The creator and god of all parsers :)</p>
-    </li><li name="org.rogach.scallop.ScallopConf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ScallopConf"></a>
-      <a id="ScallopConf:ScallopConf"></a>
+    </li><li name="org.rogach.scallop.TrailingArgumentsParser" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TrailingArgumentsParser"></a>
+      <a id="TrailingArgumentsParser:TrailingArgumentsParser"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="ScallopConf$.html"><span class="name">ScallopConf</span></a>
+        <a href="TrailingArgumentsParser$.html"><span class="name">TrailingArgumentsParser</span></a>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.package@ScallopConf" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.package@TrailingArgumentsParser" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Parses the trailing arguments (including the arguments to last option).</p><div class="fullcomment"><div class="comment cmt"><p>Parses the trailing arguments (including the arguments to last option).
+Uses simple backtraking algorithm.
+</p></div></div>
     </li><li name="org.rogach.scallop#bigDecimalConverter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="bigDecimalConverter:org.rogach.scallop.ValueConverter[scala.math.BigDecimal]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[scala.math.BigDecimal]]}"></a>
       <a id="bigDecimalConverter:ValueConverter[BigDecimal]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[scala.math.BigDecimal]]}"></a>

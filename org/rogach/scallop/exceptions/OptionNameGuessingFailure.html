@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>TrailingArgsParseException - org.rogach.scallop.exceptions.TrailingArgsParseException</title>
-          <meta name="description" content="TrailingArgsParseException - org.rogach.scallop.exceptions.TrailingArgsParseException" />
-          <meta name="keywords" content="TrailingArgsParseException org.rogach.scallop.exceptions.TrailingArgsParseException" />
+          <title>OptionNameGuessingFailure - org.rogach.scallop.exceptions.OptionNameGuessingFailure</title>
+          <meta name="description" content="OptionNameGuessingFailure - org.rogach.scallop.exceptions.OptionNameGuessingFailure" />
+          <meta name="keywords" content="OptionNameGuessingFailure org.rogach.scallop.exceptions.OptionNameGuessingFailure" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../index.html';
-            var hash = 'org.rogach.scallop.exceptions.TrailingArgsParseException';
+            var hash = 'org.rogach.scallop.exceptions.OptionNameGuessingFailure';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -30,10 +30,10 @@
       <div id="definition">
         <img alt="Class" src="../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.rogach">rogach</a>.<a href="../package.html" class="extype" name="org.rogach.scallop">scallop</a>.<a href="package.html" class="extype" name="org.rogach.scallop.exceptions">exceptions</a></p>
-        <h1>TrailingArgsParseException</h1><h3><span class="morelinks"><div>Related Doc:
+        <h1>OptionNameGuessingFailure</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="package.html" class="extype" name="org.rogach.scallop.exceptions">package exceptions</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -45,12 +45,11 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">TrailingArgsParseException</span><span class="params">(<span name="failedArgs">failedArgs: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">OptionNameGuessingFailure</span><span class="params">()</span><span class="result"> extends <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Thrown when Scallop fails to parse the argument line (usually when there
-    are some problems with trailing args).</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/scallop/scallop/blob/develop/src/main/scala/org.rogach.scallop/Exceptions.scala" target="_blank">Exceptions.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Thrown when option guessing fails on one of the options.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/scallop/scallop/blob/develop/src/main/scala/org.rogach.scallop/Exceptions.scala" target="_blank">Exceptions.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="ScallopException.html" class="extype" name="org.rogach.scallop.exceptions.ScallopException">ScallopException</a>, <a href="ScallopResult.html" class="extype" name="org.rogach.scallop.exceptions.ScallopResult">ScallopResult</a>, <span class="extype" name="java.lang.Exception">Exception</span>, <span class="extype" name="java.lang.Throwable">Throwable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -70,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.rogach.scallop.exceptions.TrailingArgsParseException"><span>TrailingArgsParseException</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="org.rogach.scallop.exceptions.ScallopException"><span>ScallopException</span></li><li class="in" name="org.rogach.scallop.exceptions.ScallopResult"><span>ScallopResult</span></li><li class="in" name="java.lang.Exception"><span>Exception</span></li><li class="in" name="java.lang.Throwable"><span>Throwable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.rogach.scallop.exceptions.OptionNameGuessingFailure"><span>OptionNameGuessingFailure</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="org.rogach.scallop.exceptions.ScallopException"><span>ScallopException</span></li><li class="in" name="org.rogach.scallop.exceptions.ScallopResult"><span>ScallopResult</span></li><li class="in" name="java.lang.Exception"><span>Exception</span></li><li class="in" name="java.lang.Throwable"><span>Throwable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,19 +88,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="org.rogach.scallop.exceptions.TrailingArgsParseException#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(failedArgs:Seq[String]):org.rogach.scallop.exceptions.TrailingArgsParseException"></a>
-      <a id="&lt;init&gt;:TrailingArgsParseException"></a>
+              <ol><li name="org.rogach.scallop.exceptions.OptionNameGuessingFailure#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;():org.rogach.scallop.exceptions.OptionNameGuessingFailure"></a>
+      <a id="&lt;init&gt;:OptionNameGuessingFailure"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">TrailingArgsParseException</span><span class="params">(<span name="failedArgs">failedArgs: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
+        <span class="name">OptionNameGuessingFailure</span><span class="params">()</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@&lt;init&gt;(failedArgs:Seq[String]):org.rogach.scallop.exceptions.TrailingArgsParseException" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@&lt;init&gt;():org.rogach.scallop.exceptions.OptionNameGuessingFailure" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -127,7 +126,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -144,7 +143,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@##():Int" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@##():Int" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -161,7 +160,7 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -178,7 +177,7 @@
         <span class="name">addSuppressed</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@addSuppressed(x$1:Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@addSuppressed(x$1:Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -195,7 +194,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -212,7 +211,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@clone():Object" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -235,28 +234,11 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.rogach.scallop.exceptions.TrailingArgsParseException#failedArgs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="failedArgs:Seq[String]"></a>
-      <a id="failedArgs:Seq[String]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">failedArgs</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@failedArgs:Seq[String]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="java.lang.Throwable#fillInStackTrace" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fillInStackTrace():Throwable"></a>
       <a id="fillInStackTrace():Throwable"></a>
@@ -269,7 +251,7 @@
         <span class="name">fillInStackTrace</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Throwable">Throwable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@fillInStackTrace():Throwable" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@fillInStackTrace():Throwable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -286,7 +268,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -309,7 +291,7 @@
         <span class="name">getCause</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Throwable">Throwable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@getCause():Throwable" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@getCause():Throwable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -326,7 +308,7 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -343,7 +325,7 @@
         <span class="name">getLocalizedMessage</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@getLocalizedMessage():String" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@getLocalizedMessage():String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -360,7 +342,7 @@
         <span class="name">getMessage</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@getMessage():String" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@getMessage():String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -377,7 +359,7 @@
         <span class="name">getStackTrace</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@getStackTrace():Array[StackTraceElement]" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@getStackTrace():Array[StackTraceElement]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -394,7 +376,7 @@
         <span class="name">getSuppressed</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="java.lang.Throwable">Throwable</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@getSuppressed():Array[Throwable]" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@getSuppressed():Array[Throwable]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -411,7 +393,7 @@
         <span class="name">initCause</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="java.lang.Throwable">Throwable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@initCause(x$1:Throwable):Throwable" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@initCause(x$1:Throwable):Throwable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -428,7 +410,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -445,7 +427,7 @@
         <span class="name">message</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@message:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@message:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -462,7 +444,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -479,7 +461,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -496,7 +478,7 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -513,7 +495,7 @@
         <span class="name">printStackTrace</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.io.PrintWriter">PrintWriter</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@printStackTrace(x$1:java.io.PrintWriter):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@printStackTrace(x$1:java.io.PrintWriter):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -530,7 +512,7 @@
         <span class="name">printStackTrace</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.io.PrintStream">PrintStream</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@printStackTrace(x$1:java.io.PrintStream):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@printStackTrace(x$1:java.io.PrintStream):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -547,7 +529,7 @@
         <span class="name">printStackTrace</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@printStackTrace():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@printStackTrace():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -564,7 +546,7 @@
         <span class="name">setStackTrace</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@setStackTrace(x$1:Array[StackTraceElement]):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@setStackTrace(x$1:Array[StackTraceElement]):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -581,7 +563,7 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -598,7 +580,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@toString():String" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@toString():String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -615,7 +597,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -638,7 +620,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -661,7 +643,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.rogach.scallop.exceptions.TrailingArgsParseException@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.rogach.scallop.exceptions.OptionNameGuessingFailure@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

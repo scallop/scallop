@@ -770,6 +770,24 @@ and contains info on properties, options and trailing arguments.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.rogach.scallop.Scallop#number" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="number(name:String,required:Boolean,descr:String,default:()=&gt;Option[Long],validate:Long=&gt;Boolean,hidden:Boolean)(implicitconv:org.rogach.scallop.ValueConverter[Long]):org.rogach.scallop.Scallop"></a>
+      <a id="number(String,Boolean,String,()⇒Option[Long],(Long)⇒Boolean,Boolean)(ValueConverter[Long]):Scallop"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">number</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="required">required: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="descr">descr: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="default">default: () ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Long">Long</span>] = <span class="symbol">() =&gt; None</span></span>, <span name="validate">validate: (<span class="extype" name="scala.Long">Long</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">(_:Long) =&gt; true</span></span>, <span name="hidden">hidden: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="conv">conv: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="scala.Long">Long</span>]</span>)</span><span class="result">: <a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.Scallop@number(name:String,required:Boolean,descr:String,default:()=&gt;Option[Long],validate:Long=&gt;Boolean,hidden:Boolean)(implicitconv:org.rogach.scallop.ValueConverter[Long]):org.rogach.scallop.Scallop" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Add new number argument definition to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add new number argument definition to this builder.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new definition, used for identification.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this trailing argument required? Defaults to true.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, for help text.</p></dd><dt class="param">default</dt><dd class="cmt"><p>If this argument is not required and not found in the argument list, use this value.</p></dd><dt class="param">validate</dt><dd class="cmt"><p>The function that validates the parsed value.</p></dd><dt class="param">hidden</dt><dd class="cmt"><p>If set to true then this option will not be present in auto-generated help.</p></dd></dl></div>
     </li><li name="org.rogach.scallop.Scallop#opt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="opt[A](name:String,short:Char,descr:String,default:()=&gt;Option[A],validate:A=&gt;Boolean,required:Boolean,argName:String,hidden:Boolean,noshort:Boolean)(implicitconv:org.rogach.scallop.ValueConverter[A]):org.rogach.scallop.Scallop"></a>
       <a id="opt[A](String,Char,String,()⇒Option[A],(A)⇒Boolean,Boolean,String,Boolean,Boolean)(ValueConverter[A]):Scallop"></a>
@@ -962,7 +980,7 @@ and contains info on properties, options and trailing arguments.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.rogach.scallop.Scallop#toggle" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="org.rogach.scallop.Scallop#toggle" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toggle(name:String,default:()=&gt;Option[Boolean],short:Char,noshort:Boolean,prefix:String,descrYes:String,descrNo:String,hidden:Boolean):org.rogach.scallop.Scallop"></a>
       <a id="toggle(String,()⇒Option[Boolean],Char,Boolean,String,String,String,Boolean):Scallop"></a>
       <h4 class="signature">
@@ -978,7 +996,9 @@ and contains info on properties, options and trailing arguments.
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Add new toggle option definition to this builer.</p><div class="fullcomment"><div class="comment cmt"><p>Add new toggle option definition to this builer.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new definition, used for identification.</p></dd><dt class="param">default</dt><dd class="cmt"><p>Default value</p></dd><dt class="param">short</dt><dd class="cmt"><p>Name for short form of this option</p></dd><dt class="param">noshort</dt><dd class="cmt"><p>If set to true, then this option will not have any short name.</p></dd><dt class="param">prefix</dt><dd class="cmt"><p>Prefix to name of the option, that will be used for &quot;negative&quot; version of the
+                    option.</p></dd><dt class="param">descrYes</dt><dd class="cmt"><p>Description for positive variant of this option.</p></dd><dt class="param">descrNo</dt><dd class="cmt"><p>Description for negative variant of this option.</p></dd><dt class="param">hidden</dt><dd class="cmt"><p>If set to true, then this option will not be present in auto-generated help.</p></dd></dl></div>
     </li><li name="org.rogach.scallop.Scallop#trailArg" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trailArg[A](name:String,required:Boolean,descr:String,default:()=&gt;Option[A],validate:A=&gt;Boolean,hidden:Boolean)(implicitconv:org.rogach.scallop.ValueConverter[A]):org.rogach.scallop.Scallop"></a>
       <a id="trailArg[A](String,Boolean,String,()⇒Option[A],(A)⇒Boolean,Boolean)(ValueConverter[A]):Scallop"></a>
@@ -996,7 +1016,7 @@ and contains info on properties, options and trailing arguments.
       </a>
     </span>
       <p class="shortcomment cmt">Add new trailing argument definition to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Add new trailing argument definition to this builder.
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new definition, used for identification.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this trailing argument required? Defaults to true.</p></dd><dt class="param">default</dt><dd class="cmt"><p>If this argument is not required and not found in the argument list, use this value.</p></dd><dt class="param">validate</dt><dd class="cmt"><p>The function, that validates the parsed value</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Name for new definition, used for identification.</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this trailing argument required? Defaults to true.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, for help text.</p></dd><dt class="param">default</dt><dd class="cmt"><p>If this argument is not required and not found in the argument list, use this value.</p></dd><dt class="param">validate</dt><dd class="cmt"><p>The function, that validates the parsed value</p></dd></dl></div>
     </li><li name="org.rogach.scallop.Scallop#verify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="verify:org.rogach.scallop.Scallop"></a>
       <a id="verify:Scallop"></a>
