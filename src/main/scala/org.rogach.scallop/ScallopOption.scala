@@ -16,8 +16,6 @@ abstract class ScallopOption[A](nm: String, val _transformCount: Int = 0) { opt 
 
   /** Name for the option */
   def name = _name
-  /** Name for the option, which can be presented to human user */
-  def humanName = _name.replace("\u0000", ":")
 
   private lazy val value: Option[A] = fn(name)
 

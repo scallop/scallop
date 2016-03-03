@@ -21,7 +21,7 @@ class LoadTest extends FunSuite with Matchers {
       .args((1 to 100).map(_.toString))
       .verify
     val end = System.currentTimeMillis
-    assert (end - start < 100, "Time bound broken: %d ms" format (end - start))
+    assert (end - start < 500, "Time bound broken: %d ms" format (end - start))
   }
 
   ignore ("retrieving options") {
@@ -29,6 +29,8 @@ class LoadTest extends FunSuite with Matchers {
       val apples = opt[Int]("apples")
       val carrots = opt[Double]("carrots")
       val bananas = 1
+
+      verify()
     }
     def time(fn: => Int) = {
       val start = System.currentTimeMillis
@@ -40,7 +42,7 @@ class LoadTest extends FunSuite with Matchers {
       end - start
     }
     val t = time(Conf.apples())
-    assert(t < 100, "Time bound broken: %d ms" format t)
+    assert(t < 200, "Time bound broken: %d ms" format t)
   }
 
   test ("too many options") {
@@ -48,6 +50,8 @@ class LoadTest extends FunSuite with Matchers {
     val opts = List.fill(N)(List("-a","1")).flatten
     object Conf extends ScallopConf(opts) {
       val apples = opt[List[Int]]("apples")
+
+      verify()
     }
     Conf.apples() should have size (N)
   }

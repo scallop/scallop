@@ -10,6 +10,8 @@ class OptionNameGuessing extends UsefulMatchers {
     object Conf extends ScallopConf(Seq("-a", "1")) {
       val appleso = opt[Int]()
       val bananaso = opt[Int]()
+
+      verify()
     }
     Conf.appleso() should equal (1)
     Conf.bananaso.get should equal (None)
@@ -19,6 +21,8 @@ class OptionNameGuessing extends UsefulMatchers {
     object Conf extends ScallopConf(Seq("--apples", "1")) {
       val apples = opt[Int]()
       val applesPlus = apples.map(2+)
+
+      verify()
     }
     Conf.apples() should equal (1)
     Conf.applesPlus() should equal (3)
@@ -31,6 +35,8 @@ class OptionNameGuessing extends UsefulMatchers {
       lazy val applesVal = appleso()
       val bananaso = opt[Int]()
       val aaa = opt[Int]()
+
+      verify()
     }
     Conf.appleso() should equal (1)
     Conf.applesPlus() should equal (3)
@@ -41,6 +47,8 @@ class OptionNameGuessing extends UsefulMatchers {
   test ("camelCase convert") {
     object Conf extends ScallopConf(Seq("--apple-treeo", "1")) {
       val appleTreeo = opt[Int]()
+
+      verify()
     }
     Conf.appleTreeo() should equal (1)
   }
@@ -50,6 +58,9 @@ class OptionNameGuessing extends UsefulMatchers {
       val tree = new Subcommand("tree") {
         val apples = opt[Int]()
       }
+      addSubcommand(tree)
+
+      verify()
     }
     Conf.tree.apples() should equal (3)
   }
@@ -57,6 +68,8 @@ class OptionNameGuessing extends UsefulMatchers {
   test ("replacing of the name in mapped ScallopOptions") {
     object Conf extends ScallopConf(Nil) {
       val xs = opt[Int](default = Some(0)) map (1+)
+
+      verify()
     }
     Conf.xs.get ==== Some(1)
   }
@@ -64,6 +77,8 @@ class OptionNameGuessing extends UsefulMatchers {
   test ("replacing of the name in doubly mapped ScallopOptions") {
     object Conf extends ScallopConf(Nil) {
       val xs = opt[Int](default = Some(0)) map (1+) map (_.toString)
+
+      verify()
     }
     Conf.xs.get ==== Some("1")
   }
@@ -72,6 +87,7 @@ class OptionNameGuessing extends UsefulMatchers {
     object Conf extends ScallopConf(List("1", "foo", "bar", "baz", "bippy")) {
       val trailing1 = trailArg[Int]()
       val trailing2 = trailArg[List[String]]()
+
       verify()
     }
     Conf.trailing1.name should be ("trailing1")
@@ -86,6 +102,8 @@ class OptionNameGuessing extends UsefulMatchers {
       val zoop = toggle()
       val bippy = toggle()
       val scooby = toggle()
+
+      verify()
     }
     Conf.foo.name should be ("foo")
     Conf.zoop.name should be ("zoop")

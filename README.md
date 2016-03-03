@@ -40,6 +40,7 @@ object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
   val properties = props[String]('E')
   // types (:ScallopOption[Double]) can be omitted, here just for clarity
   val size:ScallopOption[Double] = trailArg[Double](required = false)
+  verify()
 }
 // that's it. Completely type-safe and convenient.
 assert(Conf.count() == 4)
@@ -68,6 +69,7 @@ object Conf extends ScallopConf(
   val firstList = trailArg[List[Int]]()
   val secondListName = trailArg[String]()
   val secondList = trailArg[List[Double]]()
+  verify()
 }
 Conf.props("key1") should equal (Some("value1"))
 Conf.firstListName() should equal ("first")
@@ -91,6 +93,7 @@ object Conf extends ScallopConf(Seq("sub1", "sub2", "sub3", "sub4", "win!")) {
       }
     }
   }
+  verify()
 }
 Conf.subcommands should equal (List(Conf.sub1, Conf.sub1.sub2, Conf.sub1.sub2.sub3, Conf.sub1.sub2.sub3.sub4))
 Conf.sub1.sub2.sub3.sub4.opts() should equal (List("win!"))

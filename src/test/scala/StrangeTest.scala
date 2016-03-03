@@ -10,6 +10,8 @@ class StrangeTest extends UsefulMatchers with CapturingTest {
       object Conf extends ScallopConf(List("@--")) {
         val apples = opt[Int]("apples")
         val bananas = opt[Int]("bananas")
+
+        verify()
       }
       Conf.apples() should equal (3)
       Conf.bananas() should equal (5)
@@ -20,6 +22,8 @@ class StrangeTest extends UsefulMatchers with CapturingTest {
     object Conf extends ScallopConf(List("@src/test/resources/opts.txt")) {
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
+
+      verify()
     }
     Conf.apples() should equal (3)
     Conf.bananas() should equal (5)
@@ -27,11 +31,12 @@ class StrangeTest extends UsefulMatchers with CapturingTest {
 
   test ("changing printed program name") {
     val (out, err, exits) = captureOutputAndExits {
-      object Conf extends ScallopConf(Seq()) {
+      new ScallopConf(Seq()) {
         val apples = trailArg[Int]("beans")
         printedName = "beans"
+
+        verify()
       }
-      Conf
     }
     exits ==== List(1)
     err ==== ""

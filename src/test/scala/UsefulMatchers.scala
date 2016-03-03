@@ -13,7 +13,10 @@ trait UsefulMatchers extends FunSuite with Matchers {
     try {
       fn
     } catch {
-      case e: Throwable => e ==== ex
+      case e: Throwable =>
+        e ==== ex
+        return
     }
+    assert(false, "expected exception " + ex + ", none thrown")
   }
 }

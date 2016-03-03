@@ -5,11 +5,14 @@ import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
 class MapCodependenceTest extends FunSuite with UsefulMatchers {
+  throwError.value = true
 
   class TestConf(args: Seq[String]) extends ScallopConf(args) {
     val apples = opt[Boolean]("apples")
     val bananas = opt[Map[String,String]]("bananas")
     codependent(apples, bananas)
+
+    verify()
   }
 
   test("failing codependency including unsupplied map") {

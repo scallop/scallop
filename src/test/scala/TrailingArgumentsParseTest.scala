@@ -12,6 +12,8 @@ class TrailingArgumentsParseTest extends FunSuite with Matchers with UsefulMatch
     val conf = new ScallopConf(Seq("-a")) {
       val apple = opt[Boolean]("apple")
       val banana = trailArg[String](required = false)
+
+      verify()
     }
     conf.apple.get shouldBe Some(true)
     conf.banana.get shouldBe None
@@ -21,6 +23,8 @@ class TrailingArgumentsParseTest extends FunSuite with Matchers with UsefulMatch
     expectException(WrongOptionFormat("file", "nonexistent", "file 'nonexistent' doesn't exist")) {
       new ScallopConf(Seq("nonexistent")) {
         val file = trailArg[java.io.File]("file")
+
+        verify()
       }
     }
   }

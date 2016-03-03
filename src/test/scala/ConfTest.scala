@@ -18,6 +18,7 @@ class ConfTest extends FunSuite with Matchers with UsefulMatchers with Capturing
       val properties = props[String]('E')
       // types (:ScallopOption[Double]) can be omitted, here just for clarity
       val size:ScallopOption[Double] = trailArg[Double](required = false)
+      verify()
     }
     // that's it. Completely type-safe and convenient.
     Conf.count() should equal (4)
@@ -42,18 +43,25 @@ class ConfTest extends FunSuite with Matchers with UsefulMatchers with Capturing
       val properties = props[String]('D', descr = "some key-value pairs")
       val verbose = opt[Boolean]("verbose", descr = "use more verbose output")
       val amount = opt[Int]("amount", descr = "how many objects do you need?")
+
       val tree = new Subcommand("tree") {
         val height = opt[Double]("height", descr = "how tall should the tree be?")
         val name = trailArg[String]("tree name", descr = "tree name")
       }
+      addSubcommand(tree)
+
       val palm = new Subcommand("palm") {
         val height = opt[Double]("height", descr = "how tall should the palm be?")
         val name = trailArg[String]("tree name", descr = "palm name")
       }
+      addSubcommand(palm)
+
+      verify()
     }
     val (out, err) = captureOutput {
       Conf.builder.printHelp
     }
+
     out shouldBe """test 1.2.3 (c) 2012 Mr Placeholder
 Usage: test [OPTION]... [tree|palm] [OPTION]... [tree-name]
 test is an awesome program, which does something funny
@@ -86,7 +94,7 @@ For all other tricks, consult the documentation!
   test ("simple arg") {
     object Conf extends ScallopConf(List("-a","3")) {
       val apples = opt[Int]("apples")
-      verify
+      verify()
     }
     Conf.apples() should equal (3)
   }
@@ -94,7 +102,7 @@ For all other tricks, consult the documentation!
   test ("prorerty args") {
     object Conf extends ScallopConf(List("-Dkey1=value1", "key2=value2")) {
       val properties = props[String]('D')
-      verify
+      verify()
     }
     Conf.properties.get("key1") should equal (Some("value1"))
     Conf.properties.get("key2") should equal (Some("value2"))
@@ -105,7 +113,7 @@ For all other tricks, consult the documentation!
     object Conf extends ScallopConf(List("filename1","filename2")) {
       val file1 = trailArg[String]()
       val file2 = trailArg[String](required = false)
-      verify
+      verify()
     }
     Conf.file1() should equal ("filename1")
     Conf.file2.get should equal (Some("filename2"))
@@ -114,6 +122,7 @@ For all other tricks, consult the documentation!
   test ("trailing args - non-required, empty list arg") {
     object Conf extends ScallopConf(Nil) {
       val files = trailArg[List[String]](required = false)
+      verify()
     }
     Conf.files.get should equal (None)
   }
@@ -122,6 +131,7 @@ For all other tricks, consult the documentation!
     object Conf extends ScallopConf(Seq("-v")) {
       val verbose = opt[Boolean]("verbose")
       val files = trailArg[List[String]](required = false)
+      verify()
     }
     Conf.verbose() should equal (true)
     Conf.files.get should equal (None)
@@ -130,6 +140,7 @@ For all other tricks, consult the documentation!
   test ("trailing args - non-empty list arg") {
     object Conf extends ScallopConf(Seq("a")) {
       val files = trailArg[List[String]]()
+      verify()
     }
     Conf.files() should equal (List("a"))
   }
@@ -138,6 +149,7 @@ For all other tricks, consult the documentation!
     object Conf extends ScallopConf(Seq("-v", "a")) {
       val verbose = opt[Boolean]("verbose")
       val files = trailArg[List[String]]()
+      verify()
     }
     Conf.verbose() should equal (true)
     Conf.files() should equal (List("a"))
@@ -146,7 +158,7 @@ For all other tricks, consult the documentation!
   test ("passing to functions") {
     object Conf extends ScallopConf(List("-a","3")) {
       val apples = opt[Int]("apples")
-      verify
+      verify()
     }
     def a(conf:Conf.type) {
       conf.apples.get should equal (Some(3))
@@ -158,7 +170,7 @@ For all other tricks, consult the documentation!
     expectException(IncompleteBuildException()) {
       object Conf extends ScallopConf(List("-a")) {
         val apples = opt[Boolean]("apples").apply()
-        verify
+        verify()
       }
       Conf
     }
@@ -176,7 +188,7 @@ For all other tricks, consult the documentation!
       val applesOrElse1 = apples.orElse(Some(1))
       val applesOrElse2 = apples.filter(5<).orElse(Some(1))
       val bananas = opt[String]("bananas").collect({case b:Int => b + 1}:PartialFunction[Any,Int])
-      verify
+      verify()
     }
     Conf.applesCollect.get should equal (Some(4))
     Conf.applesFilter1.get should equal (Some(3))
@@ -192,7 +204,7 @@ For all other tricks, consult the documentation!
   test ("printing ScallopOption") {
     object Conf extends ScallopConf(List("-a","3")) {
       val apples = opt[Int]("apples")
-      verify
+      verify()
     }
     Conf.apples.toString should equal ("ScallopSome(3)")
   }
@@ -200,7 +212,7 @@ For all other tricks, consult the documentation!
   test ("is supplied - option value was supplied") {
     object Conf extends ScallopConf(List("-a","3")) {
       val apples = opt[Int]("apples")
-      verify
+      verify()
     }
     Conf.apples.isSupplied should equal (true)
   }
@@ -208,7 +220,7 @@ For all other tricks, consult the documentation!
   test ("is supplied - option value was not supplied") {
     object Conf extends ScallopConf(Nil) {
       val apples = opt[Int]("apples")
-      verify
+      verify()
     }
     Conf.apples.isSupplied should equal (false)
   }
@@ -217,7 +229,7 @@ For all other tricks, consult the documentation!
     object Conf extends ScallopConf(List("-a")) {
       val apples = opt[Boolean]("apples").map(!_)
       val bananas = opt[Boolean]("bananas").map(!_)
-      verify
+      verify()
     }
     Conf.apples() should equal (false)
     Conf.bananas() should equal (true)
@@ -227,7 +239,7 @@ For all other tricks, consult the documentation!
     object Conf extends ScallopConf(List("-b","1")) {
       val bananas = opt[Int]("bananas", noshort = true)
       val bags = opt[Int]("bags")
-      verify
+      verify()
     }
     Conf.bananas.get should equal (None)
     Conf.bags.get should equal (Some(1))
@@ -236,7 +248,7 @@ For all other tricks, consult the documentation!
   test ("correct validation") {
     object Conf extends ScallopConf(List("-a","1")) {
       val apples = opt[Int]("apples", validate = (0<))
-      verify
+      verify()
     }
     Conf.apples() should equal (1)
   }
@@ -245,9 +257,9 @@ For all other tricks, consult the documentation!
     expectException(ValidationFailure("Validation failure for 'apples' option parameters: 1")) {
       object Conf extends ScallopConf(List("-a","1")) {
         val apples = opt[Int]("apples", validate = (0>))
-        verify
+
       }
-      Conf
+      Conf.verify()
     }
   }
 
@@ -255,7 +267,7 @@ For all other tricks, consult the documentation!
     object Conf extends ScallopConf(List("-b")) {
       val apples = opt[Boolean]("apples", default = Some(true))
       val bananas = opt[Boolean]("bananas", default = Some(false))
-      verify
+      verify()
     }
     Conf.apples() should equal (true)
     Conf.bananas() should equal (true)
@@ -269,9 +281,9 @@ For all other tricks, consult the documentation!
         if (b > 0 && a % 7 == 0) Right(Unit)
         else Left("Something is wrong with composition :)")
       }
-      verify
+
     }
-    Conf
+    Conf.verify()
   }
 
   test ("custom validation - failure") {
@@ -283,9 +295,8 @@ For all other tricks, consult the documentation!
           if (b > 0 && a % 7 == 0) Right(Unit)
           else Left("Something is wrong with composition :)")
         }
-        verify
       }
-      Conf
+      Conf.verify()
     }
   }
 
@@ -298,7 +309,7 @@ For all other tricks, consult the documentation!
         case _ => Left("err")
       }
     }
-    Conf
+    Conf.verify()
   }
 
   test ("custom opt validation - failure") {
@@ -311,7 +322,7 @@ For all other tricks, consult the documentation!
           case _ => Left("err")
         }
       }
-      Conf
+      Conf.verify()
     }
   }
 
@@ -319,7 +330,7 @@ For all other tricks, consult the documentation!
     object Conf extends ScallopConf(Seq("-a", "1")) {
       val apples1 = opt[Int]("apples1")
       val apples2 = opt[Int]("apples2")
-      verify
+      verify()
     }
     Conf.apples1.get should equal (Some(1))
   }
@@ -334,35 +345,16 @@ For all other tricks, consult the documentation!
         b <- bananas
       } yield a * 2 + b * 3
       val weight2 = for { a <- apples; if a < 2; b <- bananas } yield a * 2 + b * 3
-      verify
+      verify()
     }
     Conf.weight.get should equal (Some(12))
     Conf.weight2.get should equal (None)
   }
 
-  test ("automatic verification") {
-    object Conf extends ScallopConf(Seq("-a","1")) {
-      val apples = opt[Int]("apples")
-    }
-    Conf.verified should equal (true)
-    Conf.apples() should equal (1)
-  }
-
-  test ("automatic verification, with deeper hierarcy") {
-    class AppleConf(args:Seq[String]) extends ScallopConf(args) {
-      val apples = opt[Int]("apples")
-    }
-    object Conf extends AppleConf(Seq("-a","1","-b","3")) {
-      val bananas = opt[Int]("bananas")
-    }
-    Conf.verified should equal (true)
-    Conf.apples() should equal (1)
-    Conf.bananas() should equal (3)
-  }
-
   test ("short-named property args with commas") {
     object Conf extends ScallopConf(Seq("-Akey1=1,key2=2")) {
       val app = props[Int]('A')
+      verify()
     }
     Conf.app("key1") should equal (1)
     Conf.app.get("key2") should equal (Some(2))
@@ -371,6 +363,7 @@ For all other tricks, consult the documentation!
   test ("short-named property args with commas and spaces") {
     object Conf extends ScallopConf(Seq("-A","key1=1",",","key2=2")) {
       val app = props[Int]('A')
+      verify()
     }
     Conf.app.get("key1") should equal (Some(1))
     Conf.app.get("key2") should equal (Some(2))
@@ -379,6 +372,7 @@ For all other tricks, consult the documentation!
   test ("short-named property args with commas and spaces 2") {
     object Conf extends ScallopConf(Seq("-A","key1=1,","key2=2")) {
       val app = props[Int]('A')
+      verify()
     }
     Conf.app.get("key1") should equal (Some(1))
     Conf.app.get("key2") should equal (Some(2))
@@ -387,6 +381,7 @@ For all other tricks, consult the documentation!
   test ("long-named property args") {
     object Conf extends ScallopConf(Seq("--Apples","key1=1","key2=2")) {
       val app = propsLong[Int]("Apples")
+      verify()
     }
     Conf.app.get("key1") should equal (Some(1))
     Conf.app.get("key2") should equal (Some(2))
@@ -395,6 +390,7 @@ For all other tricks, consult the documentation!
   test ("long-named property args with commas and spaces") {
     object Conf extends ScallopConf(Seq("--Apples","key1=1",",","key2=2")) {
       val app = propsLong[Int]("Apples")
+      verify()
     }
     Conf.app.get("key1") should equal (Some(1))
     Conf.app.get("key2") should equal (Some(2))
@@ -403,6 +399,7 @@ For all other tricks, consult the documentation!
   test ("toggle options - positive, long") {
     object Conf extends ScallopConf(Seq("--verbose")) {
       val verbose = toggle("verbose")
+      verify()
     }
     Conf.verbose() should equal (true)
     Conf.verbose.isSupplied should equal (true)
@@ -411,6 +408,7 @@ For all other tricks, consult the documentation!
   test ("toggle options - negative, long") {
     object Conf extends ScallopConf(Seq("--noverbose")) {
       val verbose = toggle("verbose")
+      verify()
     }
     Conf.verbose() should equal (false)
     Conf.verbose.isSupplied should equal (true)
@@ -419,6 +417,7 @@ For all other tricks, consult the documentation!
   test ("toggle options - short") {
     object Conf extends ScallopConf(Seq("-v")) {
       val verbose = toggle("verbose")
+      verify()
     }
     Conf.verbose() should equal (true)
     Conf.verbose.isSupplied should equal (true)
@@ -427,6 +426,7 @@ For all other tricks, consult the documentation!
   test ("toggle options - not supplied") {
     object Conf extends ScallopConf(Seq()) {
       val verbose = toggle("verbose")
+      verify()
     }
     Conf.verbose.get should equal (None)
     Conf.verbose.isSupplied should equal (false)
@@ -435,6 +435,7 @@ For all other tricks, consult the documentation!
   test ("toggle options - not supplied, with default") {
     object Conf extends ScallopConf(Seq()) {
       val verbose = toggle("verbose", default = Some(true))
+      verify()
     }
     Conf.verbose.get should equal (Some(true))
     Conf.verbose.isSupplied should equal (false)
@@ -444,6 +445,7 @@ For all other tricks, consult the documentation!
     object Conf extends ScallopConf(Seq("-a","1","--","-b","2")) {
       val apples = opt[Int]("apples")
       val bananas = trailArg[List[String]]("bananas")
+      verify()
     }
     Conf.apples() should equal (1)
     Conf.bananas() should equal (List("-b", "2"))
@@ -458,9 +460,10 @@ For all other tricks, consult the documentation!
     text should equal (expected)
   }
 
-  test ("sort option with arg concatenation test") {
+  test ("short option with arg concatenation test") {
     object Conf extends ScallopConf(Seq("-ffile")) {
       val file = opt[String]("file")
+      verify()
     }
     Conf.file() should equal ("file")
   }
@@ -469,6 +472,7 @@ For all other tricks, consult the documentation!
     object Conf extends ScallopConf(Seq("--output", "-", "-")) {
       val output = opt[String]("output")
       val input = trailArg[List[String]]("input")
+      verify()
     }
     Conf.output() should equal ("-")
     Conf.input() should equal (List("-"))
@@ -477,6 +481,7 @@ For all other tricks, consult the documentation!
   test ("default value of option should be lazily evaluated") {
     val conf = new ScallopConf(Seq("-a", "4")) {
       val apples = opt[Int](default = { sys.error("boom"); None })
+      verify()
     }
     conf.apples() should equal (4)
   }
@@ -484,6 +489,7 @@ For all other tricks, consult the documentation!
   test ("default value of trailing arg should be lazily evaluated") {
     val conf = new ScallopConf(Seq("4")) {
       val apples = trailArg[Int](default = { sys.error("boom"); None })
+      verify()
     }
     conf.apples() should equal (4)
   }
@@ -491,6 +497,7 @@ For all other tricks, consult the documentation!
   test ("if no arguments provided for list option, default should be returned") {
     val conf = new ScallopConf(Seq()) {
       val apples = opt[List[Int]](default = Some(List(1)))
+      verify()
     }
     conf.apples() should equal (List(1))
   }
@@ -498,6 +505,7 @@ For all other tricks, consult the documentation!
   test ("empty tally") {
     val conf = new ScallopConf(Seq()) {
       val apples = tally()
+      verify()
     }
     conf.apples() should equal (0)
     conf.apples.isSupplied should equal (false)
@@ -506,6 +514,7 @@ For all other tricks, consult the documentation!
   test ("one-arg tally") {
     val conf = new ScallopConf(Seq("-a")) {
       val apples = tally()
+      verify()
     }
     conf.apples() should equal (1)
   }
@@ -513,6 +522,7 @@ For all other tricks, consult the documentation!
   test ("two-arg tally") {
     val conf = new ScallopConf(Seq("-a", "-a")) {
       val apples = tally()
+      verify()
     }
     conf.apples() should equal (2)
   }
@@ -520,6 +530,7 @@ For all other tricks, consult the documentation!
   test ("collapsed two-arg tally") {
     val conf = new ScallopConf(Seq("-aa")) {
       val apples = tally()
+      verify()
     }
     conf.apples() should equal (2)
   }
@@ -529,6 +540,7 @@ For all other tricks, consult the documentation!
       val conf = new ScallopConf(Seq("-a", "stuff", "--verbose")) {
         val apples = tally()
         val verbose = opt[Boolean]()
+        verify()
       }
     }
   }
@@ -536,6 +548,7 @@ For all other tricks, consult the documentation!
   test ("empty list arg before empty trailing option") {
     val conf = new ScallopConf(Seq("-a")) {
       val apples = opt[List[String]](default = Some(Nil))
+      verify()
     }
     conf.apples() ==== List()
   }
@@ -544,6 +557,7 @@ For all other tricks, consult the documentation!
     val conf = new ScallopConf(Seq("-l", "1", "-l", "2", "-o", "3")) {
       val l = opt[List[String]]()
       val o = opt[Int]()
+      verify()
     }
     conf.l() ==== List("1","2")
   }
@@ -552,6 +566,7 @@ For all other tricks, consult the documentation!
     val conf = new ScallopConf(Seq("-l", "1", "-l", "2", "--", "0")) {
       val l = opt[List[String]]()
       val t = trailArg[Int](required = false)
+      verify()
     }
     conf.l() ==== List("1","2")
   }
@@ -562,6 +577,9 @@ For all other tricks, consult the documentation!
         val tree = new Subcommand("tree") {
           val apples = opt[Int]()
         }
+        addSubcommand(tree)
+
+        verify()
       }
     }
   }
@@ -577,6 +595,9 @@ For all other tricks, consult the documentation!
             else Right(Unit)
           }
         }
+        addSubcommand(tree)
+
+        verify()
       }
     }
   }
@@ -592,8 +613,37 @@ For all other tricks, consult the documentation!
             case _ => Left("both a and b must be supplied")
           }
         }
+        addSubcommand(tree)
+
+        verify()
       }
     }
+  }
+
+  test ("using mixins") {
+    class CommonOptions(args: Seq[String]) extends ScallopConf(args) {
+      val fruits = opt[Int]()
+    }
+
+    trait AppleOption { self: ScallopConf =>
+      val apples = opt[Int]()
+    }
+
+    trait BananaOption { self: ScallopConf =>
+      val bananas = opt[Int]()
+    }
+
+    class FooOptions(args: Seq[String]) extends CommonOptions(args) with AppleOption
+    class BarOptions(args: Seq[String]) extends CommonOptions(args) with AppleOption with BananaOption
+
+    val foo = new FooOptions(Seq("--apples", "42"))
+    foo.verify()
+    foo.apples() shouldBe 42
+
+    val bar = new BarOptions(Seq("--apples", "42", "--bananas", "43"))
+    bar.verify()
+    bar.apples() shouldBe 42
+    bar.bananas() shouldBe 43
   }
 
 }

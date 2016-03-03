@@ -15,6 +15,7 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
       }
     def getcf(args: Seq[String]) = new ScallopConf(args) {
       val foo = opt[Option[String]]()
+      verify()
     }
     val conf1 = getcf(Nil)
     conf1.foo.get ==== None
@@ -47,6 +48,7 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
           else Left("value of date to must be after date from")
       }
 
+      verify()
     }
 
     expectException(WrongOptionFormat("from", "201305xx", "wrong arguments format")) {
@@ -57,6 +59,8 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
   test("optDefault - no call") {
     val conf = new ScallopConf() {
       val apples = opt[Int]()(optDefault(5))
+
+      verify()
     }
     conf.apples.get ==== None
     conf.apples.isSupplied ==== false
@@ -64,6 +68,8 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
   test("optDefault - empty call") {
     val conf = new ScallopConf(Seq("-a")) {
       val apples = opt[Int]()(optDefault(5))
+
+      verify()
     }
     conf.apples.get ==== Some(5)
     conf.apples.isSupplied ==== true
@@ -71,6 +77,8 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
   test("optDefault - arg provided") {
     val conf = new ScallopConf(Seq("-a", "7")) {
       val apples = opt[Int]()(optDefault(5))
+
+      verify()
     }
     conf.apples.get ==== Some(7)
     conf.apples.isSupplied ==== true
@@ -84,6 +92,8 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
         str.toInt + 2
       })
       val banans = opt[Int]()
+
+      verify()
     }
     conf.apples.get shouldBe Some(3)
     conf.apples.get shouldBe Some(3)

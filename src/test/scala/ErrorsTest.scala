@@ -160,22 +160,24 @@ class ErrorsTest extends FunSuite with Matchers with UsefulMatchers {
   }
 
   test ("subcommand parse failure") {
-    object Conf extends ScallopConf(Seq("tree", "a")) {
-      val tree = new Subcommand("tree") {
-        val apples = trailArg[List[Int]]()
-      }
-    }
     expectException(WrongOptionFormat("apples", "a", "wrong arguments format")) {
-      Conf
+      new  ScallopConf(Seq("tree", "a")) {
+        val tree = new Subcommand("tree") {
+          val apples = trailArg[List[Int]]()
+        }
+        addSubcommand(tree)
+
+        verify()
+      }
     }
   }
 
   test ("parse failure on half-provided single-arg option") {
-    object Conf extends ScallopConf(Seq("-a")) {
-      val apples = opt[Int]("apples")
-    }
     expectException(WrongOptionFormat("apples", "", "you should provide exactly one argument")) {
-      Conf
+      new ScallopConf(Seq("-a")) {
+        val apples = opt[Int]("apples")
+        verify()
+      }
     }
   }
 }

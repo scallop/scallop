@@ -7,9 +7,11 @@ class Usability extends UsefulMatchers {
 
   test ("printing error message for single argument") {
     expectException(WrongOptionFormat("apples", "asdf", "wrong arguments format")) {
-      val conf = new ScallopConf(Seq("-a","asdf")) {
+      new ScallopConf(Seq("-a","asdf")) {
         val apples = opt[Int]("apples")
         val bananas = opt[Int]("bananas")
+
+        verify()
       }
     }
   }

@@ -13,6 +13,7 @@ class CustomErrorMessageHandlerTest extends FunSuite with UsefulMatchers {
     intercept[Err.type] {
       new ScallopConf(Seq("-a")) {
         errorMessageHandler = error => throw Err
+        verify()
       }
     }
   }

@@ -3,7 +3,7 @@ package org.rogach.scallop
 import exceptions._
 import scala.reflect.runtime.universe._
 
-trait CliOption {
+sealed trait CliOption {
 
   def longNames: List[String]
 
