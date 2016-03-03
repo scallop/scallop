@@ -38,7 +38,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     }
     out should equal ("""0.1.2
                         |some rubbish
-                        |  -a, --apples  <arg>   fresh apples! (default = 3)
+                        |  -a, --apples  <arg>   fresh apples!
                         |  -v, --verbose         very verbose
                         |      --noverbose       turn off
                         |      --help            Show help message

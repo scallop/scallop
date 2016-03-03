@@ -19,7 +19,7 @@ object Formatter {
       case Some((arg, descr, defVal)) =>
         val argPadding = " " * (if (arg.trim.startsWith("--")) 4 else 0)
         val text = wrap(
-          descr.split(" ") ++ defVal.map("(default = %s)" format _),
+          descr.split(" "),
           neededWidth - argWidth - COLUMN_PADDING
         ).map(l => " " * (argWidth + COLUMN_PADDING + INDENT) + l)
         (" " * INDENT + argPadding + arg + text.head.drop(arg.size + argPadding.size + INDENT)) :: text.tail

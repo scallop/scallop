@@ -20,7 +20,7 @@ class NormalTest extends FunSuite with Matchers with CapturingTest {
       .footer("\nFor all other tricks, consult the documentation!")
       .opt[Boolean]("donkey", descr = "use donkey mode") // simple flag option
       .opt("monkeys", default = () => Some(2), short = 'm') // you can add the default option
-                                                      // the type will be inferred
+                                                            // the type will be inferred
       .opt[Int]("num-limbs", 'k',
         "number of libms", required = true) // you can override the default short-option character
       .opt[List[Double]]("params") // default converters are provided for all primitives
@@ -52,7 +52,7 @@ Options:
 
   -Dkey=value [key=value]...   some key-value pairs
   -d, --donkey                 use donkey mode
-  -m, --monkeys  <arg>          (default = 2)
+  -m, --monkeys  <arg>
   -k, --num-limbs  <arg>       number of libms
   -p, --params  <arg>...
       --help                   Show help message
