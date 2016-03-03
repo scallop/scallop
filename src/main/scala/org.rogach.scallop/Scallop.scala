@@ -139,15 +139,25 @@ case class Scallop(
     if (args.isEmpty) acc.reverse
     else if (isOptionName(args.head) && args.head != "--") {
       if (args.head.startsWith("--")) {
-        val opt = opts find (_.longNames.contains(args.head.drop(2))) getOrElse
-                  (throw new UnknownOption(args.head.drop(2)))
-        val (before, after) = args.tail.span(isArgument)
-        if (after.isEmpty) {
-          // get the converter, proceed to trailing args parsing
-          acc.reverse ::: goParseRest(args.tail, Some((args.head.drop(2),opt)))
-        } else {
-          parse( acc = (opt -> ((args.head.drop(2), before.toList))) :: acc,
-                 args = after)
+        opts.find(_.longNames.exists(name => args.head.startsWith("--" + name + "="))) match {
+
+          // pase --arg=value option style
+          case Some(opt) =>
+            val (invocation, arg) = args.head.drop(2).span('=' != _)
+            parse(acc = (opt, (invocation, List(arg.drop(1)))) :: acc, args = args.tail)
+
+          // parse usual --arg value... option style
+          case None =>
+            val opt = opts find (_.longNames.contains(args.head.drop(2))) getOrElse
+                      (throw new UnknownOption(args.head.drop(2)))
+            val (before, after) = args.tail.span(isArgument)
+            if (after.isEmpty) {
+              // get the converter, proceed to trailing args parsing
+              acc.reverse ::: goParseRest(args.tail, Some((args.head.drop(2),opt)))
+            } else {
+              parse( acc = (opt -> ((args.head.drop(2), before.toList))) :: acc,
+                     args = after)
+            }
         }
       } else {
         if (args.head.size == 2) {

@@ -646,4 +646,42 @@ For all other tricks, consult the documentation!
     bar.bananas() shouldBe 43
   }
 
+  test ("--arg=value option style") {
+    val conf = new ScallopConf(Seq("--apples=42")) {
+      val apples = opt[Int]()
+      verify()
+    }
+
+    conf.apples() shouldBe 42
+  }
+
+  test ("pass arguments that start with dash") {
+    val conf = new ScallopConf(Seq("--apples=-1")) {
+      val apples = opt[Int]()
+      verify()
+    }
+
+    conf.apples() shouldBe (-1)
+  }
+
+  test ("pass list of arguments in --arg=value option style") {
+    val conf = new ScallopConf(Seq("--apples=-1", "--apples=-2")) {
+      val apples = opt[List[Int]]()
+      verify()
+    }
+
+    conf.apples() shouldBe List(-1, -2)
+  }
+
+  test ("handle trailing args in conjunction with --arg=value option style") {
+    val conf = new ScallopConf(Seq("--apples=-1", "basket")) {
+      val apples = opt[Int]()
+      val stuff = trailArg[String]()
+      verify()
+    }
+
+    conf.apples() shouldBe (-1)
+    conf.stuff() shouldBe "basket"
+  }
+
 }
