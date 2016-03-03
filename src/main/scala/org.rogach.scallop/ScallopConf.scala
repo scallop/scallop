@@ -262,7 +262,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * @param default default value for this option
     * @param short Overload the char that will be used as short option name. Defaults to first character of the name.
     * @param noshort If set to true, then this option will not have any short name.
-    * @param profix Prefix to name of the option, that will be used for "negative" version of the
+    * @param prefix Prefix to name of the option, that will be used for "negative" version of the
                     option.
     * @param descrYes Description for positive variant of this option.
     * @param descrNo Description for negative variant of this option.

@@ -345,6 +345,18 @@ case class Scallop(
                                                 hidden))
   }
 
+  /** Add new toggle option definition to this builer.
+    *
+    * @param name  Name for new definition, used for identification.
+    * @param default Default value
+    * @param short Name for short form of this option
+    * @param noshort If set to true, then this option will not have any short name.
+    * @param prefix Prefix to name of the option, that will be used for "negative" version of the
+                    option.
+    * @param descrYes Description for positive variant of this option.
+    * @param descrNo Description for negative variant of this option.
+    * @param hidden If set to true, then this option will not be present in auto-generated help.
+    */
   def toggle(
       name: String,
       default: () => Option[Boolean] = () => None,
