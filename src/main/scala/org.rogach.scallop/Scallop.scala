@@ -81,13 +81,13 @@ case class Scallop(
   /** Parse the argument into list of options and their arguments. */
   private def parse(args: Seq[String]): ParseResult = {
     subbuilders.filter(s => args.contains(s._1)).sortBy(s => args.indexOf(s._1)).headOption match {
-      case Some((name, sub)) => ParseResult(parse(Nil, args.takeWhile(name!=)), Some(name), args.dropWhile(name!=).drop(1).toList)
-      case None => ParseResult(parse(Nil, args))
+      case Some((name, sub)) => ParseResult(parse(Nil, args.takeWhile(name!=).toList), Some(name), args.dropWhile(name!=).drop(1).toList)
+      case None => ParseResult(parse(Nil, args.toList))
     }
   }
   @annotation.tailrec
-  private def parse(acc: Parsed, args: Seq[String]): Parsed = {
-    def goParseRest(args: Seq[String], opt: Option[(String, CliOption)]): Parsed = {
+  private def parse(acc: Parsed, args: List[String]): Parsed = {
+    def goParseRest(args: List[String], opt: Option[(String, CliOption)]): Parsed = {
       def parseRest = {
         val trailingOptions =
           opt.map(o => (o._2, o._1, true)).toList :::
@@ -136,7 +136,7 @@ case class Scallop(
       }
     }
 
-    if (args.isEmpty) acc
+    if (args.isEmpty) acc.reverse
     else if (isOptionName(args.head) && args.head != "--") {
       if (args.head.startsWith("--")) {
         val opt = opts find (_.longNames.contains(args.head.drop(2))) getOrElse
@@ -144,9 +144,9 @@ case class Scallop(
         val (before, after) = args.tail.span(isArgument)
         if (after.isEmpty) {
           // get the converter, proceed to trailing args parsing
-          acc ::: goParseRest(args.tail, Some((args.head.drop(2),opt)))
+          acc.reverse ::: goParseRest(args.tail, Some((args.head.drop(2),opt)))
         } else {
-          parse( acc = acc :+ (opt -> ((args.head.drop(2), before.toList))),
+          parse( acc = (opt -> ((args.head.drop(2), before.toList))) :: acc,
                  args = after)
         }
       } else {
@@ -156,25 +156,25 @@ case class Scallop(
           val (before, after) = args.tail.span(isArgument)
           if (after.isEmpty) {
             // get the converter, proceed to trailing args parsing
-            acc ::: goParseRest(args.tail, Some((args.head.drop(1), opt)))
+            acc.reverse ::: goParseRest(args.tail, Some((args.head.drop(1), opt)))
           } else {
-            parse( acc = acc :+ (opt -> ((args.head.drop(1), before.toList))),
+            parse( acc = (opt -> ((args.head.drop(1), before.toList))) :: acc,
                    args = after)
           }
         } else {
           val opt = getOptionWithShortName(args.head(1)) getOrElse
                     (throw new UnknownOption(args.head(1).toString))
           if (opt.converter.argType != ArgType.FLAG) {
-            parse(acc, args.head.take(2) +: args.head.drop(2) +: args.tail)
+            parse(acc, args.head.take(2) :: args.head.drop(2) :: args.tail)
           } else {
-            parse(acc, args.head.take(2) +: ("-" + args.head.drop(2)) +: args.tail)
+            parse(acc, args.head.take(2) :: ("-" + args.head.drop(2)) :: args.tail)
           }
         }
       }
     } else {
       // only trailing args left - proceed to trailing args parsing
       val trailArgs = if (args.head == "--") args.tail else args
-      acc ::: goParseRest(trailArgs, None)
+      acc.reverse ::: goParseRest(trailArgs, None)
     }
   }
 

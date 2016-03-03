@@ -1,3 +1,5 @@
+package org.rogach.scallop
+
 import org.scalatest.FunSuite
 import org.scalatest.Matchers
 import org.rogach.scallop._
@@ -42,11 +44,12 @@ class LoadTest extends FunSuite with Matchers {
   }
 
   test ("too many options") {
-    val opts = List.fill(10000)(List("-a","1")).flatten
+    val N = 100000
+    val opts = List.fill(N)(List("-a","1")).flatten
     object Conf extends ScallopConf(opts) {
       val apples = opt[List[Int]]("apples")
     }
-    Conf.apples() should have size (10000)
+    Conf.apples() should have size (N)
   }
 
 }
