@@ -1,12 +1,13 @@
 Scallop
 ========
-A simple command-line arguments parsing library for Scala, written in spirit of Ruby's [Trollop](http://trollop.rubyforge.org/). Cross-built for Scala 2.10 and 2.11.
+A simple command-line arguments parsing library for Scala, written in spirit of Ruby's [Trollop](http://trollop.rubyforge.org/). Cross-built for Scala 2.10, 2.11 and latest 2.12 milestone.
 
 Scallop supports:
 
 * flag, single-value and multiple value options
 * POSIX-style short option names (-a) with grouping (-abc)
-* GNU-style long option names (--opt)
+* GNU-style long option names (--opt, --opt=value)
+* unnamed integer options, like GNU tail (-42)
 * Property arguments (-Dkey=value, -D key1=value key2=value)
 * Non-string types of options and properties values (with extendable converters)
 * Powerful matching on trailing args
@@ -22,8 +23,14 @@ Installation
 Add following to your build.sbt:
 
 ```scala
-libraryDependencies += "org.rogach" %% "scallop" % "0.9.6"
+libraryDependencies += "org.rogach" %% "scallop" % "1.0.0"
 ```
+
+**Migration from 0.x versions:** due to deprecation of DelayedInit trait, automatic verification
+of configuration objects no longer works - now you must call `.verify()` on your config explicitly
+before retrieving options.
+Also, if you use subcommands, you will have to add them to parent config explicitly by calling
+`.addSubcommand()` method.
 
 Quick example
 =============
@@ -90,9 +97,13 @@ object Conf extends ScallopConf(Seq("sub1", "sub2", "sub3", "sub4", "win!")) {
         val sub4 = new Subcommand("sub4") {
           val opts = trailArg[List[String]]()
         }
+        addSubcommand(sub4)
       }
+      addSubcommand(sub3)
     }
+    addSubcommand(sub2)
   }
+  addSubcommand(sub1)
   verify()
 }
 Conf.subcommands should equal (List(Conf.sub1, Conf.sub1.sub2, Conf.sub1.sub2.sub3, Conf.sub1.sub2.sub3.sub4))
