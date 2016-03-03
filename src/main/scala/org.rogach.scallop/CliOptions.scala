@@ -141,6 +141,27 @@ case class TrailingArgsOption(
   def helpInfo(sh: List[Char]) = List((argLine(sh), descr, default().map(_.toString)))
 }
 
+case class NumberArgOption(
+    name: String,
+    required: Boolean,
+    descr: String,
+    converter: ValueConverter[Long],
+    validator: (TypeTag[_],Any) => Boolean,
+    default: () => Option[Long],
+    hidden: Boolean)
+  extends CliOption {
+
+  def isPositional = false
+  def longNames = Nil
+  def shortNames = Nil
+  def requiredShortNames = Nil
+
+  def argLine(sh: List[Char]): String =
+    "-<%s>" format name
+
+  def helpInfo(sh: List[Char]) = List((argLine(sh), descr, default().map(_.toString)))
+}
+
 case class ToggleOption(
     name: String,
     default: () => Option[Boolean],

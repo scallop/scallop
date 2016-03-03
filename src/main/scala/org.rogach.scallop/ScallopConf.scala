@@ -223,8 +223,11 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   /** Add new trailing argument definition to this config, and get a holder for it's value.
     *
     * @param name Name for new definition, used for identification.
+    * @param descr Description for this option, for help text.
+    * @param validate The function that validates the parsed value.
     * @param required Is this trailing argument required? Defaults to true.
     * @param default If this argument is not required and not found in the argument list, use this value.
+    * @param hidden If set to true then this option will not be present in auto-generated help.
     */
   def trailArg[A](
       name: String = null,
@@ -244,6 +247,44 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       override lazy val fn = { (name: String) =>
         assertVerified
         rootConfig.builder.get[A](getPrefixedName(name))(conv.tag)
+      }
+      override lazy val supplied = {
+        assertVerified
+        rootConfig.builder.isSupplied(getPrefixedName(name))
+      }
+    }
+  }
+
+  /** Add new number argument definition to this config and get a holder for it's value.
+    *
+    * @param name Name for new definition, used for identification.
+    * @param required Is this trailing argument required? Defaults to true.
+    * @param descr Description for this option, for help text.
+    * @param default If this argument is not required and not found in the argument list, use this value.
+    * @param validate The function that validates the parsed value.
+    * @param hidden If set to true then this option will not be present in auto-generated help.
+    */
+  def number(
+      name: String = null,
+      descr: String = "",
+      validate: Long => Boolean = (_:Long) => true,
+      required: Boolean = false,
+      default: => Option[Long] = None,
+      hidden: Boolean = false)
+      (implicit conv: ValueConverter[Long]): ScallopOption[Long] = {
+
+    val resolvedName =
+      if (name == null) {
+        if (guessOptionName) genName()
+        else throw new IllegalArgumentException("You should supply a name for your number option!")
+      } else name
+
+    editBuilder(_.number(resolvedName, required, descr, () => default, validate, hidden)(conv))
+
+    new ScallopOption[Long](resolvedName) {
+      override lazy val fn = { (name: String) =>
+        assertVerified
+        rootConfig.builder.get[Long](getPrefixedName(name))((conv.tag))
       }
       override lazy val supplied = {
         assertVerified
@@ -519,9 +560,10 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
         editBuilder(e => e.copy(opts = e.opts.map { o =>
           if (o.name == shortGenName) {
             o match {
-              case so: SimpleOption => so.copy(name = newName)
-              case to: TrailingArgsOption => to.copy(name = newName)
-              case to: ToggleOption => to.copy(name = newName)
+              case o: SimpleOption => o.copy(name = newName)
+              case o: TrailingArgsOption => o.copy(name = newName)
+              case o: ToggleOption => o.copy(name = newName)
+              case o: NumberArgOption => o.copy(name = newName)
               case _ => o
             }
           } else o

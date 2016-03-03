@@ -181,6 +181,16 @@ case class Scallop(
           }
         }
       }
+    } else if (args.head.matches("-[0-9]+")) {
+      // parse number-only options
+      val alreadyMatchedNumbers = acc.count(_._1.isInstanceOf[NumberArgOption])
+      opts.filter(_.isInstanceOf[NumberArgOption]).drop(alreadyMatchedNumbers).headOption match {
+        case Some(opt) =>
+          val num = args.head.drop(1)
+          parse(acc = (opt, (num, List(num))) :: acc, args = args.tail)
+        case None =>
+          throw new UnknownOption(args.head)
+      }
     } else {
       // only trailing args left - proceed to trailing args parsing
       val trailArgs = if (args.head == "--") args.tail else args
@@ -279,7 +289,6 @@ case class Scallop(
                                           noshort))
   }
 
-
   /** Add new property option definition to this builder.
     *
     * @param name Char, that will be used as prefix for property arguments.
@@ -314,6 +323,7 @@ case class Scallop(
     *
     * @param name Name for new definition, used for identification.
     * @param required Is this trailing argument required? Defaults to true.
+    * @param descr Description for this option, for help text.
     * @param default If this argument is not required and not found in the argument list, use this value.
     * @param validate The function, that validates the parsed value
     */
@@ -343,6 +353,39 @@ case class Scallop(
                                                 validator,
                                                 defaultA,
                                                 hidden))
+  }
+
+  /** Add new number argument definition to this builder.
+    *
+    * @param name Name for new definition, used for identification.
+    * @param required Is this trailing argument required? Defaults to true.
+    * @param descr Description for this option, for help text.
+    * @param default If this argument is not required and not found in the argument list, use this value.
+    * @param validate The function that validates the parsed value.
+    * @param hidden If set to true then this option will not be present in auto-generated help.
+    */
+  def number(
+      name: String,
+      required: Boolean = false,
+      descr: String = "",
+      default: () => Option[Long] = () => None,
+      validate: Long => Boolean = ((_:Long) => true),
+      hidden: Boolean = false)
+      (implicit conv: ValueConverter[Long]): Scallop = {
+
+    val validator = { (tt: TypeTag[_], a: Any) =>
+      if (conv.tag.tpe <:< tt.tpe) validate(a.asInstanceOf[Long])
+      else false
+    }
+    this.copy(opts = opts :+ NumberArgOption(
+      name,
+      required,
+      descr,
+      conv,
+      validator,
+      default,
+      hidden
+    ))
   }
 
   /** Add new toggle option definition to this builer.
