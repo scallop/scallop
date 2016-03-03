@@ -76,4 +76,18 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
     conf.apples.isSupplied ==== true
   }
 
+  test ("value converter is only called once when option is retrieved multiple times") {
+    var callCount = 0
+    val conf = new ScallopConf(Seq("-a", "1")) {
+      val apples = opt[Int]()(singleArgConverter { str =>
+        callCount += 1
+        str.toInt + 2
+      })
+      val banans = opt[Int]()
+    }
+    conf.apples.get shouldBe Some(3)
+    conf.apples.get shouldBe Some(3)
+    callCount shouldBe 1
+  }
+
 }

@@ -15,6 +15,17 @@ trait ValueConverter[A] { parent =>
     */
   def parse(s: List[(String, List[String])]): Either[String, Option[A]]
 
+  private val parseCache = new scala.collection.mutable.HashMap[List[(String, List[String])], Either[String, Option[A]]]()
+  def parseCached(s: List[(String, List[String])]): Either[String, Option[A]] = {
+    parseCache.get(s) match {
+      case Some(v) => v
+      case None =>
+        val v = parse(s)
+        parseCache.put(s, v)
+        v
+    }
+  }
+
   /** TypeTag, holding the type for this builder. */
   val tag: TypeTag[A]
 

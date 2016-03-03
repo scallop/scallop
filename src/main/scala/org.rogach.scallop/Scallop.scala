@@ -495,7 +495,7 @@ case class Scallop(
     } else {
       opts find (_.name == name) map { opt =>
         val args = parsed.opts.filter(_._1 == opt).map(_._2)
-        opt.converter.parse(args).right.get.isDefined
+        opt.converter.parseCached(args).right.get.isDefined
       } getOrElse(throw new UnknownOption(name))
     }
   }
@@ -514,7 +514,7 @@ case class Scallop(
         if (!(opt.converter.tag.tpe <:< tt.tpe))
           throw new WrongTypeRequest(tt, opt.converter.tag)
         val args = parsed.opts.filter(_._1 == opt).map(_._2)
-        opt.converter.parse(args).right
+        opt.converter.parseCached(args).right
           .getOrElse(if (opt.required)  throw new MajorInternalException else None)
           .orElse(opt.default())
       }.getOrElse(throw new UnknownOption(name)).asInstanceOf[Option[A]]
@@ -589,7 +589,7 @@ case class Scallop(
 
     opts foreach { o =>
       val args = parsed.opts filter (_._1 == o) map (_._2)
-      val res = o.converter.parse(args)
+      val res = o.converter.parseCached(args)
       res.left.foreach { msg =>
         throw new WrongOptionFormat(o.name, args.map(_._2.mkString(" ")).mkString(" "), msg)
       }

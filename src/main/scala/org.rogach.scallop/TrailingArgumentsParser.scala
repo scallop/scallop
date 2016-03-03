@@ -65,7 +65,7 @@ object TrailingArgumentsParser {
 
           val thisResult =
             if (mustMatch || matchLength > 0)
-              converter.parse(List((invocation, matchArgs)))
+              converter.parseCached(List((invocation, matchArgs)))
             else Right(Nil)
 
           val ParseResult(restResult, failCount, excess) = parse(restArgs, rest)
