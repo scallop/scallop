@@ -256,4 +256,29 @@ class SubcommandsTest extends UsefulMatchers {
     conf.tree.apples.get shouldBe Some(42)
   }
 
+  test ("isSupplied on subcommand options - true") {
+    val conf = new ScallopConf(Seq("tree", "--apples")) {
+      val tree = new Subcommand("tree") {
+        val apples = opt[Boolean]()
+      }
+      addSubcommand(tree)
+
+      verify()
+    }
+
+    conf.tree.apples.isSupplied shouldBe true
+  }
+
+  test ("isSupplied on subcommand options - false") {
+    val conf = new ScallopConf(Seq("tree")) {
+      val tree = new Subcommand("tree") {
+        val apples = opt[Boolean]()
+      }
+      addSubcommand(tree)
+
+      verify()
+    }
+
+    conf.tree.apples.isSupplied shouldBe false
+  }
 }
