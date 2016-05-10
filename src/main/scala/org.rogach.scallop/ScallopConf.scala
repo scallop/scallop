@@ -57,6 +57,14 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
   /** If set to true, scallop would try to guess missing option names from the names of their fields. */
   def guessOptionName_=(v: Boolean) { _guessOptionName = v }
 
+  def appendDefaultToDescription = builder.appendDefaultToDescription
+
+  /** If set to true, scallop would append auto-generated text about default option value
+    * to option descriptions. */
+  def appendDefaultToDescription_=(v: Boolean) {
+    editBuilder(_.copy(appendDefaultToDescription = v))
+  }
+
   private[this] var gen = 0
   private[this] def genName() = { gen += 1; "\t%d" format gen }
 

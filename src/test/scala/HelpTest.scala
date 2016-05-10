@@ -330,4 +330,58 @@ class HelpTest extends UsefulMatchers with CapturingTest {
                         |Latin name: Prunus persica
                         |""".stripMargin)
   }
+
+  test ("append default values to help output if requested") {
+    object Conf extends ScallopConf(Nil) {
+      appendDefaultToDescription = true
+      val apples = opt[Int](descr = "amount of apples", default = Some(42))
+      verify()
+    }
+    Conf.builder.help ====
+      """  -a, --apples  <arg>   amount of apples (default = 42)
+        |      --help            Show help message""".stripMargin
+  }
+
+  test ("append default values to help output of subcommand if parent has this setting") {
+    val (out, _, _) = captureOutputAndExits {
+      new ScallopConf(Seq("--help")) {
+        appendDefaultToDescription = true
+        val tree = new Subcommand("tree") {
+          val apples = opt[Int](descr = "how many apples?", default = Some(42))
+        }
+        addSubcommand(tree)
+
+        verify()
+      }
+    }
+
+    out ====
+     """      --help   Show help message
+       |
+       |Subcommand: tree
+       |  -a, --apples  <arg>   how many apples? (default = 42)
+       |      --help            Show help message
+       |""".stripMargin
+
+  }
+
+  test ("handle default value printing in subcommand help") {
+    val (out, _, _) = captureOutputAndExits {
+      new ScallopConf(Seq("tree", "--help")) {
+        appendDefaultToDescription = true
+        val tree = new Subcommand("tree") {
+          val apples = opt[Int](descr = "how many apples?", default = Some(42))
+        }
+        addSubcommand(tree)
+
+        verify()
+      }
+    }
+
+    out ====
+     """  -a, --apples  <arg>   how many apples? (default = 42)
+       |      --help            Show help message
+       |""".stripMargin
+
+  }
 }

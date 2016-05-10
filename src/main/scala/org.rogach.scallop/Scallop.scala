@@ -68,7 +68,10 @@ case class Scallop(
     descr: String = "",
     helpWidth: Option[Int] = None,
     shortSubcommandsHelp: Boolean = false,
-    subbuilders: List[(String, Scallop)] = Nil) {
+    appendDefaultToDescription: Boolean = false,
+    subbuilders: List[(String, Scallop)] = Nil,
+    var parent: Option[Scallop] = None
+  ) {
 
   type Parsed = List[(CliOption, (String, List[String]))]
 
@@ -423,7 +426,10 @@ case class Scallop(
   /** Adds a subbuilder (subcommand) to this builder.
     * @param name All arguments after this string would be routed to this builder.
     */
-  def addSubBuilder(name: String, builder: Scallop) = this.copy(subbuilders = subbuilders :+ (name -> builder))
+  def addSubBuilder(name: String, builder: Scallop) = {
+    builder.parent = Some(this)
+    this.copy(subbuilders = subbuilders :+ (name -> builder))
+  }
 
   /** Traverses the tree of subbuilders, using the provided name.
     * @param name Names of subcommand names, that lead to the needed builder, separated by \\0.
@@ -476,6 +482,9 @@ case class Scallop(
   /** Explicitly sets the needed width for the help printout. */
   def setHelpWidth(w: Int) = this.copy(helpWidth = Some(w))
 
+  private def needToAppendDefaultToDescription: Boolean =
+    appendDefaultToDescription || parent.exists(_.needToAppendDefaultToDescription)
+
   /** Get help on options from this builder. The resulting help is carefully formatted to required number of columns (default = 80, change with .setHelpWidth method),
     * and contains info on properties, options and trailing arguments.
     */
@@ -501,7 +510,9 @@ case class Scallop(
         case None => List(None)
         case Some(o) => o.helpInfo(getOptionShortNames(o)).map(Some(_))
       },
-      helpWidth)
+      helpWidth,
+      needToAppendDefaultToDescription
+    )
     val subcommandsHelp = if (shortSubcommandsHelp) {
       subbuilders.headOption.map { _ =>
         val maxCommandLength = subbuilders.map(_._1.size).max
@@ -520,7 +531,9 @@ case class Scallop(
     }
     val trailHelp = Formatter format (
       opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)) map (Some(_)),
-      helpWidth)
+      helpWidth,
+      needToAppendDefaultToDescription
+    )
     val formattedHelp = if (opts filter (_.isPositional) isEmpty) {
       optsHelp + subcommandsHelp
     } else {
