@@ -4,7 +4,7 @@ name := "scallop"
 
 scalaVersion := "2.11.7"
 
-crossScalaVersions := Seq("2.10.6", "2.11.7", "2.12.0-M3")
+crossScalaVersions := Seq("2.10.6", "2.11.7", "2.12.0-M3", "2.12.0-M4")
 
 scalacOptions ++= Seq(
   "-deprecation",

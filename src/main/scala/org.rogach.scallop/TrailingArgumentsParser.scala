@@ -52,6 +52,7 @@ object TrailingArgumentsParser {
           case ArgType.FLAG => 0
           case ArgType.SINGLE => math.min(1, args.size)
           case ArgType.LIST => args.size
+          case argType => sys.error("unsupported arg type: " + argType)
         }
         var minLength = if (converter.argType != ArgType.FLAG && mustMatch) 1 else 0
 
