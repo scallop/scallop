@@ -47,7 +47,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Scallop</span><span class="params">(<span name="args">args: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Nil</span></span>, <span name="opts">opts: <span class="extype" name="scala.List">List</span>[<a href="CliOption.html" class="extype" name="org.rogach.scallop.CliOption">CliOption</a>] = <span class="symbol">Nil</span></span>, <span name="mainOpts">mainOpts: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Nil</span></span>, <span name="vers">vers: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="bann">bann: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="foot">foot: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="descr">descr: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="helpWidth">helpWidth: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">None</span></span>, <span name="shortSubcommandsHelp">shortSubcommandsHelp: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="subbuilders">subbuilders: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a>)] = <span class="symbol">Nil</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Scallop</span><span class="params">(<span name="args">args: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Nil</span></span>, <span name="opts">opts: <span class="extype" name="scala.List">List</span>[<a href="CliOption.html" class="extype" name="org.rogach.scallop.CliOption">CliOption</a>] = <span class="symbol">Nil</span></span>, <span name="mainOpts">mainOpts: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Nil</span></span>, <span name="vers">vers: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="bann">bann: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="foot">foot: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="descr">descr: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="helpWidth">helpWidth: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">None</span></span>, <span name="shortSubcommandsHelp">shortSubcommandsHelp: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="appendDefaultToDescription">appendDefaultToDescription: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="subbuilders">subbuilders: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a>)] = <span class="symbol">Nil</span></span>, <span name="parent">parent: <span class="extype" name="scala.Option">Option</span>[<a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -92,7 +92,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="org.rogach.scallop.Scallop#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(args:Seq[String],opts:List[org.rogach.scallop.CliOption],mainOpts:List[String],vers:Option[String],bann:Option[String],foot:Option[String],descr:String,helpWidth:Option[Int],shortSubcommandsHelp:Boolean,subbuilders:List[(String,org.rogach.scallop.Scallop)]):org.rogach.scallop.Scallop"></a>
+      <a id="&lt;init&gt;(args:Seq[String],opts:List[org.rogach.scallop.CliOption],mainOpts:List[String],vers:Option[String],bann:Option[String],foot:Option[String],descr:String,helpWidth:Option[Int],shortSubcommandsHelp:Boolean,appendDefaultToDescription:Boolean,subbuilders:List[(String,org.rogach.scallop.Scallop)],parent:Option[org.rogach.scallop.Scallop]):org.rogach.scallop.Scallop"></a>
       <a id="&lt;init&gt;:Scallop"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -100,10 +100,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Scallop</span><span class="params">(<span name="args">args: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Nil</span></span>, <span name="opts">opts: <span class="extype" name="scala.List">List</span>[<a href="CliOption.html" class="extype" name="org.rogach.scallop.CliOption">CliOption</a>] = <span class="symbol">Nil</span></span>, <span name="mainOpts">mainOpts: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Nil</span></span>, <span name="vers">vers: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="bann">bann: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="foot">foot: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="descr">descr: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="helpWidth">helpWidth: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">None</span></span>, <span name="shortSubcommandsHelp">shortSubcommandsHelp: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="subbuilders">subbuilders: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a>)] = <span class="symbol">Nil</span></span>)</span>
+        <span class="name">Scallop</span><span class="params">(<span name="args">args: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Nil</span></span>, <span name="opts">opts: <span class="extype" name="scala.List">List</span>[<a href="CliOption.html" class="extype" name="org.rogach.scallop.CliOption">CliOption</a>] = <span class="symbol">Nil</span></span>, <span name="mainOpts">mainOpts: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Nil</span></span>, <span name="vers">vers: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="bann">bann: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="foot">foot: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="descr">descr: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="helpWidth">helpWidth: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">None</span></span>, <span name="shortSubcommandsHelp">shortSubcommandsHelp: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="appendDefaultToDescription">appendDefaultToDescription: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="subbuilders">subbuilders: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a>)] = <span class="symbol">Nil</span></span>, <span name="parent">parent: <span class="extype" name="scala.Option">Option</span>[<a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a>] = <span class="symbol">None</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.Scallop@&lt;init&gt;(args:Seq[String],opts:List[org.rogach.scallop.CliOption],mainOpts:List[String],vers:Option[String],bann:Option[String],foot:Option[String],descr:String,helpWidth:Option[Int],shortSubcommandsHelp:Boolean,subbuilders:List[(String,org.rogach.scallop.Scallop)]):org.rogach.scallop.Scallop" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.Scallop@&lt;init&gt;(args:Seq[String],opts:List[org.rogach.scallop.CliOption],mainOpts:List[String],vers:Option[String],bann:Option[String],foot:Option[String],descr:String,helpWidth:Option[Int],shortSubcommandsHelp:Boolean,appendDefaultToDescription:Boolean,subbuilders:List[(String,org.rogach.scallop.Scallop)],parent:Option[org.rogach.scallop.Scallop]):org.rogach.scallop.Scallop" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -222,6 +222,23 @@
       </a>
     </span>
       <p class="shortcomment cmt">Adds a subbuilder (subcommand) to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a subbuilder (subcommand) to this builder.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>All arguments after this string would be routed to this builder.</p></dd></dl></div>
+    </li><li name="org.rogach.scallop.Scallop#appendDefaultToDescription" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="appendDefaultToDescription:Boolean"></a>
+      <a id="appendDefaultToDescription:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">appendDefaultToDescription</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.Scallop@appendDefaultToDescription:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="org.rogach.scallop.Scallop#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="apply[A](name:Char)(implicittt:reflect.runtime.universe.TypeTag[A]):A"></a>
       <a id="apply[A](Char)(scala.reflect.api.JavaUniverse.TypeTag[A]):A"></a>
@@ -825,6 +842,23 @@ and contains info on properties, options and trailing arguments.
       </a>
     </span>
       <p class="shortcomment cmt">Options definitions.</p>
+    </li><li name="org.rogach.scallop.Scallop#parent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parent:Option[org.rogach.scallop.Scallop]"></a>
+      <a id="parent:Option[Scallop]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parent</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.Scallop@parent:Option[org.rogach.scallop.Scallop]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="org.rogach.scallop.Scallop#printHelp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="printHelp():Unit"></a>
       <a id="printHelp():Unit"></a>
