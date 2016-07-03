@@ -13,9 +13,13 @@ trait ScallopConfValidations { this: ScallopConf =>
     * @param fn Validation function. In case of error, it should return Left with the error message.
     */
   def validate[[#A1#]]([#o1: ScallopOption[A1]#])(fn: ([#A1#]) => Either[String, Unit]) {
-    codependent([#o1#])
+    allDefinedOrUndefined([#o1#])
     validations :+= { () =>
-      fn([#o1()#])
+      if (List([#o1.get#]).forall(_.isDefined)) {
+        fn([#o1()#])
+      } else {
+        Right(())
+      }
     }
   }#
   ]

@@ -326,6 +326,31 @@ For all other tricks, consult the documentation!
     }
   }
 
+  test ("validate should fall back to default values if they are present") {
+    object Conf extends ScallopConf(List("--start", "7")) {
+      val start = opt[Int]("start", default = Some(1))
+      val end = opt[Int]("end", default = Some(10))
+      validate (start, end) { (s,e) =>
+        if (s < e) Right(Unit)
+        else Left("Start must be before end")
+      }
+    }
+    Conf.verify()
+  }
+
+  test ("validate function should not run if all options are not provided") {
+    object Conf extends ScallopConf(List()) {
+      val start = opt[Int]("start")
+      val end = opt[Int]("end")
+      validate (start, end) { (s,e) =>
+        if (s <= e) Right(Unit)
+        else Left("Start must be before end")
+      }
+
+    }
+    Conf.verify()
+  }
+
   test ("numbers in option names") {
     object Conf extends ScallopConf(Seq("-a", "1")) {
       val apples1 = opt[Int]("apples1")

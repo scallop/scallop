@@ -207,6 +207,48 @@ class OptionDependenciesTest extends FunSuite with UsefulMatchers {
     }
   }
 
+  test ("option set validation, all defined or not defined, no default values, success") {
+    new ScallopConf(List("-a","1","-b","2")){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      allDefinedOrUndefined(apples, bananas)
+
+      verify()
+    }
+  }
+
+  test ("option set validation, all defined or not defined, one default value, success") {
+    new ScallopConf(List("-b","2")){
+      val apples = opt[Int]("apples", default = Some(1))
+      val bananas = opt[Int]("bananas")
+      allDefinedOrUndefined(apples, bananas)
+
+      verify()
+    }
+  }
+
+  test ("option set validation, all defined or not defined, both default values, success") {
+    new ScallopConf(List()){
+      val apples = opt[Int]("apples", default = Some(1))
+      val bananas = opt[Int]("bananas", default = Some(2))
+      allDefinedOrUndefined(apples, bananas)
+
+      verify()
+    }
+  }
+
+  test ("option set validation, all defined or not defined, one default value, failure") {
+    expectException(ValidationFailure("Either all or none of the following options should be defined, because they are co-dependent: apples, bananas")) {
+      new ScallopConf(List()){
+        val apples = opt[Int]("apples", default = Some(1))
+        val bananas = opt[Int]("bananas")
+        allDefinedOrUndefined(apples, bananas)
+
+        verify()
+      }
+    }
+  }
+
   test ("mutually exclusive flag options - validation success") {
     new ScallopConf(List("-a")) {
       val apples = opt[Boolean]("apples")
