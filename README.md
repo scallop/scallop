@@ -23,7 +23,7 @@ Installation
 Add following to your build.sbt:
 
 ```scala
-libraryDependencies += "org.rogach" %% "scallop" % "1.0.1"
+libraryDependencies += "org.rogach" %% "scallop" % "1.0.2"
 ```
 
 **Migration from 0.x versions:** due to deprecation of DelayedInit trait, automatic verification
