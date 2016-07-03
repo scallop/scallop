@@ -529,12 +529,13 @@ case class Scallop(
       }.mkString("\n")
       if (subHelp.nonEmpty) "\n\n" + subHelp else subHelp
     }
+    val trailOpts = opts filter (_.isPositional) filter (!_.hidden)
     val trailHelp = Formatter format (
-      opts filter (_.isPositional) filter (!_.hidden) flatMap (_.helpInfo(Nil)) map (Some(_)),
+      trailOpts flatMap (_.helpInfo(Nil)) map (Some(_)),
       helpWidth,
       needToAppendDefaultToDescription
     )
-    val formattedHelp = if (opts filter (_.isPositional) isEmpty) {
+    val formattedHelp = if (trailOpts isEmpty) {
       optsHelp + subcommandsHelp
     } else {
       optsHelp + "\n\n trailing arguments:\n" + trailHelp + subcommandsHelp

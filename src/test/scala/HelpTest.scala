@@ -28,6 +28,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
           val palm = new Subcommand("palm") {
             val leaves = opt[Int]("leaves", descr = "how many leaves?")
+            val hiddenTrail = trailArg[String]("secret", descr = "secret trailing arg", hidden = true)
           }
           addSubcommand(palm)
 
