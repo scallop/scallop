@@ -21,7 +21,7 @@ object Formatter {
         val text = wrap(
           descr.split(" ") ++
             (if (appendDefault) defVal.map("(default = %s)" format _) else Nil),
-          neededWidth - argWidth - COLUMN_PADDING
+          neededWidth - argWidth - COLUMN_PADDING - INDENT
         ).map(l => " " * (argWidth + COLUMN_PADDING + INDENT) + l)
         (" " * INDENT + argPadding + arg + text.head.drop(arg.size + argPadding.size + INDENT)) :: text.tail
       case None => // insert empty line
