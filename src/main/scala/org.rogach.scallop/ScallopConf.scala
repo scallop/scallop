@@ -351,7 +351,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       builder.verify
       runValidations()
     } catch {
-      case e: Throwable =>
+      case e: Exception =>
         onError(e)
     }
   }
