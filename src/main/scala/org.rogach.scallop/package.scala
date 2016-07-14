@@ -35,13 +35,13 @@ package object scallop {
   implicit val doubleConverter = singleArgConverter[Double](_.toDouble)
   implicit val charConverter = singleArgConverter[Char](_.head)
   implicit val stringConverter = singleArgConverter[String](a=>a)
-  implicit val fileConverter = stringConverter.map(new File(_)).flatMap { f =>
+  implicit val fileConverter = singleArgConverter(new File(_)).flatMap { f =>
     if (f.exists) Right(Some(f)) else Left("file '%s' doesn't exist" format f)
   }
-  implicit val urlConverter = stringConverter.map(new URL(_))
-  implicit val uriConverter = stringConverter.map(new URI(_))
-  implicit val bigIntConverter = stringConverter.map(BigInt(_))
-  implicit val bigDecimalConverter = stringConverter.map(BigDecimal(_))
+  implicit val urlConverter = singleArgConverter(new URL(_))
+  implicit val uriConverter = singleArgConverter(new URI(_))
+  implicit val bigIntConverter = singleArgConverter(BigInt(_))
+  implicit val bigDecimalConverter = singleArgConverter(BigDecimal(_))
 
   def listArgConverter[A](conv: String => A)(implicit tt: TypeTag[List[A]])  = new ValueConverter[List[A]] {
     def parse(s:List[(String, List[String])]) = {
