@@ -597,7 +597,7 @@ For all other tricks, consult the documentation!
   }
 
   test ("verification on subconfigs") {
-    expectException(WrongOptionFormat("apples", "b", "wrong arguments format")) {
+    expectException(WrongOptionFormat("apples", "b", "bad Int value")) {
       val conf = new ScallopConf(Seq("tree", "-a", "b")) {
         val tree = new Subcommand("tree") {
           val apples = opt[Int]()

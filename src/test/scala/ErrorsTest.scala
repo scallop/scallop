@@ -75,7 +75,7 @@ class ErrorsTest extends FunSuite with Matchers with UsefulMatchers {
   }
 
   test ("option verification failure") {
-    expectException(WrongOptionFormat("ang", "1.2", "wrong arguments format")) {
+    expectException(WrongOptionFormat("ang", "1.2", "bad Int value")) {
       val opts = Scallop(List("-a","1.2", "-b"))
         .opt[Int]("ang")
         .opt[Boolean]("bang")
