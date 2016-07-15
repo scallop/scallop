@@ -6,9 +6,9 @@ import reflect.runtime.universe._
 sealed trait ScallopResult
 
 /** Thrown when user requested help output (via "--help") */
-case class Help(command: String) extends Throwable with ScallopResult
+case class Help(command: String) extends Exception with ScallopResult
 /** Thrown when user requested version printout (via "--version") */
-case object Version extends Throwable with ScallopResult
+case object Version extends Exception with ScallopResult
 /** Extractor object, for matching on both Help and Version results. */
 object Exit {
   def unapply(r: ScallopResult) = r match {

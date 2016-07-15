@@ -19,7 +19,7 @@ package object scallop {
     def parse(s: List[(String, List[String])]) = {
       s match {
         case (_, i :: Nil) :: Nil =>
-          try { Right(Some(conv(i))) } catch { case _: Throwable => Left("wrong arguments format") }
+          try { Right(Some(conv(i))) } catch { case _: Exception => Left("wrong arguments format") }
         case Nil => Right(None)
         case _ => Left("you should provide exactly one argument for this option")
       }
@@ -35,13 +35,13 @@ package object scallop {
   implicit val doubleConverter = singleArgConverter[Double](_.toDouble)
   implicit val charConverter = singleArgConverter[Char](_.head)
   implicit val stringConverter = singleArgConverter[String](a=>a)
-  implicit val fileConverter = stringConverter.map(new File(_)).flatMap { f =>
+  implicit val fileConverter = singleArgConverter(new File(_)).flatMap { f =>
     if (f.exists) Right(Some(f)) else Left("file '%s' doesn't exist" format f)
   }
-  implicit val urlConverter = stringConverter.map(new URL(_))
-  implicit val uriConverter = stringConverter.map(new URI(_))
-  implicit val bigIntConverter = stringConverter.map(BigInt(_))
-  implicit val bigDecimalConverter = stringConverter.map(BigDecimal(_))
+  implicit val urlConverter = singleArgConverter(new URL(_))
+  implicit val uriConverter = singleArgConverter(new URI(_))
+  implicit val bigIntConverter = singleArgConverter(BigInt(_))
+  implicit val bigDecimalConverter = singleArgConverter(BigDecimal(_))
 
   def listArgConverter[A](conv: String => A)(implicit tt: TypeTag[List[A]])  = new ValueConverter[List[A]] {
     def parse(s:List[(String, List[String])]) = {
@@ -49,7 +49,7 @@ package object scallop {
         val l = s.map(_._2).flatten.map(i => conv(i))
         if (l.isEmpty) Right(None)
         else Right(Some(l))
-      } catch { case _: Throwable =>
+      } catch { case _: Exception =>
         Left("wrong arguments format")
       }
     }
@@ -75,7 +75,7 @@ package object scallop {
           if (m.nonEmpty) Some(m)
           else None
         }
-      } catch { case _: Throwable =>
+      } catch { case _: Exception =>
         Left("wrong arguments format")
       }
     }
