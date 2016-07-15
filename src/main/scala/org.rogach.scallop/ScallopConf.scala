@@ -382,11 +382,11 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * Update this variable with another function if you need to change that behavior.
     */
   var errorMessageHandler: String => Unit = { message =>
-    if (System.console() == null) {
+    if (overrideColorOutput.value.getOrElse(System.console() != null)) {
+      println("[\u001b[31m%s\u001b[0m] Error: %s" format (printedName, message))
+    } else {
       // no colors on output
       println("[%s] Error: %s" format (printedName, message))
-    } else {
-      println("[\u001b[31m%s\u001b[0m] Error: %s" format (printedName, message))
     }
     sys.exit(1)
   }
@@ -610,3 +610,4 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
 
 /** Convenience variable to permit testing. */
 object throwError extends util.DynamicVariable[Boolean](false)
+object overrideColorOutput extends util.DynamicVariable[Option[Boolean]](None)

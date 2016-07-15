@@ -30,17 +30,19 @@ class StrangeTest extends UsefulMatchers with CapturingTest {
   }
 
   test ("changing printed program name") {
-    val (out, err, exits) = captureOutputAndExits {
-      new ScallopConf(Seq()) {
-        val apples = trailArg[Int]("beans")
-        printedName = "beans"
+    overrideColorOutput.withValue(Some(false)) {
+      val (out, err, exits) = captureOutputAndExits {
+        new ScallopConf(Seq()) {
+          val apples = trailArg[Int]("beans")
+          printedName = "beans"
 
-        verify()
+          verify()
+        }
       }
+      exits ==== List(1)
+      err ==== ""
+      out ==== "[beans] Error: Required option 'beans' not found\n"
     }
-    exits ==== List(1)
-    err ==== ""
-    out ==== "[\u001b[31mbeans\u001b[0m] Error: Required option 'beans' not found\n"
   }
 
 }
