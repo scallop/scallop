@@ -20,7 +20,11 @@ abstract class ScallopOption[A](nm: String, val _transformCount: Int = 0) { opt 
   private lazy val value: Option[A] = fn(name)
 
   /** Retreive the underlying value as an option */
+  @deprecated("use .toOption instead", "1.0.2")
   def get = value
+
+  /** Retreive the underlying value as a scala Option */
+  def toOption = value
 
   /** Retreive the underlying value. Use only if you are completely sure that there is a value. */
   def apply() = get.get
