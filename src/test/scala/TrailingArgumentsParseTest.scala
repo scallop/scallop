@@ -20,9 +20,10 @@ class TrailingArgumentsParseTest extends FunSuite with Matchers with UsefulMatch
   }
 
   test ("proper error message on trailing file option failure") {
-    expectException(WrongOptionFormat("file", "nonexistent", "file 'nonexistent' doesn't exist")) {
+    expectException(ValidationFailure("File 'nonexistent' not found")) {
       new ScallopConf(Seq("nonexistent")) {
         val file = trailArg[java.io.File]("file")
+        validateFileExists(file)
 
         verify()
       }

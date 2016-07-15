@@ -57,10 +57,7 @@ package object scallop {
   implicit val doubleConverter = singleArgConverter[Double](_.toDouble, numberHandler("Double"))
   implicit val bigIntConverter = singleArgConverter(BigInt(_), numberHandler("integer"))
   implicit val bigDecimalConverter = singleArgConverter(BigDecimal(_), numberHandler("decimal"))
-
-  implicit val fileConverter = singleArgConverter(new File(_)).flatMap { f =>
-    if (f.exists) Right(Some(f)) else Left("file '%s' doesn't exist" format f)
-  }
+  implicit val fileConverter = singleArgConverter(new File(_))
   implicit val urlConverter = singleArgConverter(new URL(_), {
     case e: MalformedURLException => Left("bad URL, %s" format e.getMessage)
   })

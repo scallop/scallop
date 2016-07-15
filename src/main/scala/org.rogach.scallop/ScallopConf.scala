@@ -1,5 +1,6 @@
 package org.rogach.scallop
 
+import java.io.File
 import exceptions._
 import scala.util.DynamicVariable
 import reflect.runtime.universe._
@@ -501,6 +502,17 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       Left("Either all or none of the following options should be defined, because they are co-dependent: %s"
         format list.map(_.name).mkString(", "))
     } else Right(Unit)
+  }
+
+  /** In the verify stage, check that file with supplied name exists. */
+  def validateFileExists(fileOption: ScallopOption[File]) = addValidation {
+    fileOption.toOption.fold[Either[String,Unit]](Right(Unit)) { file =>
+      if (!file.exists) {
+        Left("File '" + file + "' not found")
+      } else {
+        Right(Unit)
+      }
+    }
   }
 
   // === some getters for convenience ===
