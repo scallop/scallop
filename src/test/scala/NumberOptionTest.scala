@@ -21,7 +21,7 @@ class NumberOptionTest extends FunSuite with Matchers with CapturingTest with Us
       val answer = number(required = true)
       verify()
     }
-    conf.answer.get shouldBe Some(42)
+    conf.answer.toOption shouldBe Some(42)
   }
 
   test ("required number option not provided") {

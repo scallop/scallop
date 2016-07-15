@@ -52,7 +52,7 @@ object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
 // that's it. Completely type-safe and convenient.
 assert(Conf.count() == 4)
 assert(Conf.properties("fruit") == Some("apple"))
-assert(Conf.size.get == Some(7.2))
+assert(Conf.size.toOption == Some(7.2))
 // passing into other functions
 def someInternalFunc(conf:Conf.type) {
   assert(conf.count() == 4)

@@ -27,7 +27,7 @@ abstract class ScallopOption[A](nm: String, val _transformCount: Int = 0) { opt 
   def toOption = value
 
   /** Retreive the underlying value. Use only if you are completely sure that there is a value. */
-  def apply() = get.get
+  def apply() = value.get
 
   /** Tests whether the underlying value was explicitly supplied by user. */
   def isSupplied = supplied
@@ -79,13 +79,13 @@ abstract class ScallopOption[A](nm: String, val _transformCount: Int = 0) { opt 
 
   /** Apply the given procedure f to the option's value, if it is nonempty.
     */
-  def foreach(f: A => Unit) = opt.get.foreach(f)
+  def foreach(f: A => Unit) = opt.value.foreach(f)
 
   /** Returns the result of applying f th this options value if
     * this option is non-empty.
     */
   def flatMap[B](f: A => ScallopOption[B]): ScallopOption[B] =
-    mapResult(_.flatMap(x => f(x).get))
+    mapResult(_.flatMap(x => f(x).toOption))
 
   /** Returns ScallopOption with this value if it is non-empty,
     * or with the value of the alternative option. If it is
@@ -98,14 +98,14 @@ abstract class ScallopOption[A](nm: String, val _transformCount: Int = 0) { opt 
   /** A convenience method to check whether the underlying option
     * is defined. Just an alias for opt.get.isDefined.
     */
-  def isDefined = get.isDefined
+  def isDefined = value.isDefined
 
   /** A convenience method to check whether the underlying option is
     * empty. Just an alias for !opt.isDefined.
     */
   def isEmpty = !isDefined
 
-  override def toString = opt.get match {
+  override def toString = opt.toOption match {
     case Some(x) => "ScallopSome(%s)" format x
     case None => "ScallopNone"
   }

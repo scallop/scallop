@@ -15,7 +15,7 @@ trait ScallopConfValidations { this: ScallopConf =>
   def validate[[#A1#]]([#o1: ScallopOption[A1]#])(fn: ([#A1#]) => Either[String, Unit]) {
     allDefinedOrUndefined([#o1#])
     validations :+= { () =>
-      if (List([#o1.get#]).forall(_.isDefined)) {
+      if (List([#o1.toOption#]).forall(_.isDefined)) {
         fn([#o1()#])
       } else {
         Right(())
@@ -30,7 +30,7 @@ trait ScallopConfValidations { this: ScallopConf =>
     */
   def validateOpt[[#A1#]]([#o1: ScallopOption[A1]#])(fn: ([#Option[A1]#]) => Either[String, Unit]) {
     validations :+= { () =>
-      fn([#o1.get#])
+      fn([#o1.toOption#])
     }
   }#
   ]

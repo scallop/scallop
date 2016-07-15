@@ -253,7 +253,7 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    conf.tree.apples.get shouldBe Some(42)
+    conf.tree.apples.toOption shouldBe Some(42)
   }
 
   test ("isSupplied on subcommand options - true") {

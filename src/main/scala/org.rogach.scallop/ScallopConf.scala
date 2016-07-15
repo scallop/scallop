@@ -496,7 +496,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     * have values defined (either supplied in arguments or got from defaults).
     */
   def allDefinedOrUndefined(list: ScallopOption[_]*) = addValidation {
-    val c = list.count(_.get.isDefined)
+    val c = list.count(_.toOption.isDefined)
     if (c != 0 && c != list.size) {
       Left("Either all or none of the following options should be defined, because they are co-dependent: %s"
         format list.map(_.name).mkString(", "))

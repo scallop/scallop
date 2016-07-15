@@ -14,7 +14,7 @@ class OptionNameGuessing extends UsefulMatchers {
       verify()
     }
     Conf.appleso() should equal (1)
-    Conf.bananaso.get should equal (None)
+    Conf.bananaso.toOption should equal (None)
   }
 
   test ("shadowing with derived option") {
@@ -40,8 +40,8 @@ class OptionNameGuessing extends UsefulMatchers {
     }
     Conf.appleso() should equal (1)
     Conf.applesPlus() should equal (3)
-    Conf.bananaso.get should equal (None)
-    Conf.aaa.get should equal (None)
+    Conf.bananaso.toOption should equal (None)
+    Conf.aaa.toOption should equal (None)
   }
 
   test ("camelCase convert") {
@@ -71,7 +71,7 @@ class OptionNameGuessing extends UsefulMatchers {
 
       verify()
     }
-    Conf.xs.get ==== Some(1)
+    Conf.xs.toOption ==== Some(1)
   }
 
   test ("replacing of the name in doubly mapped ScallopOptions") {
@@ -80,7 +80,7 @@ class OptionNameGuessing extends UsefulMatchers {
 
       verify()
     }
-    Conf.xs.get ==== Some("1")
+    Conf.xs.toOption ==== Some("1")
   }
 
   test("trailArg name guessing") {
@@ -92,8 +92,8 @@ class OptionNameGuessing extends UsefulMatchers {
     }
     Conf.trailing1.name should be ("trailing1")
     Conf.trailing2.name should be ("trailing2")
-    Conf.trailing1.get should be (Some(1))
-    Conf.trailing2.get should be (Some(List("foo", "bar", "baz", "bippy")))
+    Conf.trailing1.toOption should be (Some(1))
+    Conf.trailing2.toOption should be (Some(List("foo", "bar", "baz", "bippy")))
   }
 
   test("toggle name guessing") {
@@ -108,10 +108,10 @@ class OptionNameGuessing extends UsefulMatchers {
     Conf.foo.name should be ("foo")
     Conf.zoop.name should be ("zoop")
     Conf.bippy.name should be ("bippy")
-    Conf.foo.get should be (Some(true))
-    Conf.zoop.get should be (None)
-    Conf.bippy.get should be (Some(false))
-    Conf.scooby.get should be (Some(true))
+    Conf.foo.toOption should be (Some(true))
+    Conf.zoop.toOption should be (None)
+    Conf.bippy.toOption should be (Some(false))
+    Conf.scooby.toOption should be (Some(true))
   }
 
 }

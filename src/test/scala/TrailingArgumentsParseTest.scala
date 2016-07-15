@@ -15,8 +15,8 @@ class TrailingArgumentsParseTest extends FunSuite with Matchers with UsefulMatch
 
       verify()
     }
-    conf.apple.get shouldBe Some(true)
-    conf.banana.get shouldBe None
+    conf.apple.toOption shouldBe Some(true)
+    conf.banana.toOption shouldBe None
   }
 
   test ("proper error message on trailing file option failure") {

@@ -1,4 +1,4 @@
-package org.rogach.scallop
+ package org.rogach.scallop
 
 import org.scalatest.FunSuite
 import org.scalatest.Matchers
@@ -23,7 +23,7 @@ class ConfTest extends FunSuite with Matchers with UsefulMatchers with Capturing
     // that's it. Completely type-safe and convenient.
     Conf.count() should equal (4)
     Conf.properties("fruit") should equal ("apple")
-    Conf.size.get should equal (Some(7.2))
+    Conf.size.toOption should equal (Some(7.2))
     // passing into other functions
     def someInternalFunc(conf:Conf.type) {
       conf.count() should equal (4)
@@ -116,7 +116,7 @@ For all other tricks, consult the documentation!
       verify()
     }
     Conf.file1() should equal ("filename1")
-    Conf.file2.get should equal (Some("filename2"))
+    Conf.file2.toOption should equal (Some("filename2"))
   }
 
   test ("trailing args - non-required, empty list arg") {
@@ -124,7 +124,7 @@ For all other tricks, consult the documentation!
       val files = trailArg[List[String]](required = false)
       verify()
     }
-    Conf.files.get should equal (None)
+    Conf.files.toOption should equal (None)
   }
 
   test ("trailing args - empty list arg after flag option") {
@@ -134,7 +134,7 @@ For all other tricks, consult the documentation!
       verify()
     }
     Conf.verbose() should equal (true)
-    Conf.files.get should equal (None)
+    Conf.files.toOption should equal (None)
   }
 
   test ("trailing args - non-empty list arg") {
@@ -161,7 +161,7 @@ For all other tricks, consult the documentation!
       verify()
     }
     def a(conf:Conf.type) {
-      conf.apples.get should equal (Some(3))
+      conf.apples.toOption should equal (Some(3))
     }
     a(Conf)
   }
@@ -190,15 +190,15 @@ For all other tricks, consult the documentation!
       val bananas = opt[String]("bananas").collect({case b:Int => b + 1}:PartialFunction[Any,Int])
       verify()
     }
-    Conf.applesCollect.get should equal (Some(4))
-    Conf.applesFilter1.get should equal (Some(3))
-    Conf.applesFilter2.get should equal (None)
-    Conf.applesFilterNot.get should equal (Some(3))
-    Conf.applesMap1.get should equal (Some(5))
-    Conf.applesMap2.get should equal (None)
-    Conf.applesOrElse1.get should equal (Some(3))
-    Conf.applesOrElse2.get should equal (Some(1))
-    Conf.bananas.get should equal (None)
+    Conf.applesCollect.toOption should equal (Some(4))
+    Conf.applesFilter1.toOption should equal (Some(3))
+    Conf.applesFilter2.toOption should equal (None)
+    Conf.applesFilterNot.toOption should equal (Some(3))
+    Conf.applesMap1.toOption should equal (Some(5))
+    Conf.applesMap2.toOption should equal (None)
+    Conf.applesOrElse1.toOption should equal (Some(3))
+    Conf.applesOrElse2.toOption should equal (Some(1))
+    Conf.bananas.toOption should equal (None)
   }
 
   test ("printing ScallopOption") {
@@ -241,8 +241,8 @@ For all other tricks, consult the documentation!
       val bags = opt[Int]("bags")
       verify()
     }
-    Conf.bananas.get should equal (None)
-    Conf.bags.get should equal (Some(1))
+    Conf.bananas.toOption should equal (None)
+    Conf.bags.toOption should equal (Some(1))
   }
 
   test ("correct validation") {
@@ -357,7 +357,7 @@ For all other tricks, consult the documentation!
       val apples2 = opt[Int]("apples2")
       verify()
     }
-    Conf.apples1.get should equal (Some(1))
+    Conf.apples1.toOption should equal (Some(1))
   }
 
   test ("for comprehensions for ScallopOptions") {
@@ -372,8 +372,8 @@ For all other tricks, consult the documentation!
       val weight2 = for { a <- apples; if a < 2; b <- bananas } yield a * 2 + b * 3
       verify()
     }
-    Conf.weight.get should equal (Some(12))
-    Conf.weight2.get should equal (None)
+    Conf.weight.toOption should equal (Some(12))
+    Conf.weight2.toOption should equal (None)
   }
 
   test ("short-named property args with commas") {
@@ -453,7 +453,7 @@ For all other tricks, consult the documentation!
       val verbose = toggle("verbose")
       verify()
     }
-    Conf.verbose.get should equal (None)
+    Conf.verbose.toOption should equal (None)
     Conf.verbose.isSupplied should equal (false)
   }
 
@@ -462,7 +462,7 @@ For all other tricks, consult the documentation!
       val verbose = toggle("verbose", default = Some(true))
       verify()
     }
-    Conf.verbose.get should equal (Some(true))
+    Conf.verbose.toOption should equal (Some(true))
     Conf.verbose.isSupplied should equal (false)
   }
 

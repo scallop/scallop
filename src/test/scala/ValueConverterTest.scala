@@ -18,14 +18,14 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
       verify()
     }
     val conf1 = getcf(Nil)
-    conf1.foo.get ==== None
+    conf1.foo.toOption ==== None
 
     val conf2 = getcf(List("-f"))
     // bad corner case - flatMap doesn't apply when previous converter returned None
-    conf2.foo.get ==== None
+    conf2.foo.toOption ==== None
 
     val conf3 = getcf(List("-f", "bar"))
-    conf3.foo.get ==== Some(Some("bar"))
+    conf3.foo.toOption ==== Some(Some("bar"))
   }
 
   /** https://github.com/Rogach/scallop/issues/57 */
@@ -62,7 +62,7 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
 
       verify()
     }
-    conf.apples.get ==== None
+    conf.apples.toOption ==== None
     conf.apples.isSupplied ==== false
   }
   test("optDefault - empty call") {
@@ -71,7 +71,7 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
 
       verify()
     }
-    conf.apples.get ==== Some(5)
+    conf.apples.toOption ==== Some(5)
     conf.apples.isSupplied ==== true
   }
   test("optDefault - arg provided") {
@@ -80,7 +80,7 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
 
       verify()
     }
-    conf.apples.get ==== Some(7)
+    conf.apples.toOption ==== Some(7)
     conf.apples.isSupplied ==== true
   }
 
@@ -95,8 +95,8 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
 
       verify()
     }
-    conf.apples.get shouldBe Some(3)
-    conf.apples.get shouldBe Some(3)
+    conf.apples.toOption shouldBe Some(3)
+    conf.apples.toOption shouldBe Some(3)
     callCount shouldBe 1
   }
 
