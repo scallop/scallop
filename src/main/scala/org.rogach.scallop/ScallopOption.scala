@@ -29,6 +29,9 @@ abstract class ScallopOption[A](nm: String, val _transformCount: Int = 0) { opt 
   /** Retreive the underlying value. Use only if you are completely sure that there is a value. */
   def apply() = value.get
 
+  /** Retrieve the underlying value if the option is nonempty, otherwise return the result of evaluating `default`. */
+  def getOrElse(default: => A): A = value.getOrElse(default)
+
   /** Tests whether the underlying value was explicitly supplied by user. */
   def isSupplied = supplied
 
