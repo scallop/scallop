@@ -2,7 +2,9 @@ package org.rogach
 
 import reflect.runtime.universe._
 import java.io.File
-import java.net.{URL, URI}
+import java.net.{MalformedURLException, URL, URI, URISyntaxException}
+
+import scala.util.Try
 
 package object scallop {
   implicit val flagConverter = new ValueConverter[Boolean] {
@@ -15,11 +17,19 @@ package object scallop {
     val argType = ArgType.FLAG
   }
 
-  def singleArgConverter[A](conv: String => A)(implicit tt: TypeTag[A]) = new ValueConverter[A] {
+  /** Create a converter for an argument with a single value.
+    * @param conv the conversion function to use, which may throw an exception on error
+    * @param handler an error handler function for writing custom error messages
+    */
+  def singleArgConverter[A](
+    conv: String => A, handler: PartialFunction[Throwable, Either[String, Option[A]]] = PartialFunction.empty
+  )(implicit tt: TypeTag[A]) = new ValueConverter[A] {
     def parse(s: List[(String, List[String])]) = {
       s match {
         case (_, i :: Nil) :: Nil =>
-          try { Right(Some(conv(i))) } catch { case _: Exception => Left("wrong arguments format") }
+          Try(Right(Some(conv(i)))).recover(handler).recover({
+            case _: Exception => Left("wrong arguments format")
+          }).get
         case Nil => Right(None)
         case _ => Left("you should provide exactly one argument for this option")
       }
@@ -27,21 +37,36 @@ package object scallop {
     val tag = tt
     val argType = ArgType.SINGLE
   }
-  implicit val byteConverter = singleArgConverter[Byte](_.toByte)
-  implicit val shortConverter = singleArgConverter[Short](_.toShort)
-  implicit val intConverter = singleArgConverter[Int](_.toInt)
-  implicit val longConverter = singleArgConverter[Long](_.toLong)
-  implicit val floatConverter = singleArgConverter[Float](_.toFloat)
-  implicit val doubleConverter = singleArgConverter[Double](_.toDouble)
+
   implicit val charConverter = singleArgConverter[Char](_.head)
-  implicit val stringConverter = singleArgConverter[String](a=>a)
+  implicit val stringConverter = singleArgConverter[String](identity)
+
+  /** Handler function for numeric types which expects a NumberFormatException and prints a more
+    * helpful error message.
+    * @param name the type name to display
+    */
+  def numberHandler[T](name: String): PartialFunction[Throwable, Either[String, Option[T]]] = {
+    case _: NumberFormatException => Left("bad %s value" format name)
+  }
+
+  implicit val byteConverter = singleArgConverter[Byte](_.toByte, numberHandler("Byte"))
+  implicit val shortConverter = singleArgConverter[Short](_.toShort, numberHandler("Short"))
+  implicit val intConverter = singleArgConverter[Int](_.toInt, numberHandler("Int"))
+  implicit val longConverter = singleArgConverter[Long](_.toLong, numberHandler("Long"))
+  implicit val floatConverter = singleArgConverter[Float](_.toFloat, numberHandler("Float"))
+  implicit val doubleConverter = singleArgConverter[Double](_.toDouble, numberHandler("Double"))
+  implicit val bigIntConverter = singleArgConverter(BigInt(_), numberHandler("integer"))
+  implicit val bigDecimalConverter = singleArgConverter(BigDecimal(_), numberHandler("decimal"))
+
   implicit val fileConverter = singleArgConverter(new File(_)).flatMap { f =>
     if (f.exists) Right(Some(f)) else Left("file '%s' doesn't exist" format f)
   }
-  implicit val urlConverter = singleArgConverter(new URL(_))
-  implicit val uriConverter = singleArgConverter(new URI(_))
-  implicit val bigIntConverter = singleArgConverter(BigInt(_))
-  implicit val bigDecimalConverter = singleArgConverter(BigDecimal(_))
+  implicit val urlConverter = singleArgConverter(new URL(_), {
+    case e: MalformedURLException => Left("bad URL, %s" format e.getMessage)
+  })
+  implicit val uriConverter = singleArgConverter(new URI(_), {
+    case e: URISyntaxException => Left("bad URI, %s" format e.getMessage)
+  })
 
   def listArgConverter[A](conv: String => A)(implicit tt: TypeTag[List[A]])  = new ValueConverter[List[A]] {
     def parse(s:List[(String, List[String])]) = {
@@ -62,7 +87,7 @@ package object scallop {
   implicit val longListConverter = listArgConverter[Long](_.toLong)
   implicit val floatListConverter = listArgConverter[Float](_.toFloat)
   implicit val doubleListConverter = listArgConverter[Double](_.toDouble)
-  implicit val stringListConverter = listArgConverter[String](a => a)
+  implicit val stringListConverter = listArgConverter[String](identity)
 
   def propsConverter[A](conv: ValueConverter[A])(implicit tt: TypeTag[Map[String,A]]): ValueConverter[Map[String,A]] = new ValueConverter[Map[String,A]] {
     val rgx = """([^=]+)=(.*)""".r
