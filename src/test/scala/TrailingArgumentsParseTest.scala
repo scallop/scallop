@@ -29,4 +29,15 @@ class TrailingArgumentsParseTest extends FunSuite with Matchers with UsefulMatch
       }
     }
   }
+
+  test ("proper error message on trailing path option failure") {
+    expectException(ValidationFailure("File at 'nonexistent' not found")) {
+      new ScallopConf(Seq("nonexistent")) {
+        val path = trailArg[java.nio.file.Path]("path")
+        validatePathExists(path)
+
+        verify()
+      }
+    }
+  }
 }

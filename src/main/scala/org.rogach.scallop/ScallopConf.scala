@@ -1,6 +1,7 @@
 package org.rogach.scallop
 
 import java.io.File
+import java.nio.file.Path
 import exceptions._
 import scala.util.DynamicVariable
 import reflect.runtime.universe._
@@ -509,6 +510,17 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     fileOption.toOption.fold[Either[String,Unit]](Right(Unit)) { file =>
       if (!file.exists) {
         Left("File '" + file + "' not found")
+      } else {
+        Right(Unit)
+      }
+    }
+  }
+
+  /** In the verify stage, check that file with the supplied path exists. */
+  def validatePathExists(pathOption: ScallopOption[Path]) = addValidation {
+    pathOption.toOption.fold[Either[String,Unit]](Right(Unit)) { path =>
+      if (!path.toFile.exists) {
+        Left("File at '" + path + "' not found")
       } else {
         Right(Unit)
       }
