@@ -3,6 +3,7 @@ package org.rogach
 import reflect.runtime.universe._
 import java.io.File
 import java.net.{MalformedURLException, URL, URI, URISyntaxException}
+import java.nio.file.{InvalidPathException,Path,Paths}
 
 import scala.util.Try
 
@@ -58,6 +59,9 @@ package object scallop {
   implicit val bigIntConverter = singleArgConverter(BigInt(_), numberHandler("integer"))
   implicit val bigDecimalConverter = singleArgConverter(BigDecimal(_), numberHandler("decimal"))
   implicit val fileConverter = singleArgConverter(new File(_))
+  implicit val pathConverter = singleArgConverter[Path](Paths.get(_), {
+    case e: InvalidPathException => Left("bad Path, %s" format e.getMessage)
+  })
   implicit val urlConverter = singleArgConverter(new URL(_), {
     case e: MalformedURLException => Left("bad URL, %s" format e.getMessage)
   })
