@@ -406,35 +406,35 @@ and evaluates the value only as the last resort.</p></div></div>
 Uses simple backtraking algorithm.
 </p></div></div>
     </li><li name="org.rogach.scallop#bigDecimalConverter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="bigDecimalConverter:org.rogach.scallop.ValueConverter[scala.math.BigDecimal]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[scala.math.BigDecimal]]}"></a>
-      <a id="bigDecimalConverter:ValueConverter[BigDecimal]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[scala.math.BigDecimal]]}"></a>
+      <a id="bigDecimalConverter:org.rogach.scallop.ValueConverter[scala.math.BigDecimal]"></a>
+      <a id="bigDecimalConverter:ValueConverter[BigDecimal]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">bigDecimalConverter</span><span class="result">: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="scala.math.BigDecimal">BigDecimal</span>] { def parse(s: List[(String, List[String])]): Product with Serializable with scala.util.Either[String,Option[scala.math.BigDecimal]] }</span>
+        <span class="name">bigDecimalConverter</span><span class="result">: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="scala.math.BigDecimal">BigDecimal</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.package@bigDecimalConverter:org.rogach.scallop.ValueConverter[scala.math.BigDecimal]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[scala.math.BigDecimal]]}" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.package@bigDecimalConverter:org.rogach.scallop.ValueConverter[scala.math.BigDecimal]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="org.rogach.scallop#bigIntConverter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="bigIntConverter:org.rogach.scallop.ValueConverter[scala.math.BigInt]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[scala.math.BigInt]]}"></a>
-      <a id="bigIntConverter:ValueConverter[BigInt]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[scala.math.BigInt]]}"></a>
+      <a id="bigIntConverter:org.rogach.scallop.ValueConverter[scala.math.BigInt]"></a>
+      <a id="bigIntConverter:ValueConverter[BigInt]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">bigIntConverter</span><span class="result">: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="scala.math.BigInt">BigInt</span>] { def parse(s: List[(String, List[String])]): Product with Serializable with scala.util.Either[String,Option[scala.math.BigInt]] }</span>
+        <span class="name">bigIntConverter</span><span class="result">: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="scala.math.BigInt">BigInt</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.package@bigIntConverter:org.rogach.scallop.ValueConverter[scala.math.BigInt]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[scala.math.BigInt]]}" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.package@bigIntConverter:org.rogach.scallop.ValueConverter[scala.math.BigInt]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -796,6 +796,25 @@ Uses simple backtraking algorithm.
       </a>
     </span>
       
+    </li><li name="org.rogach.scallop#numberHandler" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="numberHandler[T](name:String):PartialFunction[Throwable,Either[String,Option[T]]]"></a>
+      <a id="numberHandler[T](String):PartialFunction[Throwable,Either[String,Option[T]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">numberHandler</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.rogach.scallop.numberHandler.T">T</span>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.package@numberHandler[T](name:String):PartialFunction[Throwable,Either[String,Option[T]]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Handler function for numeric types which expects a NumberFormatException and prints a more
+helpful error message.</p><div class="fullcomment"><div class="comment cmt"><p>Handler function for numeric types which expects a NumberFormatException and prints a more
+helpful error message.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the type name to display</p></dd></dl></div>
     </li><li name="org.rogach.scallop#optDefault" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="optDefault[A](default:A)(implicitconv:org.rogach.scallop.ValueConverter[A]):org.rogach.scallop.ValueConverter[A]"></a>
       <a id="optDefault[A](A)(ValueConverter[A]):ValueConverter[A]"></a>
@@ -809,6 +828,40 @@ Uses simple backtraking algorithm.
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#org.rogach.scallop.package@optDefault[A](default:A)(implicitconv:org.rogach.scallop.ValueConverter[A]):org.rogach.scallop.ValueConverter[A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.rogach.scallop.overrideColorOutput" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="overrideColorOutput"></a>
+      <a id="overrideColorOutput:overrideColorOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="overrideColorOutput$.html"><span class="name">overrideColorOutput</span></a><span class="result"> extends <span class="extype" name="scala.util.DynamicVariable">DynamicVariable</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Boolean">Boolean</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.package@overrideColorOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.rogach.scallop#pathConverter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="pathConverter:org.rogach.scallop.ValueConverter[java.nio.file.Path]"></a>
+      <a id="pathConverter:ValueConverter[Path]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pathConverter</span><span class="result">: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="java.nio.file.Path">Path</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.package@pathConverter:org.rogach.scallop.ValueConverter[java.nio.file.Path]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -881,23 +934,23 @@ Uses simple backtraking algorithm.
       </a>
     </span>
       
-    </li><li name="org.rogach.scallop#singleArgConverter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="singleArgConverter[A](conv:String=&gt;A)(implicittt:reflect.runtime.universe.TypeTag[A]):org.rogach.scallop.ValueConverter[A]"></a>
-      <a id="singleArgConverter[A]((String)⇒A)(scala.reflect.api.JavaUniverse.TypeTag[A]):ValueConverter[A]"></a>
+    </li><li name="org.rogach.scallop#singleArgConverter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="singleArgConverter[A](conv:String=&gt;A,handler:PartialFunction[Throwable,Either[String,Option[A]]])(implicittt:reflect.runtime.universe.TypeTag[A]):org.rogach.scallop.ValueConverter[A]"></a>
+      <a id="singleArgConverter[A]((String)⇒A,PartialFunction[Throwable,Either[String,Option[A]]])(scala.reflect.api.JavaUniverse.TypeTag[A]):ValueConverter[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">singleArgConverter</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="conv">conv: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="org.rogach.scallop.singleArgConverter.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tt">tt: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="org.rogach.scallop.singleArgConverter.A">A</span>]</span>)</span><span class="result">: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="org.rogach.scallop.singleArgConverter.A">A</span>]</span>
+        <span class="name">singleArgConverter</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="conv">conv: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="org.rogach.scallop.singleArgConverter.A">A</span></span>, <span name="handler">handler: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.rogach.scallop.singleArgConverter.A">A</span>]]] = <span class="symbol">PartialFunction.empty</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tt">tt: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="org.rogach.scallop.singleArgConverter.A">A</span>]</span>)</span><span class="result">: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="org.rogach.scallop.singleArgConverter.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.package@singleArgConverter[A](conv:String=&gt;A)(implicittt:reflect.runtime.universe.TypeTag[A]):org.rogach.scallop.ValueConverter[A]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.package@singleArgConverter[A](conv:String=&gt;A,handler:PartialFunction[Throwable,Either[String,Option[A]]])(implicittt:reflect.runtime.universe.TypeTag[A]):org.rogach.scallop.ValueConverter[A]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Create a converter for an argument with a single value.</p><div class="fullcomment"><div class="comment cmt"><p>Create a converter for an argument with a single value.</p></div><dl class="paramcmts block"><dt class="param">conv</dt><dd class="cmt"><p>the conversion function to use, which may throw an exception on error</p></dd><dt class="param">handler</dt><dd class="cmt"><p>an error handler function for writing custom error messages</p></dd></dl></div>
     </li><li name="org.rogach.scallop#stringConverter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="stringConverter:org.rogach.scallop.ValueConverter[String]"></a>
       <a id="stringConverter:ValueConverter[String]"></a>
@@ -984,35 +1037,35 @@ Uses simple backtraking algorithm.
     </span>
       <p class="shortcomment cmt">Convenience variable to permit testing.</p>
     </li><li name="org.rogach.scallop#uriConverter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="uriConverter:org.rogach.scallop.ValueConverter[java.net.URI]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[java.net.URI]]}"></a>
-      <a id="uriConverter:ValueConverter[URI]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[java.net.URI]]}"></a>
+      <a id="uriConverter:org.rogach.scallop.ValueConverter[java.net.URI]"></a>
+      <a id="uriConverter:ValueConverter[URI]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">uriConverter</span><span class="result">: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="java.net.URI">URI</span>] { def parse(s: List[(String, List[String])]): Product with Serializable with scala.util.Either[String,Option[java.net.URI]] }</span>
+        <span class="name">uriConverter</span><span class="result">: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="java.net.URI">URI</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.package@uriConverter:org.rogach.scallop.ValueConverter[java.net.URI]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[java.net.URI]]}" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.package@uriConverter:org.rogach.scallop.ValueConverter[java.net.URI]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="org.rogach.scallop#urlConverter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="urlConverter:org.rogach.scallop.ValueConverter[java.net.URL]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[java.net.URL]]}"></a>
-      <a id="urlConverter:ValueConverter[URL]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[java.net.URL]]}"></a>
+      <a id="urlConverter:org.rogach.scallop.ValueConverter[java.net.URL]"></a>
+      <a id="urlConverter:ValueConverter[URL]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">urlConverter</span><span class="result">: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="java.net.URL">URL</span>] { def parse(s: List[(String, List[String])]): Product with Serializable with scala.util.Either[String,Option[java.net.URL]] }</span>
+        <span class="name">urlConverter</span><span class="result">: <a href="ValueConverter.html" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="java.net.URL">URL</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.package@urlConverter:org.rogach.scallop.ValueConverter[java.net.URL]{defparse(s:List[(String,List[String])]):ProductwithSerializablewithscala.util.Either[String,Option[java.net.URL]]}" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.package@urlConverter:org.rogach.scallop.ValueConverter[java.net.URL]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -1541,6 +1541,23 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
     </span>
       <p class="shortcomment cmt">Adds a validation function to this configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a validation function to this configuration. This function will be run after all other verification steps.
 Automatically defines co-dependent relationship on these options.</p></div><dl class="paramcmts block"><dt class="param">fn</dt><dd class="cmt"><p>Validation function. In case of error, it should return Left with the error message.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConfValidations.html" class="extype" name="org.rogach.scallop.ScallopConfValidations">ScallopConfValidations</a></dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopConf#validateFileExists" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="validateFileExists(fileOption:org.rogach.scallop.ScallopOption[java.io.File]):Unit"></a>
+      <a id="validateFileExists(ScallopOption[File]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validateFileExists</span><span class="params">(<span name="fileOption">fileOption: <a href="ScallopOption.html" class="extype" name="org.rogach.scallop.ScallopOption">ScallopOption</a>[<span class="extype" name="java.io.File">File</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.Subcommand@validateFileExists(fileOption:org.rogach.scallop.ScallopOption[java.io.File]):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">In the verify stage, check that file with supplied name exists.</p><div class="fullcomment"><div class="comment cmt"><p>In the verify stage, check that file with supplied name exists.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConfValidations#validateOpt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="validateOpt[A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22](o1:org.rogach.scallop.ScallopOption[A1],o2:org.rogach.scallop.ScallopOption[A2],o3:org.rogach.scallop.ScallopOption[A3],o4:org.rogach.scallop.ScallopOption[A4],o5:org.rogach.scallop.ScallopOption[A5],o6:org.rogach.scallop.ScallopOption[A6],o7:org.rogach.scallop.ScallopOption[A7],o8:org.rogach.scallop.ScallopOption[A8],o9:org.rogach.scallop.ScallopOption[A9],o10:org.rogach.scallop.ScallopOption[A10],o11:org.rogach.scallop.ScallopOption[A11],o12:org.rogach.scallop.ScallopOption[A12],o13:org.rogach.scallop.ScallopOption[A13],o14:org.rogach.scallop.ScallopOption[A14],o15:org.rogach.scallop.ScallopOption[A15],o16:org.rogach.scallop.ScallopOption[A16],o17:org.rogach.scallop.ScallopOption[A17],o18:org.rogach.scallop.ScallopOption[A18],o19:org.rogach.scallop.ScallopOption[A19],o20:org.rogach.scallop.ScallopOption[A20],o21:org.rogach.scallop.ScallopOption[A21],o22:org.rogach.scallop.ScallopOption[A22])(fn:(Option[A1],Option[A2],Option[A3],Option[A4],Option[A5],Option[A6],Option[A7],Option[A8],Option[A9],Option[A10],Option[A11],Option[A12],Option[A13],Option[A14],Option[A15],Option[A16],Option[A17],Option[A18],Option[A19],Option[A20],Option[A21],Option[A22])=&gt;Either[String,Unit]):Unit"></a>
       <a id="validateOpt[A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22](ScallopOption[A1],ScallopOption[A2],ScallopOption[A3],ScallopOption[A4],ScallopOption[A5],ScallopOption[A6],ScallopOption[A7],ScallopOption[A8],ScallopOption[A9],ScallopOption[A10],ScallopOption[A11],ScallopOption[A12],ScallopOption[A13],ScallopOption[A14],ScallopOption[A15],ScallopOption[A16],ScallopOption[A17],ScallopOption[A18],ScallopOption[A19],ScallopOption[A20],ScallopOption[A21],ScallopOption[A22])((Option[A1],Option[A2],Option[A3],Option[A4],Option[A5],Option[A6],Option[A7],Option[A8],Option[A9],Option[A10],Option[A11],Option[A12],Option[A13],Option[A14],Option[A15],Option[A16],Option[A17],Option[A18],Option[A19],Option[A20],Option[A21],Option[A22])⇒Either[String,Unit]):Unit"></a>
@@ -1915,6 +1932,23 @@ Automatically defines co-dependent relationship on these options.</p></div><dl c
       </a>
     </span>
       <p class="shortcomment cmt">Adds a validation function to this configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a validation function to this configuration. This function will be run after all other verification steps.</p></div><dl class="paramcmts block"><dt class="param">fn</dt><dd class="cmt"><p>Validation function. In case of error, it should return Left with the error message.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConfValidations.html" class="extype" name="org.rogach.scallop.ScallopConfValidations">ScallopConfValidations</a></dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopConf#validatePathExists" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="validatePathExists(pathOption:org.rogach.scallop.ScallopOption[java.nio.file.Path]):Unit"></a>
+      <a id="validatePathExists(ScallopOption[Path]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validatePathExists</span><span class="params">(<span name="pathOption">pathOption: <a href="ScallopOption.html" class="extype" name="org.rogach.scallop.ScallopOption">ScallopOption</a>[<span class="extype" name="java.nio.file.Path">Path</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.Subcommand@validatePathExists(pathOption:org.rogach.scallop.ScallopOption[java.nio.file.Path]):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">In the verify stage, check that file with the supplied path exists.</p><div class="fullcomment"><div class="comment cmt"><p>In the verify stage, check that file with the supplied path exists.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConfValidations#validations" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="validations:List[()=&gt;Either[String,Unit]]"></a>
       <a id="validations:List[()⇒Either[String,Unit]]"></a>

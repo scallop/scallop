@@ -430,23 +430,6 @@ this option is non-empty.</p>
       </a>
     </span>
       <p class="shortcomment cmt">Apply the given procedure f to the option's value, if it is nonempty.</p>
-    </li><li name="org.rogach.scallop.ScallopOption#get" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="get:Option[A]"></a>
-      <a id="get:Option[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">get</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.rogach.scallop.ScallopOption.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.ScallopOption@get:Option[A]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Retreive the underlying value as an option</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -464,6 +447,23 @@ this option is non-empty.</p>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopOption#getOrElse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getOrElse(default:=&gt;A):A"></a>
+      <a id="getOrElse(⇒A):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOrElse</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="org.rogach.scallop.ScallopOption.A">A</span></span>)</span><span class="result">: <span class="extype" name="org.rogach.scallop.ScallopOption.A">A</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.ScallopOption@getOrElse(default:=&gt;A):A" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Retrieve the underlying value if the option is nonempty, otherwise return the result of evaluating <code>default</code>.</p>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -699,6 +699,23 @@ empty too, the resulting ScallopOption will contain None.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopOption#toOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toOption:Option[A]"></a>
+      <a id="toOption:Option[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toOption</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.rogach.scallop.ScallopOption.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.ScallopOption@toOption:Option[A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Retreive the underlying value as a scala Option</p>
     </li><li name="org.rogach.scallop.ScallopOption#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -807,7 +824,30 @@ empty too, the resulting ScallopOption will contain None.
 
         
 
-        
+        <div id="values" class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="org.rogach.scallop.ScallopOption#get" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="get:Option[A]"></a>
+      <a id="get:Option[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 1.0.2) use .toOption instead">get</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.rogach.scallop.ScallopOption.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.ScallopOption@get:Option[A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Retreive the underlying value as an option</p><div class="fullcomment"><div class="comment cmt"><p>Retreive the underlying value as an option</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.2)</i> use .toOption instead</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
