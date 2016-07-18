@@ -23,8 +23,10 @@ Installation
 Add following to your build.sbt:
 
 ```scala
-libraryDependencies += "org.rogach" %% "scallop" % "1.0.2"
+libraryDependencies += "org.rogach" %% "scallop" % "2.0.0"
 ```
+
+**Migration from 1.x versions:** `opt[File]` does not check that file exists anymore. Instead, use `validateFileExists` helper inside your configuration.
 
 **Migration from 0.x versions:** due to deprecation of DelayedInit trait, automatic verification
 of configuration objects no longer works - now you must call `.verify()` on your config explicitly
