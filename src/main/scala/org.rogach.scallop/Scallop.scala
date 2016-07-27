@@ -450,6 +450,9 @@ case class Scallop(
     subbuilders.find(_._1 == sn).map(_._2)
   }
 
+  /** Returns the subcommand arguments. */
+  def getSubcommandArgs: List[String] = parsed.subcommandArgs
+
   /** Returns the list of subcommand names, recursively. */
   def getSubcommandNames: List[String] = {
     parsed.subcommand.map(subName => subbuilders.find(_._1 == subName).map(s => s._1 :: s._2.args(parsed.subcommandArgs).getSubcommandNames).getOrElse(Nil)).getOrElse(Nil)

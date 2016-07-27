@@ -370,6 +370,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
       subBuilder <- builder.getSubbuilder
       subConfig <- subconfigs.find(_.builder == subBuilder)
     } {
+      subConfig.editBuilder(_.args(builder.getSubcommandArgs))
       subConfig.runValidations
     }
   }
