@@ -627,6 +627,27 @@ For all other tricks, consult the documentation!
     }
   }
 
+  test ("validation failure on nested subconfigs") {
+    expectException(ValidationFailure("branch: a + b must be < 3")) {
+      val conf = new ScallopConf(Seq("tree", "branch", "-a", "1", "-b", "5")) {
+        val tree = new Subcommand("tree") {
+          val branch = new Subcommand("branch") {
+            val apples = opt[Int]()
+            val bananas = opt[Int]()
+            validate(apples, bananas) { (a, b) =>
+              if (a + b >= 3) Left("branch: a + b must be < 3")
+              else Right(Unit)
+            }
+          }
+          addSubcommand(branch)
+        }
+        addSubcommand(tree)
+
+        verify()
+      }
+    }
+  }
+
   test ("validationOpt failure on subconfigs") {
     expectException(ValidationFailure("both a and b must be supplied")) {
       val conf = new ScallopConf(Seq("tree", "-a", "1")) {
