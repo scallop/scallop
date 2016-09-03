@@ -2,9 +2,9 @@ organization := "org.rogach"
 
 name := "scallop"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
-crossScalaVersions := Seq("2.10.6", "2.11.7", "2.12.0-M3", "2.12.0-M4")
+crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0-M5")
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -18,7 +18,7 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % (if (scalaVersion.value == "2.12.0-M3") "2.2.5-M3" else "2.2.6") % "test",
+  "org.scalatest" %% "scalatest" % "3.0.0" % "test",
   "org.scala-lang" % "scala-reflect" % scalaVersion.value
 )
 
