@@ -42,7 +42,11 @@ trait ValueConverter[A] { parent =>
     * }}}
     */
   def map[B](fn: A => B)(implicit tt: TypeTag[B]) = new ValueConverter[B] { child =>
-    def parse(s: List[(String,List[String])]) = parent.parse(s).right.map(_.map(fn))
+    def parse(s: List[(String,List[String])]) =
+      parent.parse(s) match {
+        case Right(parseResult) => Right(parseResult.map(fn))
+        case Left(msg) => Left(msg)
+      }
     val tag = tt
     val argType = parent.argType
   }
@@ -50,9 +54,11 @@ trait ValueConverter[A] { parent =>
   def flatMap[B](fn: A => Either[String, Option[B]])(implicit tt: TypeTag[B]) =
     new ValueConverter[B] { child =>
       def parse(s: List[(String,List[String])]) =
-        parent.parse(s).right.flatMap {
-          case None => Right(None)
-          case Some(a) => fn(a)
+        parent.parse(s) match {
+          case Right(Some(parseResult)) =>
+            fn(parseResult)
+          case Right(None) => Right(None)
+          case Left(msg) => Left(msg)
         }
       val tag = tt
       val argType = parent.argType

@@ -4,6 +4,7 @@ import reflect.runtime.universe._
 import java.io.File
 import java.net.{MalformedURLException, URL, URI, URISyntaxException}
 import java.nio.file.{InvalidPathException,Path,Paths}
+import org.rogach.scallop.exceptions.GenericScallopException
 
 import scala.util.Try
 
@@ -96,7 +97,12 @@ package object scallop {
       try {
         Right {
           val m = s.map(_._2).flatten.map(_.trim).filter(","!=).flatMap(_ split "," filter (_.trim.size > 0)).map {
-            case rgx(key,value) => (key, conv.parse(List(("",List(value)))).right.get.get)
+            case rgx(key,value) =>
+              conv.parse(List(("",List(value)))) match {
+                case Right(Some(parseResult)) => (key, parseResult)
+                case Right(None) => throw new GenericScallopException("No result from props converter")
+                case Left(msg) => throw new GenericScallopException(msg)
+              }
           }.toMap
           if (m.nonEmpty) Some(m)
           else None

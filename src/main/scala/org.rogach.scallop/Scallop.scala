@@ -577,7 +577,10 @@ case class Scallop(
     } else {
       opts find (_.name == name) map { opt =>
         val args = parsed.opts.filter(_._1 == opt).map(_._2)
-        opt.converter.parseCached(args).right.get.isDefined
+        opt.converter.parseCached(args) match {
+          case Right(Some(_)) => true
+          case _ => false
+        }
       } getOrElse(throw new UnknownOption(name))
     }
   }
@@ -592,13 +595,15 @@ case class Scallop(
       subbuilders.find(_._1 == name.takeWhile('\u0000'!=)).map(_._2.args(parsed.subcommandArgs).get(name.dropWhile('\u0000'!=).drop(1))(tt))
         .getOrElse(throw new UnknownOption(name.replace("\u0000","."))).asInstanceOf[Option[A]]
     } else {
-      opts.find(_.name == name).map{ opt =>
+      opts.find(_.name == name).map { opt =>
         if (!(opt.converter.tag.tpe <:< tt.tpe))
           throw new WrongTypeRequest(tt, opt.converter.tag)
         val args = parsed.opts.filter(_._1 == opt).map(_._2)
-        opt.converter.parseCached(args).right
-          .getOrElse(if (opt.required)  throw new MajorInternalException else None)
-          .orElse(opt.default())
+        opt.converter.parseCached(args) match {
+          case Right(parseResult) =>
+            parseResult.orElse(opt.default())
+          case _ => if (opt.required) throw new MajorInternalException else None
+        }
       }.getOrElse(throw new UnknownOption(name)).asInstanceOf[Option[A]]
     }
   }
@@ -672,10 +677,12 @@ case class Scallop(
     opts foreach { o =>
       val args = parsed.opts filter (_._1 == o) map (_._2)
       val res = o.converter.parseCached(args)
-      res.left.foreach { msg =>
-        throw new WrongOptionFormat(o.name, args.map(_._2.mkString(" ")).mkString(" "), msg)
+      res match {
+        case Left(msg) =>
+          throw new WrongOptionFormat(o.name, args.map(_._2.mkString(" ")).mkString(" "), msg)
+        case _ =>
       }
-      if (o.required && !res.right.get.isDefined && !o.default().isDefined)
+      if (o.required && !res.fold(_ => false, _.isDefined) && !o.default().isDefined)
         throw new RequiredOptionNotFound(o.name)
       // validaiton
       if (!(get(o.name)(o.converter.tag) map (v => o.validator(o.converter.tag,v)) getOrElse true))

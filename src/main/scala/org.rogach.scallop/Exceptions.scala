@@ -74,3 +74,5 @@ case class ValidationFailure(mess: String) extends ScallopException(mess)
     If you actually saw it, there is a sure bug lurking somewhere. In such cases, please
     file a bug on project page! */
 case class MajorInternalException() extends ScallopException("Oi, something went awfully wrong. Please report a bug to the developer of the library!")
+
+case class GenericScallopException(msg: String) extends ScallopException(msg)
