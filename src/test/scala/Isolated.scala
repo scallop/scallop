@@ -10,7 +10,15 @@ class Isolated extends UsefulMatchers with CapturingTest {
   throwError.value = true
 
   test ("i") {
+    object Conf extends ScallopConf(Seq("apple", "-c", "42")) {
+      val fruit = new Subcommand("fruit", "apple", "banana") {
+        val count = opt[Int]()
+      }
+      addSubcommand(fruit)
 
+      verify()
+    }
+    Conf.fruit.count.isSupplied ==== true
   }
 
 }

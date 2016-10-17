@@ -6,15 +6,17 @@ import exceptions._
 import scala.util.DynamicVariable
 import reflect.runtime.universe._
 
-class Subcommand(val commandName: String) extends ScallopConf(Nil, commandName) {
-  /** Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled.
-    */
+class Subcommand(commandNameAndAliases: String*) extends ScallopConf(Nil, commandNameAndAliases) {
+  /** Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled. */
   def descr(d: String) {
     editBuilder(_.copy(descr = d))
   }
 }
 
-abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandname: String = "") extends ScallopConfValidations {
+abstract class ScallopConf(
+  val args: Seq[String] = Nil,
+  protected val commandNameAndAliases: Seq[String] = Nil
+) extends ScallopConfValidations {
 
   /** Pointer to parent ScallopConf */
   protected var parentConfig: ScallopConf = this
@@ -42,7 +44,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
 
     conf.verifyConf()
 
-    editBuilder(_.addSubBuilder(conf.commandname, conf.builder))
+    editBuilder(_.addSubBuilder(conf.commandNameAndAliases, conf.builder))
   }
 
   var builder = Scallop(args)
@@ -75,7 +77,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     assertVerified
     assert(rootConfig == this, "You shouldn't call 'subcommand' on subcommand object")
 
-    builder.getSubcommandName.map(n => subconfigs.find(_.commandname == n).get)
+    builder.getSubcommandName.map(n => subconfigs.find(_.commandNameAndAliases.contains(n)).get)
   }
 
   /** Retrieves the list of the chosen nested subcommands. */
@@ -86,7 +88,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     var config = this
     var configs = List[ScallopConf]()
     builder.getSubcommandNames.foreach { bn =>
-      config = config.subconfigs.find(_.commandname == bn).get
+      config = config.subconfigs.find(_.commandNameAndAliases.contains(bn)).get
       configs :+= config
     }
     configs
@@ -97,7 +99,7 @@ abstract class ScallopConf(val args: Seq[String] = Nil, protected val commandnam
     var prefix = ""
     var conf = this
     while (!conf.isRootConfig) {
-      prefix = conf.commandname + "\u0000" + prefix
+      prefix = conf.commandNameAndAliases.head + "\u0000" + prefix
       conf = conf.parentConfig
     }
     prefix

@@ -426,9 +426,9 @@ case class Scallop(
   /** Adds a subbuilder (subcommand) to this builder.
     * @param name All arguments after this string would be routed to this builder.
     */
-  def addSubBuilder(name: String, builder: Scallop) = {
+  def addSubBuilder(nameAndAliases: Seq[String], builder: Scallop) = {
     builder.parent = Some(this)
-    this.copy(subbuilders = subbuilders :+ (name -> builder))
+    this.copy(subbuilders = subbuilders ++ nameAndAliases.map(name => name -> builder))
   }
 
   /** Traverses the tree of subbuilders, using the provided name.
@@ -568,11 +568,15 @@ case class Scallop(
     if (name.contains('\u0000')) {
       // delegating to subbuilder
       parsed.subcommand.map { subc =>
-        if (subc == name.takeWhile('\u0000'!=)) {
-          subbuilders.find(_._1 == subc)
-          .map(_._2.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\u0000'!=).drop(1)))
-          .getOrElse(throw new UnknownOption(name.replace("\u0000",".")))
-        } else false // only current subcommand can have supplied arguments
+        subbuilders
+        .find(_._1 == subc).map(_._2)
+        .filter { subBuilder =>
+          subbuilders.filter(_._2 == subBuilder)
+          .exists(_._1 == name.takeWhile('\u0000'!=))
+        }
+        .map { subBuilder =>
+          subBuilder.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\u0000'!=).drop(1))
+        }.getOrElse(false) // only current subcommand can have supplied arguments
       }.getOrElse(false) // no subcommands, so their options are definitely not supplied
     } else {
       opts find (_.name == name) map { opt =>

@@ -12,7 +12,7 @@ class SubcommandsTest extends UsefulMatchers {
       .opt[Boolean]("bananas")
     val opts = Scallop()
       .opt[Boolean]("apples")
-      .addSubBuilder("tree",sub)
+      .addSubBuilder(Seq("tree"),sub)
       .args(Seq("-a","tree","-b"))
       .verify
     opts.get[Boolean]("apples") should equal (Some(true))
@@ -280,5 +280,20 @@ class SubcommandsTest extends UsefulMatchers {
     }
 
     conf.tree.apples.isSupplied shouldBe false
+  }
+
+  test ("subcommand aliases") {
+    object Conf extends ScallopConf(Seq("apple", "-c", "42")) {
+      val fruit = new Subcommand("fruit", "apple", "banana") {
+        val count = opt[Int]()
+      }
+      addSubcommand(fruit)
+
+      verify()
+    }
+    Conf.subcommand ==== Some(Conf.fruit)
+    Conf.subcommands ==== List(Conf.fruit)
+    Conf.fruit.count() shouldEqual 42
+    Conf.fruit.count.isSupplied ==== true
   }
 }
