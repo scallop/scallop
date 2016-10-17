@@ -62,7 +62,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -75,7 +75,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="org.rogach.scallop.Subcommand#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(commandName:String):org.rogach.scallop.Subcommand"></a>
+      <a id="&lt;init&gt;(commandNameAndAliases:String*):org.rogach.scallop.Subcommand"></a>
       <a id="&lt;init&gt;:Subcommand"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Subcommand</span><span class="params">(<span name="commandName">commandName: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+        <span class="name">Subcommand</span><span class="params">(<span name="commandNameAndAliases">commandNameAndAliases: <span class="extype" name="scala.Predef.String">String</span>*</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.Subcommand@&lt;init&gt;(commandName:String):org.rogach.scallop.Subcommand" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.Subcommand@&lt;init&gt;(commandNameAndAliases:String*):org.rogach.scallop.Subcommand" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -365,36 +365,19 @@ to option descriptions.</p></div><dl class="attributes block"> <dt>Definition Cl
     </span>
       <p class="shortcomment cmt">In the verify stage, checks that either all or none of the provided options have values supplied in arguments.</p><div class="fullcomment"><div class="comment cmt"><p>In the verify stage, checks that either all or none of the provided options have values supplied in arguments.
 </p></div><dl class="paramcmts block"><dt class="param">list</dt><dd class="cmt"><p>list of codependent options</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConf.html" class="extype" name="org.rogach.scallop.ScallopConf">ScallopConf</a></dd></dl></div>
-    </li><li name="org.rogach.scallop.Subcommand#commandName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="commandName:String"></a>
-      <a id="commandName:String"></a>
+    </li><li name="org.rogach.scallop.ScallopConf#commandNameAndAliases" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="commandNameAndAliases:Seq[String]"></a>
+      <a id="commandNameAndAliases:Seq[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">commandName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">commandNameAndAliases</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.Subcommand@commandName:String" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="org.rogach.scallop.ScallopConf#commandname" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="commandname:String"></a>
-      <a id="commandname:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">commandname</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.Subcommand@commandname:String" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.Subcommand@commandNameAndAliases:Seq[String]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -469,8 +452,7 @@ to option descriptions.</p></div><dl class="attributes block"> <dt>Definition Cl
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Short description for this subcommand.</p><div class="fullcomment"><div class="comment cmt"><p>Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled.
-</p></div></div>
+      <p class="shortcomment cmt">Short description for this subcommand.</p><div class="fullcomment"><div class="comment cmt"><p>Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled.</p></div></div>
     </li><li name="org.rogach.scallop.ScallopConf#editBuilder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="editBuilder(fn:org.rogach.scallop.Scallop=&gt;org.rogach.scallop.Scallop):Unit"></a>
       <a id="editBuilder((Scallop)⇒Scallop):Unit"></a>

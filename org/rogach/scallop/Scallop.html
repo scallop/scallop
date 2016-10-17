@@ -65,7 +65,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -78,7 +78,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -205,23 +205,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.rogach.scallop.Scallop#addSubBuilder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="addSubBuilder(name:String,builder:org.rogach.scallop.Scallop):org.rogach.scallop.Scallop"></a>
-      <a id="addSubBuilder(String,Scallop):Scallop"></a>
+    </li><li name="org.rogach.scallop.Scallop#addSubBuilder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="addSubBuilder(nameAndAliases:Seq[String],builder:org.rogach.scallop.Scallop):org.rogach.scallop.Scallop"></a>
+      <a id="addSubBuilder(Seq[String],Scallop):Scallop"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addSubBuilder</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="builder">builder: <a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a></span>)</span><span class="result">: <a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a></span>
+        <span class="name">addSubBuilder</span><span class="params">(<span name="nameAndAliases">nameAndAliases: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="builder">builder: <a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a></span>)</span><span class="result">: <a href="" class="extype" name="org.rogach.scallop.Scallop">Scallop</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.rogach.scallop.Scallop@addSubBuilder(name:String,builder:org.rogach.scallop.Scallop):org.rogach.scallop.Scallop" title="Permalink" target="_top">
+      <a href="../../../index.html#org.rogach.scallop.Scallop@addSubBuilder(nameAndAliases:Seq[String],builder:org.rogach.scallop.Scallop):org.rogach.scallop.Scallop" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Adds a subbuilder (subcommand) to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a subbuilder (subcommand) to this builder.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>All arguments after this string would be routed to this builder.</p></dd></dl></div>
+      <p class="shortcomment cmt">Adds a subbuilder (subcommand) to this builder.</p>
     </li><li name="org.rogach.scallop.Scallop#appendDefaultToDescription" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="appendDefaultToDescription:Boolean"></a>
       <a id="appendDefaultToDescription:Boolean"></a>
@@ -614,6 +614,23 @@ summary on it's usage.
     </span>
       <p class="shortcomment cmt">Retrieves the subbuilder object,
 that matches the name of the subcommand found in input arguments.</p>
+    </li><li name="org.rogach.scallop.Scallop#getSubcommandArgs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getSubcommandArgs:List[String]"></a>
+      <a id="getSubcommandArgs:List[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getSubcommandArgs</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.rogach.scallop.Scallop@getSubcommandArgs:List[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the subcommand arguments.</p>
     </li><li name="org.rogach.scallop.Scallop#getSubcommandName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="getSubcommandName:Option[String]"></a>
       <a id="getSubcommandName:Option[String]"></a>
