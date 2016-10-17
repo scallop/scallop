@@ -522,14 +522,22 @@ case class Scallop(
         "\n\nSubcommands:\n" + subbuilders.map(s => "  " + s._1.padTo(maxCommandLength, ' ') + "   " + s._2.descr).mkString("\n")
       }.getOrElse("")
     } else {
-      val subHelp = subbuilders.map { case (sn, sub) =>
-        val subDescr = if (sub.descr.nonEmpty) " - " + sub.descr else ""
-        ("Subcommand: %s%s%s" format (subcommandPrefix, sn, subDescr)) + "\n" +
-        sub.bann.map(_+"\n").getOrElse("") +
-        sub.help(subcommandPrefix + sn + " ").split("\n").
-          filter(!_.trim.startsWith("--version")).mkString("\n") +
-        sub.foot.map("\n"+_).getOrElse("")
-      }.mkString("\n")
+      val subHelp = subbuilders
+        .groupBy(_._2)
+        .mapValues(_.map(_._1))
+        .toList
+        .sortBy { case (subBuilder, names) => subbuilders.indexWhere(_._2 == subBuilder) }
+        .map { case (sub, names) =>
+          val subName =
+            if (names.size == 1) names.head
+            else names.head + " (alias: " + names.tail.mkString(", ") + ")"
+          val subDescr = if (sub.descr.nonEmpty) " - " + sub.descr else ""
+          ("Subcommand: %s%s%s" format (subcommandPrefix, subName, subDescr)) + "\n" +
+          sub.bann.map(_+"\n").getOrElse("") +
+          sub.help(subcommandPrefix + names.head + " ").split("\n").
+            filter(!_.trim.startsWith("--version")).mkString("\n") +
+          sub.foot.map("\n"+_).getOrElse("")
+        }.mkString("\n")
       if (subHelp.nonEmpty) "\n\n" + subHelp else subHelp
     }
     val trailOpts = opts filter (_.isPositional) filter (!_.hidden)
