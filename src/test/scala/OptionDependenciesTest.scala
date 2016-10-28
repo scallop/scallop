@@ -129,6 +129,38 @@ class OptionDependenciesTest extends FunSuite with UsefulMatchers {
     }
   }
 
+  test("requireAtLeastOne - failure, nothing is provided") {
+    expectException(ValidationFailure("There should be at least one of the following options: apples, bananas")) {
+      new ScallopConf(List()){
+        val apples = opt[Int]("apples")
+        val bananas = opt[Int]("bananas")
+        requireAtLeastOne(apples, bananas)
+
+        verify()
+      }
+    }
+  }
+
+  test("requireAtLeastOne - success, one is provided") {
+    new ScallopConf(List("-b","2")){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      requireAtLeastOne(apples, bananas)
+
+      verify()
+    }
+  }
+
+  test("requireAtLeastOne - success, all are provided") {
+    new ScallopConf(List("-a","1","-b","2")){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      requireAtLeastOne(apples, bananas)
+
+      verify()
+    }
+  }
+
   test("requireOne - failure, no options are provided") {
     expectException(ValidationFailure("There should be exactly one of the following options: apples, bananas")) {
       new ScallopConf(List()){

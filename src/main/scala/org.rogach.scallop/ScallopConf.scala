@@ -463,6 +463,17 @@ abstract class ScallopConf(
     } else Right(Unit)
   }
 
+  /** In the verify stage, checks that at least one option in the list is supplied.
+    *
+    * @param list list of options (at least one must be present)
+    */
+  def requireAtLeastOne(list: ScallopOption[_]*) = addValidation {
+    if (!list.exists(_.isSupplied)) {
+      Left("There should be at least one of the following options: %s"
+        format list.map(_.name).mkString(", "))
+    } else Right(Unit)
+  }
+
   /** In the verify stage, checks that one, and only one, option in the list is supplied.
     *
     * @param list list of conflicting options (exactly one must be present)
