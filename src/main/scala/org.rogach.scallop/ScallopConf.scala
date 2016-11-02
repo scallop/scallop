@@ -530,6 +530,33 @@ abstract class ScallopConf(
     }
   }
 
+  def validateFileDoesNotExist(fileOption: ScallopOption[File]) = addValidation {
+    fileOption.toOption
+      .map(file => {
+        if (file.exists()) Left(s"File '$file' already exists")
+        else Right(())
+      })
+      .getOrElse(Right(()))
+  }
+
+  def validateFileIsDirectory(fileOption: ScallopOption[File]) = addValidation {
+    fileOption.toOption
+      .map(file => {
+        if (!file.isDirectory) Left(s"File '$file' is not a directory")
+        else Right(())
+      })
+      .getOrElse(Right(()))
+  }
+
+  def validateFileIsFile(fileOption: ScallopOption[File]) = addValidation {
+    fileOption.toOption
+      .map(file => {
+        if (!file.isFile) Left(s"File '$file' is not a file")
+        else Right(())
+      })
+      .getOrElse(Right(()))
+  }
+
   /** In the verify stage, check that file with the supplied path exists. */
   def validatePathExists(pathOption: ScallopOption[Path]) = addValidation {
     pathOption.toOption.fold[Either[String,Unit]](Right(Unit)) { path =>
