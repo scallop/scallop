@@ -23,7 +23,7 @@ Installation
 Add following to your build.sbt:
 
 ```scala
-libraryDependencies += "org.rogach" %% "scallop" % "2.0.4"
+libraryDependencies += "org.rogach" %% "scallop" % "2.0.5"
 ```
 
 **Migration from 1.x versions:** `opt[File]` does not check that file exists anymore. Instead, use `validateFileExists` helper inside your configuration.
