@@ -8,6 +8,22 @@ import reflect.runtime.universe._
 
 class NormalTest extends FunSuite with Matchers with CapturingTest {
 
+  test ("readme example") {
+    import org.rogach.scallop._
+
+    class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
+      val apples = opt[Int](required = true)
+      val bananas = opt[Int]()
+      val name = trailArg[String]()
+      verify()
+    }
+
+    val conf = new Conf(List("--apples", "4", "--bananas", "10", "strangeTree"))
+    conf.apples() shouldEqual 4
+    conf.bananas() shouldEqual 10
+    conf.name() shouldEqual "strangeTree"
+  }
+
   test ("main") {
     val opts = Scallop(List("-d","--num-limbs","1"))
       .version("test 1.2.3 (c) 2012 Mr Placeholder") // --version option is provided for you
