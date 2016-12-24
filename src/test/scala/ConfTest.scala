@@ -421,6 +421,31 @@ For all other tricks, consult the documentation!
     Conf.app.get("key2") should equal (Some(2))
   }
 
+  test ("escaped commas in property args") {
+    object Conf extends ScallopConf(Seq("-A", "key=1\\,2")) {
+      val app = props[String]('A')
+      verify()
+    }
+    Conf.app.get("key") shouldEqual Some("1,2")
+  }
+
+  test ("escaped commas mixed with non-escaped separators in property args") {
+    object Conf extends ScallopConf(Seq("-A", "key1=1\\,2,key2=3")) {
+      val app = props[String]('A')
+      verify()
+    }
+    Conf.app.get("key1") shouldEqual Some("1,2")
+    Conf.app.get("key2") shouldEqual Some("3")
+  }
+
+  test ("escaped equals in property args") {
+    object Conf extends ScallopConf(Seq("-A", "key=1\\=2")) {
+      val app = props[String]('A')
+      verify()
+    }
+    Conf.app.get("key") shouldEqual Some("1=2")
+  }
+
   test ("toggle options - positive, long") {
     object Conf extends ScallopConf(Seq("--verbose")) {
       val verbose = toggle("verbose")

@@ -92,18 +92,21 @@ package object scallop {
   implicit val stringListConverter = listArgConverter[String](identity)
 
   def propsConverter[A](conv: ValueConverter[A])(implicit tt: TypeTag[Map[String,A]]): ValueConverter[Map[String,A]] = new ValueConverter[Map[String,A]] {
-    val rgx = """([^=]+)=(.*)""".r
     def parse(s:List[(String, List[String])]) = {
       try {
         Right {
-          val m = s.map(_._2).flatten.map(_.trim).filter(","!=).flatMap(_ split "," filter (_.trim.size > 0)).map {
-            case rgx(key,value) =>
-              conv.parse(List(("",List(value)))) match {
-                case Right(Some(parseResult)) => (key, parseResult)
-                case Right(None) => throw new GenericScallopException("No result from props converter")
-                case Left(msg) => throw new GenericScallopException(msg)
-              }
+          val pairs = s.map(_._2).flatten.map(_.trim).filter("," != _).flatMap(_.split("(?<!\\\\),")).map(_.replace("\\,", ","))
+          val m = pairs.map { pair =>
+            val kv = pair.split("(?<!\\\\)=").map(_.replace("\\=", "="))
+            val key = kv(0)
+            val value = kv(1)
+            conv.parse(List(("",List(value)))) match {
+              case Right(Some(parseResult)) => (key, parseResult)
+              case Right(None) => throw new GenericScallopException("No result from props converter")
+              case Left(msg) => throw new GenericScallopException(msg)
+            }
           }.toMap
+
           if (m.nonEmpty) Some(m)
           else None
         }
