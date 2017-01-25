@@ -499,15 +499,19 @@ case class Scallop(
     val versionOpt = opts.find(_.name == "version").orElse(vers.map(_ => Scallop.builtinVersionOpt))
 
     val optsToFormat =
-      mainOpts.map(mo => opts.find(_.name == mo)) ++ mainOpts.headOption.map(_=>List(None)).getOrElse(Nil) ++
+      mainOpts.map(mo => opts.find(_.name == mo)) ++
+      // insert empty line before other options if main options are defined
+      mainOpts.headOption.map(_=>List(None)).getOrElse(Nil) ++
       (opts
         filter (!_.isPositional)
         filter (!_.hidden)
         filter (o => mainOpts.forall(o.name!=))
         filter (o => o.name != "help" && o.name != "version")
         sortBy (_.name.toLowerCase)
-        map (o => Some(o))) ++
-      List(Some(helpOpt), versionOpt).filter(_.isDefined)
+        map (o => Some(o))
+      ) ++
+      List(Some(helpOpt), versionOpt).map(_.filterNot(_.hidden)).filter(_.isDefined)
+
     val optsHelp = Formatter format (
       optsToFormat flatMap {
         case None => List(None)
@@ -516,6 +520,7 @@ case class Scallop(
       helpWidth,
       needToAppendDefaultToDescription
     )
+
     val subcommandsHelp = if (shortSubcommandsHelp) {
       subbuilders.headOption.map { _ =>
         val maxCommandLength = subbuilders.map(_._1.size).max

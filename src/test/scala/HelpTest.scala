@@ -385,4 +385,36 @@ class HelpTest extends UsefulMatchers with CapturingTest {
        |""".stripMargin
 
   }
+
+  test ("hide help option if overriding option has hidden = true") {
+    val conf = new ScallopConf(Seq()) {
+      val help = opt[Boolean](hidden = true)
+      verify()
+    }
+    val (out, _, _) = captureOutputAndExits {
+      conf.printHelp()
+    }
+    out ====
+      """
+        |""".stripMargin
+  }
+
+  test ("hide help option in subcommand if overriding option has hidden = true") {
+    val conf = new ScallopConf(Seq()) {
+      val sub = new Subcommand("sub") {
+        val help = opt[Boolean](hidden = true)
+      }
+      addSubcommand(sub)
+      verify()
+    }
+    val (out, _, _) = captureOutputAndExits {
+      conf.printHelp()
+    }
+    out ====
+      """      --help   Show help message
+        |
+        |Subcommand: sub
+        |
+        |""".stripMargin
+  }
 }
