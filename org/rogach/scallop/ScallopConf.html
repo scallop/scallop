@@ -430,6 +430,22 @@
       </span>
       
       <p class="shortcomment cmt">Add subcommand to this config</p>
+    </li><li name="org.rogach.scallop.ScallopConf#addValidation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="addValidation(fn:=&gt;Either[String,Unit]):Unit"></a><a id="addValidation(⇒Either[String,Unit]):Unit"></a>
+      <span class="permalink">
+      <a href="../../../org/rogach/scallop/ScallopConf.html#addValidation(fn:=&gt;Either[String,Unit]):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">addValidation</span><span class="params">(<span name="fn">fn: ⇒ <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Unit">Unit</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Adds a validation function to this configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a validation function to this configuration. This function will be run after all other verification steps.</p></div><dl class="paramcmts block"><dt class="param">fn</dt><dd class="cmt"><p>Validation function. In case of error, it should return Left with the error message.</p></dd></dl></div>
     </li><li name="org.rogach.scallop.ScallopConf#allDefinedOrUndefined" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="allDefinedOrUndefined(list:org.rogach.scallop.ScallopOption[_]*):Unit"></a><a id="allDefinedOrUndefined(ScallopOption[_]*):Unit"></a>
       <span class="permalink">
