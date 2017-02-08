@@ -423,7 +423,10 @@ abstract class ScallopConf(
     }
   }
 
-  private[scallop] def addValidation(fn: => Either[String, Unit]) {
+  /** Adds a validation function to this configuration. This function will be run after all other verification steps.
+    * @param fn Validation function. In case of error, it should return Left with the error message.
+    */
+  def addValidation(fn: => Either[String, Unit]) {
     validations :+= (() => fn)
   }
 
