@@ -715,12 +715,23 @@ case class Scallop(
     * Returns a list of all options in the builder, and corresponding values for them.
     */
   def summary: String = {
-    ("Scallop(%s)" format args.mkString(", ")) + "\n" +
-    opts.map(o =>
-      " %s  %s => %s" format ((if (isSupplied(o.name)) "*" else " "),
-                              o.name,
-                              get(o.name)(o.converter.tag).getOrElse("<None>"))
-    ).mkString("\n") + "\n" + parsed.subcommand.map { sn =>
+    ("Scallop(%s)" format args.mkString(", ")) + "\n" + filteredSummary(Set.empty)
+  }
+
+  /** Get summary of current parser state + blurring the values of parameters provided.
+    *
+    * @param blurred names of arguments that should be hidden.
+    *
+    * Returns a list of all options in the builder, and corresponding values for them
+    * with eventually blurred values.
+    */
+  def filteredSummary(blurred:Set[String]): String = {
+    lazy val hide = "************"
+    opts.map { o =>
+      " %s  %s => %s" format((if (isSupplied(o.name)) "*" else " "),
+        o.name,
+        if(!blurred.contains(o.name)) get(o.name)(o.converter.tag).getOrElse("<None>") else hide)
+    }.mkString("\n") + "\n" + parsed.subcommand.map { sn =>
       ("subcommand: %s\n" format sn) + subbuilders.find(_._1 == sn).get._2.args(parsed.subcommandArgs).summary
     }.getOrElse("")
   }
