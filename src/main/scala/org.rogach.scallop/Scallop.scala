@@ -732,7 +732,7 @@ case class Scallop(
         o.name,
         if(!blurred.contains(o.name)) get(o.name)(o.converter.tag).getOrElse("<None>") else hide)
     }.mkString("\n") + "\n" + parsed.subcommand.map { sn =>
-      ("subcommand: %s\n" format sn) + subbuilders.find(_._1 == sn).get._2.args(parsed.subcommandArgs).summary
+      ("subcommand: %s\n" format sn) + subbuilders.find(_._1 == sn).get._2.args(parsed.subcommandArgs).filteredSummary(blurred)
     }.getOrElse("")
   }
 
