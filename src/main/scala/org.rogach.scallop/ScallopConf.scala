@@ -582,6 +582,11 @@ abstract class ScallopConf(
     builder.summary
   }
 
+  def filteredSummary(blurred: Set[String]) = {
+    assertVerified
+    builder.filteredSummary(blurred: Set[String])
+  }
+
   /** Prints help message (with version, banner, option usage and footer) to stdout. */
   def printHelp() = builder.printHelp
 
