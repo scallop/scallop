@@ -69,9 +69,10 @@ case class Scallop(
     helpWidth: Option[Int] = None,
     shortSubcommandsHelp: Boolean = false,
     appendDefaultToDescription: Boolean = false,
-    subbuilders: List[(String, Scallop)] = Nil,
-    var parent: Option[Scallop] = None
+    subbuilders: List[(String, Scallop)] = Nil
   ) {
+
+  var parent: Option[Scallop] = None
 
   type Parsed = List[(CliOption, (String, List[String]))]
 
