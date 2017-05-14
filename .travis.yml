@@ -5,3 +5,5 @@ scala:
   - 2.12.0
 jdk:
   - oraclejdk8
+before_script:
+  - sudo chmod +x /usr/local/bin/sbt
