@@ -531,11 +531,16 @@ case class Scallop(
         "\n\nSubcommands:\n" + subbuilders.map(s => "  " + s._1.padTo(maxCommandLength, ' ') + "   " + s._2.descr).mkString("\n")
       }.getOrElse("")
     } else {
-      val subHelp = subbuilders
-        .groupBy(_._2)
-        .mapValues(_.map(_._1))
-        .toList
-        .sortBy { case (subBuilder, names) => subbuilders.indexWhere(_._2 == subBuilder) }
+      val subHelp =
+        subbuilders.foldLeft(Seq.empty[(Scallop, Seq[String])]) {
+          case (acc, (name, subBuilder)) =>
+            acc.indexWhere(_._1 == subBuilder) match {
+              case -1 => acc :+ (subBuilder -> Seq(name))
+              case i  =>
+                val (currentSubBuilder, currentNames) = acc(i)
+                acc.updated(i, (currentSubBuilder, currentNames :+ name))
+            }
+        }
         .map { case (sub, names) =>
           val subName =
             if (names.size == 1) names.head
