@@ -108,7 +108,10 @@ case class Scallop(
           case TrailingArgumentsParser.ParseResult(result, _, _) if result.exists(_.isLeft) =>
             val ((option, _, _), Left((message, args))) =
               trailingOptions.zip(result).find(_._2.isLeft).get
-            throw WrongOptionFormat(option.name, args.mkString(" "), message)
+            if (option.required && (message == "not enough arguments"))
+              throw RequiredOptionNotFound(option.name)
+            else
+              throw WrongOptionFormat(option.name, args.mkString(" "), message)
 
           case TrailingArgumentsParser.ParseResult(result, _, _) =>
             trailingOptions.zip(result).flatMap {
