@@ -1,7 +1,5 @@
 package org.rogach.scallop
 
-import exceptions._
-
 /** Helper trait for generaton of `validate` methods on ScallopConf. */
 trait ScallopConfValidations { this: ScallopConf =>
 

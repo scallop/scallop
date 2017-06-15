@@ -3,7 +3,6 @@ package org.rogach.scallop
 import java.io.File
 import java.nio.file.Path
 import exceptions._
-import scala.util.DynamicVariable
 
 class Subcommand(commandNameAndAliases: String*) extends ScallopConf(Nil, commandNameAndAliases) {
   /** Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled. */
