@@ -1,7 +1,10 @@
 language: scala
 scala:
   - 2.10.6
-  - 2.11.8
-  - 2.12.0
+  - 2.11.11
+  - 2.12.2
 jdk:
   - oraclejdk8
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION scallopJVM/test
+  - sbt ++$TRAVIS_SCALA_VERSION scallopNative/test:run
