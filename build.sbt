@@ -78,7 +78,8 @@ lazy val scallop =
     doc in Compile := {
       Seq("bash","-c",""" for x in $(find jvm/target/scala-2.12/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
       (doc in Compile).value
-    }
+    },
+    scalacOptions in Test -= "-Xlint"
   )
   .nativeSettings(
     scalaVersion := "2.11.11",
