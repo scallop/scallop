@@ -1,7 +1,5 @@
 package org.rogach.scallop.exceptions
 
-import reflect.runtime.universe._
-
 /** Parent trait for all not-positive results that can be resulted from this library (including help and exits) */
 sealed trait ScallopResult
 
@@ -26,10 +24,6 @@ object ScallopException {
     Some(e.message)
   }
 }
-
-/** Thrown when the user requests wrong type of option argument from Scallop. */
-case class WrongTypeRequest(requested: TypeTag[_], required: TypeTag[_])
-  extends ScallopException("Requested '%s' instead of '%s'" format (requested.tpe, required.tpe))
 
 /** Thrown when option guessing fails on one of the options. */
 case class OptionNameGuessingFailure()

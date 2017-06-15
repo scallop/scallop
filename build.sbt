@@ -18,9 +18,6 @@ lazy val commonSettings = Seq(
     "-language:implicitConversions",
     "-Xlint"
   ),
-  libraryDependencies ++= Seq(
-    "org.scala-lang" % "scala-reflect" % scalaVersion.value
-  ),
   licenses := Seq(
     "MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")
   ),

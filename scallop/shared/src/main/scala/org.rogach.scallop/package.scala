@@ -1,6 +1,5 @@
 package org.rogach
 
-import reflect.runtime.universe._
 import java.io.File
 import java.net.{MalformedURLException, URL, URI, URISyntaxException}
 import java.nio.file.{InvalidPathException,Path,Paths}
@@ -15,7 +14,6 @@ package object scallop {
       case Nil => Right(None)
       case _ => Left("too many arguments for flag option")
     }
-    val tag = typeTag[Boolean]
     val argType = ArgType.FLAG
   }
 
@@ -24,8 +22,9 @@ package object scallop {
     * @param handler an error handler function for writing custom error messages
     */
   def singleArgConverter[A](
-    conv: String => A, handler: PartialFunction[Throwable, Either[String, Option[A]]] = PartialFunction.empty
-  )(implicit tt: TypeTag[A]) = new ValueConverter[A] {
+    conv: String => A,
+    handler: PartialFunction[Throwable, Either[String, Option[A]]] = PartialFunction.empty
+  ) = new ValueConverter[A] {
     def parse(s: List[(String, List[String])]) = {
       s match {
         case (_, i :: Nil) :: Nil =>
@@ -36,7 +35,6 @@ package object scallop {
         case _ => Left("you should provide exactly one argument for this option")
       }
     }
-    val tag = tt
     val argType = ArgType.SINGLE
   }
 
@@ -70,7 +68,7 @@ package object scallop {
     case e: URISyntaxException => Left("bad URI, %s" format e.getMessage)
   })
 
-  def listArgConverter[A](conv: String => A)(implicit tt: TypeTag[List[A]])  = new ValueConverter[List[A]] {
+  def listArgConverter[A](conv: String => A) = new ValueConverter[List[A]] {
     def parse(s:List[(String, List[String])]) = {
       try {
         val l = s.map(_._2).flatten.map(i => conv(i))
@@ -80,7 +78,6 @@ package object scallop {
         Left("wrong arguments format")
       }
     }
-    val tag = tt
     val argType = ArgType.LIST
   }
   implicit val byteListConverter = listArgConverter[Byte](_.toByte)
@@ -91,7 +88,7 @@ package object scallop {
   implicit val doubleListConverter = listArgConverter[Double](_.toDouble)
   implicit val stringListConverter = listArgConverter[String](identity)
 
-  def propsConverter[A](conv: ValueConverter[A])(implicit tt: TypeTag[Map[String,A]]): ValueConverter[Map[String,A]] = new ValueConverter[Map[String,A]] {
+  def propsConverter[A](conv: ValueConverter[A]): ValueConverter[Map[String,A]] = new ValueConverter[Map[String,A]] {
     def parse(s:List[(String, List[String])]) = {
       try {
         Right {
@@ -114,7 +111,6 @@ package object scallop {
         Left("wrong arguments format")
       }
     }
-    val tag = tt
     val argType = ArgType.LIST
   }
   implicit val bytePropsConverter = propsConverter[Byte](byteConverter)
@@ -132,7 +128,6 @@ package object scallop {
       else if (s.nonEmpty) Right(Some(s.size))
            else Right(None)
     }
-    val tag = implicitly[TypeTag[Int]]
     val argType = ArgType.FLAG
   }
 
@@ -146,7 +141,6 @@ package object scallop {
           case _ => Left("Too many arguments")
         }
       }
-      val tag = conv.tag
       val argType = ArgType.LIST
     }
 

@@ -1,10 +1,9 @@
 package org.rogach.scallop
 
 import org.rogach.scallop.exceptions._
-import reflect.runtime.universe._
 
 /** The creator and god of all parsers :) */
-object Scallop {
+private[scallop] object Scallop {
 
   /** Create the new parser with some arguments already inserted.
     *
@@ -23,7 +22,7 @@ object Scallop {
       required = false,
       converter = flagConverter,
       default = () => None,
-      validator = (_,_) => true,
+      validator = (_) => true,
       argName = "",
       hidden = false,
       noshort = true
@@ -37,7 +36,7 @@ object Scallop {
       required = false,
       converter = flagConverter,
       default = () => None,
-      validator = (_,_) => true,
+      validator = (_) => true,
       argName = "",
       hidden = false,
       noshort = true
@@ -276,10 +275,7 @@ case class Scallop(
         }
       else default
     val eShort = if (short == '\u0000' || noshort) None else Some(short)
-    val validator = { (tt:TypeTag[_], a:Any) =>
-      if (conv.tag.tpe <:< tt.tpe) validate(a.asInstanceOf[A])
-      else false
-    }
+    val validator = { (a:Any) => validate(a.asInstanceOf[A]) }
     this.copy(opts = opts :+ SimpleOption(name,
                                           eShort,
                                           descr,
@@ -345,10 +341,7 @@ case class Scallop(
           else Some(false)
         }
       else default
-    val validator = { (tt: TypeTag[_], a:Any) =>
-      if (conv.tag.tpe <:< tt.tpe) validate(a.asInstanceOf[A])
-      else false
-    }
+    val validator = { (a:Any) => validate(a.asInstanceOf[A]) }
     this.copy(opts = opts :+ TrailingArgsOption(name,
                                                 required,
                                                 descr,
@@ -376,10 +369,7 @@ case class Scallop(
       hidden: Boolean = false)
       (implicit conv: ValueConverter[Long]): Scallop = {
 
-    val validator = { (tt: TypeTag[_], a: Any) =>
-      if (conv.tag.tpe <:< tt.tpe) validate(a.asInstanceOf[Long])
-      else false
-    }
+    val validator = { (a: Any) => validate(a.asInstanceOf[Long]) }
     this.copy(opts = opts :+ NumberArgOption(
       name,
       required,
@@ -604,39 +594,35 @@ case class Scallop(
 
    /** Get the value of option (or trailing arg) as Option.
      * @param name Name for option.
-     * @param tt TypeTag for requested type. Usually found implicitly.
      */
-  def get[A](name: String)(implicit tt: TypeTag[A]): Option[A] = {
+  def get(name: String): Option[Any] = {
     if (name.contains('\u0000')) {
       // delegating to subbuilder
-      subbuilders.find(_._1 == name.takeWhile('\u0000'!=)).map(_._2.args(parsed.subcommandArgs).get(name.dropWhile('\u0000'!=).drop(1))(tt))
-        .getOrElse(throw new UnknownOption(name.replace("\u0000","."))).asInstanceOf[Option[A]]
+      subbuilders.find(_._1 == name.takeWhile('\u0000'!=)).map(_._2.args(parsed.subcommandArgs).get(name.dropWhile('\u0000'!=).drop(1)))
+        .getOrElse(throw new UnknownOption(name.replace("\u0000",".")))
     } else {
       opts.find(_.name == name).map { opt =>
-        if (!(opt.converter.tag.tpe <:< tt.tpe))
-          throw new WrongTypeRequest(tt, opt.converter.tag)
         val args = parsed.opts.filter(_._1 == opt).map(_._2)
         opt.converter.parseCached(args) match {
           case Right(parseResult) =>
             parseResult.orElse(opt.default())
           case _ => if (opt.required) throw new MajorInternalException else None
         }
-      }.getOrElse(throw new UnknownOption(name)).asInstanceOf[Option[A]]
+      }.getOrElse(throw new UnknownOption(name))
     }
   }
 
-  def get[A](name: Char)(implicit tt: TypeTag[A]): Option[A] = get(name.toString)(tt)
+  def get(name: Char): Option[Any] = get(name.toString)
 
   /** Get the value of option. If option is not found, this will throw an exception.
     *
     * @param name Name for option.
-    * @param tt TypeTag for requested type. Usually found implicitly.
     */
-  def apply[A](name: String)(implicit tt: TypeTag[A]): A = get(name)(tt).get
+  def apply(name: String): Any = get(name).get
 
-  def apply[A](name: Char)(implicit tt: TypeTag[A]): A = apply(name.toString)(tt)
+  def apply(name: Char): Any = apply(name.toString)
 
-  def prop[A](name: Char, key: String)(implicit tt: TypeTag[Map[String, A]]): Option[A] = apply(name)(tt).get(key)
+  def prop(name: Char, key: String): Option[Any] = apply(name).asInstanceOf[Map[String, Any]].get(key)
 
   /** Verify the builder. Parses arguments, makes sure no definitions clash, no garbage or unknown options are present,
     * and all present arguments are in proper format. It is recommended to call this method before using the results.
@@ -702,7 +688,7 @@ case class Scallop(
       if (o.required && !res.fold(_ => false, _.isDefined) && !o.default().isDefined)
         throw new RequiredOptionNotFound(o.name)
       // validaiton
-      if (!(get(o.name)(o.converter.tag) map (v => o.validator(o.converter.tag,v)) getOrElse true))
+      if (!(get(o.name) map (v => o.validator(v)) getOrElse true))
         throw new ValidationFailure("Validation failure for '%s' option parameters: %s" format (o.name, args.map(_._2.mkString(" ")).mkString(" ")))
 
     }
@@ -730,7 +716,7 @@ case class Scallop(
     opts.map { o =>
       " %s  %s => %s" format((if (isSupplied(o.name)) "*" else " "),
         o.name,
-        if(!blurred.contains(o.name)) get(o.name)(o.converter.tag).getOrElse("<None>") else hide)
+        if(!blurred.contains(o.name)) get(o.name).getOrElse("<None>") else hide)
     }.mkString("\n") + "\n" + parsed.subcommand.map { sn =>
       ("subcommand: %s\n" format sn) + subbuilders.find(_._1 == sn).get._2.args(parsed.subcommandArgs).filteredSummary(blurred)
     }.getOrElse("")

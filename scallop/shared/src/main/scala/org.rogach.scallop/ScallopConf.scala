@@ -4,7 +4,6 @@ import java.io.File
 import java.nio.file.Path
 import exceptions._
 import scala.util.DynamicVariable
-import reflect.runtime.universe._
 
 class Subcommand(commandNameAndAliases: String*) extends ScallopConf(Nil, commandNameAndAliases) {
   /** Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled. */
@@ -146,7 +145,7 @@ abstract class ScallopConf(
     new ScallopOption[A](resolvedName) {
       override lazy val fn = { (name: String) =>
         assertVerified
-        rootConfig.builder.get[A](getPrefixedName(name))(conv.tag)
+        rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[A]]
       }
       override lazy val supplied = {
         assertVerified
@@ -186,7 +185,7 @@ abstract class ScallopConf(
     new ScallopOption[Int](resolvedName) {
       override lazy val fn = { (name: String) =>
         assertVerified
-        rootConfig.builder.get[Int](getPrefixedName(name))(implicitly[TypeTag[Int]])
+        rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[Int]]
       }
       override lazy val supplied = {
         assertVerified
@@ -213,7 +212,7 @@ abstract class ScallopConf(
     editBuilder(_.props(name, descr, keyName, valueName, hidden)(conv))
     new LazyMap({
       assertVerified
-      rootConfig.builder(getPrefixedName(name.toString))(conv.tag)
+      rootConfig.builder.apply(getPrefixedName(name.toString)).asInstanceOf[Map[String, A]]
     })
   }
 
@@ -227,7 +226,7 @@ abstract class ScallopConf(
     editBuilder(_.propsLong(name, descr, keyName, valueName, hidden)(conv))
     new LazyMap({
       assertVerified
-      rootConfig.builder(getPrefixedName(name))(conv.tag)
+      rootConfig.builder.apply(getPrefixedName(name)).asInstanceOf[Map[String, A]]
     })
   }
 
@@ -258,7 +257,7 @@ abstract class ScallopConf(
     new ScallopOption[A](resolvedName) {
       override lazy val fn = { (name: String) =>
         assertVerified
-        rootConfig.builder.get[A](getPrefixedName(name))(conv.tag)
+        rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[A]]
       }
       override lazy val supplied = {
         assertVerified
@@ -296,7 +295,7 @@ abstract class ScallopConf(
     new ScallopOption[Long](resolvedName) {
       override lazy val fn = { (name: String) =>
         assertVerified
-        rootConfig.builder.get[Long](getPrefixedName(name))((conv.tag))
+        rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[Long]]
       }
       override lazy val supplied = {
         assertVerified
@@ -339,7 +338,7 @@ abstract class ScallopConf(
     new ScallopOption[Boolean](resolvedName) {
       override lazy val fn = { (name: String) =>
         assertVerified
-        rootConfig.builder.get[Boolean](getPrefixedName(name))
+        rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[Boolean]]
       }
       override lazy val supplied = {
         assertVerified

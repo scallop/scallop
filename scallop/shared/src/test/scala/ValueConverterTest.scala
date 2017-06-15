@@ -1,20 +1,17 @@
 package org.rogach.scallop
 
 import org.scalatest.FunSuite
-import scala.reflect.runtime.universe.TypeTag
 
 class ValueConverterTest extends FunSuite with UsefulMatchers {
   throwError.value = true
 
   test ("optional value - flatMap way") {
-    implicit def optConv[A](implicit tt: TypeTag[Option[A]], conv: ValueConverter[List[A]]) =
-      conv.flatMap {
+    def getcf(args: Seq[String]) = new ScallopConf(args) {
+      val foo = opt[Option[String]]()(stringListConverter.flatMap {
         case Nil => Right(None)
         case v :: Nil => Right(Option(Option(v)))
         case _ => Left("wrong option format")
-      }
-    def getcf(args: Seq[String]) = new ScallopConf(args) {
-      val foo = opt[Option[String]]()
+      })
       verify()
     }
     val conf1 = getcf(Nil)

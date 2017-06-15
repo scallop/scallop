@@ -1,7 +1,6 @@
 package org.rogach.scallop
 
 import exceptions._
-import scala.reflect.runtime.universe._
 
 sealed trait CliOption {
 
@@ -30,7 +29,7 @@ sealed trait CliOption {
   /** Is there a requirement to have at least one invocation of this option? */
   def required: Boolean
 
-  def validator: (TypeTag[_], Any) => Boolean
+  def validator: (Any) => Boolean
 
   def default: () => Option[Any]
 
@@ -52,7 +51,7 @@ case class SimpleOption(
     required: Boolean,
     converter: ValueConverter[_],
     default: () => Option[Any],
-    validator: (TypeTag[_], Any) => Boolean,
+    validator: (Any) => Boolean,
     argName: String,
     hidden: Boolean,
     noshort: Boolean)
@@ -69,7 +68,7 @@ case class SimpleOption(
   def helpInfo(sh: List[Char]) = List((
     argLine(sh),
     descr,
-    (if (converter.tag.tpe <:< typeTag[Boolean].tpe) None else default().map(_.toString))  // we don't need to remind user of default flag value, do we?
+    (if (converter == flagConverter) None else default().map(_.toString))  // we don't need to remind user of default flag value, do we?
   ))
 }
 
@@ -87,7 +86,7 @@ case class PropertyOption(
   def longNames = Nil
   def shortNames = List(short)
   def requiredShortNames = shortNames
-  def validator = (a,b) => true
+  def validator = (a) => true
   def default = () => Some(Map())
   def required = false
 
@@ -110,7 +109,7 @@ case class LongNamedPropertyOption(
   def longNames = List(name)
   def shortNames = Nil
   def requiredShortNames = Nil
-  def validator = (a,b) => true
+  def validator = (a) => true
   def default = () => Some(Map())
   def required = false
 
@@ -125,7 +124,7 @@ case class TrailingArgsOption(
     required: Boolean,
     descr: String,
     converter: ValueConverter[_],
-    validator: (TypeTag[_],Any) => Boolean,
+    validator: (Any) => Boolean,
     default: () => Option[Any],
     hidden: Boolean)
   extends CliOption {
@@ -146,7 +145,7 @@ case class NumberArgOption(
     required: Boolean,
     descr: String,
     converter: ValueConverter[Long],
-    validator: (TypeTag[_],Any) => Boolean,
+    validator: (Any) => Boolean,
     default: () => Option[Long],
     hidden: Boolean)
   extends CliOption {
@@ -175,7 +174,7 @@ case class ToggleOption(
 
   def descr = ""
   def isPositional = false
-  def validator = (a,b) => true
+  def validator = (a) => true
   def required = false
 
   def shortNames = if (noshort) Nil else List(short.getOrElse(name.head))
@@ -196,7 +195,6 @@ case class ToggleOption(
         case _ => Left("wrong arguments format")
       }
     }
-    val tag = typeTag[Boolean]
     val argType = ArgType.FLAG
   }
 
