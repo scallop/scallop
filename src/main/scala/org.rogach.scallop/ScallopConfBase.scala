@@ -381,15 +381,7 @@ abstract class ScallopConfBase(
     *
     * Update this variable with another function if you need to change that behavior.
     */
-  var errorMessageHandler: String => Unit = { message =>
-    if (overrideColorOutput.value.getOrElse(System.console() != null)) {
-      println("[\u001b[31m%s\u001b[0m] Error: %s" format (printedName, message))
-    } else {
-      // no colors on output
-      println("[%s] Error: %s" format (printedName, message))
-    }
-    sys.exit(1)
-  }
+  var errorMessageHandler: String => Unit = (_) => {}
 
   /** This function is called in event of any exception
     * in arguments parsing. By default, it catches only
