@@ -1,6 +1,6 @@
 Scallop
 ========
-A simple command-line arguments parsing library for Scala, written in spirit of Ruby's [Trollop](http://trollop.rubyforge.org/). Cross-built for Scala 2.10, 2.11 and latest 2.12 milestone.
+A simple command-line arguments parsing library for Scala, written in spirit of Ruby's [Trollop](http://trollop.rubyforge.org/). Cross-built for Scala 2.10, 2.11, 2.12 and Scala Native.
 
 Scallop supports:
 
@@ -25,6 +25,8 @@ Add following to your build.sbt:
 ```scala
 libraryDependencies += "org.rogach" %% "scallop" % "2.1.1"
 ```
+
+**Migration from 2.x versions:** `Scallop` type-unsafe immutable builder was removed. Instead, use `ScallopConf`. If your use case requires old type-unsafe builder, please raise an issue in the tracker.
 
 **Migration from 1.x versions:** `opt[File]` does not check that file exists anymore. Instead, use `validateFileExists` helper inside your configuration.
 
