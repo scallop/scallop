@@ -11,18 +11,18 @@ class Subcommand(commandNameAndAliases: String*) extends ScallopConf(Nil, comman
   }
 }
 
-abstract class ScallopConf(
+abstract class ScallopConfBase(
   val args: Seq[String] = Nil,
   protected val commandNameAndAliases: Seq[String] = Nil
 ) extends ScallopConfValidations {
 
   /** Pointer to parent ScallopConf */
-  protected var parentConfig: ScallopConf = this
+  protected var parentConfig: ScallopConfBase = this
 
   /** true if this config does not represent a subcommand */
   protected var isRootConfig = true
 
-  private def rootConfig: ScallopConf = {
+  private def rootConfig: ScallopConfBase = {
     var conf = this
     while (!conf.isRootConfig) {
       conf = conf.parentConfig
@@ -31,7 +31,7 @@ abstract class ScallopConf(
   }
 
   /** List of sub-configs of this config. */
-  protected var subconfigs: Seq[ScallopConf] = Nil
+  protected var subconfigs: Seq[ScallopConfBase] = Nil
 
   /** Add subcommand to this config */
   def addSubcommand(conf: Subcommand) {
@@ -52,12 +52,9 @@ abstract class ScallopConf(
   }
 
   // machinery to support option name guessing
-
-  private[this] var _guessOptionName = true
-  /** If true, scallop would try to guess missing option names from the names of their fields. */
-  def guessOptionName = _guessOptionName
-  /** If set to true, scallop would try to guess missing option names from the names of their fields. */
-  def guessOptionName_=(v: Boolean) { _guessOptionName = v }
+  protected var _guessOptionName: Boolean = true
+  protected def guessOptionNameDefault: Boolean
+  protected def performOptionNameGuessing()
 
   def appendDefaultToDescription = builder.appendDefaultToDescription
 
@@ -71,7 +68,7 @@ abstract class ScallopConf(
   private[this] def genName() = { gen += 1; "\t%d" format gen }
 
   /** Retrieves the choosen subcommand. */
-  def subcommand: Option[ScallopConf] = {
+  def subcommand: Option[ScallopConfBase] = {
     assertVerified
     assert(rootConfig == this, "You shouldn't call 'subcommand' on subcommand object")
 
@@ -79,12 +76,12 @@ abstract class ScallopConf(
   }
 
   /** Retrieves the list of the chosen nested subcommands. */
-  def subcommands: List[ScallopConf] = {
+  def subcommands: List[ScallopConfBase] = {
     assertVerified
     assert(rootConfig == this, "You shouldn't call 'subcommands' on subcommand object")
 
     var config = this
-    var configs = List[ScallopConf]()
+    var configs = List[ScallopConfBase]()
     builder.getSubcommandNames.foreach { bn =>
       config = config.subconfigs.find(_.commandNameAndAliases.contains(bn)).get
       configs :+= config
@@ -134,7 +131,7 @@ abstract class ScallopConf(
     // guessing name, if needed
     val resolvedName =
       if (name == null)
-        if (guessOptionName) {
+        if (_guessOptionName) {
           genName() // generate unique name, that will be replaced during verification with guessed name
         }
         else throw new IllegalArgumentException("You should supply a name for your option!")
@@ -174,7 +171,7 @@ abstract class ScallopConf(
     // guessing name, if needed
     val resolvedName =
       if (name == null)
-        if (guessOptionName) genName()
+        if (_guessOptionName) genName()
         else throw new IllegalArgumentException("You should supply a name for your option!")
       else name
 
@@ -249,7 +246,7 @@ abstract class ScallopConf(
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
     val resolvedName =
       if (name == null) {
-        if (guessOptionName) genName()
+        if (_guessOptionName) genName()
         else throw new IllegalArgumentException("You should supply a name for your trailArg!")
       } else name
     editBuilder(_.trailArg(resolvedName, required, descr, () => default, validate, hidden)(conv))
@@ -285,7 +282,7 @@ abstract class ScallopConf(
 
     val resolvedName =
       if (name == null) {
-        if (guessOptionName) genName()
+        if (_guessOptionName) genName()
         else throw new IllegalArgumentException("You should supply a name for your number option!")
       } else name
 
@@ -330,7 +327,7 @@ abstract class ScallopConf(
       hidden: Boolean = false): ScallopOption[Boolean] = {
     val resolvedName =
       if (name == null) {
-        if (guessOptionName) genName()
+        if (_guessOptionName) genName()
         else throw new IllegalArgumentException("You should supply a name for your toggle!")
       } else name
     editBuilder(_.toggle(resolvedName, () => default, short, noshort, prefix, descrYes, descrNo, hidden))
@@ -624,42 +621,8 @@ abstract class ScallopConf(
   }
 
   def verifyConf() {
-    if (guessOptionName) {
-      val methodsAndOptions =
-        this.getClass.getMethods
-        .filterNot(classOf[ScallopConf].getMethods.toSet)
-        .filterNot(_.getName.endsWith("$eq"))
-        .filterNot(_.getName.endsWith("$outer"))
-        .filter(_.getReturnType == classOf[ScallopOption[_]])
-        .filter(_.getParameterTypes.isEmpty)
-        .map { m =>
-          val opt = m.invoke(this).asInstanceOf[ScallopOption[_]]
-          (m, opt)
-        }
-        .filter(_._2.name.contains("\t"))
-
-      val nameMap = methodsAndOptions.sortBy(-_._2._transformCount).map { case (m, opt) =>
-        val newName = m.getName.flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
-        // the old, generated version of name, without prefixes from parent builders
-        val shortGenName = '\t' +: opt.name.reverse.takeWhile('\t'!=).reverse
-        (opt.name, (shortGenName, newName))
-      }.toMap
-
-      methodsAndOptions.foreach { case (m, opt) =>
-        val (shortGenName, newName) = nameMap(opt.name)
-        editBuilder(e => e.copy(opts = e.opts.map { o =>
-          if (o.name == shortGenName) {
-            o match {
-              case o: SimpleOption => o.copy(name = newName)
-              case o: TrailingArgsOption => o.copy(name = newName)
-              case o: ToggleOption => o.copy(name = newName)
-              case o: NumberArgOption => o.copy(name = newName)
-              case _ => o
-            }
-          } else o
-        }))
-        opt._name = newName
-      }
+    if (_guessOptionName) {
+      performOptionNameGuessing()
     }
 
     if (builder.opts.exists(_.name.startsWith("\t"))) {

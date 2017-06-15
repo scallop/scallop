@@ -1,7 +1,7 @@
 package org.rogach.scallop
 
 /** Helper trait for generaton of `validate` methods on ScallopConf. */
-trait ScallopConfValidations { this: ScallopConf =>
+trait ScallopConfValidations { this: ScallopConfBase =>
 
   protected var validations: List[() => Either[String, Unit]] = Nil
 
