@@ -28,7 +28,7 @@ lazy val commonSettings = Seq(
       connection = "scm:git:git@github.com:scallop/scallop.git"
     )
   ),
-  boilerplateSource in Compile := baseDirectory.value.getParentFile / "shared" / "src" / "main" / "boilerplate",
+  boilerplateSource in Compile := baseDirectory.value.getParentFile / "src" / "main" / "boilerplate",
   pomExtra := (
     <developers>
       <developer>
@@ -43,9 +43,7 @@ lazy val commonSettings = Seq(
       </developer>
     </developers>
   ),
-
   pomIncludeRepository := { x => false },
-
   publishTo := {
     val snapshot = false
     if (snapshot)
@@ -53,49 +51,39 @@ lazy val commonSettings = Seq(
     else
       Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
   },
-
   publishMavenStyle := true,
-
   publishArtifact in Test := false,
-
   scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/scallop/scallop/blob/develop/€{FILE_PATH}.scala"),
-
   parallelExecution in Test := false,
-
-  git.remoteRepo := "git@github.com:scallop/scallop.git"
-)
+  git.remoteRepo := "git@github.com:scallop/scallop.git",
+  // fix for paths to source files in scaladoc
+  doc in Compile := {
+    Seq("bash","-c",""" for x in $(find target/scala-2.12/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
+    (doc in Compile).value
+  }
+) ++ site.settings ++ site.includeScaladoc("") ++ ghpages.settings
 
 lazy val scallop =
   crossProject(JVMPlatform, NativePlatform)
-    .crossType(CrossType.Full)
-    .settings(commonSettings)
-    .jvmSettings(
-      libraryDependencies ++= Seq(
-        "org.scalatest" %%% "scalatest" % "3.0.0" % "test"
-      )
+  .crossType(new sbtcrossproject.CrossType {
+    def projectDir(crossBase: File, projectType: String): File =
+      crossBase / projectType
+    def projectDir(crossBase: File, platform: sbtcrossproject.Platform): File =
+      crossBase / platform.identifier
+    def sharedSrcDir(projectBase: File, conf: String): Option[File] =
+      Some(projectBase.getParentFile / "src" / conf / "scala")
+  })
+  .in(file("."))
+  .settings(commonSettings)
+  .jvmSettings(
+    libraryDependencies ++= Seq(
+      "org.scalatest" %%% "scalatest" % "3.0.0" % "test"
     )
-    .nativeSettings(
-      scalaVersion := "2.11.8",
-      crossScalaVersions := "2.11.8" :: Nil
-    )
+  )
+  .nativeSettings(
+    scalaVersion := "2.11.8",
+    crossScalaVersions := "2.11.8" :: Nil
+  )
 
 lazy val scallopJVM    = scallop.jvm.enablePlugins(spray.boilerplate.BoilerplatePlugin)
 lazy val scallopNative = scallop.native.enablePlugins(spray.boilerplate.BoilerplatePlugin)
-
-lazy val `scala-scallop` =
-  (project in file("."))
-    .enablePlugins(spray.boilerplate.BoilerplatePlugin)
-    .settings(commonSettings, publish := {})
-    .aggregate(scallopJVM, scallopNative)
-
-// fix for paths to source files in scaladoc
-doc in Compile := {
-  Seq("bash","-c",""" for x in $(find target/scala-2.12/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
-  (doc in Compile).value
-}
-
-site.settings
-
-site.includeScaladoc("")
-
-ghpages.settings

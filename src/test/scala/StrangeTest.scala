@@ -19,7 +19,7 @@ class StrangeTest extends UsefulMatchers with CapturingTest {
   }
 
   test ("reading options from file") {
-    object Conf extends ScallopConf(List("@scallop/shared/src/test/resources/opts.txt")) {
+    object Conf extends ScallopConf(List("@src/test/resources/opts.txt")) {
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
 
