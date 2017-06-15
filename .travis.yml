@@ -7,4 +7,4 @@ jdk:
   - oraclejdk8
 script:
   - sbt ++$TRAVIS_SCALA_VERSION scallopJVM/test
-  - sbt ++$TRAVIS_SCALA_VERSION scallopNative/test:run
+  - sbt scallopNative/test:run
