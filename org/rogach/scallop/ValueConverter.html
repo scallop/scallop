@@ -186,7 +186,7 @@
                           PropertyOption
                         </a>
                       </li><li class="current-entities indented3">
-                        <a class="object" href="Scallop$.html" title="The creator and god of all parsers :)"></a>
+                        <span class="separator"></span>
                         <a class="class" href="Scallop.html" title="The main builder class."></a>
                         <a href="Scallop.html" title="The main builder class.">
                           Scallop
@@ -373,22 +373,6 @@
       <p class="shortcomment cmt">Takes a list of arguments to all option invocations:
 for example, &quot;-a 1 2 -a 3 4 5&quot; would produce List((&quot;a&quot;,List(1,2)),(&quot;a&quot;,List(3,4,5))).</p><div class="fullcomment"><div class="comment cmt"><p>Takes a list of arguments to all option invocations:
 for example, &quot;-a 1 2 -a 3 4 5&quot; would produce List((&quot;a&quot;,List(1,2)),(&quot;a&quot;,List(3,4,5))).</p><ul><li> parse returns Left, if there was an error while parsing.</li><li> if no option was found, it returns Right(None).</li><li> if option was found, it returns Right(...).</li></ul></div></div>
-    </li><li name="org.rogach.scallop.ValueConverter#tag" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="tag:reflect.runtime.universe.TypeTag[A]"></a><a id="tag:scala.reflect.api.JavaUniverse.TypeTag[A]"></a>
-      <span class="permalink">
-      <a href="../../../org/rogach/scallop/ValueConverter.html#tag:reflect.runtime.universe.TypeTag[A]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tag</span><span class="result">: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="org.rogach.scallop.ValueConverter.A">A</span>]</span>
-      </span>
-      
-      <p class="shortcomment cmt">TypeTag, holding the type for this builder.</p>
     </li></ol>
             </div>
 
@@ -552,9 +536,9 @@ for example, &quot;-a 1 2 -a 3 4 5&quot; would produce List((&quot;a&quot;,List(
               
         </dd></dl></div>
     </li><li name="org.rogach.scallop.ValueConverter#flatMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="flatMap[B](fn:A=&gt;Either[String,Option[B]])(implicittt:reflect.runtime.universe.TypeTag[B]):org.rogach.scallop.ValueConverter[B]"></a><a id="flatMap[B]((A)⇒Either[String,Option[B]])(scala.reflect.api.JavaUniverse.TypeTag[B]):ValueConverter[B]"></a>
+      <a id="flatMap[B](fn:A=&gt;Either[String,Option[B]]):org.rogach.scallop.ValueConverter[B]"></a><a id="flatMap[B]((A)⇒Either[String,Option[B]]):ValueConverter[B]"></a>
       <span class="permalink">
-      <a href="../../../org/rogach/scallop/ValueConverter.html#flatMap[B](fn:A=&gt;Either[String,Option[B]])(implicittt:reflect.runtime.universe.TypeTag[B]):org.rogach.scallop.ValueConverter[B]" title="Permalink">
+      <a href="../../../org/rogach/scallop/ValueConverter.html#flatMap[B](fn:A=&gt;Either[String,Option[B]]):org.rogach.scallop.ValueConverter[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -563,7 +547,7 @@ for example, &quot;-a 1 2 -a 3 4 5&quot; would produce List((&quot;a&quot;,List(
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="fn">fn: (<span class="extype" name="org.rogach.scallop.ValueConverter.A">A</span>) ⇒ <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.rogach.scallop.ValueConverter.flatMap.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tt">tt: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="org.rogach.scallop.ValueConverter.flatMap.B">B</span>]</span>)</span><span class="result">: <a href="" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="org.rogach.scallop.ValueConverter.flatMap.B">B</span>]</span>
+        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="fn">fn: (<span class="extype" name="org.rogach.scallop.ValueConverter.A">A</span>) ⇒ <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.rogach.scallop.ValueConverter.flatMap.B">B</span>]]</span>)</span><span class="result">: <a href="" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="org.rogach.scallop.ValueConverter.flatMap.B">B</span>]</span>
       </span>
       
       
@@ -616,9 +600,9 @@ for example, &quot;-a 1 2 -a 3 4 5&quot; would produce List((&quot;a&quot;,List(
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="org.rogach.scallop.ValueConverter#map" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="map[B](fn:A=&gt;B)(implicittt:reflect.runtime.universe.TypeTag[B]):org.rogach.scallop.ValueConverter[B]"></a><a id="map[B]((A)⇒B)(scala.reflect.api.JavaUniverse.TypeTag[B]):ValueConverter[B]"></a>
+      <a id="map[B](fn:A=&gt;B):org.rogach.scallop.ValueConverter[B]"></a><a id="map[B]((A)⇒B):ValueConverter[B]"></a>
       <span class="permalink">
-      <a href="../../../org/rogach/scallop/ValueConverter.html#map[B](fn:A=&gt;B)(implicittt:reflect.runtime.universe.TypeTag[B]):org.rogach.scallop.ValueConverter[B]" title="Permalink">
+      <a href="../../../org/rogach/scallop/ValueConverter.html#map[B](fn:A=&gt;B):org.rogach.scallop.ValueConverter[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -627,7 +611,7 @@ for example, &quot;-a 1 2 -a 3 4 5&quot; would produce List((&quot;a&quot;,List(
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="fn">fn: (<span class="extype" name="org.rogach.scallop.ValueConverter.A">A</span>) ⇒ <span class="extype" name="org.rogach.scallop.ValueConverter.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tt">tt: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="org.rogach.scallop.ValueConverter.map.B">B</span>]</span>)</span><span class="result">: <a href="" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="org.rogach.scallop.ValueConverter.map.B">B</span>]</span>
+        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="fn">fn: (<span class="extype" name="org.rogach.scallop.ValueConverter.A">A</span>) ⇒ <span class="extype" name="org.rogach.scallop.ValueConverter.map.B">B</span></span>)</span><span class="result">: <a href="" class="extype" name="org.rogach.scallop.ValueConverter">ValueConverter</a>[<span class="extype" name="org.rogach.scallop.ValueConverter.map.B">B</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Maps the converter to another value:</p><div class="fullcomment"><div class="comment cmt"><p>Maps the converter to another value:</p><pre>intConverter.map(<span class="num">2</span> +) <span class="cmt">// and you get a "biased converter"</span></pre></div></div>
