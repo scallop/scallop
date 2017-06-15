@@ -55,7 +55,7 @@ lazy val commonSettings = Seq(
   publishArtifact in Test := false,
   scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/scallop/scallop/blob/develop/€{FILE_PATH}.scala"),
   parallelExecution in Test := false,
-  git.remoteRepo := "git@github.com:scallop/scallop.git",
+  git.remoteRepo := "git@github.com:scallop/scallop.git"
 ) ++ site.settings ++ site.includeScaladoc("") ++ ghpages.settings
 
 lazy val scallop =
