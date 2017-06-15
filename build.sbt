@@ -6,8 +6,8 @@ lazy val commonSettings = Seq(
   organization := "org.rogach",
   name := "scallop",
   version := versRgx.findFirstIn(io.Source.fromFile("README.md").getLines.filter(_.contains("libraryDependencies")).mkString).get,
-  scalaVersion := "2.12.0",
-  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0"),
+  scalaVersion := "2.12.2",
+  crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2"),
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
@@ -56,11 +56,6 @@ lazy val commonSettings = Seq(
   scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/scallop/scallop/blob/develop/€{FILE_PATH}.scala"),
   parallelExecution in Test := false,
   git.remoteRepo := "git@github.com:scallop/scallop.git",
-  // fix for paths to source files in scaladoc
-  doc in Compile := {
-    Seq("bash","-c",""" for x in $(find target/scala-2.12/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
-    (doc in Compile).value
-  }
 ) ++ site.settings ++ site.includeScaladoc("") ++ ghpages.settings
 
 lazy val scallop =
@@ -78,11 +73,16 @@ lazy val scallop =
   .jvmSettings(
     libraryDependencies ++= Seq(
       "org.scalatest" %%% "scalatest" % "3.0.0" % "test"
-    )
+    ),
+    // fix for paths to source files in scaladoc
+    doc in Compile := {
+      Seq("bash","-c",""" for x in $(find jvm/target/scala-2.12/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
+      (doc in Compile).value
+    }
   )
   .nativeSettings(
-    scalaVersion := "2.11.8",
-    crossScalaVersions := "2.11.8" :: Nil
+    scalaVersion := "2.11.11",
+    crossScalaVersions := Seq("2.11.8")
   )
 
 lazy val scallopJVM    = scallop.jvm.enablePlugins(spray.boilerplate.BoilerplatePlugin)
