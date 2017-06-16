@@ -1,12 +1,12 @@
 Release
 =======
 * Bump the version (in README.md).
-* +jvm/test
-* native/test:run
-* js/test:run
-* +jvm/publish-signed
-* native/publish-signed
-* js/publish-signed
+
+* Test the changes:
+sbt "++2.11.11 native/test:run" "++2.12.2 js/test:run" "++2.10.6 jvm/test" "++2.11.11 jvm/test" "++2.12.2 jvm/test"
+
+* Publish artifacts:
+sbt "++2.11.11 native/publish-signed" "++2.12.2 js/publish-signed" "++2.10.6 jvm/publish-signed" "++2.11.11 jvm/publish-signed" "++2.12.2 jvm/publish-signed"
 * Commit the changes.
 * Tag the release (in develop branch).
 * Close the release in Nexus UI.
