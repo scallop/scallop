@@ -6,7 +6,7 @@ import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 import reflect.runtime.universe._
 
-class NormalTest extends FunSuite with Matchers with CapturingTest {
+class LegacyScallopTest extends FunSuite with Matchers with CapturingTest {
 
   test ("readme example") {
     import org.rogach.scallop._
@@ -48,15 +48,11 @@ class NormalTest extends FunSuite with Matchers with CapturingTest {
                                     // args list
       .verify
 
-    opts.get[Boolean]("donkey") should equal (Some(true))
-    opts[Int]("monkeys") should equal (2)
-    opts[Int]("num-limbs") should equal (1)
-    opts.prop[String]('D',"alpha") should equal (Some("1"))
-    opts[String]("pet name") should equal ("Pigeon")
-    intercept[WrongTypeRequest] {
-      opts[Double]("monkeys") // this will throw an exception at runtime
-                              // because the wrong type is requested
-    }
+    opts.get("donkey") should equal (Some(true))
+    opts("monkeys") should equal (2)
+    opts("num-limbs") should equal (1)
+    opts.prop('D',"alpha") should equal (Some("1"))
+    opts("pet name") should equal ("Pigeon")
 
     val (helpOut, helpErr) = captureOutput {
       opts.printHelp
@@ -102,21 +98,21 @@ For all other tricks, consult the documentation!
     val opts = Scallop(List("--angel"))
       .opt[Boolean]("angel")
       .verify
-    opts[Boolean]("angel") should equal (true)
+    opts("angel") should equal (true)
   }
 
   test ("short flag, explicit name") {
     val opts = Scallop(List("-a"))
       .opt[Boolean]("angel", short = 'a')
       .verify
-    opts[Boolean]("angel") should equal (true)
+    opts("angel") should equal (true)
   }
 
   test ("short flag, implicit name") {
     val opts = Scallop(List("-a"))
       .opt[Boolean]("angel")
       .verify
-    opts[Boolean]("angel") should equal (true)
+    opts("angel") should equal (true)
   }
 
   test ("two short flags, implicit name") {
@@ -124,8 +120,8 @@ For all other tricks, consult the documentation!
       .opt[Boolean]("angel")
       .opt[Boolean]("baboon")
       .verify
-    opts[Boolean]("angel") should equal (true)
-    opts[Boolean]("baboon") should equal (false)
+    opts("angel") should equal (true)
+    opts("baboon") should equal (false)
   }
 
   test ("two short flags, implicit name, required value") {
@@ -133,57 +129,57 @@ For all other tricks, consult the documentation!
       .opt[Boolean]("angel", required = true)
       .opt[Boolean]("baboon")
       .verify
-    opts[Boolean]("angel") should equal (true)
-    opts[Boolean]("baboon") should equal (false)
+    opts("angel") should equal (true)
+    opts("baboon") should equal (false)
   }
 
   test ("one missing int, short opt") {
     val opts = Scallop(List())
       .opt[Int]("angels")
       .verify
-    opts.get[Int]("angels") should equal (None)
+    opts.get("angels") should equal (None)
   }
 
   test ("one int, short opt") {
     val opts = Scallop(List("-a","42"))
       .opt[Int]("angels")
       .verify
-    opts.get[Int]("angels") should equal (Some(42))
+    opts.get("angels") should equal (Some(42))
   }
 
   test ("one int, long opt") {
     val opts = Scallop(List("--angels","42"))
       .opt[Int]("angels")
       .verify
-    opts.get[Int]("angels") should equal (Some(42))
+    opts.get("angels") should equal (Some(42))
   }
 
   test ("one short, long opt") {
     val opts = Scallop(List("--angels","42"))
       .opt[Short]("angels")
       .verify
-    opts.get[Short]("angels") should equal (Some(42))
+    opts.get("angels") should equal (Some(42))
   }
 
   test ("one byte, long opt") {
     val opts = Scallop(List("--angels","42"))
       .opt[Byte]("angels")
       .verify
-    opts.get[Byte]("angels") should equal (Some(42))
+    opts.get("angels") should equal (Some(42))
   }
 
   test ("one double, long opt") {
     val opts = Scallop(List("--angels","42"))
       .opt[Double]("angels")
       .verify
-    opts.get[Double]("angels") should equal (Some(42))
+    opts.get("angels") should equal (Some(42))
   }
 
   test ("one string, long opt") {
     val opts = Scallop(List("--angels","aoeu"))
       .opt[String]("angels")(stringConverter)
       .verify
-    opts.get[String]("angels") should equal (Some("aoeu"))
+    opts.get("angels") should equal (Some("aoeu"))
   }
 
 
@@ -191,21 +187,21 @@ For all other tricks, consult the documentation!
     val opts = Scallop(List("--angels","42","12","345"))
       .opt[List[Int]]("angels")
       .verify
-    opts.get[List[Int]]("angels") should equal (Some(List(42,12,345)))
+    opts.get("angels") should equal (Some(List(42,12,345)))
   }
 
   test ("list of doubles, long opt") {
     val opts = Scallop(List("--angels","42.0","12","345e0"))
       .opt[List[Double]]("angels")
       .verify
-    opts.get[List[Double]]("angels") should equal (Some(List(42.0,12.0,345.0)))
+    opts.get("angels") should equal (Some(List(42.0,12.0,345.0)))
   }
 
   test ("default value") {
     val opts = Scallop(List())
       .opt("ang", default = () => Some(42), required = true)
       .verify
-    opts[Int]("ang") should equal (42)
+    opts("ang") should equal (42)
   }
 
   test ("additional args") {
@@ -213,7 +209,7 @@ For all other tricks, consult the documentation!
       .opt[List[Int]]("ang")
       .args(List("-a","10"))
       .verify
-    opts[List[Int]]("ang") should equal (List(5,10))
+    opts("ang") should equal (List(5,10))
   }
 
   // properties testing
@@ -222,43 +218,43 @@ For all other tricks, consult the documentation!
     val opts = Scallop()
       .props[String]('D')
       .verify
-    opts.prop[String]('D',"aoeu") should equal (None)
+    opts.prop('D',"aoeu") should equal (None)
   }
 
   test ("simle value") {
     val opts = Scallop(List("-Daoeu=htns"))
       .props[String]('D')
       .verify
-    opts.prop[String]('D',"aoeu") should equal (Some("htns"))
+    opts.prop('D',"aoeu") should equal (Some("htns"))
   }
 
   test ("one plain prop") {
     val opts = Scallop(List("-D","aoeu=htns"))
       .props[String]('D')
       .verify
-    opts.prop[String]('D',"aoeu") should equal (Some("htns"))
+    opts.prop('D',"aoeu") should equal (Some("htns"))
   }
 
   test ("two plain props") {
     val opts = Scallop(List("-D", "aoeu=htns", "qjk=gcr"))
       .props[String]('D')
       .verify
-    opts.prop[String]('D',"aoeu") should equal (Some("htns"))
-    opts.prop[String]('D',"qjk") should equal (Some("gcr"))
+    opts.prop('D',"aoeu") should equal (Some("htns"))
+    opts.prop('D',"qjk") should equal (Some("gcr"))
   }
 
   test ("two plain props to a map") {
     val opts = Scallop(List("-D", "aoeu=htns", "qjk=gcr"))
       .props[String]('D')
       .verify
-    opts[Map[String,String]]('D') should equal (Map("aoeu" -> "htns", "qjk" -> "gcr"))
+    opts('D') should equal (Map("aoeu" -> "htns", "qjk" -> "gcr"))
   }
 
   test ("empty prop") {
     val opts = Scallop(Nil)
       .props[String]('E')
       .verify
-    opts.prop[String]('E',"nokey") should equal (None)
+    opts.prop('E',"nokey") should equal (None)
   }
 
   // --- typed props ---
@@ -267,17 +263,17 @@ For all other tricks, consult the documentation!
     val opts = Scallop(List("-Ekey1=1","key2=2"))
       .props[Int]('E')
       .verify
-    opts.prop[Int]('E',"key1") should equal (Some(1))
-    opts.prop[Int]('E',"key2") should equal (Some(2))
-    opts[Map[String,Int]]('E') should equal (Map("key1" -> 1, "key2" -> 2))
+    opts.prop('E',"key1") should equal (Some(1))
+    opts.prop('E',"key2") should equal (Some(2))
+    opts('E') should equal (Map("key1" -> 1, "key2" -> 2))
   }
 
   test ("typed double prop") {
     val opts = Scallop(List("-Ekey1=1.1","key2=2.3"))
       .props[Double]('E')
       .verify
-    opts.prop[Double]('E',"key1") should equal (Some(1.1))
-    opts.prop[Double]('E',"key2") should equal (Some(2.3))
+    opts.prop('E',"key1") should equal (Some(1.1))
+    opts.prop('E',"key2") should equal (Some(2.3))
   }
 
   test ("opt implicit name clash with prop name") {
@@ -285,7 +281,7 @@ For all other tricks, consult the documentation!
       .props[String]('D')
       .opt[String]("Dark")
       .verify
-    opts.get[String]("Dark") should equal (None)
+    opts.get("Dark") should equal (None)
   }
 
   test ("trail options - after single long-named argument") {
@@ -293,8 +289,8 @@ For all other tricks, consult the documentation!
       .opt[Int]("echo")
       .trailArg[String]("animal")
       .verify
-    opts.get[Int]("echo") should equal ((Some(42)))
-    opts[String]("animal") should equal ("rabbit")
+    opts.get("echo") should equal ((Some(42)))
+    opts("animal") should equal ("rabbit")
   }
 
   test ("trail options - after single short-named argument") {
@@ -302,8 +298,8 @@ For all other tricks, consult the documentation!
       .opt[Int]("echo")
       .trailArg[String]("animal")
       .verify
-    opts.get[Int]("echo") should equal ((Some(42)))
-    opts[String]("animal") should equal ("rabbit")
+    opts.get("echo") should equal ((Some(42)))
+    opts("animal") should equal ("rabbit")
   }
 
   test ("trail options - after two arguments") {
@@ -313,9 +309,9 @@ For all other tricks, consult the documentation!
         "number of libms", required = true) // you can override the default short-option character
       .trailArg[String]("pet-name")
       .verify
-    opts[Boolean]("donkey") should equal (true)
-    opts.get[Int]("num-limbs") should equal ((Some(1)))
-    opts[String]("pet-name") should equal ("Pigeon")
+    opts("donkey") should equal (true)
+    opts.get("num-limbs") should equal ((Some(1)))
+    opts("pet-name") should equal ("Pigeon")
   }
 
   test ("trail options - after single property argument") {
@@ -323,8 +319,8 @@ For all other tricks, consult the documentation!
       .props[String]('E')
       .trailArg[String]("animal")
       .verify
-    opts.prop[String]('E',"key") should equal ((Some("value")))
-    opts[String]("animal") should equal ("rabbit")
+    opts.prop('E',"key") should equal ((Some("value")))
+    opts("animal") should equal ("rabbit")
   }
 
   test ("trail options - after single property argument (2)") {
@@ -332,8 +328,8 @@ For all other tricks, consult the documentation!
       .props[String]('E')
       .trailArg[List[String]]("rubbish")
       .verify
-    opts.prop[String]('E',"key") should equal ((Some("value")))
-    opts[List[String]]("rubbish") should equal (List("rabbit", "key2=value2"))
+    opts.prop('E',"key") should equal ((Some("value")))
+    opts("rubbish") should equal (List("rabbit", "key2=value2"))
   }
 
   test ("trail options - after list argument") {
@@ -341,8 +337,8 @@ For all other tricks, consult the documentation!
       .opt[List[Int]]("echo")
       .trailArg[List[Int]]("numbers")
       .verify
-    opts.get[List[Int]]("echo") should equal (Some(List(42)))
-    opts.get[List[Int]]("numbers") should equal (Some(List(43)))
+    opts.get("echo") should equal (Some(List(42)))
+    opts.get("numbers") should equal (Some(List(43)))
   }
 
   test ("trail options - after list argument, optional") {
@@ -350,8 +346,8 @@ For all other tricks, consult the documentation!
       .opt[List[Int]]("echo")
       .trailArg[List[Int]]("numbers", required = false)
       .verify
-    opts.get[List[Int]]("echo") should equal (Some(List(42,43)))
-    opts.get[List[Int]]("numbers") should equal (None)
+    opts.get("echo") should equal (Some(List(42,43)))
+    opts.get("numbers") should equal (None)
   }
 
   test ("trail options - after list argument, single optional value") {
@@ -359,8 +355,8 @@ For all other tricks, consult the documentation!
       .opt[List[Int]]("echo")
       .trailArg[Int]("numbers", required = false)
       .verify
-    opts.get[List[Int]]("echo") should equal (Some(List(42,43)))
-    opts.get[Int]("numbers") should equal (None)
+    opts.get("echo") should equal (Some(List(42,43)))
+    opts.get("numbers") should equal (None)
   }
 
   test ("trail options - after flag argument, single optional value") {
@@ -368,8 +364,8 @@ For all other tricks, consult the documentation!
       .opt[Boolean]("echo")
       .trailArg[List[Int]]("numbers", required = false)
       .verify
-    opts.get[List[Int]]("numbers") should equal (Some(List(42,43)))
-    opts[Boolean]("echo") should equal (true)
+    opts.get("numbers") should equal (Some(List(42,43)))
+    opts("echo") should equal (true)
   }
 
   test ("trail options - one required, one optional - both provided") {
@@ -377,8 +373,8 @@ For all other tricks, consult the documentation!
       .trailArg[String]("name")
       .trailArg[String]("surname", required = false)
       .verify
-    opts[String]("name") should equal ("first")
-    opts.get[String]("surname") should equal (Some("second"))
+    opts("name") should equal ("first")
+    opts.get("surname") should equal (Some("second"))
   }
 
   test ("trail options - one required, one optional - one provided") {
@@ -386,22 +382,22 @@ For all other tricks, consult the documentation!
       .trailArg[String]("name")
       .trailArg[String]("surname", required = false)
       .verify
-    opts[String]("name") should equal ("first")
-    opts.get[String]("surname") should equal (None)
+    opts("name") should equal ("first")
+    opts.get("surname") should equal (None)
   }
 
   test ("trail option - with default value, provided") {
     val opts = Scallop(List("first"))
       .trailArg[String]("name", required = false, default = () => Some("aoeu"))
       .verify
-    opts[String]("name") should equal ("first")
+    opts("name") should equal ("first")
   }
 
   test ("trail option - with default value, not provided") {
     val opts = Scallop(Nil)
       .trailArg[String]("name", required = false, default = () => Some("aoeu"))
       .verify
-    opts[String]("name") should equal ("aoeu")
+    opts("name") should equal ("aoeu")
   }
 
   test ("trail options - tricky case") {
@@ -413,11 +409,11 @@ For all other tricks, consult the documentation!
       .trailArg[String]("second list name")
       .trailArg[List[Double]]("second list values")
       .verify
-    opts[Map[String,String]]('E') should equal ((1 to 3).map(i => ("key"+i,"value"+i)).toMap)
-    opts[String]("first list name") should equal ("first")
-    opts[String]("second list name") should equal ("second")
-    opts[List[Int]]("first list values") should equal (List(1,2,3))
-    opts[List[Double]]("second list values") should equal (List[Double](4,5,6))
+    opts('E') should equal ((1 to 3).map(i => ("key"+i,"value"+i)).toMap)
+    opts("first list name") should equal ("first")
+    opts("second list name") should equal ("second")
+    opts("first list values") should equal (List(1,2,3))
+    opts("second list values") should equal (List[Double](4,5,6))
   }
 
   case class Person(name:String, phone:String)
@@ -443,7 +439,7 @@ For all other tricks, consult the documentation!
     val opts = Scallop(List("--person", "Pete", "123-45"))
       .opt[Person]("person")(personConverter)
       .verify
-    opts[Person]("person") should equal (Person("Pete", "123-45"))
+    opts("person") should equal (Person("Pete", "123-45"))
   }
 
   test ("is supplied - option value was supplied") {
@@ -493,22 +489,22 @@ For all other tricks, consult the documentation!
       .opt[Int]("bananas", noshort = true)
       .opt[Int]("bags")
       .verify
-    opts.get[Int]("bananas") should equal (None)
-    opts.get[Int]("bags") should equal (Some(1))
+    opts.get("bananas") should equal (None)
+    opts.get("bags") should equal (Some(1))
   }
 
   test ("negative number in option parameters") {
     val opts = Scallop(List("-a","-1"))
       .opt[Int]("apples")
       .verify
-    opts.get[Int]("apples") should equal (Some(-1))
+    opts.get("apples") should equal (Some(-1))
   }
 
   test ("correct validation") {
     val opts = Scallop(List("-a","1"))
       .opt[Int]("apples", validate = (0<))
       .verify
-    opts[Int]("apples") should equal (1)
+    opts("apples") should equal (1)
   }
 
   test ("help printing") {

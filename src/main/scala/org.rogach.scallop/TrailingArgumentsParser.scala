@@ -54,7 +54,7 @@ object TrailingArgumentsParser {
           case ArgType.LIST => args.size
           case argType => sys.error("unsupported arg type: " + argType)
         }
-        var minLength = if (converter.argType != ArgType.FLAG && mustMatch) 1 else 0
+        val minLength = if (converter.argType != ArgType.FLAG && mustMatch) 1 else 0
 
         if (minLength > matchLength) {
           val ParseResult(restResult, failCount, excess) = parse(Nil, rest)

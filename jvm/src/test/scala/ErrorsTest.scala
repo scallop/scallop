@@ -8,33 +8,6 @@ import org.rogach.scallop.exceptions._
 class ErrorsTest extends FunSuite with Matchers with UsefulMatchers {
   throwError.value = true
 
-  test("wrong arg type") {
-    val opts = Scallop(List("--angels","42"))
-      .opt[Int]("angels")
-      .verify
-    intercept[WrongTypeRequest] {
-      opts.get[Double]("angels") should equal (Some(42))
-    }
-  }
-
-  test("wrong arg type parameter") {
-    val opts = Scallop(List("--angels","42","34"))
-      .opt[List[Int]]("angels")
-      .verify
-    intercept[WrongTypeRequest] {
-      opts.get[List[Double]]("angels")
-    }
-  }
-
-  test("wrong arg type 2") {
-    val opts = Scallop(List("--angels","42"))
-      .opt[Int]("angels")
-      .verify
-    intercept[WrongTypeRequest] {
-      opts[Double]("angels") should equal (42)
-    }
-  }
-
   test ("options parse failure") {
     expectException(ExcessArguments(Seq("42"))) {
       val opts = Scallop(List("42"))
@@ -120,17 +93,7 @@ class ErrorsTest extends FunSuite with Matchers with UsefulMatchers {
     expectException(UnknownOption("aoeu")) {
       val opts = Scallop()
         .verify
-      opts[Int]("aoeu")
-    }
-
-  }
-
-  test ("no option type provided") {
-    val opts = Scallop(List("--angels","42"))
-      .opt[Int]("angels")
-      .verify
-    intercept[WrongTypeRequest] {
-      opts.get("angels") should equal (Some(42))
+      opts("aoeu")
     }
   }
 

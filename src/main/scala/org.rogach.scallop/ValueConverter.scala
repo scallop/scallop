@@ -1,7 +1,5 @@
 package org.rogach.scallop
 
-import scala.reflect.runtime.universe.TypeTag
-
 /** Converter from list of plain strings to something meaningful. */
 trait ValueConverter[A] { parent =>
 
@@ -26,9 +24,6 @@ trait ValueConverter[A] { parent =>
     }
   }
 
-  /** TypeTag, holding the type for this builder. */
-  val tag: TypeTag[A]
-
   /** Type of parsed argument list. */
   val argType: ArgType.V
 
@@ -41,17 +36,16 @@ trait ValueConverter[A] { parent =>
     * intConverter.map(2 +) // and you get a "biased converter"
     * }}}
     */
-  def map[B](fn: A => B)(implicit tt: TypeTag[B]) = new ValueConverter[B] { child =>
+  def map[B](fn: A => B) = new ValueConverter[B] { child =>
     def parse(s: List[(String,List[String])]) =
       parent.parse(s) match {
         case Right(parseResult) => Right(parseResult.map(fn))
         case Left(msg) => Left(msg)
       }
-    val tag = tt
     val argType = parent.argType
   }
 
-  def flatMap[B](fn: A => Either[String, Option[B]])(implicit tt: TypeTag[B]) =
+  def flatMap[B](fn: A => Either[String, Option[B]]) =
     new ValueConverter[B] { child =>
       def parse(s: List[(String,List[String])]) =
         parent.parse(s) match {
@@ -60,7 +54,6 @@ trait ValueConverter[A] { parent =>
           case Right(None) => Right(None)
           case Left(msg) => Left(msg)
         }
-      val tag = tt
       val argType = parent.argType
     }
 

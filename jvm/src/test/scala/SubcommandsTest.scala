@@ -15,8 +15,8 @@ class SubcommandsTest extends UsefulMatchers {
       .addSubBuilder(Seq("tree"),sub)
       .args(Seq("-a","tree","-b"))
       .verify
-    opts.get[Boolean]("apples") should equal (Some(true))
-    opts.get[Boolean]("tree\u0000bananas") should equal (Some(true))
+    opts.get("apples") should equal (Some(true))
+    opts.get("tree\u0000bananas") should equal (Some(true))
     opts.getSubcommandName should equal (Some("tree"))
   }
 
