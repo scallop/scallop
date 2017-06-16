@@ -3,8 +3,10 @@ Release
 * Bump the version (in README.md).
 * +jvm/test
 * native/test:run
+* js/test:run
 * +jvm/publish-signed
 * native/publish-signed
+* js/publish-signed
 * Commit the changes.
 * Tag the release (in develop branch).
 * Close the release in Nexus UI.

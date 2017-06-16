@@ -58,18 +58,18 @@ private[scallop] object Scallop {
   * @param subbuilders subcommands in this builder
   */
 case class Scallop(
-    args: Seq[String] = Nil,
-    opts: List[CliOption] = Nil,
-    mainOpts: List[String] = Nil,
-    vers: Option[String] = None,
-    bann: Option[String] = None,
-    foot: Option[String] = None,
-    descr: String = "",
-    helpWidth: Option[Int] = None,
-    shortSubcommandsHelp: Boolean = false,
-    appendDefaultToDescription: Boolean = false,
-    subbuilders: List[(String, Scallop)] = Nil
-  ) {
+  args: Seq[String] = Nil,
+  opts: List[CliOption] = Nil,
+  mainOpts: List[String] = Nil,
+  vers: Option[String] = None,
+  bann: Option[String] = None,
+  foot: Option[String] = None,
+  descr: String = "",
+  helpWidth: Option[Int] = None,
+  shortSubcommandsHelp: Boolean = false,
+  appendDefaultToDescription: Boolean = false,
+  subbuilders: List[(String, Scallop)] = Nil
+) extends ScallopArgListLoader {
 
   var parent: Option[Scallop] = None
 
@@ -216,19 +216,7 @@ case class Scallop(
   }
 
   /** Result of parsing */
-  private lazy val parsed: ParseResult = if (args.headOption map("@--" ==) getOrElse false) {
-    // read options from stdin
-    val argList =
-      io.Source.fromInputStream(java.lang.System.in).getLines.toList
-      .flatMap(_.split(" ").filter(_.size > 0))
-    parse(argList)
-  } else if (args.headOption map(_ startsWith "@") getOrElse false) {
-    // read options from a file (canned config)
-    val argList =
-      io.Source.fromFile(args.head.drop(1)).getLines.toList
-      .flatMap(_.split(" ").filter(_.size > 0))
-    parse(argList)
-  } else parse(args)
+  private lazy val parsed: ParseResult = parse(loadArgList(args))
 
   /** Tests whether this string contains option name, not some number. */
   private def isOptionName(s: String) =

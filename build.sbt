@@ -1,11 +1,14 @@
 import sbtcrossproject.{CrossType, crossProject}
 
-val versRgx = """[0-9]+\.[0-9]+\.[0-9]+""".r
-
 lazy val commonSettings = Seq(
   organization := "org.rogach",
   name := "scallop",
-  version := versRgx.findFirstIn(io.Source.fromFile("README.md").getLines.filter(_.contains("libraryDependencies")).mkString).get,
+  version := {
+    val versionRegexp = """[0-9]+\.[0-9]+\.[0-9]+""".r
+    val libraryDependenciesString =
+      io.Source.fromFile("README.md").getLines.filter(_.contains("libraryDependencies")).mkString
+    versionRegexp.findFirstIn(libraryDependenciesString).get
+  },
   scalaVersion := "2.12.2",
   crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2"),
   scalacOptions ++= Seq(
@@ -59,7 +62,7 @@ lazy val commonSettings = Seq(
 ) ++ site.settings ++ site.includeScaladoc("") ++ ghpages.settings
 
 lazy val scallop =
-  crossProject(JVMPlatform, NativePlatform)
+  crossProject(JVMPlatform, NativePlatform, JSPlatform)
   .crossType(new sbtcrossproject.CrossType {
     def projectDir(crossBase: File, projectType: String): File =
       crossBase / projectType
@@ -89,3 +92,4 @@ lazy val scallop =
 
 lazy val scallopJVM = scallop.jvm.copy(id = "jvm")
 lazy val scallopNative = scallop.native.copy(id = "native")
+lazy val scallopJS = scallop.js.copy(id = "js")

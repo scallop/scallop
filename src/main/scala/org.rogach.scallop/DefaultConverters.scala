@@ -1,6 +1,5 @@
 package org.rogach.scallop
 
-import java.io.File
 import org.rogach.scallop.exceptions.GenericScallopException
 
 import scala.util.Try
@@ -65,8 +64,6 @@ trait DefaultConverters {
     singleArgConverter(BigInt(_), numberHandler("integer"))
   implicit val bigDecimalConverter: ValueConverter[BigDecimal] =
     singleArgConverter(BigDecimal(_), numberHandler("decimal"))
-  implicit val fileConverter: ValueConverter[File] =
-    singleArgConverter(new File(_))
 
   def listArgConverter[A](conv: String => A) = new ValueConverter[List[A]] {
     def parse(s:List[(String, List[String])]) = {
