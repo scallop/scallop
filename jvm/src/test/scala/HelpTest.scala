@@ -448,7 +448,6 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
       verify()
     }
-    println(conf.builder.help)
     conf.builder.help ====
       """      --help   Show help message
         |
