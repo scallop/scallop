@@ -1,0 +1,13 @@
+Release
+=======
+* Bump the version (in README.md).
+* +jvm/test
+* native/test:run
+* +jvm/publish-signed
+* native/publish-signed
+* Commit the changes.
+* Tag the release (in develop branch).
+* Close the release in Nexus UI.
+* Push latest version to github. (push --all; push --tags)
+* Update API docs (jvm/ghpages-push-site).
+* Draft a release in Github ui.
