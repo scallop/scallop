@@ -64,6 +64,13 @@ abstract class ScallopConfBase(
     editBuilder(_.copy(appendDefaultToDescription = v))
   }
 
+  def helpFormatter = builder.helpFormatter
+  /** Set custom help formatter.
+    */
+  def helpFormatter_=(formatter: ScallopHelpFormatter) = {
+    editBuilder(_.copy(helpFormatter = formatter))
+  }
+
   private[this] var gen = 0
   private[this] def genName() = { gen += 1; "\t%d" format gen }
 

@@ -414,7 +414,45 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       """      --help   Show help message
         |
         |Subcommand: sub
-        |
         |""".stripMargin
+  }
+
+  test ("custom help formatter ('Subcommand' => 'Command')") {
+    val conf = new ScallopConf(Seq()) {
+      val tree = new Subcommand("tree") {
+        val apples = opt[Int](descr = "how many apples?")
+      }
+      addSubcommand(tree)
+
+      helpFormatter = new ScallopHelpFormatter {
+        override def getSubcommandHeaderPrefix = "Command: "
+      }
+
+      verify()
+    }
+    conf.builder.help ====
+      """      --help   Show help message
+        |
+        |Command: tree
+        |  -a, --apples  <arg>   how many apples?
+        |      --help            Show help message""".stripMargin
+  }
+
+  test ("custom help formatter ('trailing arguments' => 'arguments')") {
+    val conf = new ScallopConf(Seq("42")) {
+      val apples = trailArg[Int](descr = "how many apples?")
+
+      helpFormatter = new ScallopHelpFormatter {
+        override def getTrailingArgsSectionName = " arguments:"
+      }
+
+      verify()
+    }
+    println(conf.builder.help)
+    conf.builder.help ====
+      """      --help   Show help message
+        |
+        | arguments:
+        |  apples (required)   how many apples?""".stripMargin
   }
 }

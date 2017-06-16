@@ -40,7 +40,6 @@ private[scallop] object Scallop {
       argName = "",
       hidden = false,
       noshort = true
-
     )
 }
 
@@ -68,6 +67,7 @@ case class Scallop(
   helpWidth: Option[Int] = None,
   shortSubcommandsHelp: Boolean = false,
   appendDefaultToDescription: Boolean = false,
+  helpFormatter: ScallopHelpFormatter = new ScallopHelpFormatter,
   subbuilders: List[(String, Scallop)] = Nil
 ) extends ScallopArgListLoader {
 
@@ -467,79 +467,10 @@ case class Scallop(
   /** Explicitly sets the needed width for the help printout. */
   def setHelpWidth(w: Int) = this.copy(helpWidth = Some(w))
 
-  private def needToAppendDefaultToDescription: Boolean =
-    appendDefaultToDescription || parent.exists(_.needToAppendDefaultToDescription)
-
   /** Get help on options from this builder. The resulting help is carefully formatted to required number of columns (default = 80, change with .setHelpWidth method),
     * and contains info on properties, options and trailing arguments.
     */
-  def help: String = help("")
-
-  private def help(subcommandPrefix: String): String = {
-    // --help and --version do not go through normal pipeline, so we need to hardcode them here
-    val helpOpt = opts.find(_.name == "help").getOrElse(Scallop.builtinHelpOpt)
-    val versionOpt = opts.find(_.name == "version").orElse(vers.map(_ => Scallop.builtinVersionOpt))
-
-    val optsToFormat =
-      mainOpts.map(mo => opts.find(_.name == mo)) ++
-      // insert empty line before other options if main options are defined
-      mainOpts.headOption.map(_=>List(None)).getOrElse(Nil) ++
-      (opts
-        filter (!_.isPositional)
-        filter (!_.hidden)
-        filter (o => mainOpts.forall(o.name!=))
-        filter (o => o.name != "help" && o.name != "version")
-        sortBy (_.name.toLowerCase)
-        map (o => Some(o))
-      ) ++
-      List(Some(helpOpt), versionOpt).map(_.filterNot(_.hidden)).filter(_.isDefined)
-
-    val optsHelp = Formatter format (
-      optsToFormat flatMap {
-        case None => List(None)
-        case Some(o) => o.helpInfo(getOptionShortNames(o)).map(Some(_))
-      },
-      helpWidth,
-      needToAppendDefaultToDescription
-    )
-
-    val subcommandsHelp = if (shortSubcommandsHelp) {
-      subbuilders.headOption.map { _ =>
-        val maxCommandLength = subbuilders.map(_._1.size).max
-        "\n\nSubcommands:\n" + subbuilders.map(s => "  " + s._1.padTo(maxCommandLength, ' ') + "   " + s._2.descr).mkString("\n")
-      }.getOrElse("")
-    } else {
-      val subHelp = subbuilders
-        .groupBy(_._2)
-        .mapValues(_.map(_._1))
-        .toList
-        .sortBy { case (subBuilder, names) => subbuilders.indexWhere(_._2 == subBuilder) }
-        .map { case (sub, names) =>
-          val subName =
-            if (names.size == 1) names.head
-            else names.head + " (alias: " + names.tail.mkString(", ") + ")"
-          val subDescr = if (sub.descr.nonEmpty) " - " + sub.descr else ""
-          ("Subcommand: %s%s%s" format (subcommandPrefix, subName, subDescr)) + "\n" +
-          sub.bann.map(_+"\n").getOrElse("") +
-          sub.help(subcommandPrefix + names.head + " ").split("\n").
-            filter(!_.trim.startsWith("--version")).mkString("\n") +
-          sub.foot.map("\n"+_).getOrElse("")
-        }.mkString("\n")
-      if (subHelp.nonEmpty) "\n\n" + subHelp else subHelp
-    }
-    val trailOpts = opts filter (_.isPositional) filter (!_.hidden)
-    val trailHelp = Formatter format (
-      trailOpts flatMap (_.helpInfo(Nil)) map (Some(_)),
-      helpWidth,
-      needToAppendDefaultToDescription
-    )
-    val formattedHelp = if (trailOpts isEmpty) {
-      optsHelp + subcommandsHelp
-    } else {
-      optsHelp + "\n\n trailing arguments:\n" + trailHelp + subcommandsHelp
-    }
-    formattedHelp.replaceAll(" +(\n)| +$", "$1") // remove trailing whitespace
-  }
+  def help: String = helpFormatter.formatHelp(this, "")
 
   /** Print help message (with version, banner, option usage and footer) to stdout. */
   def printHelp() = {
