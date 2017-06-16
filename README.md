@@ -26,15 +26,7 @@ Add following to your build.sbt:
 libraryDependencies += "org.rogach" %% "scallop" % "2.1.3"
 ```
 
-**Migration from 2.x versions:** `Scallop` type-unsafe immutable builder was removed. Instead, use `ScallopConf`. If your use case requires old type-unsafe builder, please raise an issue in the tracker.
-
-**Migration from 1.x versions:** `opt[File]` does not check that file exists anymore. Instead, use `validateFileExists` helper inside your configuration.
-
-**Migration from 0.x versions:** due to deprecation of DelayedInit trait, automatic verification
-of configuration objects no longer works - now you must call `.verify()` on your config explicitly
-before retrieving options.
-Also, if you use subcommands, you will have to add them to parent config explicitly by calling
-`.addSubcommand()` method.
+If you were using `2.x` version or older, please see [migration notes](https://github.com/scallop/scallop/wiki/Migration-notes).
 
 Quick example
 =============
