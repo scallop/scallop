@@ -70,6 +70,7 @@ lazy val scallop =
   })
   .in(file("."))
   .settings(commonSettings)
+  .configure(_.enablePlugins(spray.boilerplate.BoilerplatePlugin))
   .jvmSettings(
     libraryDependencies ++= Seq(
       "org.scalatest" %%% "scalatest" % "3.0.0" % "test"
@@ -86,5 +87,5 @@ lazy val scallop =
     crossScalaVersions := Seq("2.11.8")
   )
 
-lazy val scallopJVM    = scallop.jvm.enablePlugins(spray.boilerplate.BoilerplatePlugin)
-lazy val scallopNative = scallop.native.enablePlugins(spray.boilerplate.BoilerplatePlugin)
+lazy val scallopJVM = scallop.jvm.copy(id = "jvm")
+lazy val scallopNative = scallop.native.copy(id = "native")
