@@ -40,8 +40,8 @@ class StrangeTest extends UsefulMatchers with CapturingTest {
         }
       }
       exits ==== List(1)
-      err ==== ""
-      out ==== "[beans] Error: Required option 'beans' not found\n"
+      out ==== ""
+      err ==== "[beans] Error: Required option 'beans' not found\n"
     }
   }
 
