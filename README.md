@@ -23,7 +23,7 @@ Installation
 Add following to your build.sbt:
 
 ```scala
-libraryDependencies += "org.rogach" %% "scallop" % "3.0.0"
+libraryDependencies += "org.rogach" %% "scallop" % "3.0.1"
 ```
 
 If you were using `2.x` version or older, please see [migration notes](https://github.com/scallop/scallop/wiki/Migration-notes).
