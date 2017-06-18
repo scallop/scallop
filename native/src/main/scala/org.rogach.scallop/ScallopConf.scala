@@ -10,4 +10,9 @@ abstract class ScallopConf(
     // noop, no reflection support in Scala-Native
   }
 
+  errorMessageHandler = { message =>
+    Console.err.println(Util.format("[%s] Error: %s", printedName, message))
+    sys.exit(1)
+  }
+
 }

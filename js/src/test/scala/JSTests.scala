@@ -9,5 +9,10 @@ object Main extends js.JSApp {
       verify()
     }
     assert(conf.apples() == 3)
+    assert(
+      conf.builder.help ==
+        """  -a, --apples  <arg>
+          |      --help            Show help message""".stripMargin
+    )
   }
 }
