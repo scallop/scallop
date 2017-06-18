@@ -8,7 +8,10 @@ class ScallopHelpFormatter {
       getTrailingArgsHelp(s) +
       getSubcommandsHelp(s, subcommandPrefix)
 
-    formattedHelp.replaceAll(" +(\n)| +$", "$1") // remove trailing whitespace
+    // remove trailing whitespace
+    formattedHelp.split("\n")
+    .map(_.reverse.dropWhile(Character.isWhitespace).reverse)
+    .mkString("\n")
   }
 
   protected def getOptionsHelp(s: Scallop): String = {

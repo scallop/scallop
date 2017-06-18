@@ -91,7 +91,7 @@ case class PropertyOption(
   def required = false
 
   def argLine(sh: List[Char]): String =
-    "-%1$s%2$s=%3$s [%2$s=%3$s]..." format (short, keyName, valueName)
+    Util.format("-%1$s%2$s=%3$s [%2$s=%3$s]...", short, keyName, valueName)
 
   def helpInfo(sh: List[Char]) = List((argLine(sh), descr, None))
 }
@@ -114,7 +114,7 @@ case class LongNamedPropertyOption(
   def required = false
 
   def argLine(sh: List[Char]) =
-    "--%1$s%2$s=%3$s [%2$s=%3$s]..." format (name, keyName, valueName)
+    Util.format("--%1$s%2$s=%3$s [%2$s=%3$s]...", name, keyName, valueName)
 
   def helpInfo(sh: List[Char]) = List((argLine(sh), descr, None))
 }
@@ -135,7 +135,7 @@ case class TrailingArgsOption(
   def requiredShortNames = Nil
 
   def argLine(sh: List[Char]): String =
-    "%s (%s)" format (name, (if (required) "required" else "not required"))
+    Util.format("%s (%s)", name, (if (required) "required" else "not required"))
 
   def helpInfo(sh: List[Char]) = List((argLine(sh), descr, default().map(_.toString)))
 }
@@ -156,7 +156,7 @@ case class NumberArgOption(
   def requiredShortNames = Nil
 
   def argLine(sh: List[Char]): String =
-    "-<%s>" format name
+    Util.format("-<%s>", name)
 
   def helpInfo(sh: List[Char]) = List((argLine(sh), descr, default().map(_.toString)))
 }

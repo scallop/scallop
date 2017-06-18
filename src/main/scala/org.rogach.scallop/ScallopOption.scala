@@ -109,7 +109,7 @@ abstract class ScallopOption[A](nm: String, val _transformCount: Int = 0) { opt 
   def isEmpty = !isDefined
 
   override def toString = opt.toOption match {
-    case Some(x) => "ScallopSome(%s)" format x
+    case Some(x) => Util.format("ScallopSome(%s)", x)
     case None => "ScallopNone"
   }
 }

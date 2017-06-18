@@ -72,7 +72,7 @@ abstract class ScallopConfBase(
   }
 
   private[this] var gen = 0
-  private[this] def genName() = { gen += 1; "\t%d" format gen }
+  private[this] def genName() = { gen += 1; Util.format("\t%d", gen) }
 
   /** Retrieves the choosen subcommand. */
   def subcommand: Option[ScallopConfBase] = {
@@ -431,8 +431,10 @@ abstract class ScallopConfBase(
     */
   def dependsOnAny(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
     if (opt.isSupplied && !list.exists(_.isSupplied)) {
-      Left("When specifying '%s', at least one of the following options must be provided: %s"
-        format (opt.name, list.map(_.name).mkString(", ")))
+      Left(Util.format(
+        "When specifying '%s', at least one of the following options must be provided: %s",
+        opt.name, list.map(_.name).mkString(", ")
+      ))
     } else Right(Unit)
   }
 
@@ -443,8 +445,10 @@ abstract class ScallopConfBase(
     */
   def dependsOnAll(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
     if (opt.isSupplied && !list.forall(_.isSupplied)) {
-      Left("When specifying '%s', all of the following options must also be provided: %s"
-        format (opt.name, list.map(_.name).mkString(", ")))
+      Left(Util.format(
+        "When specifying '%s', all of the following options must also be provided: %s",
+        opt.name, list.map(_.name).mkString(", ")
+      ))
     } else Right(Unit)
   }
 
@@ -456,7 +460,7 @@ abstract class ScallopConfBase(
   def conflicts(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
     if (opt.isSupplied && list.exists(_.isSupplied)) {
       val conflict = list.find(_.isSupplied).get
-      Left("Option '%s' conflicts with option '%s'" format (opt.name, conflict.name))
+      Left(Util.format("Option '%s' conflicts with option '%s'", opt.name, conflict.name))
     } else Right(Unit)
   }
 
@@ -466,8 +470,10 @@ abstract class ScallopConfBase(
     */
   def requireAtLeastOne(list: ScallopOption[_]*) = addValidation {
     if (!list.exists(_.isSupplied)) {
-      Left("There should be at least one of the following options: %s"
-        format list.map(_.name).mkString(", "))
+      Left(Util.format(
+        "There should be at least one of the following options: %s",
+        list.map(_.name).mkString(", ")
+      ))
     } else Right(Unit)
   }
 
@@ -477,8 +483,10 @@ abstract class ScallopConfBase(
     */
   def requireOne(list: ScallopOption[_]*) = addValidation {
     if (list.count(_.isSupplied) != 1) {
-      Left("There should be exactly one of the following options: %s"
-        format list.map(_.name).mkString(", "))
+      Left(Util.format(
+        "There should be exactly one of the following options: %s",
+        list.map(_.name).mkString(", ")
+      ))
     } else Right(Unit)
   }
 
@@ -488,8 +496,10 @@ abstract class ScallopConfBase(
     */
   def mutuallyExclusive(list: ScallopOption[_]*) = addValidation {
     if (list.count(_.isSupplied) > 1) {
-      Left("There should be only one or zero of the following options: %s"
-        format list.map(_.name).mkString(", "))
+      Left(Util.format(
+        "There should be only one or zero of the following options: %s",
+        list.map(_.name).mkString(", ")
+      ))
     } else Right(Unit)
   }
 
@@ -500,8 +510,10 @@ abstract class ScallopConfBase(
   def codependent(list: ScallopOption[_]*) = addValidation {
     val c = list.count(_.isSupplied)
     if (c != 0 && c != list.size) {
-      Left("Either all or none of the following options should be supplied, because they are co-dependent: %s"
-        format list.map(_.name).mkString(", "))
+      Left(Util.format(
+        "Either all or none of the following options should be supplied, because they are co-dependent: %s",
+        list.map(_.name).mkString(", ")
+      ))
     } else Right(Unit)
   }
 
@@ -511,8 +523,10 @@ abstract class ScallopConfBase(
   def allDefinedOrUndefined(list: ScallopOption[_]*) = addValidation {
     val c = list.count(_.toOption.isDefined)
     if (c != 0 && c != list.size) {
-      Left("Either all or none of the following options should be defined, because they are co-dependent: %s"
-        format list.map(_.name).mkString(", "))
+      Left(Util.format(
+        "Either all or none of the following options should be defined, because they are co-dependent: %s",
+        list.map(_.name).mkString(", ")
+      ))
     } else Right(Unit)
   }
 
@@ -530,7 +544,7 @@ abstract class ScallopConfBase(
   def validateFileDoesNotExist(fileOption: ScallopOption[File]) = addValidation {
     fileOption.toOption
       .map(file => {
-        if (file.exists()) Left(s"File '$file' already exists")
+        if (file.exists()) Left(Util.format("File '%s' already exists", file))
         else Right(())
       })
       .getOrElse(Right(()))
@@ -539,7 +553,7 @@ abstract class ScallopConfBase(
   def validateFileIsDirectory(fileOption: ScallopOption[File]) = addValidation {
     fileOption.toOption
       .map(file => {
-        if (!file.isDirectory) Left(s"File '$file' is not a directory")
+        if (!file.isDirectory) Left(Util.format("File '%s' is not a directory", file))
         else Right(())
       })
       .getOrElse(Right(()))
@@ -548,7 +562,7 @@ abstract class ScallopConfBase(
   def validateFileIsFile(fileOption: ScallopOption[File]) = addValidation {
     fileOption.toOption
       .map(file => {
-        if (!file.isFile) Left(s"File '$file' is not a file")
+        if (!file.isFile) Left(Util.format("File '%s' is not a file", file))
         else Right(())
       })
       .getOrElse(Right(()))

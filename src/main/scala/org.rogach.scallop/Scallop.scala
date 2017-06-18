@@ -258,7 +258,7 @@ case class Scallop(
       hidden: Boolean = false,
       noshort: Boolean = false)
       (implicit conv: ValueConverter[A]): Scallop = {
-    if (name.head.isDigit) throw new IllegalOptionParameters("First character of the option name must not be a digit: %s" format name)
+    if (name.head.isDigit) throw new IllegalOptionParameters(Util.format("First character of the option name must not be a digit: %s", name))
     val defaultA =
       if (conv == flagConverter)
         { () =>
@@ -555,13 +555,13 @@ case class Scallop(
   def verify: Scallop = {
     // option identifiers must not clash
     opts map (_.name) groupBy (a=>a) filter (_._2.size > 1) foreach
-      (a => throw new IdenticalOptionNames("Option identifier '%s' is not unique" format a._1))
+      (a => throw new IdenticalOptionNames(Util.format("Option identifier '%s' is not unique", a._1)))
     // long options names must not clash
     opts flatMap (_.longNames) groupBy (a=>a) filter (_._2.size > 1) foreach
-      (a => throw new IdenticalOptionNames("Long option name '%s' is not unique" format a._1))
+      (a => throw new IdenticalOptionNames(Util.format("Long option name '%s' is not unique", a._1)))
     // short options names must not clash
     opts flatMap (o => (o.requiredShortNames).distinct) groupBy (a=>a) filter (_._2.size > 1) foreach
-      (a => throw new IdenticalOptionNames("Short option name '%s' is not unique" format a._1))
+      (a => throw new IdenticalOptionNames(Util.format("Short option name '%s' is not unique", a._1)))
 
 
     val helpOpt = opts.find(_.name == "help").getOrElse(Scallop.builtinHelpOpt)
@@ -612,7 +612,7 @@ case class Scallop(
         throw new RequiredOptionNotFound(o.name)
       // validaiton
       if (!(get(o.name) map (v => o.validator(v)) getOrElse true))
-        throw new ValidationFailure("Validation failure for '%s' option parameters: %s" format (o.name, args.map(_._2.mkString(" ")).mkString(" ")))
+        throw new ValidationFailure(Util.format("Validation failure for '%s' option parameters: %s", o.name, args.map(_._2.mkString(" ")).mkString(" ")))
 
     }
 
@@ -624,7 +624,7 @@ case class Scallop(
     * Returns a list of all options in the builder, and corresponding values for them.
     */
   def summary: String = {
-    ("Scallop(%s)" format args.mkString(", ")) + "\n" + filteredSummary(Set.empty)
+    Util.format("Scallop(%s)", args.mkString(", ")) + "\n" + filteredSummary(Set.empty)
   }
 
   /** Get summary of current parser state + blurring the values of parameters provided.
@@ -637,11 +637,14 @@ case class Scallop(
   def filteredSummary(blurred:Set[String]): String = {
     lazy val hide = "************"
     opts.map { o =>
-      " %s  %s => %s" format((if (isSupplied(o.name)) "*" else " "),
+      Util.format(
+        " %s  %s => %s",
+        (if (isSupplied(o.name)) "*" else " "),
         o.name,
-        if(!blurred.contains(o.name)) get(o.name).getOrElse("<None>") else hide)
+        if(!blurred.contains(o.name)) get(o.name).getOrElse("<None>") else hide
+      )
     }.mkString("\n") + "\n" + parsed.subcommand.map { sn =>
-      ("subcommand: %s\n" format sn) + subbuilders.find(_._1 == sn).get._2.args(parsed.subcommandArgs).filteredSummary(blurred)
+      Util.format("subcommand: %s\n", sn) + subbuilders.find(_._1 == sn).get._2.args(parsed.subcommandArgs).filteredSummary(blurred)
     }.getOrElse("")
   }
 

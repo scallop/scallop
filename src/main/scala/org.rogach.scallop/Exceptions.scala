@@ -1,5 +1,7 @@
 package org.rogach.scallop.exceptions
 
+import org.rogach.scallop.Util
+
 /** Parent trait for all not-positive results that can be resulted from this library (including help and exits) */
 sealed trait ScallopResult
 
@@ -31,7 +33,7 @@ case class OptionNameGuessingFailure()
 
 /** Thrown when user provides excess arguments that can't be matched by trailing arg options */
 case class ExcessArguments(args: Seq[String])
-  extends ScallopException("Excess arguments provided: '%s'" format args.mkString(" "))
+  extends ScallopException(Util.format("Excess arguments provided: '%s'", args.mkString(" ")))
 
 /** Thrown when several options and/or trailing arguments have identical names
     in definition - making it impossible to distinguish between them. */
@@ -40,17 +42,17 @@ case class IdenticalOptionNames(mess:String) extends ScallopException(mess)
 /** Thrown when user provides Scallop with unknown option name in the arguments
     or requests unknown option result from parser. */
 case class UnknownOption(optionName: String)
-  extends ScallopException("Unknown option '%s'" format optionName)
+  extends ScallopException(Util.format("Unknown option '%s'", optionName))
 
 /** Thrown when arguments to some option do not satisfy that option's
     value converter (it returns Left in such case). */
 case class WrongOptionFormat(optionName: String, args: String, msg: String)
-  extends ScallopException("Bad arguments for option '%s': '%s' - %s" format (optionName, args, msg))
+  extends ScallopException(Util.format("Bad arguments for option '%s': '%s' - %s", optionName, args, msg))
 
 /** Thrown when parser failed to find arguments to option (marked as 'required')
     in the input arguments. */
 case class RequiredOptionNotFound(name: String)
-  extends ScallopException("Required option '%s' not found" format name)
+  extends ScallopException(Util.format("Required option '%s' not found", name))
 
 /** Thrown when user tried to extract the value of an option before the call
     to verify in ScallopConf. */

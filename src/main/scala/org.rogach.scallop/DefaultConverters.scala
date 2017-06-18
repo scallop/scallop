@@ -45,7 +45,7 @@ trait DefaultConverters {
     * @param name the type name to display
     */
   def numberHandler[T](name: String): PartialFunction[Throwable, Either[String, Option[T]]] = {
-    case _: NumberFormatException => Left("bad %s value" format name)
+    case _: NumberFormatException => Left(Util.format("bad %s value", name))
   }
 
   implicit val byteConverter: ValueConverter[Byte] =
