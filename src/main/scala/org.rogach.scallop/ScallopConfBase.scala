@@ -252,10 +252,7 @@ abstract class ScallopConfBase(
       hidden: Boolean = false)
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
     val resolvedName =
-      if (name == null) {
-        if (_guessOptionName) genName()
-        else throw new IllegalArgumentException("You should supply a name for your trailArg!")
-      } else name
+      if (name == null) genName() else name
     editBuilder(_.trailArg(resolvedName, required, descr, () => default, validate, hidden)(conv))
     new ScallopOption[A](resolvedName) {
       override lazy val fn = { (name: String) =>
