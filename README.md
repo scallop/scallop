@@ -1,6 +1,6 @@
 Scallop
 ========
-A simple command-line arguments parsing library for Scala, written in spirit of Ruby's [Trollop](http://trollop.rubyforge.org/). Cross-built for Scala 2.10, 2.11, 2.12, Scala Native and Scala JS.
+A simple command-line arguments parsing library for Scala, written in spirit of Ruby's [Trollop](http://trollop.rubyforge.org/). Cross-built for Scala 2.10, 2.11, 2.12, and experimental support for Scala Native and Scala JS.
 
 Scallop supports:
 
