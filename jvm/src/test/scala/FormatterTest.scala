@@ -27,7 +27,7 @@ class FormatterTest extends FunSuite with Matchers {
 
   test ("exactly-fitting argument formatting") {
     val args = List(
-      Some(("-a, --apples", "* * * *", None))
+      Some(HelpInfo("-a, --apples", "* * * *", () => None))
     )
     val formatted = Formatter.format(args, Some(20), false)
     formatted.split("\n").foreach { line =>
@@ -39,7 +39,7 @@ class FormatterTest extends FunSuite with Matchers {
 
   test ("almost-exactly fitting argument formatting") {
     val args = List(
-      Some(("-a, --apple", "* * * *", None))
+      Some(HelpInfo("-a, --apple", "* * * *", () => None))
     )
     val formatted = Formatter.format(args, Some(20), false)
     // Should format with a trailing whitespace to exactly 20 chars.
@@ -47,13 +47,12 @@ class FormatterTest extends FunSuite with Matchers {
       line should have length(20)
     }
     // Note the trailing spaces on the first line.
-    formatted should equal ("""  -a, --apple   * * 
-                              |                * * """.stripMargin)
+    formatted shouldEqual "  -a, --apple   * * \n                * * "
   }
 
   test ("long-only argument formatting") {
     val args = List(
-      Some(("--apples", "* * * *", None))
+      Some(HelpInfo("--apples", "* * * *", () => None))
     )
     val formatted = Formatter.format(args, Some(20), false)
     formatted.split("\n").foreach { line =>

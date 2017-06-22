@@ -148,6 +148,7 @@ class ErrorsTest extends FunSuite with Matchers with UsefulMatchers {
     intercept[IncompleteBuildException] {
       throwError.withValue(false) {
         class Conf (arguments: Seq[String]) extends ScallopConf(arguments) {
+          appendDefaultToDescription = true
           val protocol = opt[String](default = Some("http"))
           val port = opt[Int](default = protocol() match {
             case "http" => Some(80)

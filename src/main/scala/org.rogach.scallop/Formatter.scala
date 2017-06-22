@@ -11,16 +11,17 @@ object Formatter {
     * is inserted.
     * Also accepts optional width, to which the result must be formatted.
     */
-  def format(s: List[Option[(String, String, Option[String])]], width: Option[Int], appendDefault: Boolean): String = {
+  def format(s: List[Option[HelpInfo]], width: Option[Int], appendDefault: Boolean): String = {
     val neededWidth = width getOrElse DEFAULT_WIDTH
-    val argWidth = if (s.isEmpty || s.head.isEmpty) 0
-                   else s.map(_.map(_._1).getOrElse("")).map(a => if (a.startsWith("--")) "    " + a else a).map(_.size).max
+    val argWidth =
+      if (s.isEmpty || s.head.isEmpty) 0
+      else s.map(_.map(_.argLine).getOrElse("")).map(a => if (a.startsWith("--")) "    " + a else a).map(_.size).max
     s.flatMap {
-      case Some((arg, descr, defVal)) =>
+      case Some(HelpInfo(arg, descr, defVal)) =>
         val argPadding = " " * (if (arg.trim.startsWith("--")) 4 else 0)
         val text = wrap(
           descr.split(" ") ++
-            (if (appendDefault) defVal.map(v => Util.format("(default = %s)", v)) else Nil),
+            (if (appendDefault) defVal().map(v => Util.format("(default = %s)", v)) else Nil),
           neededWidth - argWidth - COLUMN_PADDING - INDENT
         ).map(l => " " * (argWidth + COLUMN_PADDING + INDENT) + l)
         (" " * INDENT + argPadding + arg + text.head.drop(arg.size + argPadding.size + INDENT)) :: text.tail
