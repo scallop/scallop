@@ -755,4 +755,35 @@ For all other tricks, consult the documentation!
     conf.stuff() shouldBe "basket"
   }
 
+  test ("accessing unverified builder from default option value resolver") {
+    intercept[Help] {
+      class Conf (arguments: Seq[String]) extends ScallopConf(arguments) {
+        appendDefaultToDescription = true
+        val protocol = opt[String](default = Some("http"))
+        val port = opt[Int](default = protocol() match {
+          case "http" => Some(80)
+          case _ => None
+        })
+        verify()
+      }
+
+      val conf = new Conf(Seq("--help"))
+    }
+  }
+
+  test ("default option value resolver accessing other options") {
+    class Conf (arguments: Seq[String]) extends ScallopConf(arguments) {
+      val protocol = opt[String](name = "protocol", noshort = true, required = false, default = Some("http"))
+      val port = opt[Int](name = "port", noshort = true, default = protocol() match {
+        case "http" => Some(80)
+        case _ => None
+      })
+      verify()
+    }
+
+    val conf = new Conf(Seq())
+    conf.protocol() shouldEqual "http"
+    conf.port() shouldEqual 80
+  }
+
 }

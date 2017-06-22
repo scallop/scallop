@@ -154,8 +154,12 @@ case class Scallop(
 
           // parse usual --arg value... option style
           case None =>
-            val opt = opts find (_.longNames.contains(args.head.drop(2))) getOrElse
-                      (throw new UnknownOption(args.head.drop(2)))
+            val optName = args.head.drop(2)
+            val opt =
+              opts.find(_.longNames.contains(optName))
+              .orElse(if (optName == "help") Some(getHelpOption) else None)
+              .orElse(if (optName == "version") getVersionOption else None)
+              .getOrElse(throw new UnknownOption(optName))
             val (before, after) = args.tail.span(isArgument)
             if (after.isEmpty) {
               // get the converter, proceed to trailing args parsing
@@ -206,8 +210,10 @@ case class Scallop(
 
   /** Find an option, that responds to this short name. */
   def getOptionWithShortName(c: Char): Option[CliOption] = {
-    opts find (_.requiredShortNames.contains(c)) orElse {
-      opts find (_.shortNames.contains(c))
+    opts
+    .find(_.requiredShortNames.contains(c))
+    .orElse {
+      opts.find(_.shortNames.contains(c))
     }
   }
 
@@ -547,6 +553,12 @@ case class Scallop(
 
   def prop(name: Char, key: String): Option[Any] = apply(name).asInstanceOf[Map[String, Any]].get(key)
 
+  def getHelpOption =
+    opts.find(_.name == "help").getOrElse(Scallop.builtinHelpOpt)
+
+  def getVersionOption =
+    vers.map(_ => opts.find(_.name == "version").getOrElse(Scallop.builtinVersionOpt))
+
   /** Verify the builder. Parses arguments, makes sure no definitions clash, no garbage or unknown options are present,
     * and all present arguments are in proper format. It is recommended to call this method before using the results.
     *
@@ -564,7 +576,7 @@ case class Scallop(
       (a => throw new IdenticalOptionNames(Util.format("Short option name '%s' is not unique", a._1)))
 
 
-    val helpOpt = opts.find(_.name == "help").getOrElse(Scallop.builtinHelpOpt)
+    val helpOpt = getHelpOption
     val shortHelpOpt = helpOpt match {
       case o: SimpleOption => o.short
       case _ => None
@@ -574,8 +586,7 @@ case class Scallop(
       throw Help("")
     }
 
-    vers.foreach { _ =>
-      val versionOpt = opts.find(_.name == "version").getOrElse(Scallop.builtinVersionOpt)
+    getVersionOption.foreach { versionOpt =>
       val shortVersionOpt = versionOpt match {
         case o: SimpleOption => o.short
         case _ => None

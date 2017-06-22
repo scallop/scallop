@@ -144,22 +144,4 @@ class ErrorsTest extends FunSuite with Matchers with UsefulMatchers {
     }
   }
 
-  test ("accessing unverified builder from default option value resolver") {
-    intercept[IncompleteBuildException] {
-      throwError.withValue(false) {
-        class Conf (arguments: Seq[String]) extends ScallopConf(arguments) {
-          appendDefaultToDescription = true
-          val protocol = opt[String](default = Some("http"))
-          val port = opt[Int](default = protocol() match {
-            case "http" => Some(80)
-            case _ => None
-          })
-          verify()
-        }
-
-        val conf = new Conf(Seq("--help"))
-      }
-    }
-  }
-
 }

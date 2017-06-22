@@ -351,8 +351,8 @@ abstract class ScallopConfBase(
   /** Verify that this config object is properly configured. */
   private[scallop] def verifyBuilder() {
     try {
-      builder.verify
       verified = true
+      builder.verify
       runValidations()
     } catch {
       case e: Exception =>
