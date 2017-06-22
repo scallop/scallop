@@ -10,11 +10,7 @@ class Isolated extends UsefulMatchers with CapturingTest {
   throwError.value = true
 
   test ("i") {
-    object Conf extends ScallopConf(List("-a","3")) {
-      val apples = opt[Int]("apples")
-      verify()
-    }
-    Conf.apples() should equal (3)
+
   }
 
 }

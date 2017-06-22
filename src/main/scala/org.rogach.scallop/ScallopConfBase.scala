@@ -41,6 +41,7 @@ abstract class ScallopConfBase(
     conf.isRootConfig = false
 
     conf.verifyConf()
+    conf.verified = true
 
     editBuilder(_.addSubBuilder(conf.commandNameAndAliases, conf.builder))
   }
@@ -350,8 +351,8 @@ abstract class ScallopConfBase(
   /** Verify that this config object is properly configured. */
   private[scallop] def verifyBuilder() {
     try {
-      verified = true
       builder.verify
+      verified = true
       runValidations()
     } catch {
       case e: Exception =>
@@ -641,8 +642,6 @@ abstract class ScallopConfBase(
 
     // now, when we fixed option names, we can push mainOptions into the builder
     editBuilder(_.copy(mainOpts = _mainOptions().toList))
-
-    verified = true
   }
 
   def verify() {
