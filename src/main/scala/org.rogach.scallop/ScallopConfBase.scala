@@ -158,6 +158,56 @@ abstract class ScallopConfBase(
     }
   }
 
+  /** Add a new option definition to this config and get a holder for the value.
+    *
+    * @param choices List of possible argument values
+    * @param name Name for new option, used as long option name in parsing, and for option identification.
+    * @param short Overload the char that will be used as short option name. Defaults to first character of the name.
+    * @param descr Description for this option, for help description.
+    * @param default Default value to use if option is not found in input arguments (if you provide this, you can omit the type on method).
+    * @param required Is this option required? Defaults to false.
+    * @param argName The name for this option argument, as it will appear in help. Defaults to "arg".
+    * @param hidden If set to true, then this option will be hidden from generated help output.
+    * @param noshort If set to true, then this option does not have any short name.
+    * @return A holder for parsed value
+    */
+  def choice(
+    choices: Seq[String],
+    name: String = null,
+    short: Char = '\u0000',
+    descr: String = "",
+    default: => Option[String] = None,
+    required: Boolean = false,
+    argName: String = "arg",
+    hidden: Boolean = false,
+    noshort: Boolean = false
+  ): ScallopOption[String] = {
+    this.opt[String](
+      name = name,
+      short = short,
+      descr = descr + this.helpFormatter.getChoiceHelpText(choices),
+      default = default,
+      required = required,
+      argName = argName,
+      hidden = hidden,
+      noshort = noshort
+    )(new ValueConverter[String] {
+      def parse(s: List[(String, List[String])]) = {
+        s match {
+          case (_, arg :: Nil) :: Nil =>
+            if (choices.contains(arg)) {
+              Right(Some(arg))
+            } else {
+              Left(s"Expected one of: ${choices.mkString(", ")}")
+            }
+          case Nil => Right(None)
+          case _ => Left("You should provide exactly one argument for this option")
+        }
+      }
+      val argType = ArgType.SINGLE
+    })
+  }
+
   private var _mainOptions: () => Seq[String] = () => Nil
   /** Options, that are to be printed first in the help printout */
   def mainOptions = _mainOptions()

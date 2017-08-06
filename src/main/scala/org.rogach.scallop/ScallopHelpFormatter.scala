@@ -147,4 +147,7 @@ class ScallopHelpFormatter {
   protected def needToAppendDefaultToDescription(s: Scallop): Boolean =
     s.appendDefaultToDescription || s.parent.exists(needToAppendDefaultToDescription)
 
+  def getChoiceHelpText(choices: Seq[String]): String =
+    " Choices: " + choices.mkString(", ")
+
 }
