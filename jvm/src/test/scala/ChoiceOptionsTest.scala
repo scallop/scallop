@@ -15,7 +15,6 @@ class ChoiceOptionsTest extends FunSuite with Matchers with UsefulMatchers {
     }
 
     val conf = new Conf(Seq("--letter", "alpha"))
-    conf.printHelp()
     conf.letter() shouldEqual "alpha"
   }
 
