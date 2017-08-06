@@ -167,6 +167,12 @@
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="class" href="HelpInfo.html" title=""></a>
+                        <a href="HelpInfo.html" title="">
+                          HelpInfo
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="LazyMap.html" title="A class, that lazily encapsulates a map inside."></a>
                         <a href="LazyMap.html" title="A class, that lazily encapsulates a map inside.">
                           LazyMap
@@ -233,6 +239,18 @@
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="Serialization.html" title="Use this trait to make your ScallopConf serializable."></a>
+                        <a href="Serialization.html" title="Use this trait to make your ScallopConf serializable.">
+                          Serialization
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SerializationProxy.html" title=""></a>
+                        <a href="SerializationProxy.html" title="">
+                          SerializationProxy
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="SimpleOption.html" title=""></a>
                         <a href="SimpleOption.html" title="">
                           SimpleOption
@@ -260,6 +278,12 @@
                         <a class="object" href="TrailingArgumentsParser$.html" title="Parses the trailing arguments (including the arguments to last option)."></a>
                         <a href="TrailingArgumentsParser$.html" title="Parses the trailing arguments (including the arguments to last option).">
                           TrailingArgumentsParser
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="object" href="Util$.html" title=""></a>
+                        <a href="Util$.html" title="">
+                          Util
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
@@ -392,6 +416,24 @@
         <a title="" href="DefaultConverters.html">
               <span class="name">DefaultConverters</span>
             </a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      
+    </li><li name="org.rogach.scallop.HelpInfo" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HelpInfoextendsProductwithSerializable"></a><a id="HelpInfo:HelpInfo"></a>
+      <span class="permalink">
+      <a href="../../../org/rogach/scallop/index.html#HelpInfoextendsProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="HelpInfo.html">
+              <span class="name">HelpInfo</span>
+            </a><span class="params">(<span name="argLine">argLine: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="defaultValue">defaultValue: () ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       
       
@@ -595,6 +637,46 @@
       
       <p class="shortcomment cmt">A class to hold a reference to not-yet-computed option values.</p><div class="fullcomment"><div class="comment cmt"><p>A class to hold a reference to not-yet-computed option values.</p><p>Basically, this is a lazy option - it batches up all operations,
 and evaluates the value only as the last resort.</p></div></div>
+    </li><li name="org.rogach.scallop.Serialization" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="SerializationextendsSerializable"></a><a id="Serialization:Serialization"></a>
+      <span class="permalink">
+      <a href="../../../org/rogach/scallop/index.html#SerializationextendsSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="Use this trait to make your ScallopConf serializable." href="Serialization.html">
+              <span class="name">Serialization</span>
+            </a><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Use this trait to make your ScallopConf serializable.</p><div class="fullcomment"><div class="comment cmt"><p>Use this trait to make your ScallopConf serializable.
+Warning: this serialization method expects your ScallopConf class
+to have public constructor that accepts Seq[String] or List[String] as a single parameter.</p><p>If your class does not have such constructor, you will need to implement
+serialization/deserialization logic yourself (see https://github.com/scallop/scallop/issues/137)
+</p></div></div>
+    </li><li name="org.rogach.scallop.SerializationProxy" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SerializationProxyextendsSerializable"></a><a id="SerializationProxy:SerializationProxy"></a>
+      <span class="permalink">
+      <a href="../../../org/rogach/scallop/index.html#SerializationProxyextendsSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="SerializationProxy.html">
+              <span class="name">SerializationProxy</span>
+            </a><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      
+      
     </li><li name="org.rogach.scallop.SimpleOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SimpleOptionextendsCliOptionwithProductwithSerializable"></a><a id="SimpleOption:SimpleOption"></a>
       <span class="permalink">
@@ -1327,6 +1409,24 @@ helpful error message.</p></div><dl class="paramcmts block"><dt class="param">na
       <p class="shortcomment cmt">Parses the trailing arguments (including the arguments to last option).</p><div class="fullcomment"><div class="comment cmt"><p>Parses the trailing arguments (including the arguments to last option).
 Uses simple backtraking algorithm.
 </p></div></div>
+    </li><li name="org.rogach.scallop.Util" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Util"></a><a id="Util:Util"></a>
+      <span class="permalink">
+      <a href="../../../org/rogach/scallop/index.html#Util" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Util$.html">
+              <span class="name">Util</span>
+            </a>
+      </span>
+      
+      
     </li><li name="org.rogach.scallop.overrideColorOutput" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="overrideColorOutput"></a><a id="overrideColorOutput:overrideColorOutput"></a>
       <span class="permalink">

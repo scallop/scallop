@@ -169,6 +169,12 @@
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="class" href="HelpInfo.html" title=""></a>
+                        <a href="HelpInfo.html" title="">
+                          HelpInfo
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="LazyMap.html" title="A class, that lazily encapsulates a map inside."></a>
                         <a href="LazyMap.html" title="A class, that lazily encapsulates a map inside.">
                           LazyMap
@@ -235,6 +241,18 @@
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="Serialization.html" title="Use this trait to make your ScallopConf serializable."></a>
+                        <a href="Serialization.html" title="Use this trait to make your ScallopConf serializable.">
+                          Serialization
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="SerializationProxy.html" title=""></a>
+                        <a href="SerializationProxy.html" title="">
+                          SerializationProxy
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="SimpleOption.html" title=""></a>
                         <a href="SimpleOption.html" title="">
                           SimpleOption
@@ -262,6 +280,12 @@
                         <a class="object" href="TrailingArgumentsParser$.html" title="Parses the trailing arguments (including the arguments to last option)."></a>
                         <a href="TrailingArgumentsParser$.html" title="Parses the trailing arguments (including the arguments to last option).">
                           TrailingArgumentsParser
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="object" href="Util$.html" title=""></a>
+                        <a href="Util$.html" title="">
+                          Util
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
@@ -620,6 +644,23 @@ to option descriptions.</p></div><dl class="attributes block"> <dt>Definition Cl
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConfBase.html" class="extype" name="org.rogach.scallop.ScallopConfBase">ScallopConfBase</a></dd></dl></div>
+    </li><li name="org.rogach.scallop.ScallopConfBase#choice" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="choice(choices:Seq[String],name:String,short:Char,descr:String,default:=&gt;Option[String],required:Boolean,argName:String,hidden:Boolean,noshort:Boolean):org.rogach.scallop.ScallopOption[String]"></a><a id="choice(Seq[String],String,Char,String,⇒Option[String],Boolean,String,Boolean,Boolean):ScallopOption[String]"></a>
+      <span class="permalink">
+      <a href="../../../org/rogach/scallop/ScallopConf.html#choice(choices:Seq[String],name:String,short:Char,descr:String,default:=&gt;Option[String],required:Boolean,argName:String,hidden:Boolean,noshort:Boolean):org.rogach.scallop.ScallopOption[String]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">choice</span><span class="params">(<span name="choices">choices: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">null</span></span>, <span name="short">short: <span class="extype" name="scala.Char">Char</span> = <span class="symbol">'\u0000'</span></span>, <span name="descr">descr: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="default">default: ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="required">required: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="argName">argName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;arg&quot;</span></span>, <span name="hidden">hidden: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="noshort">noshort: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="ScallopOption.html" class="extype" name="org.rogach.scallop.ScallopOption">ScallopOption</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Add a new option definition to this config and get a holder for the value.</p><div class="fullcomment"><div class="comment cmt"><p>Add a new option definition to this config and get a holder for the value.
+</p></div><dl class="paramcmts block"><dt class="param">choices</dt><dd class="cmt"><p>List of possible argument values</p></dd><dt class="param">name</dt><dd class="cmt"><p>Name for new option, used as long option name in parsing, and for option identification.</p></dd><dt class="param">short</dt><dd class="cmt"><p>Overload the char that will be used as short option name. Defaults to first character of the name.</p></dd><dt class="param">descr</dt><dd class="cmt"><p>Description for this option, for help description.</p></dd><dt class="param">default</dt><dd class="cmt"><p>Default value to use if option is not found in input arguments (if you provide this, you can omit the type on method).</p></dd><dt class="param">required</dt><dd class="cmt"><p>Is this option required? Defaults to false.</p></dd><dt class="param">argName</dt><dd class="cmt"><p>The name for this option argument, as it will appear in help. Defaults to &quot;arg&quot;.</p></dd><dt class="param">hidden</dt><dd class="cmt"><p>If set to true, then this option will be hidden from generated help output.</p></dd><dt class="param">noshort</dt><dd class="cmt"><p>If set to true, then this option does not have any short name.</p></dd><dt>returns</dt><dd class="cmt"><p>A holder for parsed value</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ScallopConfBase.html" class="extype" name="org.rogach.scallop.ScallopConfBase">ScallopConfBase</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
