@@ -4,22 +4,9 @@ import org.scalatest.FunSuite
 import org.scalatest.Matchers
 import java.io.{Serializable, ByteArrayOutputStream, ByteArrayInputStream, ObjectOutputStream, ObjectInputStream}
 
-class TestConf(args: List[String]) extends ScallopConf(args) with Serializable {
+class TestConf(args: List[String]) extends ScallopConf(args) with Serialization {
   val apples = opt[Int]("apples")
   verify()
-
-  protected final def writeReplace(): AnyRef = new TestConfSerializationProxy(this)
-}
-private class TestConfSerializationProxy(@transient private var orig: TestConf) extends Serializable {
-  private def writeObject(out: ObjectOutputStream) {
-    out.defaultWriteObject()
-    out.writeObject(orig.args.toArray)
-  }
-  private def readObject(in: ObjectInputStream) {
-    in.defaultReadObject()
-    orig = new TestConf(in.readObject().asInstanceOf[Array[String]].toList)
-  }
-  private def readResolve(): AnyRef = orig
 }
 
 class SerializationTest extends FunSuite with Matchers with UsefulMatchers {
