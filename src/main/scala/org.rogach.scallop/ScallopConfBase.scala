@@ -185,7 +185,7 @@ abstract class ScallopConfBase(
     this.opt[String](
       name = name,
       short = short,
-      descr = descr + this.helpFormatter.getChoiceHelpText(choices),
+      descr = this.helpFormatter.getChoiceHelpText(descr, choices),
       default = default,
       required = required,
       argName = argName,
