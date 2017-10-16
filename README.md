@@ -23,7 +23,7 @@ Installation
 Add following to your build.sbt:
 
 ```scala
-libraryDependencies += "org.rogach" %% "scallop" % "3.1.0"
+libraryDependencies += "org.rogach" %% "scallop" % "3.1.1"
 ```
 
 For use with Scala Native and Scala.js, use `%%%`:
