@@ -114,4 +114,12 @@ class OptionNameGuessing extends UsefulMatchers {
     Conf.scooby.toOption should be (Some(true))
   }
 
+  test("decode special symbols") {
+    object Conf extends ScallopConf(List()) {
+      val `source-folder` = opt[String]()
+      verify()
+    }
+    Conf.`source-folder`.name shouldBe "source-folder"
+  }
+
 }

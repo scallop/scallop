@@ -27,7 +27,27 @@ abstract class ScallopConf(
       .filter(_._2.name.contains("\t"))
 
     val nameMap = methodsAndOptions.sortBy(-_._2._transformCount).map { case (m, opt) =>
-      val newName = m.getName.flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
+      val newName =
+        m.getName
+        .flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
+        .replace("$tilde", "~")
+        .replace("$eq", "=")
+        .replace("$less", "<")
+        .replace("$greater", ">")
+        .replace("$bang", "!")
+        .replace("$hash", "#")
+        .replace("$percent", "%")
+        .replace("$up", "^")
+        .replace("$amp", "&")
+        .replace("$bar", "|")
+        .replace("$times", "*")
+        .replace("$div", "/")
+        .replace("$plus", "+")
+        .replace("$minus", "-")
+        .replace("$colon", ":")
+        .replace("$qmark", "?")
+        .replace("$at", "@")
+
       // the old, generated version of name, without prefixes from parent builders
       val shortGenName = '\t' +: opt.name.reverse.takeWhile('\t'!=).reverse
       (opt.name, (shortGenName, newName))
