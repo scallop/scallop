@@ -26,6 +26,12 @@ Add following to your build.sbt:
 libraryDependencies += "org.rogach" %% "scallop" % "3.1.0"
 ```
 
+For use with Scala Native and Scala.js, use `%%%`:
+
+```scala
+libraryDependencies += "org.rogach" %%% "scallop" % "3.1.0"
+```
+
 If you were using `2.x` version or older, please see [migration notes](https://github.com/scallop/scallop/wiki/Migration-notes).
 
 Quick example
