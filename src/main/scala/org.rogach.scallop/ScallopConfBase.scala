@@ -616,6 +616,46 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  def validateFilesExists(filesOption: ScallopOption[List[File]]) = addValidation {
+    filesOption.toOption
+	  .map(files => {
+        val problems = files.filterNot(_.exists)
+        if (problems.nonEmpty) Left(Util.format("File(s) %s not found", Util.seqstr(problems)))
+        else Right(())
+      })
+	  .getOrElse(Right(()))
+  }
+
+  def validateFilesDoesNotExist(filesOption: ScallopOption[List[File]]) = addValidation {
+    filesOption.toOption
+      .map(files => {
+	    val problems = files.filter(_.exists)
+        if (problems.nonEmpty) Left(Util.format("File(s) %s already exists", Util.seqstr(problems)))
+        else Right(())
+      })
+      .getOrElse(Right(()))
+  }
+
+  def validateFilesIsDirectory(filesOption: ScallopOption[List[File]]) = addValidation {
+    filesOption.toOption
+      .map(files => {
+	    val problems = files.filterNot(_.isDirectory)
+        if (problems.nonEmpty) Left(Util.format("File(s) %s is not a directory", Util.seqstr(problems)))
+        else Right(())
+      })
+      .getOrElse(Right(()))
+  }
+
+  def validateFilesIsFile(filesOption: ScallopOption[List[File]]) = addValidation {
+    filesOption.toOption
+      .map(files => {
+        val problems = files.filterNot(_.isFile)
+        if (problems.nonEmpty) Left(Util.format("File(s) %s is not a file", Util.seqstr(problems)))
+        else Right(())
+      })
+      .getOrElse(Right(()))
+  }
+
   /** In the verify stage, check that file with the supplied path exists. */
   def validatePathExists(pathOption: ScallopOption[Path]) = addValidation {
     pathOption.toOption.fold[Either[String,Unit]](Right(Unit)) { path =>
@@ -625,6 +665,11 @@ abstract class ScallopConfBase(
         Right(Unit)
       }
     }
+  }
+
+  def requireSubcommand() = addValidation {
+    if (subcommand.isEmpty) Left("Subcommand required")
+    else Right(Unit)
   }
 
   // === some getters for convenience ===
