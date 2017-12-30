@@ -616,20 +616,20 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
-  def validateFilesExists(filesOption: ScallopOption[List[File]]) = addValidation {
+  def validateFilesExist(filesOption: ScallopOption[List[File]]) = addValidation {
     filesOption.toOption
-	  .map(files => {
+      .map(files => {
         val problems = files.filterNot(_.exists)
         if (problems.nonEmpty) Left(Util.format("File(s) %s not found", Util.seqstr(problems)))
         else Right(())
       })
-	  .getOrElse(Right(()))
+      .getOrElse(Right(()))
   }
 
-  def validateFilesDoesNotExist(filesOption: ScallopOption[List[File]]) = addValidation {
+  def validateFilesDoNotExist(filesOption: ScallopOption[List[File]]) = addValidation {
     filesOption.toOption
       .map(files => {
-	    val problems = files.filter(_.exists)
+        val problems = files.filter(_.exists)
         if (problems.nonEmpty) Left(Util.format("File(s) %s already exists", Util.seqstr(problems)))
         else Right(())
       })
@@ -639,7 +639,7 @@ abstract class ScallopConfBase(
   def validateFilesIsDirectory(filesOption: ScallopOption[List[File]]) = addValidation {
     filesOption.toOption
       .map(files => {
-	    val problems = files.filterNot(_.isDirectory)
+        val problems = files.filterNot(_.isDirectory)
         if (problems.nonEmpty) Left(Util.format("File(s) %s is not a directory", Util.seqstr(problems)))
         else Right(())
       })
