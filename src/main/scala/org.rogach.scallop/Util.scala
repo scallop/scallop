@@ -47,4 +47,7 @@ object Util {
     }
     s.toString
   }
+
+  def seqstr(items: Seq[Any]): String =
+    items.mkString("'", "', '", "'")
 }

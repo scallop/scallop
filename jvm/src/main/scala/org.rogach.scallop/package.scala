@@ -7,6 +7,8 @@ import java.nio.file.{InvalidPathException,Path,Paths}
 package object scallop extends DefaultConverters {
   implicit val fileConverter: ValueConverter[File] =
     singleArgConverter(new File(_))
+  implicit val fileListConverter: ValueConverter[List[File]] =
+    listArgConverter(new File(_))
   implicit val pathConverter = singleArgConverter[Path](Paths.get(_), {
     case e: InvalidPathException => Left("bad Path, %s" format e.getMessage)
   })
