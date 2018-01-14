@@ -91,6 +91,9 @@ lazy val scallop =
     scalaVersion := "2.11.11",
     crossScalaVersions := Seq("2.11.8")
   )
+  .jsSettings(
+    scalaJSUseMainModuleInitializer in Test := true
+  )
 
 lazy val scallopJVM = scallop.jvm.copy(id = "jvm")
 lazy val scallopNative = scallop.native.copy(id = "native")
