@@ -58,8 +58,9 @@ lazy val commonSettings = Seq(
   publishArtifact in Test := false,
   scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/scallop/scallop/blob/develop/€{FILE_PATH}.scala"),
   parallelExecution in Test := false,
+  siteSubdirName in SiteScaladoc := "",
   git.remoteRepo := "git@github.com:scallop/scallop.git"
-) ++ site.settings ++ site.includeScaladoc("") ++ ghpages.settings
+)
 
 lazy val scallop =
   crossProject(JVMPlatform, NativePlatform, JSPlatform)
@@ -73,6 +74,7 @@ lazy val scallop =
   })
   .in(file("."))
   .settings(commonSettings)
+  .enablePlugins(SiteScaladocPlugin, GhpagesPlugin)
   .configure(_.enablePlugins(spray.boilerplate.BoilerplatePlugin))
   .jvmSettings(
     libraryDependencies ++= Seq(
@@ -88,6 +90,9 @@ lazy val scallop =
   .nativeSettings(
     scalaVersion := "2.11.11",
     crossScalaVersions := Seq("2.11.8")
+  )
+  .jsSettings(
+    scalaJSUseMainModuleInitializer in Test := true
   )
 
 lazy val scallopJVM = scallop.jvm.copy(id = "jvm")
