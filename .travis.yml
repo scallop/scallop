@@ -8,4 +8,4 @@ jdk:
 before_script:
   - sudo chmod +x /usr/local/bin/sbt
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION jvm/test
+  - sbt "++${TRAVIS_SCALA_VERSION}!" jvm/test
