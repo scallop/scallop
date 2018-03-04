@@ -51,14 +51,14 @@ class ScallopHelpFormatter {
   protected def getHelpLine(s: Scallop): List[Option[CliOption]] = {
     val helpOption =
       s.opts.find(_.name == "help")
-      .getOrElse(Scallop.builtinHelpOpt)
+      .getOrElse(s.getHelpOption)
     if (helpOption.hidden) Nil else List(Some(helpOption))
   }
 
   protected def getVersionLine(s: Scallop): List[Option[CliOption]] = {
     val versionOption =
       s.opts.find(_.name == "version")
-      .orElse(s.vers.map(_ => Scallop.builtinVersionOpt))
+      .orElse(s.vers.flatMap(_ => s.getVersionOption))
       .filterNot(_.hidden)
     if (versionOption.isDefined) List(versionOption) else Nil
   }

@@ -42,24 +42,24 @@ class HelpTest extends UsefulMatchers with CapturingTest {
                         |  -a, --apples  <arg>   fresh apples!
                         |  -v, --verbose         very verbose
                         |      --noverbose       turn off
-                        |      --help            Show help message
+                        |  -h, --help            Show help message
                         |      --version         Show version of this program
                         |
                         |Subcommand: tree
                         |  -b, --branches  <arg>   how many branches?
-                        |      --help              Show help message
+                        |  -h, --help              Show help message
                         |
                         | trailing arguments:
                         |  trail (required)   Which trail do you choose?
                         |Subcommand: peach
                         |plant the fruit-bearing peach tree
                         |  -p, --peaches  <arg>   how many peaches?
-                        |      --help             Show help message
+                        |  -h, --help             Show help message
                         |Latin name: Prunus persica
                         |
                         |Subcommand: palm (alias: palm-tree)
                         |  -l, --leaves  <arg>   how many leaves?
-                        |      --help            Show help message
+                        |  -h, --help            Show help message
                         |and some more
                         |""".stripMargin)
   }
@@ -84,12 +84,12 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     }
     out should equal ("""0.1.2
                         |  -a, --apples  <arg>   fresh apples!
-                        |      --help            Show help message
-                        |      --version         Show version of this program
+                        |  -h, --help            Show help message
+                        |  -v, --version         Show version of this program
                         |
                         |Subcommand: tree - some tree
                         |  -b, --branches  <arg>   how many branches?
-                        |      --help              Show help message
+                        |  -h, --help              Show help message
                         |""".stripMargin)
   }
 
@@ -98,13 +98,13 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       .version("")
       .opt[Boolean]("apples", descr = "********* ********* ********* ********* ********* *********")
     opts.setHelpWidth(80).help should equal ("""  -a, --apples    ********* ********* ********* ********* ********* *********
-                                               |      --help      Show help message
-                                               |      --version   Show version of this program""".stripMargin)
+                                               |  -h, --help      Show help message
+                                               |  -v, --version   Show version of this program""".stripMargin)
     opts.setHelpWidth(40).help should equal ("""  -a, --apples    ********* *********
                                                |                  ********* *********
                                                |                  ********* *********
-                                               |      --help      Show help message
-                                               |      --version   Show version of this
+                                               |  -h, --help      Show help message
+                                               |  -v, --version   Show version of this
                                                |                  program""".stripMargin)
   }
 
@@ -122,6 +122,34 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     out should equal ("""0.1.2
                         |""".stripMargin)
   }
+
+  test ("version printing (short argument)") {
+    val (out, err) = captureOutput {
+      val exits = trapExit {
+        new ScallopConf(List("-v")) {
+          version("0.1.2")
+          val apples = opt[Int]("apples")
+          verify()
+        }
+      }
+      exits.size should equal (1)
+    }
+    out should equal ("""0.1.2
+                        |""".stripMargin)
+  }
+
+  test ("help printing (short argument)") {
+    captureOutput {
+      val exits = trapExit {
+        new ScallopConf(List("-h")) {
+          val apples = opt[Int]("apples")
+          verify()
+        }
+      }
+      exits.size should equal (1)
+    }
+  }
+
 
   test ("help for subcommand") {
     val (out, err, exits) = captureOutputAndExits {
@@ -143,7 +171,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     out ====
      """Planting a tree
        |  -a, --apples  <arg>   how many apples?
-       |      --help            Show help message
+       |  -h, --help            Show help message
        |
        | trailing arguments:
        |  jang (required)
@@ -170,7 +198,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     err ==== ""
     out ====
      """  -a, --apples  <arg>   how many apples?
-       |      --help            Show help message
+       |  -h, --help            Show help message
        |""".stripMargin
 
   }
@@ -203,7 +231,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     out ====
       """Planting a tree.
         |  -b, --bananas  <arg>
-        |      --help             Show help message
+        |  -h, --help             Show help message
         |
         |Subcommands:
         |  tree        Plant a normal, regular tree
@@ -228,7 +256,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         |
         |  -c, --coconuts  <arg>     amount of coconuts
         |  -d, --dewberries  <arg>   amount of dewberries
-        |      --help                Show help message""".stripMargin
+        |  -h, --help                Show help message""".stripMargin
   }
 
   test ("splitting commands list into 'main' and 'other' options (in subcommands)") {
@@ -251,7 +279,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         |
         |  -c, --coconuts  <arg>     amount of coconuts
         |  -d, --dewberries  <arg>   amount of dewberries
-        |      --help                Show help message""".stripMargin
+        |  -h, --help                Show help message""".stripMargin
   }
 
   test ("user-provided help & version option takes precedence over hardcoded one") {
@@ -311,11 +339,11 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       }
       exits.size should equal (1)
     }
-    out should equal ("""      --help   Show help message
+    out should equal ("""  -h, --help   Show help message
                         |
                         |Subcommand: tree
                         |  -b, --branches  <arg>   how many branches?
-                        |      --help              Show help message
+                        |  -h, --help              Show help message
                         |
                         | trailing arguments:
                         |  trail (required)   Which trail do you choose?
@@ -323,11 +351,11 @@ class HelpTest extends UsefulMatchers with CapturingTest {
                         |Subcommand: tree peach
                         |plant the fruit-bearing peach tree
                         |  -p, --peaches  <arg>   how many peaches?
-                        |      --help             Show help message
+                        |  -h, --help             Show help message
                         |
                         |Subcommand: tree peach palm
                         |  -l, --leaves  <arg>   how many leaves?
-                        |      --help            Show help message
+                        |  -h, --help            Show help message
                         |Latin name: Prunus persica
                         |""".stripMargin)
   }
@@ -340,7 +368,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     }
     Conf.builder.help ====
       """  -a, --apples  <arg>   amount of apples (default = 42)
-        |      --help            Show help message""".stripMargin
+        |  -h, --help            Show help message""".stripMargin
   }
 
   test ("append default values to help output of subcommand if parent has this setting") {
@@ -357,11 +385,11 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     }
 
     out ====
-     """      --help   Show help message
+     """  -h, --help   Show help message
        |
        |Subcommand: tree
        |  -a, --apples  <arg>   how many apples? (default = 42)
-       |      --help            Show help message
+       |  -h, --help            Show help message
        |""".stripMargin
 
   }
@@ -381,7 +409,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
     out ====
      """  -a, --apples  <arg>   how many apples? (default = 42)
-       |      --help            Show help message
+       |  -h, --help            Show help message
        |""".stripMargin
 
   }
@@ -411,7 +439,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       conf.printHelp()
     }
     out ====
-      """      --help   Show help message
+      """  -h, --help   Show help message
         |
         |Subcommand: sub
         |""".stripMargin
@@ -431,11 +459,11 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       verify()
     }
     conf.builder.help ====
-      """      --help   Show help message
+      """  -h, --help   Show help message
         |
         |Command: tree
         |  -a, --apples  <arg>   how many apples?
-        |      --help            Show help message""".stripMargin
+        |  -h, --help            Show help message""".stripMargin
   }
 
   test ("custom help formatter ('trailing arguments' => 'arguments')") {
@@ -449,7 +477,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       verify()
     }
     conf.builder.help ====
-      """      --help   Show help message
+      """  -h, --help   Show help message
         |
         | arguments:
         |  apples (required)   how many apples?""".stripMargin

@@ -72,7 +72,7 @@ class NumberOptionTest extends FunSuite with Matchers with CapturingTest with Us
     }
     out shouldBe """  -<a>         option a
   -<b>         option b
-      --help   Show help message
+  -h, --help   Show help message
 """
     err shouldBe ""
   }

@@ -67,8 +67,8 @@ Options:
   -m, --monkeys  <arg>
   -k, --num-limbs  <arg>       number of libms
   -p, --params  <arg>...
-      --help                   Show help message
-      --version                Show version of this program
+  -h, --help                   Show help message
+  -v, --version                Show version of this program
 
  trailing arguments:
   pet name (required)
@@ -512,8 +512,8 @@ For all other tricks, consult the documentation!
       .version("")
       .opt[Int]("apples")
     opts.help should equal ("""  -a, --apples  <arg>
-                              |      --help            Show help message
-                              |      --version         Show version of this program""".stripMargin)
+                              |  -h, --help            Show help message
+                              |  -v, --version         Show version of this program""".stripMargin)
   }
 
 }

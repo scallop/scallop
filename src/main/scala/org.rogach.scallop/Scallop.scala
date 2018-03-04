@@ -215,6 +215,8 @@ case class Scallop(
     .orElse {
       opts.find(_.shortNames.contains(c))
     }
+    .orElse(Option(getHelpOption).find(_.requiredShortNames.contains(c)))
+    .orElse(getVersionOption.find(_.requiredShortNames.contains(c)))
   }
 
   def getOptionShortNames(opt: CliOption): List[Char] = {
@@ -553,11 +555,25 @@ case class Scallop(
 
   def prop(name: Char, key: String): Option[Any] = apply(name).asInstanceOf[Map[String, Any]].get(key)
 
-  def getHelpOption =
-    opts.find(_.name == "help").getOrElse(Scallop.builtinHelpOpt)
+  lazy val getHelpOption =
+    opts.find(_.name == "help")
+    .getOrElse(
+      if (opts.exists(_.requiredShortNames.contains('h'))) {
+        Scallop.builtinHelpOpt
+      } else {
+        Scallop.builtinHelpOpt.copy(short = Some('h'), noshort = false)
+      }
+    )
 
-  def getVersionOption =
-    vers.map(_ => opts.find(_.name == "version").getOrElse(Scallop.builtinVersionOpt))
+  lazy val getVersionOption =
+    vers.map(_ => opts.find(_.name == "version")
+    .getOrElse(
+      if (opts.exists(_.requiredShortNames.contains('v'))) {
+        Scallop.builtinVersionOpt
+      } else {
+        Scallop.builtinVersionOpt.copy(short = Some('v'), noshort = false)
+      }
+    ))
 
   /** Verify the builder. Parses arguments, makes sure no definitions clash, no garbage or unknown options are present,
     * and all present arguments are in proper format. It is recommended to call this method before using the results.

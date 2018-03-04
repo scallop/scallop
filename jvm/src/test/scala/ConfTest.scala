@@ -70,7 +70,7 @@ Options:
   -a, --amount  <arg>          how many objects do you need?
   -Dkey=value [key=value]...   some key-value pairs
   -v, --verbose                use more verbose output
-      --help                   Show help message
+  -h, --help                   Show help message
       --version                Show version of this program
 
 Subcommand: tree
