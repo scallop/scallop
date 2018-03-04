@@ -6,7 +6,7 @@ lazy val commonSettings = Seq(
   version := {
     val versionRegexp = """[0-9]+\.[0-9]+\.[0-9]+""".r
     val libraryDependenciesString =
-      io.Source.fromFile("README.md").getLines.filter(_.contains("libraryDependencies")).mkString
+      scala.io.Source.fromFile("README.md").getLines.filter(_.contains("libraryDependencies")).mkString
     versionRegexp.findFirstIn(libraryDependenciesString).get
   },
   scalaVersion := "2.12.2",
@@ -82,6 +82,7 @@ lazy val scallop =
     ),
     // fix for paths to source files in scaladoc
     doc in Compile := {
+      import sys.process._
       Seq("bash","-c",""" for x in $(find jvm/target/scala-2.12/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
       (doc in Compile).value
     },
@@ -95,6 +96,6 @@ lazy val scallop =
     scalaJSUseMainModuleInitializer in Test := true
   )
 
-lazy val scallopJVM = scallop.jvm.copy(id = "jvm")
-lazy val scallopNative = scallop.native.copy(id = "native")
-lazy val scallopJS = scallop.js.copy(id = "js")
+lazy val scallopJVM = scallop.jvm.withId("jvm")
+lazy val scallopNative = scallop.native.withId("native")
+lazy val scallopJS = scallop.js.withId("js")
