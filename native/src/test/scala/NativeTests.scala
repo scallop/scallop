@@ -10,7 +10,7 @@ object NativeTests {
     assert(
       conf.builder.help ==
         """  -a, --apples  <arg>
-          |      --help            Show help message""".stripMargin
+          |  -h, --help            Show help message""".stripMargin
     )
   }
 }
