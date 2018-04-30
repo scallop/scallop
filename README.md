@@ -62,7 +62,7 @@ This snippet above defined simple configuration that will parse argument lines l
 -a 4 appleTree
 ```
 
-For more examples, you can look at Scallop's [wiki](https://github.com/scallop/scallop/wiki) and [test suite](./src/test/scala).
+For more examples, you can look at Scallop's [wiki](https://github.com/scallop/scallop/wiki) and [test suite](./jvm/src/test/scala).
 
 Fancy things
 ============
