@@ -191,7 +191,7 @@ case class ToggleOption(
   def converter = new ValueConverter[Boolean] {
     def parse(s: List[(String, List[String])]) = {
       val noname = prefix + name
-      val shortname = name.head.toString
+      val shortname = short.getOrElse(name.head).toString
       s match {
         case (`name`, Nil) :: Nil => Right(Some(true))
         case (`noname`, Nil) :: Nil => Right(Some(false))
