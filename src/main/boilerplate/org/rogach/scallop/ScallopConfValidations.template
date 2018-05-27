@@ -10,7 +10,7 @@ trait ScallopConfValidations { this: ScallopConfBase =>
     * Automatically defines co-dependent relationship on these options.
     * @param fn Validation function. In case of error, it should return Left with the error message.
     */
-  def validate[[#A1#]]([#o1: ScallopOption[A1]#])(fn: ([#A1#]) => Either[String, Unit]) {
+  def validate[[#A1#]]([#o1: ScallopOption[A1]#])(fn: ([#A1#]) => Either[String, Unit]): Unit = {
     allDefinedOrUndefined([#o1#])
     validations :+= { () =>
       if (List([#o1.toOption#]).forall(_.isDefined)) {
@@ -26,7 +26,7 @@ trait ScallopConfValidations { this: ScallopConfBase =>
   /** Adds a validation function to this configuration. This function will be run after all other verification steps.
     * @param fn Validation function. In case of error, it should return Left with the error message.
     */
-  def validateOpt[[#A1#]]([#o1: ScallopOption[A1]#])(fn: ([#Option[A1]#]) => Either[String, Unit]) {
+  def validateOpt[[#A1#]]([#o1: ScallopOption[A1]#])(fn: ([#Option[A1]#]) => Either[String, Unit]): Unit = {
     validations :+= { () =>
       fn([#o1.toOption#])
     }
