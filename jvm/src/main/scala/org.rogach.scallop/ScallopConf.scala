@@ -10,9 +10,9 @@ abstract class ScallopConf(
   /** If true, scallop would try to guess missing option names from the names of their fields. */
   def guessOptionName = _guessOptionName
   /** If set to true, scallop would try to guess missing option names from the names of their fields. */
-  def guessOptionName_=(v: Boolean) { _guessOptionName = v }
+  def guessOptionName_=(v: Boolean): Unit = { _guessOptionName = v }
 
-  override protected def performOptionNameGuessing() {
+  override protected def performOptionNameGuessing(): Unit = {
     val methodsAndOptions =
       this.getClass.getMethods
       .filterNot(classOf[ScallopConf].getMethods.toSet)

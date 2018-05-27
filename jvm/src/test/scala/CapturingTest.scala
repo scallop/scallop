@@ -25,11 +25,11 @@ trait CapturingTest {
     @volatile var statuses = List[Int]()
     val normalSM = System.getSecurityManager
     object SM extends SecurityManager {
-      override def checkExit(status:Int) {
+      override def checkExit(status:Int): Unit = {
         statuses ::= status
         throw new SecurityException
       }
-      override def checkPermission(p:Permission) {}
+      override def checkPermission(p:Permission): Unit = {}
     }
     System.setSecurityManager(SM)
     try {

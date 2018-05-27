@@ -9,7 +9,7 @@ trait UsefulMatchers extends FunSuite with Matchers {
     def ====[B](b: B) = a should equal (b)
   }
 
-  def expectException(ex: Throwable)(fn: => Any) {
+  def expectException(ex: Throwable)(fn: => Any): Unit = {
     try {
       fn
     } catch {

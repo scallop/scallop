@@ -25,7 +25,7 @@ class ConfTest extends FunSuite with Matchers with UsefulMatchers with Capturing
     Conf.properties("fruit") should equal ("apple")
     Conf.size.toOption should equal (Some(7.2))
     // passing into other functions
-    def someInternalFunc(conf:Conf.type) {
+    def someInternalFunc(conf:Conf.type): Unit = {
       conf.count() should equal (4)
     }
     someInternalFunc(Conf)
@@ -160,7 +160,7 @@ For all other tricks, consult the documentation!
       val apples = opt[Int]("apples")
       verify()
     }
-    def a(conf:Conf.type) {
+    def a(conf:Conf.type): Unit = {
       conf.apples.toOption should equal (Some(3))
     }
     a(Conf)
