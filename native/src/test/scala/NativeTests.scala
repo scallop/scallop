@@ -1,7 +1,7 @@
 package org.rogach.scallop
 
 object NativeTests {
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     val conf = new ScallopConf(List("-a", "3")) {
       val apples = opt[Int]("apples")
       verify()

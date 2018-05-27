@@ -21,11 +21,11 @@ class SerializationProxy(
   val confClassName: String
 ) extends Serializable {
 
-  private def writeObject(out: ObjectOutputStream) {
+  private def writeObject(out: ObjectOutputStream): Unit = {
     out.defaultWriteObject()
     out.writeObject(orig.args.toArray)
   }
-  private def readObject(in: ObjectInputStream) {
+  private def readObject(in: ObjectInputStream): Unit = {
     in.defaultReadObject()
     val args = in.readObject().asInstanceOf[Array[String]].toList
 

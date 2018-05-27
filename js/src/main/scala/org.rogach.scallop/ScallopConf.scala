@@ -6,7 +6,7 @@ abstract class ScallopConf(
 ) extends ScallopConfBase(args, commandNameAndAliases) {
 
   override protected def guessOptionNameDefault: Boolean = false
-  override protected def performOptionNameGuessing() {}
+  override protected def performOptionNameGuessing(): Unit = {}
 
   errorMessageHandler = { message =>
     Console.err.println(Util.format("[%s] Error: %s", printedName, message))

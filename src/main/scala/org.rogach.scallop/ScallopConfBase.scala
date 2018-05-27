@@ -6,7 +6,7 @@ import exceptions._
 
 class Subcommand(commandNameAndAliases: String*) extends ScallopConf(Nil, commandNameAndAliases) {
   /** Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled. */
-  def descr(d: String) {
+  def descr(d: String): Unit = {
     editBuilder(_.copy(descr = d))
   }
 }
@@ -34,7 +34,7 @@ abstract class ScallopConfBase(
   protected var subconfigs: Seq[ScallopConfBase] = Nil
 
   /** Add subcommand to this config */
-  def addSubcommand(conf: Subcommand) {
+  def addSubcommand(conf: Subcommand): Unit = {
     subconfigs :+= conf
 
     conf.parentConfig = this
@@ -48,20 +48,20 @@ abstract class ScallopConfBase(
 
   var builder = Scallop(args)
 
-  def editBuilder(fn: Scallop => Scallop) {
+  def editBuilder(fn: Scallop => Scallop): Unit = {
     builder = fn(builder)
   }
 
   // machinery to support option name guessing
   protected var _guessOptionName: Boolean = true
   protected def guessOptionNameDefault: Boolean
-  protected def performOptionNameGuessing()
+  protected def performOptionNameGuessing(): Unit
 
   def appendDefaultToDescription = builder.appendDefaultToDescription
 
   /** If set to true, scallop would append auto-generated text about default option value
     * to option descriptions. */
-  def appendDefaultToDescription_=(v: Boolean) {
+  def appendDefaultToDescription_=(v: Boolean): Unit = {
     editBuilder(_.copy(appendDefaultToDescription = v))
   }
 
@@ -399,7 +399,7 @@ abstract class ScallopConfBase(
   }
 
   /** Verify that this config object is properly configured. */
-  private[scallop] def verifyBuilder() {
+  private[scallop] def verifyBuilder(): Unit = {
     try {
       verified = true
       builder.verify
@@ -410,7 +410,7 @@ abstract class ScallopConfBase(
     }
   }
 
-  private[scallop] def runValidations() {
+  private[scallop] def runValidations(): Unit = {
     validations foreach { v =>
       v() match {
         case Right(_) =>
@@ -459,7 +459,7 @@ abstract class ScallopConfBase(
   }
 
   /** Checks that this Conf object is verified. If it is not, throws an exception. */
-  def assertVerified() {
+  def assertVerified(): Unit = {
     if (!verified) {
       throw new IncompleteBuildException()
     }
@@ -468,7 +468,7 @@ abstract class ScallopConfBase(
   /** Adds a validation function to this configuration. This function will be run after all other verification steps.
     * @param fn Validation function. In case of error, it should return Left with the error message.
     */
-  def addValidation(fn: => Either[String, Unit]) {
+  def addValidation(fn: => Either[String, Unit]): Unit = {
     validations :+= (() => fn)
   }
 
@@ -695,7 +695,7 @@ abstract class ScallopConfBase(
     *
     * @param v Version string.
     */
-  def version(v: String) {
+  def version(v: String): Unit = {
     editBuilder(_.version(v))
   }
 
@@ -703,7 +703,7 @@ abstract class ScallopConfBase(
     *
     * @param b Banner string.
     */
-  def banner(b: String) {
+  def banner(b: String): Unit = {
     editBuilder(_.banner(b))
   }
 
@@ -711,22 +711,22 @@ abstract class ScallopConfBase(
     *
     * @param f footer string.
     */
-  def footer(f: String) {
+  def footer(f: String): Unit = {
     editBuilder(_.footer(f))
   }
 
   /** Explicitly set width of help printout. By default, Scallop tries
     * to determine it from terminal width or defaults to 80 characters.
     */
-  def helpWidth(w: Int) {
+  def helpWidth(w: Int): Unit = {
     editBuilder(_.setHelpWidth(w))
   }
 
-  def shortSubcommandsHelp(v: Boolean = true) {
+  def shortSubcommandsHelp(v: Boolean = true): Unit = {
     editBuilder(_.copy(shortSubcommandsHelp = v))
   }
 
-  def verifyConf() {
+  def verifyConf(): Unit = {
     if (_guessOptionName) {
       performOptionNameGuessing()
     }
@@ -739,7 +739,7 @@ abstract class ScallopConfBase(
     editBuilder(_.copy(mainOpts = _mainOptions().toList))
   }
 
-  def verify() {
+  def verify(): Unit = {
     verifyConf
     verifyBuilder
   }
