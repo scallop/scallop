@@ -77,7 +77,8 @@ For all other tricks, consult the documentation!
 """
     helpErr shouldBe ""
 
-    opts.summary shouldBe """Scallop(-d, --num-limbs, 1, -Dalpha=1, -D, betta=2, gamma=3, Pigeon)
+    if (! scala.util.Properties.versionNumberString.startsWith("2.13")) {
+      opts.summary shouldBe """Scallop(-d, --num-limbs, 1, -Dalpha=1, -D, betta=2, gamma=3, Pigeon)
  *  donkey => true
     monkeys => 2
  *  num-limbs => 1
@@ -86,6 +87,7 @@ For all other tricks, consult the documentation!
  *  D => Map(alpha -> 1, betta -> 2, gamma -> 3)
  *  pet name => Pigeon
 """
+    }
   }
 
   test ("no values") {

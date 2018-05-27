@@ -492,7 +492,7 @@ case class Scallop(
     *
     * @param a arg list to add
     */
-  def args(a: Seq[String]) = this.copy(args = args ++ a)
+  def args(a: Seq[String]): Scallop = this.copy(args = args ++ a)
 
   /** Tests if this option or trailing arg was explicitly provided by argument list (not from default).
     *

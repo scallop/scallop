@@ -21,7 +21,7 @@ object Formatter {
         val argPadding = " " * (if (arg.trim.startsWith("--")) 4 else 0)
         val text = wrap(
           descr.split(" ") ++
-            (if (appendDefault) defVal().map(v => Util.format("(default = %s)", v)) else Nil),
+            (if (appendDefault) defVal().map(v => Util.format("(default = %s)", v)).toList else Nil),
           neededWidth - argWidth - COLUMN_PADDING - INDENT
         ).map(l => " " * (argWidth + COLUMN_PADDING + INDENT) + l)
         (" " * INDENT + argPadding + arg + text.head.drop(arg.size + argPadding.size + INDENT)) :: text.tail
