@@ -92,7 +92,7 @@ For all other tricks, consult the documentation!
 
   test ("no values") {
     Scallop().verify
-    Scallop(Array[String]()).verify
+    Scallop(Seq[String]()).verify
     Scallop(List()).verify
   }
 

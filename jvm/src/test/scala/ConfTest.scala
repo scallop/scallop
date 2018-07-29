@@ -504,7 +504,7 @@ For all other tricks, consult the documentation!
   }
 
   test ("help formatter test") {
-    val text = Formatter.wrap("supress all output, including output from scripts (stderr from scripts is still printed)".split(" "), 76)
+    val text = Formatter.wrap("supress all output, including output from scripts (stderr from scripts is still printed)".split(" ").toSeq, 76)
     val expected =  (List(
       "supress all output, including output from scripts (stderr from scripts is ",
       "still printed) "
