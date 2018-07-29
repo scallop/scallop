@@ -54,7 +54,7 @@ abstract class ScallopConfBase(
 
   // machinery to support option name guessing
   protected var _guessOptionName: Boolean = true
-  protected def guessOptionNameDefault: Boolean
+  protected def optionNameGuessingSupported: Boolean
   protected def performOptionNameGuessing(): Unit
 
   def appendDefaultToDescription = builder.appendDefaultToDescription
@@ -732,7 +732,11 @@ abstract class ScallopConfBase(
     }
 
     if (builder.opts.exists(_.name.startsWith("\t"))) {
-      throw new OptionNameGuessingFailure()
+      if (optionNameGuessingSupported) {
+        throw new OptionNameGuessingFailure()
+      } else {
+        throw new OptionNameGuessingUnsupported()
+      }
     }
 
     // now, when we fixed option names, we can push mainOptions into the builder

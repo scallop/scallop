@@ -6,7 +6,7 @@ abstract class ScallopConf(
 ) extends ScallopConfBase(args, commandNameAndAliases) {
 
   // machinery to support option name guessing
-  override protected def guessOptionNameDefault: Boolean = true
+  override protected def optionNameGuessingSupported: Boolean = true
   /** If true, scallop would try to guess missing option names from the names of their fields. */
   def guessOptionName = _guessOptionName
   /** If set to true, scallop would try to guess missing option names from the names of their fields. */

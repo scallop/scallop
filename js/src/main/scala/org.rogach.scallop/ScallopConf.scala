@@ -5,7 +5,7 @@ abstract class ScallopConf(
   commandNameAndAliases: Seq[String] = Nil
 ) extends ScallopConfBase(args, commandNameAndAliases) {
 
-  override protected def guessOptionNameDefault: Boolean = false
+  override protected def optionNameGuessingSupported: Boolean = false
   override protected def performOptionNameGuessing(): Unit = {}
 
   errorMessageHandler = { message =>
