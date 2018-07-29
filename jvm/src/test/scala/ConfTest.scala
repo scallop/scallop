@@ -41,6 +41,7 @@ class ConfTest extends FunSuite with Matchers with UsefulMatchers with Capturing
       footer("\nFor all other tricks, consult the documentation!")
       // ... options ...
       val properties = props[String]('D', descr = "some key-value pairs")
+      val longProperties = propsLong[String]("Props", descr = "more key-value pairs")
       val verbose = opt[Boolean]("verbose", descr = "use more verbose output")
       val amount = opt[Int]("amount", descr = "how many objects do you need?")
 
@@ -67,11 +68,12 @@ Usage: test [OPTION]... [tree|palm] [OPTION]... [tree-name]
 test is an awesome program, which does something funny
 Options:
 
-  -a, --amount  <arg>          how many objects do you need?
-  -Dkey=value [key=value]...   some key-value pairs
-  -v, --verbose                use more verbose output
-  -h, --help                   Show help message
-      --version                Show version of this program
+  -a, --amount  <arg>                    how many objects do you need?
+  -Dkey=value [key=value]...             some key-value pairs
+      --Props key=value [key=value]...   more key-value pairs
+  -v, --verbose                          use more verbose output
+  -h, --help                             Show help message
+      --version                          Show version of this program
 
 Subcommand: tree
   -h, --height  <arg>   how tall should the tree be?

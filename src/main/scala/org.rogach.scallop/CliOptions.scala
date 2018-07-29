@@ -121,7 +121,7 @@ case class LongNamedPropertyOption(
   def required = false
 
   def argLine(sh: List[Char]) =
-    Util.format("--%1$s%2$s=%3$s [%2$s=%3$s]...", name, keyName, valueName)
+    Util.format("--%1$s %2$s=%3$s [%2$s=%3$s]...", name, keyName, valueName)
 
   def helpInfo(sh: List[Char]) = List(HelpInfo(argLine(sh), descr, () => None))
 }
