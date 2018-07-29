@@ -30,6 +30,7 @@ abstract class ScallopConf(
       val newName =
         m.getName
         .flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
+        .mkString
         .replace("$tilde", "~")
         .replace("$eq", "=")
         .replace("$less", "<")

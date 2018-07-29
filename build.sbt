@@ -10,7 +10,7 @@ lazy val commonSettings = Seq(
     versionRegexp.findFirstIn(libraryDependenciesString).get
   },
   scalaVersion := "2.12.6",
-  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.6"),
+  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.6", "2.13.0-M4"),
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
@@ -21,6 +21,15 @@ lazy val commonSettings = Seq(
     "-language:implicitConversions",
     "-Xlint"
   ),
+  unmanagedSourceDirectories in Compile += {
+    val base = baseDirectory.value.getParentFile / "src" / "main"
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v >= 13 =>
+        base / s"scala-2.13+"
+      case _ =>
+        base / s"scala-2.13-"
+    }
+  },
   licenses := Seq(
     "MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")
   ),
@@ -78,7 +87,7 @@ lazy val scallop =
   .configure(_.enablePlugins(spray.boilerplate.BoilerplatePlugin))
   .jvmSettings(
     libraryDependencies ++= Seq(
-      "org.scalatest" %%% "scalatest" % "3.0.0" % "test"
+      "org.scalatest" %%% "scalatest" % "3.0.6-SNAP1" % "test"
     ),
     // fix for paths to source files in scaladoc
     doc in Compile := {
