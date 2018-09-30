@@ -2,11 +2,11 @@ language: scala
 scala:
   - 2.10.7
   - 2.11.12
-  - 2.12.6
+  - 2.12.7
   - 2.13.0-M4
 jdk:
   - oraclejdk8
 before_script:
   - sudo chmod +x /usr/local/bin/sbt
 script:
-  - sbt "++${TRAVIS_SCALA_VERSION}!" jvm/test
+  - sbt "++${TRAVIS_SCALA_VERSION}!" scallopJVM/test
