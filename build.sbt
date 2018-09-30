@@ -9,8 +9,8 @@ lazy val commonSettings = Seq(
       scala.io.Source.fromFile("README.md").getLines.filter(_.contains("libraryDependencies")).mkString
     versionRegexp.findFirstIn(libraryDependenciesString).get
   },
-  scalaVersion := "2.12.6",
-  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.6", "2.13.0-M4"),
+  scalaVersion := "2.12.7",
+  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.7", "2.13.0-M5"),
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
@@ -87,7 +87,7 @@ lazy val scallop =
   .configure(_.enablePlugins(spray.boilerplate.BoilerplatePlugin))
   .jvmSettings(
     libraryDependencies ++= Seq(
-      "org.scalatest" %%% "scalatest" % "3.0.6-SNAP1" % "test"
+      "org.scalatest" %%% "scalatest" % "3.0.6-SNAP2" % "test"
     ),
     // fix for paths to source files in scaladoc
     doc in Compile := {
@@ -98,13 +98,9 @@ lazy val scallop =
     scalacOptions in Test -= "-Xlint"
   )
   .nativeSettings(
-    scalaVersion := "2.11.11",
-    crossScalaVersions := Seq("2.11.8")
+    scalaVersion := "2.11.12",
+    crossScalaVersions := Seq("2.11.12")
   )
   .jsSettings(
     scalaJSUseMainModuleInitializer in Test := true
   )
-
-lazy val scallopJVM = scallop.jvm.withId("jvm")
-lazy val scallopNative = scallop.native.withId("native")
-lazy val scallopJS = scallop.js.withId("js")
