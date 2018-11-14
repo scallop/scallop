@@ -558,7 +558,7 @@ case class Scallop(
   lazy val getHelpOption =
     opts.find(_.name == "help")
     .getOrElse(
-      if (opts.exists(_.requiredShortNames.contains('h'))) {
+      if (opts.exists(opt => getOptionShortNames(opt).contains('h'))) {
         Scallop.builtinHelpOpt
       } else {
         Scallop.builtinHelpOpt.copy(short = Some('h'), noshort = false)
@@ -568,7 +568,7 @@ case class Scallop(
   lazy val getVersionOption =
     vers.map(_ => opts.find(_.name == "version")
     .getOrElse(
-      if (opts.exists(_.requiredShortNames.contains('v'))) {
+      if (opts.exists(opt => getOptionShortNames(opt).contains('v'))) {
         Scallop.builtinVersionOpt
       } else {
         Scallop.builtinVersionOpt.copy(short = Some('v'), noshort = false)

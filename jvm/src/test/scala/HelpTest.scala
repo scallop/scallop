@@ -482,4 +482,27 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         | arguments:
         |  apples (required)   how many apples?""".stripMargin
   }
+
+  test ("implicit short option name should override help printing") {
+    val exits = trapExit {
+      val conf = new ScallopConf(Seq("-h")) {
+        val hard = opt[Boolean]()
+        verify()
+      }
+      conf.hard() shouldEqual true
+    }
+    exits.size shouldEqual 0
+  }
+
+  test ("implicit short option name should override version printing") {
+    val exits = trapExit {
+      val conf = new ScallopConf(Seq("-v")) {
+        val verbose = opt[Boolean]()
+        version("1.0")
+        verify()
+      }
+      conf.verbose() shouldEqual true
+    }
+    exits.size shouldEqual 0
+  }
 }
