@@ -788,4 +788,26 @@ For all other tricks, consult the documentation!
     conf.port() shouldEqual 80
   }
 
+  test ("isSupplied on transformed option with guessed option name") {
+    val config = new ScallopConf(Seq("-i", "5")) {
+      val index = opt[Int]().map(_-1)
+      verify()
+    }
+    config.index.isSupplied shouldEqual true
+  }
+
+  test ("isSupplied on transformed option with guessed option name inside validation") {
+    val config = new ScallopConf(Seq("-i", "5", "-l", "10")) {
+      val index = opt[Int]().map(_-1)
+      val length = opt[Int]()
+      addValidation {
+        if (index.isSupplied && length.isSupplied && index() >= length()) {
+          Left("Index out of bounds")
+        } else Right(Unit)
+      }
+      verify()
+    }
+    config.index.isSupplied shouldEqual true
+  }
+
 }

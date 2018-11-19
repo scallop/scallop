@@ -7,15 +7,15 @@ package org.rogach.scallop
   * @param nm Name for the option
   * @param _transformCount Count of .map, .filter, etc. operations applied to this option
   */
-abstract class ScallopOption[A](nm: String, val _transformCount: Int = 0) { opt =>
+abstract class ScallopOption[A](nm: () => String, val _transformCount: Int = 0) { opt =>
 
-  private[scallop] var _name = nm
+  private[scallop] var _name: () => String = nm
 
   lazy val fn: String => Option[A] = x => None
-  lazy val supplied: Boolean = false
+  lazy val supplied: String => Boolean = x => false
 
   /** Name for the option */
-  def name = _name
+  def name = _name()
 
   private lazy val value: Option[A] = fn(name)
 
@@ -33,10 +33,10 @@ abstract class ScallopOption[A](nm: String, val _transformCount: Int = 0) { opt 
   def getOrElse(default: => A): A = value.getOrElse(default)
 
   /** Tests whether the underlying value was explicitly supplied by user. */
-  def isSupplied = supplied
+  def isSupplied = supplied(name)
 
   private def mapResult[B](transformer: Option[A] => Option[B]) =
-    new ScallopOption[B](name, _transformCount + 1) {
+    new ScallopOption[B](() => name, _transformCount + 1) {
       override lazy val fn = opt.fn andThen transformer
       override lazy val supplied = opt.supplied
     }

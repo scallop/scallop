@@ -146,12 +146,12 @@ abstract class ScallopConfBase(
       else name
 
     editBuilder(_.opt(resolvedName, short, descr, () => default, validate, required, argName, hidden, noshort)(conv))
-    new ScallopOption[A](resolvedName) {
+    new ScallopOption[A](() => resolvedName) {
       override lazy val fn = { (name: String) =>
         assertVerified
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[A]]
       }
-      override lazy val supplied = {
+      override lazy val supplied = { (name: String) =>
         assertVerified
         rootConfig.builder.isSupplied(getPrefixedName(name))
       }
@@ -236,12 +236,12 @@ abstract class ScallopConfBase(
     editBuilder(
       _.opt[Int](resolvedName, short, descr, () => Some(0), _ => true,
                  false, "", hidden, noshort)(tallyConverter))
-    new ScallopOption[Int](resolvedName) {
+    new ScallopOption[Int](() => resolvedName) {
       override lazy val fn = { (name: String) =>
         assertVerified
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[Int]]
       }
-      override lazy val supplied = {
+      override lazy val supplied = { (name: String) =>
         assertVerified
         rootConfig.builder.isSupplied(getPrefixedName(name))
       }
@@ -305,12 +305,12 @@ abstract class ScallopConfBase(
     val resolvedName =
       if (name == null) genName() else name
     editBuilder(_.trailArg(resolvedName, required, descr, () => default, validate, hidden)(conv))
-    new ScallopOption[A](resolvedName) {
+    new ScallopOption[A](() => resolvedName) {
       override lazy val fn = { (name: String) =>
         assertVerified
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[A]]
       }
-      override lazy val supplied = {
+      override lazy val supplied = { (name: String) =>
         assertVerified
         rootConfig.builder.isSupplied(getPrefixedName(name))
       }
@@ -343,12 +343,12 @@ abstract class ScallopConfBase(
 
     editBuilder(_.number(resolvedName, required, descr, () => default, validate, hidden)(conv))
 
-    new ScallopOption[Long](resolvedName) {
+    new ScallopOption[Long](() => resolvedName) {
       override lazy val fn = { (name: String) =>
         assertVerified
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[Long]]
       }
-      override lazy val supplied = {
+      override lazy val supplied = { (name: String) =>
         assertVerified
         rootConfig.builder.isSupplied(getPrefixedName(name))
       }
@@ -386,12 +386,12 @@ abstract class ScallopConfBase(
         else throw new IllegalArgumentException("You should supply a name for your toggle!")
       } else name
     editBuilder(_.toggle(resolvedName, () => default, short, noshort, prefix, descrYes, descrNo, hidden))
-    new ScallopOption[Boolean](resolvedName) {
+    new ScallopOption[Boolean](() => resolvedName) {
       override lazy val fn = { (name: String) =>
         assertVerified
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[Boolean]]
       }
-      override lazy val supplied = {
+      override lazy val supplied = { (name: String) =>
         assertVerified
         rootConfig.builder.isSupplied(getPrefixedName(name))
       }

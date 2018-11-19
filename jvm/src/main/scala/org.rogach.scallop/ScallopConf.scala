@@ -25,8 +25,9 @@ abstract class ScallopConf(
         (m, opt)
       }
       .filter(_._2.name.contains("\t"))
+      .sortBy(-_._2._transformCount)
 
-    val nameMap = methodsAndOptions.sortBy(-_._2._transformCount).map { case (m, opt) =>
+    val nameMap = methodsAndOptions.map { case (m, opt) =>
       val newName =
         m.getName
         .flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
@@ -67,7 +68,7 @@ abstract class ScallopConf(
           }
         } else o
       }))
-      opt._name = newName
+      opt._name = () => newName
     }
   }
 

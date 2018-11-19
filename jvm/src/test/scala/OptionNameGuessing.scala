@@ -26,6 +26,8 @@ class OptionNameGuessing extends UsefulMatchers {
     }
     Conf.apples() should equal (1)
     Conf.applesPlus() should equal (3)
+    Conf.apples.isSupplied shouldEqual true
+    Conf.applesPlus.isSupplied shouldEqual true
   }
 
   test ("tricky") {
