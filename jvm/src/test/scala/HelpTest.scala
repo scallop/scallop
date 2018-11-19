@@ -505,4 +505,34 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     }
     exits.size shouldEqual 0
   }
+
+  test ("implicit short option name in subcommand should override help printing") {
+    val exits = trapExit {
+      val config = new ScallopConf(Seq("cmd", "-h")) {
+        val cmd = new Subcommand("cmd") {
+          val hard = opt[Boolean]()
+        }
+        addSubcommand(cmd)
+        verify()
+      }
+      config.cmd.hard() shouldEqual true
+    }
+    exits.size shouldEqual 0
+  }
+
+  test ("implicit short option name in subcommand should override version printing") {
+    val exits = trapExit {
+      val config = new ScallopConf(Seq("cmd", "-v")) {
+        version("Version 1.0")
+        val cmd = new Subcommand("cmd") {
+          val verbose = opt[Boolean]()
+        }
+        addSubcommand(cmd)
+        verify()
+      }
+      config.cmd.verbose() shouldEqual true
+    }
+    exits.size shouldEqual 0
+  }
+
 }

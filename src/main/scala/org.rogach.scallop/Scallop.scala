@@ -220,7 +220,8 @@ case class Scallop(
   }
 
   def getOptionShortNames(opt: CliOption): List[Char] = {
-    (opt.shortNames ++ opt.requiredShortNames).distinct.filter(sh => getOptionWithShortName(sh).get == opt)
+    (opt.shortNames ++ opt.requiredShortNames).distinct
+    .filter(sh => getOptionWithShortName(sh).get == opt)
   }
 
   /** Result of parsing */
@@ -607,8 +608,8 @@ case class Scallop(
         case o: SimpleOption => o.short
         case _ => None
       }
-      if (args.contains("--" + versionOpt.name) ||
-          shortVersionOpt.map(s => args.contains("-" + s)).getOrElse(false)) {
+      if (args.headOption == Some("--" + versionOpt.name) ||
+          shortVersionOpt.map(s => args.headOption == Some("-" + s)).getOrElse(false)) {
         throw Version
       }
     }
