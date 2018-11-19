@@ -23,13 +23,13 @@ Installation
 Add following to your build.sbt:
 
 ```scala
-libraryDependencies += "org.rogach" %% "scallop" % "3.1.4"
+libraryDependencies += "org.rogach" %% "scallop" % "3.1.5"
 ```
 
 For use with Scala Native and Scala.js, use `%%%`:
 
 ```scala
-libraryDependencies += "org.rogach" %%% "scallop" % "3.1.3"
+libraryDependencies += "org.rogach" %%% "scallop" % "3.1.5"
 ```
 
 If you were using `2.x` version or older, please see [migration notes](https://github.com/scallop/scallop/wiki/Migration-notes).
