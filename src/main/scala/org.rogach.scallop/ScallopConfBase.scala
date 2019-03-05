@@ -1,7 +1,7 @@
 package org.rogach.scallop
 
 import java.io.File
-import java.nio.file.Path
+import java.nio.file.{Path, Files}
 import exceptions._
 
 class Subcommand(commandNameAndAliases: String*) extends ScallopConf(Nil, commandNameAndAliases) {
@@ -665,6 +665,89 @@ abstract class ScallopConfBase(
         Right(Unit)
       }
     }
+  }
+
+  def validatePathDoesNotExist(pathOption: ScallopOption[Path]): Unit = addValidation {
+    pathOption.toOption
+      .map {
+        case path if Files.exists(path) => Left(Util.format("File '%s' already exists", path))
+        case _ => Right(())
+      }
+      .getOrElse(Right(()))
+  }
+
+  def validatePathIsDirectory(pathOption: ScallopOption[Path]): Unit = addValidation {
+    pathOption.toOption
+      .map {
+        case path if Files.isDirectory(path) => Right(())
+        case path => Left(Util.format("File '%s' is not a directory", path))
+      }
+      .getOrElse(Right(()))
+  }
+
+  def validatePathIsFile(pathOption: ScallopOption[Path]): Unit = addValidation {
+    pathOption.toOption
+      .map {
+        case path if Files.isRegularFile(path) => Right(())
+        case path => Left(Util.format("File '%s' is not a directory", path))
+      }
+      .getOrElse(Right(()))
+  }
+
+  def validatePathsExists(pathsOption: ScallopOption[List[Path]]): Unit = addValidation {
+    pathsOption.toOption
+      .map(paths => {
+        val problems = paths.filterNot(Files.exists(_))
+
+        problems match {
+          case Nil => Right(())
+          case problem :: Nil => Left(Util.format("File %s not found", problem))
+          case _ => Left(Util.format("Files %s not found", Util.seqstr(problems)))
+        }
+      })
+      .getOrElse(Right(()))
+  }
+
+  def validatePathsDoesNotExist(pathsOption: ScallopOption[List[Path]]): Unit = addValidation {
+    pathsOption.toOption
+      .map(paths => {
+        val problems = paths.filter(Files.exists(_))
+
+        problems match {
+          case Nil => Right(())
+          case problem :: Nil => Left(Util.format("File %s already exists", problem))
+          case _ => Left(Util.format("Files %s already exist", Util.seqstr(problems)))
+        }
+      })
+      .getOrElse(Right(()))
+  }
+
+  def validatePathsIsDirectory(pathsOption: ScallopOption[List[Path]]): Unit = addValidation {
+    pathsOption.toOption
+      .map(paths => {
+        val problems = paths.filterNot(Files.isDirectory(_))
+
+        problems match {
+          case Nil => Right(())
+          case problem :: Nil => Left(Util.format("File %s is not a directory", problem))
+          case _ => Left(Util.format("Files %s are not directories", Util.seqstr(problems)))
+        }
+      })
+      .getOrElse(Right(()))
+  }
+
+  def validatePathsIsFile(pathsOption: ScallopOption[List[Path]]): Unit = addValidation {
+    pathsOption.toOption
+      .map(paths => {
+        val problems = paths.filterNot(Files.isRegularFile(_))
+
+        problems match {
+          case Nil => Right(())
+          case problem :: Nil => Left(Util.format("File %s is not a file", problem))
+          case _ => Left(Util.format("Files %s are not files", Util.seqstr(problems)))
+        }
+      })
+      .getOrElse(Right(()))
   }
 
   def requireSubcommand() = addValidation {
