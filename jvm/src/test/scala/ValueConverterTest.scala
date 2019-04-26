@@ -41,7 +41,7 @@ class ValueConverterTest extends FunSuite with UsefulMatchers {
 
       validate(from, to) {
         (f, t) =>
-          if (t after f) Right(Unit)
+          if (t after f) Right(())
           else Left("value of date to must be after date from")
       }
 

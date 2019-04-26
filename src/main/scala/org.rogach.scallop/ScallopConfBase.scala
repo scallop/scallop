@@ -483,7 +483,7 @@ abstract class ScallopConfBase(
         "When specifying '%s', at least one of the following options must be provided: %s",
         opt.name, list.map(_.name).mkString(", ")
       ))
-    } else Right(Unit)
+    } else Right(())
   }
 
   /** In the verify stage, if opt was supplied, checks that all of the options in list are also supplied.
@@ -497,7 +497,7 @@ abstract class ScallopConfBase(
         "When specifying '%s', all of the following options must also be provided: %s",
         opt.name, list.map(_.name).mkString(", ")
       ))
-    } else Right(Unit)
+    } else Right(())
   }
 
   /** In the verify stage, if opt was supplied, checks that all of the options in list are not supplied.
@@ -509,7 +509,7 @@ abstract class ScallopConfBase(
     if (opt.isSupplied && list.exists(_.isSupplied)) {
       val conflict = list.find(_.isSupplied).get
       Left(Util.format("Option '%s' conflicts with option '%s'", opt.name, conflict.name))
-    } else Right(Unit)
+    } else Right(())
   }
 
   /** In the verify stage, checks that at least one option in the list is supplied.
@@ -522,7 +522,7 @@ abstract class ScallopConfBase(
         "There should be at least one of the following options: %s",
         list.map(_.name).mkString(", ")
       ))
-    } else Right(Unit)
+    } else Right(())
   }
 
   /** In the verify stage, checks that one, and only one, option in the list is supplied.
@@ -535,7 +535,7 @@ abstract class ScallopConfBase(
         "There should be exactly one of the following options: %s",
         list.map(_.name).mkString(", ")
       ))
-    } else Right(Unit)
+    } else Right(())
   }
 
   /** In the verify stage, checks that only one or zero of the provided options have values supplied in arguments.
@@ -548,7 +548,7 @@ abstract class ScallopConfBase(
         "There should be only one or zero of the following options: %s",
         list.map(_.name).mkString(", ")
       ))
-    } else Right(Unit)
+    } else Right(())
   }
 
   /** In the verify stage, checks that either all or none of the provided options have values supplied in arguments.
@@ -562,7 +562,7 @@ abstract class ScallopConfBase(
         "Either all or none of the following options should be supplied, because they are co-dependent: %s",
         list.map(_.name).mkString(", ")
       ))
-    } else Right(Unit)
+    } else Right(())
   }
 
   /** In the verify stage, checks that either all or none of the provided options
@@ -575,16 +575,16 @@ abstract class ScallopConfBase(
         "Either all or none of the following options should be defined, because they are co-dependent: %s",
         list.map(_.name).mkString(", ")
       ))
-    } else Right(Unit)
+    } else Right(())
   }
 
   /** In the verify stage, check that file with supplied name exists. */
   def validateFileExists(fileOption: ScallopOption[File]) = addValidation {
-    fileOption.toOption.fold[Either[String,Unit]](Right(Unit)) { file =>
+    fileOption.toOption.fold[Either[String,Unit]](Right(())) { file =>
       if (!file.exists) {
         Left("File '" + file + "' not found")
       } else {
-        Right(Unit)
+        Right(())
       }
     }
   }
@@ -658,11 +658,11 @@ abstract class ScallopConfBase(
 
   /** In the verify stage, check that file with the supplied path exists. */
   def validatePathExists(pathOption: ScallopOption[Path]) = addValidation {
-    pathOption.toOption.fold[Either[String,Unit]](Right(Unit)) { path =>
+    pathOption.toOption.fold[Either[String,Unit]](Right(())) { path =>
       if (!path.toFile.exists) {
         Left("File at '" + path + "' not found")
       } else {
-        Right(Unit)
+        Right(())
       }
     }
   }
@@ -752,7 +752,7 @@ abstract class ScallopConfBase(
 
   def requireSubcommand() = addValidation {
     if (subcommand.isEmpty) Left("Subcommand required")
-    else Right(Unit)
+    else Right(())
   }
 
   // === some getters for convenience ===
