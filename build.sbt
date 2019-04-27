@@ -9,8 +9,8 @@ lazy val commonSettings = Seq(
       scala.io.Source.fromFile("README.md").getLines.filter(_.contains("libraryDependencies")).mkString
     versionRegexp.findFirstIn(libraryDependenciesString).get
   },
-  scalaVersion := "2.12.7",
-  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.7", "2.13.0-RC1"),
+  scalaVersion := "2.12.8",
+  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC1"),
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",

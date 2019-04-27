@@ -3,10 +3,10 @@ Release
 * Bump the version (in README.md).
 
 * Test the changes:
-sbt "++2.11.12 scallopNative/test:run" "++2.12.7 scallopJS/test:run" "++2.10.7 scallopJVM/test" "++2.11.12 scallopJVM/test" "++2.12.7 scallopJVM/test" "++2.13.0-RC1 scallopJVM/test"
+sbt "++2.11.12 scallopNative/test:run" "++2.12.8 scallopJS/test:run" "++2.10.7 scallopJVM/test" "++2.11.12 scallopJVM/test" "++2.12.8 scallopJVM/test" "++2.13.0-RC1 scallopJVM/test"
 
 * Publish artifacts:
-sbt "++2.11.12 scallopNative/publishSigned" "++2.12.7 scallopJS/publishSigned" "++2.10.7 scallopJVM/publishSigned" "++2.11.12 scallopJVM/publishSigned" "++2.12.7 scallopJVM/publishSigned" "++2.13.0-RC1 scallopJVM/publishSigned"
+sbt "++2.11.12 scallopNative/publishSigned" "++2.12.8 scallopJS/publishSigned" "++2.10.7 scallopJVM/publishSigned" "++2.11.12 scallopJVM/publishSigned" "++2.12.8 scallopJVM/publishSigned" "++2.13.0-RC1 scallopJVM/publishSigned"
 * Commit the changes.
 * Tag the release (in develop branch).
 * Close the release in Nexus UI.
