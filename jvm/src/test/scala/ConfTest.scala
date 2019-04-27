@@ -280,7 +280,7 @@ For all other tricks, consult the documentation!
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
       validate (apples, bananas) { (a,b) =>
-        if (b > 0 && a % 7 == 0) Right(Unit)
+        if (b > 0 && a % 7 == 0) Right(())
         else Left("Something is wrong with composition :)")
       }
 
@@ -294,7 +294,7 @@ For all other tricks, consult the documentation!
         val apples = opt[Int]("apples")
         val bananas = opt[Int]("bananas")
         validate (apples, bananas) { (a,b) =>
-          if (b > 0 && a % 7 == 0) Right(Unit)
+          if (b > 0 && a % 7 == 0) Right(())
           else Left("Something is wrong with composition :)")
         }
       }
@@ -307,7 +307,7 @@ For all other tricks, consult the documentation!
       val apples = opt[Int]()
       val bananas = opt[Int]()
       validateOpt (apples, bananas) {
-        case (Some(a), None) => Right(Unit)
+        case (Some(a), None) => Right(())
         case _ => Left("err")
       }
     }
@@ -320,7 +320,7 @@ For all other tricks, consult the documentation!
         val apples = opt[Int]()
         val bananas = opt[Int]()
         validateOpt (apples, bananas) {
-          case (Some(a), None) => Right(Unit)
+          case (Some(a), None) => Right(())
           case _ => Left("err")
         }
       }
@@ -333,7 +333,7 @@ For all other tricks, consult the documentation!
       val start = opt[Int]("start", default = Some(1))
       val end = opt[Int]("end", default = Some(10))
       validate (start, end) { (s,e) =>
-        if (s < e) Right(Unit)
+        if (s < e) Right(())
         else Left("Start must be before end")
       }
     }
@@ -345,7 +345,7 @@ For all other tricks, consult the documentation!
       val start = opt[Int]("start")
       val end = opt[Int]("end")
       validate (start, end) { (s,e) =>
-        if (s <= e) Right(Unit)
+        if (s <= e) Right(())
         else Left("Start must be before end")
       }
 
@@ -644,7 +644,7 @@ For all other tricks, consult the documentation!
           val bananas = opt[Int]()
           validate(apples, bananas) { (a, b) =>
             if (a + b >= 3) Left("tree: a + b must be < 3")
-            else Right(Unit)
+            else Right(())
           }
         }
         addSubcommand(tree)
@@ -663,7 +663,7 @@ For all other tricks, consult the documentation!
             val bananas = opt[Int]()
             validate(apples, bananas) { (a, b) =>
               if (a + b >= 3) Left("branch: a + b must be < 3")
-              else Right(Unit)
+              else Right(())
             }
           }
           addSubcommand(branch)
@@ -682,7 +682,7 @@ For all other tricks, consult the documentation!
           val apples = opt[Int]()
           val bananas = opt[Int]()
           validateOpt(apples, bananas) {
-            case (Some(a), Some(b)) => Right(Unit)
+            case (Some(a), Some(b)) => Right(())
             case _ => Left("both a and b must be supplied")
           }
         }
@@ -803,7 +803,7 @@ For all other tricks, consult the documentation!
       addValidation {
         if (index.isSupplied && length.isSupplied && index() >= length()) {
           Left("Index out of bounds")
-        } else Right(Unit)
+        } else Right(())
       }
       verify()
     }
