@@ -1,4 +1,4 @@
-import sbtcrossproject.{CrossType, crossProject}
+import sbtcrossproject.crossProject
 
 lazy val commonSettings = Seq(
   organization := "org.rogach",
