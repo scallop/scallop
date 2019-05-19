@@ -10,7 +10,7 @@ lazy val commonSettings = Seq(
     versionRegexp.findFirstIn(libraryDependenciesString).get
   },
   scalaVersion := "2.12.8",
-  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC1"),
+  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC1", "2.13.0-RC2"),
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
@@ -87,7 +87,7 @@ lazy val scallop =
   .configure(_.enablePlugins(spray.boilerplate.BoilerplatePlugin))
   .jvmSettings(
     libraryDependencies ++= Seq(
-      "org.scalatest" %%% "scalatest" % "3.0.8-RC2" % Test
+      "org.scalatest" %%% "scalatest" % (if (scalaVersion.value == "2.13.0-RC2") "3.1.0-SNAP11" else "3.0.8-RC2") % Test
     ),
     // fix for paths to source files in scaladoc
     doc in Compile := {
