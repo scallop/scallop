@@ -199,7 +199,8 @@ case class Scallop(
           val num = args.head.drop(1)
           parse(acc = (opt, (num, List(num))) :: acc, args = args.tail)
         case None =>
-          throw new UnknownOption(args.head)
+          // only trailing args are left - proceed to trailing args parsing
+          acc.reverse ::: goParseRest(args, None)
       }
     } else {
       // only trailing args left - proceed to trailing args parsing

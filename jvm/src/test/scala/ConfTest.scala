@@ -810,4 +810,12 @@ For all other tricks, consult the documentation!
     config.index.isSupplied shouldEqual true
   }
 
+  test ("negative number in trailing arguments") {
+    val config = new ScallopConf(Seq("-1234")) {
+      val value = trailArg[Int]()
+      verify()
+    }
+    config.value() shouldEqual -1234
+  }
+
 }
