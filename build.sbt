@@ -87,7 +87,7 @@ lazy val scallop =
   .configure(_.enablePlugins(spray.boilerplate.BoilerplatePlugin))
   .jvmSettings(
     libraryDependencies ++= Seq(
-      "org.scalatest" %%% "scalatest" % (if (scalaVersion.value == "2.13.0-RC2") "3.1.0-SNAP11" else "3.0.8-RC2") % Test
+      "org.scalatest" %%% "scalatest" % "3.0.8-RC5" % Test
     ),
     // fix for paths to source files in scaladoc
     doc in Compile := {
