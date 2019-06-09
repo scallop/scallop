@@ -1,8 +1,11 @@
 package org.rogach.scallop
 
 import java.io.File
-import java.nio.file.{Path, Files}
-import exceptions._
+import java.nio.file.{Files, Path}
+
+import org.rogach.scallop.exceptions._
+
+import scala.collection.{Seq => CSeq}
 
 class Subcommand(commandNameAndAliases: String*) extends ScallopConf(Nil, commandNameAndAliases) {
   /** Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled. */
@@ -12,7 +15,7 @@ class Subcommand(commandNameAndAliases: String*) extends ScallopConf(Nil, comman
 }
 
 abstract class ScallopConfBase(
-  val args: Seq[String] = Nil,
+  val args: CSeq[String] = Nil,
   protected val commandNameAndAliases: Seq[String] = Nil
 ) extends ScallopConfValidations {
 

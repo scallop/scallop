@@ -10,7 +10,7 @@ lazy val commonSettings = Seq(
     versionRegexp.findFirstIn(libraryDependenciesString).get
   },
   scalaVersion := "2.12.8",
-  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC3"),
+  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.8", "2.13.0"),
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
@@ -86,9 +86,13 @@ lazy val scallop =
   .enablePlugins(SiteScaladocPlugin, GhpagesPlugin)
   .configure(_.enablePlugins(spray.boilerplate.BoilerplatePlugin))
   .jvmSettings(
-    libraryDependencies ++= Seq(
-      "org.scalatest" %%% "scalatest" % "3.0.8-RC5" % Test
-    ),
+    libraryDependencies += {
+      val v = "3.0.8-RC5"
+      if (scalaVersion.value == "2.13.0")
+        "org.scalatest" % "scalatest_2.13.0-RC3" % v % Test
+      else
+        "org.scalatest" %%% "scalatest" % v % Test
+    },
     // fix for paths to source files in scaladoc
     doc in Compile := {
       import sys.process._

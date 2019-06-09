@@ -2,6 +2,8 @@ package org.rogach.scallop
 
 import org.rogach.scallop.exceptions._
 
+import scala.collection.{Seq => CSeq}
+
 /** The creator and god of all parsers :) */
 private[scallop] object Scallop {
 
@@ -9,7 +11,7 @@ private[scallop] object Scallop {
     *
     * @param args Args to pre-insert.
     */
-  def apply(args: Seq[String]): Scallop = new Scallop(args)
+  def apply(args: CSeq[String]): Scallop = new Scallop(args)
 
   /** Create the default empty parser, fresh as mountain air. */
   def apply(): Scallop = apply(Nil)
@@ -57,7 +59,7 @@ private[scallop] object Scallop {
   * @param subbuilders subcommands in this builder
   */
 case class Scallop(
-  args: Seq[String] = Nil,
+  args: CSeq[String] = Nil,
   opts: List[CliOption] = Nil,
   mainOpts: List[String] = Nil,
   vers: Option[String] = None,
@@ -82,7 +84,7 @@ case class Scallop(
   )
 
   /** Parse the argument into list of options and their arguments. */
-  private def parse(args: Seq[String]): ParseResult = {
+  private def parse(args: CSeq[String]): ParseResult = {
     subbuilders.filter(s => args.contains(s._1)).sortBy(s => args.indexOf(s._1)).headOption match {
       case Some((name, sub)) => ParseResult(parse(Nil, args.takeWhile(name!=).toList), Some(name), args.dropWhile(name!=).drop(1).toList)
       case None => ParseResult(parse(Nil, args.toList))

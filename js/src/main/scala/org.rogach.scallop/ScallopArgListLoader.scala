@@ -1,5 +1,7 @@
 package org.rogach.scallop
 
+import scala.collection.{Seq => CSeq}
+
 trait ScallopArgListLoader {
-  def loadArgList(args: Seq[String]): Seq[String] = args
+  def loadArgList(args: CSeq[String]): CSeq[String] = args
 }
