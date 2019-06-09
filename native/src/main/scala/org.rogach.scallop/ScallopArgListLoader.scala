@@ -1,7 +1,9 @@
 package org.rogach.scallop
 
+import scala.collection.{Seq => CSeq}
+
 trait ScallopArgListLoader {
-  def loadArgList(args: Seq[String]): Seq[String] =
+  def loadArgList(args: CSeq[String]): CSeq[String] =
     if (args.headOption map("@--" ==) getOrElse false) {
       // read options from stdin
       io.Source.fromInputStream(java.lang.System.in).getLines.toList
