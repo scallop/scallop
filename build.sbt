@@ -86,13 +86,9 @@ lazy val scallop =
   .enablePlugins(SiteScaladocPlugin, GhpagesPlugin)
   .configure(_.enablePlugins(spray.boilerplate.BoilerplatePlugin))
   .jvmSettings(
-    libraryDependencies += {
-      val v = "3.0.8-RC5"
-      if (scalaVersion.value == "2.13.0")
-        "org.scalatest" % "scalatest_2.13.0-RC3" % v % Test
-      else
-        "org.scalatest" %%% "scalatest" % v % Test
-    },
+    libraryDependencies ++= Seq(
+      "org.scalatest" %%% "scalatest" % "3.0.8" % Test
+    ),
     // fix for paths to source files in scaladoc
     doc in Compile := {
       import sys.process._
