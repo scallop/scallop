@@ -1,7 +1,9 @@
 package org.rogach.scallop
 
+import scala.collection.{Seq => CSeq}
+
 abstract class ScallopConf(
-  args: Seq[String] = Nil,
+  args: CSeq[String] = Nil,
   commandNameAndAliases: Seq[String] = Nil
 ) extends ScallopConfBase(args, commandNameAndAliases) {
 
