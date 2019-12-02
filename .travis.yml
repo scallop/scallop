@@ -5,7 +5,7 @@ scala:
   - 2.12.8
   - 2.13.0
 jdk:
-  - oraclejdk8
+  - openjdk8
 before_script:
   - sudo chmod +x /usr/local/bin/sbt
 script:
