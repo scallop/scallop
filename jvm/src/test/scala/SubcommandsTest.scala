@@ -296,4 +296,72 @@ class SubcommandsTest extends UsefulMatchers {
     Conf.fruit.count() shouldEqual 42
     Conf.fruit.count.isSupplied ==== true
   }
+
+  test ("require subcommand to be present - successfull case") {
+    object Conf extends ScallopConf(Seq("fruit", "-c", "42")) {
+      val fruit = new Subcommand("fruit") {
+        val count = opt[Int]()
+      }
+      addSubcommand(fruit)
+      requireSubcommand()
+
+      verify()
+    }
+    Conf.subcommand ==== Some(Conf.fruit)
+    Conf.fruit.count() shouldEqual 42
+  }
+
+  test ("require subcommand to be present - error case") {
+    expectException(ValidationFailure("Subcommand required")) {
+      object Conf extends ScallopConf(Seq()) {
+        val fruit = new Subcommand("fruit") {
+          val count = opt[Int]()
+        }
+        addSubcommand(fruit)
+        requireSubcommand()
+
+        verify()
+      }
+      Conf
+    }
+  }
+
+  test ("require several nested subcommands to be present - successfull case") {
+    object Conf extends ScallopConf(Seq("fruit", "pick", "-c", "42")) {
+      val fruit = new Subcommand("fruit") {
+        val pick = new Subcommand("pick") {
+          val count = opt[Int]()
+        }
+        addSubcommand(pick)
+        requireSubcommand()
+      }
+      addSubcommand(fruit)
+      requireSubcommand()
+
+      verify()
+    }
+    Conf.subcommand ==== Some(Conf.fruit)
+    Conf.subcommands ==== List(Conf.fruit, Conf.fruit.pick)
+    Conf.fruit.pick.count() shouldEqual 42
+  }
+
+  test ("require several nested subcommands to be present - error case") {
+    expectException(ValidationFailure("Subcommand required")) {
+      object Conf extends ScallopConf(Seq("fruit")) {
+        val fruit = new Subcommand("fruit") {
+          val pick = new Subcommand("pick") {
+            val count = opt[Int]()
+          }
+          addSubcommand(pick)
+          requireSubcommand()
+        }
+        addSubcommand(fruit)
+        requireSubcommand()
+
+        verify()
+      }
+      Conf
+    }
+  }
+
 }

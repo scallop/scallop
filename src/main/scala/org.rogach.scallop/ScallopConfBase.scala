@@ -81,15 +81,12 @@ abstract class ScallopConfBase(
   /** Retrieves the choosen subcommand. */
   def subcommand: Option[ScallopConfBase] = {
     assertVerified
-    assert(rootConfig == this, "You shouldn't call 'subcommand' on subcommand object")
-
     builder.getSubcommandName.map(n => subconfigs.find(_.commandNameAndAliases.contains(n)).get)
   }
 
   /** Retrieves the list of the chosen nested subcommands. */
   def subcommands: List[ScallopConfBase] = {
     assertVerified
-    assert(rootConfig == this, "You shouldn't call 'subcommands' on subcommand object")
 
     var config = this
     var configs = List[ScallopConfBase]()
