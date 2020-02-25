@@ -3,6 +3,7 @@ package org.rogach.scallop
 import org.rogach.scallop.exceptions.GenericScallopException
 
 import scala.util.Try
+import scala.concurrent.duration.{Duration, FiniteDuration}
 
 trait DefaultConverters {
   implicit val flagConverter = new ValueConverter[Boolean] {
@@ -64,6 +65,14 @@ trait DefaultConverters {
     singleArgConverter(BigInt(_), numberHandler("integer"))
   implicit val bigDecimalConverter: ValueConverter[BigDecimal] =
     singleArgConverter(BigDecimal(_), numberHandler("decimal"))
+  implicit val durationConverter: ValueConverter[Duration] =
+    singleArgConverter(Duration(_))
+  implicit val finiteDurationConverter = singleArgConverter[FiniteDuration] { arg =>
+    Duration(arg) match {
+      case d: FiniteDuration => d
+      case d => throw new IllegalArgumentException(s"'$d' is not a FiniteDuration.")
+    }
+  }
 
   def listArgConverter[A](conv: String => A) = new ValueConverter[List[A]] {
     def parse(s:List[(String, List[String])]) = {
