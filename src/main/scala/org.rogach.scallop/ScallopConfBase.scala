@@ -446,13 +446,13 @@ abstract class ScallopConfBase(
     case r: ScallopResult if !throwError.value => r match {
       case Help("") =>
         builder.printHelp
-        sys.exit(0)
+        Compat.exit(0)
       case Help(subname) =>
         builder.findSubbuilder(subname).get.printHelp
-        sys.exit(0)
+        Compat.exit(0)
       case Version =>
         builder.vers.foreach(println)
-        sys.exit(0)
+        Compat.exit(0)
       case ScallopException(message) => errorMessageHandler(message)
     }
     case e => throw e

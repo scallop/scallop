@@ -1,10 +1,10 @@
 package org.rogach.scallop
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
-class MapCodependenceTest extends FunSuite with UsefulMatchers {
+class MapCodependenceTest extends AnyFunSuite with UsefulMatchers {
   throwError.value = true
 
   class TestConf(args: Seq[String]) extends ScallopConf(args) {

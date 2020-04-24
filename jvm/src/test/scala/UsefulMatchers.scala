@@ -1,9 +1,9 @@
 package org.rogach.scallop
 
-import org.scalatest.FunSuite
-import org.scalatest.Matchers
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-trait UsefulMatchers extends FunSuite with Matchers {
+trait UsefulMatchers extends AnyFunSuite with Matchers {
 
   implicit def toGoodEquals[A](a: A) = new {
     def ====[B](b: B) = a should equal (b)

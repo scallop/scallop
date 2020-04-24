@@ -1,7 +1,7 @@
 package org.rogach.scallop
 
-import org.scalatest.FunSuite
-import org.scalatest.Matchers
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import java.io.{Serializable, ByteArrayOutputStream, ByteArrayInputStream, ObjectOutputStream, ObjectInputStream}
 
 class TestConf(args: List[String]) extends ScallopConf(args) with Serialization {
@@ -9,7 +9,7 @@ class TestConf(args: List[String]) extends ScallopConf(args) with Serialization 
   verify()
 }
 
-class SerializationTest extends FunSuite with Matchers with UsefulMatchers {
+class SerializationTest extends AnyFunSuite with Matchers with UsefulMatchers {
   throwError.value = true
 
   test("simple ScallopConf serialization") {

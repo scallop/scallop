@@ -2,11 +2,11 @@ package org.rogach.scallop
 
 import org.rogach.scallop.exceptions._
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 import scala.concurrent.duration._
 
-class DurationConverterTest extends FunSuite with UsefulMatchers {
+class DurationConverterTest extends AnyFunSuite with UsefulMatchers {
   throwError.value = true
 
   test("convert to Duration") {
@@ -25,7 +25,7 @@ class DurationConverterTest extends FunSuite with UsefulMatchers {
   }
 }
 
-class FiniteDurationConverterTest extends FunSuite with UsefulMatchers {
+class FiniteDurationConverterTest extends AnyFunSuite with UsefulMatchers {
   throwError.value = true
 
   test("convert to Duration") {

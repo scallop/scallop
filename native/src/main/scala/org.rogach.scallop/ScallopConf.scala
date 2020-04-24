@@ -12,7 +12,7 @@ abstract class ScallopConf(
 
   errorMessageHandler = { message =>
     Console.err.println(Util.format("[%s] Error: %s", printedName, message))
-    sys.exit(1)
+    Compat.exit(1)
   }
 
 }

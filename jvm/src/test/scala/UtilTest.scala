@@ -1,9 +1,9 @@
 package org.rogach.scallop
 
-import org.scalatest.FunSuite
-import org.scalatest.Matchers
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class UtilTest extends FunSuite with Matchers with UsefulMatchers {
+class UtilTest extends AnyFunSuite with Matchers with UsefulMatchers {
   test ("format") {
     Util.format("%s", "test") ==== "test"
     Util.format(" %s ", "test") ==== " test "

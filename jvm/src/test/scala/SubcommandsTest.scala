@@ -1,6 +1,6 @@
 package org.rogach.scallop
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 

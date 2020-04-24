@@ -1,8 +1,8 @@
 package org.rogach.scallop
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class ValueConverterTest extends FunSuite with UsefulMatchers {
+class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
   throwError.value = true
 
   test ("optional value - flatMap way") {

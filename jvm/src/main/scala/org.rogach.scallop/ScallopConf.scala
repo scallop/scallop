@@ -81,7 +81,7 @@ abstract class ScallopConf(
       // no colors on output
       Console.err.println("[%s] Error: %s" format (printedName, message))
     }
-    sys.exit(1)
+    Compat.exit(1)
   }
 
 }

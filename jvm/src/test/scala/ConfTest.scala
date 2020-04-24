@@ -1,11 +1,11 @@
 package org.rogach.scallop
 
-import org.scalatest.FunSuite
-import org.scalatest.Matchers
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
-class ConfTest extends FunSuite with Matchers with UsefulMatchers with CapturingTest {
+class ConfTest extends AnyFunSuite with Matchers with UsefulMatchers with CapturingTest {
   throwError.value = true
 
   test ("full example") {

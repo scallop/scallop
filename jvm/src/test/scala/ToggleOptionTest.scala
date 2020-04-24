@@ -1,11 +1,12 @@
 package org.rogach.scallop
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
 
-class ToggleOptionTest extends FunSuite with Matchers {
+class ToggleOptionTest extends AnyFunSuite with Matchers {
   throwError.value = true
 
   test ("short name") {

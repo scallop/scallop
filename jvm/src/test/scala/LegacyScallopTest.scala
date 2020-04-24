@@ -1,12 +1,12 @@
 package org.rogach.scallop
 
-import org.scalatest.FunSuite
-import org.scalatest.Matchers
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 import reflect.runtime.universe._
 
-class LegacyScallopTest extends FunSuite with Matchers with CapturingTest {
+class LegacyScallopTest extends AnyFunSuite with Matchers with CapturingTest {
 
   test ("readme example") {
     import org.rogach.scallop._

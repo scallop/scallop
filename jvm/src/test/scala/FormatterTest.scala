@@ -1,8 +1,9 @@
 package org.rogach.scallop
 
-import org.scalatest.{ FunSuite, Matchers }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class FormatterTest extends FunSuite with Matchers {
+class FormatterTest extends AnyFunSuite with Matchers {
   test ("exact wrapping") {
     // Two lines' worth of dots, two dots to start (one dot should be at the very end of the line).
     val dots = ".." +: Seq.fill(79)(".")
