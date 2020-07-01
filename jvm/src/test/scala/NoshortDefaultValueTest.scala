@@ -8,13 +8,13 @@ class NoshortDefaultValueTest extends UsefulMatchers with CapturingTest with Mat
   test("noshort default value") {
 
     case class NoshortConf(initialNoshort: Boolean, reassignedNoshort: Boolean) extends ScallopConf(List("-a", "x", "-b", "x", "-c", "-d")) {
-      _noshort shouldBe false // check whether hard-coded default in ScallopConfBase is false
-      noshort(initialNoshort) // for all subsequent options, set global default for noshort to initialNoshort
+      noshort shouldBe false // check whether hard-coded default in ScallopConfBase is false
+      noshort = initialNoshort // for all subsequent options, set global default for noshort to initialNoshort
       val a1 = opt[String]()
       val a2 = opt[String](noshort = false)
       val b1 = choice(choices = Seq("x"))
       val b2 = choice(choices = Seq("x"), noshort = false)
-      noshort(reassignedNoshort) // for all subsequent options, set global default for noshort to reassignedNoshort
+      noshort = reassignedNoshort // for all subsequent options, set global default for noshort to reassignedNoshort
       val c1 = tally()
       val c2 = tally(noshort = false)
       val d1 = toggle()

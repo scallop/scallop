@@ -25,9 +25,6 @@ abstract class ScallopConfBase(
   /** true if this config does not represent a subcommand */
   protected var isRootConfig = true
 
-  /** Default value for the noshort parameter, may be overridden, or re-defined by noshort(Boolean). */
-  protected var _noshort = false
-
   private def rootConfig: ScallopConfBase = {
     var conf = this
     while (!conf.isRootConfig) {
@@ -77,6 +74,12 @@ abstract class ScallopConfBase(
   def helpFormatter_=(formatter: ScallopHelpFormatter) = {
     editBuilder(_.copy(helpFormatter = formatter))
   }
+
+  /** Default value for the noshort-parameter for all subsequent option definitions in this ScallopConf.
+    * May be overridden or re-assigned.
+    * Only applied if a subsequent option definition does not explicitly provide its noshort-parameter.
+    */
+  protected var noshort = false
 
   private[this] var gen = 0
   private[this] def genName() = { gen += 1; Util.format("\t%d", gen) }
@@ -136,7 +139,7 @@ abstract class ScallopConfBase(
       required: Boolean = false,
       argName: String = "arg",
       hidden: Boolean = false,
-      noshort: Boolean = _noshort)
+      noshort: Boolean = noshort)
       (implicit conv:ValueConverter[A]): ScallopOption[A] = {
 
     // guessing name, if needed
@@ -183,7 +186,7 @@ abstract class ScallopConfBase(
     required: Boolean = false,
     argName: String = "arg",
     hidden: Boolean = false,
-    noshort: Boolean = _noshort
+    noshort: Boolean = noshort
   ): ScallopOption[String] = {
     this.opt[String](
       name = name,
@@ -227,7 +230,7 @@ abstract class ScallopConfBase(
       short: Char = '\u0000',
       descr: String = "",
       hidden: Boolean = false,
-      noshort: Boolean = _noshort): ScallopOption[Int] = {
+      noshort: Boolean = noshort): ScallopOption[Int] = {
 
     // guessing name, if needed
     val resolvedName =
@@ -375,14 +378,14 @@ abstract class ScallopConfBase(
     * @param hidden If set to true, then this option will not be present in auto-generated help.
     */
   def toggle(
-      name: String = null,
-      default: => Option[Boolean] = None,
-      short: Char = '\u0000',
-      noshort: Boolean = _noshort,
-      prefix: String = "no",
-      descrYes: String = "",
-      descrNo: String = "",
-      hidden: Boolean = false): ScallopOption[Boolean] = {
+              name: String = null,
+              default: => Option[Boolean] = None,
+              short: Char = '\u0000',
+              noshort: Boolean = noshort,
+              prefix: String = "no",
+              descrYes: String = "",
+              descrNo: String = "",
+              hidden: Boolean = false): ScallopOption[Boolean] = {
     val resolvedName =
       if (name == null) {
         if (_guessOptionName) genName()
@@ -806,14 +809,6 @@ abstract class ScallopConfBase(
     */
   def helpWidth(w: Int): Unit = {
     editBuilder(_.setHelpWidth(w))
-  }
-
-  /** Sets the default value for the noshort-parameter for all subsequent option definitions in this ScallopConf.
-    * Only applied if an option definition does not explicitly provide its noshort-parameter.
-    * @param noshort new default value
-    */
-  def noshort(noshort: Boolean): Unit = {
-    _noshort = noshort
   }
 
   def shortSubcommandsHelp(v: Boolean = true): Unit = {
