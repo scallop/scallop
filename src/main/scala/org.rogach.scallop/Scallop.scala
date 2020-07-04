@@ -56,6 +56,9 @@ private[scallop] object Scallop {
   * @param descr Short description - used for subcommands
   * @param helpWidth Width, to which the help output will be formatted (note that banner, footer, version and description are not affected!)
   * @param shortSubcommandsHelp If true, then help output from this builder wouldn't list full help for subcommands, only short description
+  * @param appendDefaultToDescription If true, then append auto-generated text about default option value to option descriptions
+  * @param noshort If true, then do not generate short names for options by default unless overridden per option by providing its noshort parameter
+  * @param helpFormatter help formatter in this builder
   * @param subbuilders subcommands in this builder
   */
 case class Scallop(
@@ -69,6 +72,7 @@ case class Scallop(
   helpWidth: Option[Int] = None,
   shortSubcommandsHelp: Boolean = false,
   appendDefaultToDescription: Boolean = false,
+  noshort: Boolean = false,
   helpFormatter: ScallopHelpFormatter = new ScallopHelpFormatter,
   subbuilders: List[(String, Scallop)] = Nil
 ) extends ScallopArgListLoader {
@@ -268,7 +272,7 @@ case class Scallop(
       required: Boolean = false,
       argName: String = "arg",
       hidden: Boolean = false,
-      noshort: Boolean = false)
+      noshort: Boolean = noshort)
       (implicit conv: ValueConverter[A]): Scallop = {
     if (name.head.isDigit) throw new IllegalOptionParameters(Util.format("First character of the option name must not be a digit: %s", name))
     val defaultA =
@@ -401,7 +405,7 @@ case class Scallop(
       name: String,
       default: () => Option[Boolean] = () => None,
       short: Char = '\u0000',
-      noshort: Boolean = false,
+      noshort: Boolean = noshort,
       prefix: String = "no",
       descrYes: String = "",
       descrNo: String = "",

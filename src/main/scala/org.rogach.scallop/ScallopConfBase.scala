@@ -75,11 +75,14 @@ abstract class ScallopConfBase(
     editBuilder(_.copy(helpFormatter = formatter))
   }
 
-  /** Default value for the noshort-parameter for all subsequent option definitions in this ScallopConf.
-    * May be overridden or re-assigned.
+  def noshort = builder.noshort
+
+  /** If set to true, then do not generate short names for subsequently defined options by default.
     * Only applied if a subsequent option definition does not explicitly provide its noshort-parameter.
     */
-  protected var noshort = false
+  def noshort_=(v: Boolean): Unit = {
+    editBuilder(_.copy(noshort = v))
+  }
 
   private[this] var gen = 0
   private[this] def genName() = { gen += 1; Util.format("\t%d", gen) }
