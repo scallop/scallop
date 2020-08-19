@@ -12,6 +12,8 @@ package object scallop extends DefaultConverters {
   implicit val pathConverter = singleArgConverter[Path](Paths.get(_), {
     case e: InvalidPathException => Left("bad Path, %s" format e.getMessage)
   })
+  implicit val pathListConverter: ValueConverter[List[Path]] =
+    listArgConverter[Path](Paths.get(_))
   implicit val urlConverter = singleArgConverter(new URL(_), {
     case e: MalformedURLException => Left("bad URL, %s" format e.getMessage)
   })
