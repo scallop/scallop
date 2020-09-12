@@ -111,12 +111,14 @@ case class Scallop(
             throw ExcessArguments(excess)
 
           case TrailingArgumentsParser.ParseResult(result, _, _) if result.exists(_.isLeft) =>
-            val ((option, _, _), Left((message, args))) =
-              trailingOptions.zip(result).find(_._2.isLeft).get
-            if (option.required && (message == "not enough arguments"))
-              throw RequiredOptionNotFound(option.name)
-            else
-              throw WrongOptionFormat(option.name, args.mkString(" "), message)
+            trailingOptions.zip(result).find(_._2.isLeft).get match {
+              case ((option, _, _), Left((message, args))) =>
+                if (option.required && (message == "not enough arguments"))
+                  throw RequiredOptionNotFound(option.name)
+                else
+                  throw WrongOptionFormat(option.name, args.mkString(" "), message)
+              case _ => throw MajorInternalException()
+            }
 
           case TrailingArgumentsParser.ParseResult(result, _, _) =>
             trailingOptions.zip(result).flatMap {

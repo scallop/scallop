@@ -10,20 +10,19 @@ lazy val commonSettings = Seq(
     versionRegexp.findFirstIn(libraryDependenciesString).get
   },
   scalaVersion := "2.13.2",
-  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.11", "2.13.2"),
+  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.11", "2.13.2", "0.27.0-RC1"),
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
     "-feature",
-    "-language:postfixOps",
-    "-language:reflectiveCalls",
-    "-language:existentials",
-    "-language:implicitConversions",
+    "-language:postfixOps,reflectiveCalls,existentials,implicitConversions",
     "-Xlint"
   ),
   unmanagedSourceDirectories in Compile += {
     val base = baseDirectory.value.getParentFile / "src" / "main"
     CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((0, _)) =>
+        base / s"scala-2.13+"
       case Some((2, v)) if v >= 13 =>
         base / s"scala-2.13+"
       case _ =>
@@ -43,11 +42,6 @@ lazy val commonSettings = Seq(
   boilerplateSource in Compile := baseDirectory.value.getParentFile / "src" / "main" / "boilerplate",
   pomExtra := (
     <developers>
-      <developer>
-        <id>clhodapp</id>
-        <name>Chris Hodapp</name>
-        <url>http://clhodapp.net</url>
-      </developer>
       <developer>
         <id>rogach</id>
         <name>Platon Pronko</name>
@@ -86,9 +80,15 @@ lazy val scallop =
   .enablePlugins(SiteScaladocPlugin, GhpagesPlugin)
   .configure(_.enablePlugins(spray.boilerplate.BoilerplatePlugin))
   .jvmSettings(
-    libraryDependencies ++= Seq(
-      "org.scalatest" %%% "scalatest" % "3.1.1" % Test
-    ),
+    libraryDependencies ++= {
+      if (scalaVersion.value.startsWith("0")) {
+        Seq()
+      } else {
+        Seq(
+          "org.scalatest" %%% "scalatest" % "3.1.1" % Test
+        )
+      }
+    },
     // fix for paths to source files in scaladoc
     doc in Compile := {
       import sys.process._

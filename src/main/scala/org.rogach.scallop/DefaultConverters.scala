@@ -6,7 +6,7 @@ import scala.util.Try
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
 trait DefaultConverters {
-  implicit val flagConverter = new ValueConverter[Boolean] {
+  implicit val flagConverter: ValueConverter[Boolean] = new ValueConverter[Boolean] {
     def parse(s: List[(String, List[String])]) = s match {
       case (_,Nil) :: Nil => Right(Some(true))
       case Nil => Right(None)
@@ -36,10 +36,17 @@ trait DefaultConverters {
     val argType = ArgType.SINGLE
   }
 
+  // for some reason direct usages of singleArgConverter sometimes fail to compile under Dotty 0.27.0-RC1
+  // this wrapper "fixes" the issue
+  def singleArgConverter2[A](
+    conv: String => A,
+    handler: PartialFunction[Throwable, Either[String, Option[A]]] = PartialFunction.empty
+  ) = singleArgConverter(conv, handler)
+
   implicit val charConverter: ValueConverter[Char] =
-    singleArgConverter[Char](_.head)
+    singleArgConverter2[Char](_.head)
   implicit val stringConverter: ValueConverter[String] =
-    singleArgConverter[String](identity)
+    singleArgConverter2[String](identity)
 
   /** Handler function for numeric types which expects a NumberFormatException and prints a more
     * helpful error message.
@@ -66,8 +73,8 @@ trait DefaultConverters {
   implicit val bigDecimalConverter: ValueConverter[BigDecimal] =
     singleArgConverter(BigDecimal(_), numberHandler("decimal"))
   implicit val durationConverter: ValueConverter[Duration] =
-    singleArgConverter(Duration(_))
-  implicit val finiteDurationConverter = singleArgConverter[FiniteDuration] { arg =>
+    singleArgConverter2(Duration(_))
+  implicit val finiteDurationConverter: ValueConverter[FiniteDuration] = singleArgConverter2[FiniteDuration] { arg =>
     Duration(arg) match {
       case d: FiniteDuration => d
       case d => throw new IllegalArgumentException(s"'$d' is not a FiniteDuration.")
@@ -126,14 +133,14 @@ trait DefaultConverters {
     }
     val argType = ArgType.LIST
   }
-  implicit val bytePropsConverter = propsConverter[Byte](byteConverter)
-  implicit val shortPropsConverter = propsConverter[Short](shortConverter)
-  implicit val intPropsConverter = propsConverter[Int](intConverter)
-  implicit val longPropsConverter = propsConverter[Long](longConverter)
-  implicit val floatPropsConverter = propsConverter[Float](floatConverter)
-  implicit val doublePropsConverter = propsConverter[Double](doubleConverter)
-  implicit val charPropsConverter = propsConverter[Char](charConverter)
-  implicit val stringPropsConverter = propsConverter[String](stringConverter)
+  implicit val bytePropsConverter: ValueConverter[Map[String, Byte]] = propsConverter[Byte](byteConverter)
+  implicit val shortPropsConverter: ValueConverter[Map[String, Short]] = propsConverter[Short](shortConverter)
+  implicit val intPropsConverter: ValueConverter[Map[String, Int]] = propsConverter[Int](intConverter)
+  implicit val longPropsConverter: ValueConverter[Map[String, Long]] = propsConverter[Long](longConverter)
+  implicit val floatPropsConverter: ValueConverter[Map[String, Float]] = propsConverter[Float](floatConverter)
+  implicit val doublePropsConverter: ValueConverter[Map[String, Double]] = propsConverter[Double](doubleConverter)
+  implicit val charPropsConverter: ValueConverter[Map[String, Char]] = propsConverter[Char](charConverter)
+  implicit val stringPropsConverter: ValueConverter[Map[String, String]] = propsConverter[String](stringConverter)
 
   val tallyConverter = new ValueConverter[Int] {
     def parse(s: List[(String, List[String])]) = {

@@ -113,7 +113,9 @@ class ScallopHelpFormatter {
   protected def getSubcommandsWithNames(s: Scallop): List[(Scallop, List[String])] = {
     s.subbuilders
     .groupBy(_._2)
-    .mapValues(_.map(_._1))
+    .map { case (subBuilder, names) =>
+      (subBuilder, names.map(_._1))
+    }
     .toList
     // retain original subcommand ordering
     .sortBy { case (subBuilder, names) => s.subbuilders.indexWhere(_._2 == subBuilder) }

@@ -89,13 +89,13 @@ abstract class ScallopConfBase(
 
   /** Retrieves the choosen subcommand. */
   def subcommand: Option[ScallopConfBase] = {
-    assertVerified
+    assertVerified()
     builder.getSubcommandName.map(n => subconfigs.find(_.commandNameAndAliases.contains(n)).get)
   }
 
   /** Retrieves the list of the chosen nested subcommands. */
   def subcommands: List[ScallopConfBase] = {
-    assertVerified
+    assertVerified()
 
     var config = this
     var configs = List[ScallopConfBase]()
@@ -157,11 +157,11 @@ abstract class ScallopConfBase(
     editBuilder(_.opt(resolvedName, short, descr, () => default, validate, required, argName, hidden, noshort)(conv))
     new ScallopOption[A](() => resolvedName) {
       override lazy val fn = { (name: String) =>
-        assertVerified
+        assertVerified()
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[A]]
       }
       override lazy val supplied = { (name: String) =>
-        assertVerified
+        assertVerified()
         rootConfig.builder.isSupplied(getPrefixedName(name))
       }
     }
@@ -247,11 +247,11 @@ abstract class ScallopConfBase(
                  false, "", hidden, noshort)(tallyConverter))
     new ScallopOption[Int](() => resolvedName) {
       override lazy val fn = { (name: String) =>
-        assertVerified
+        assertVerified()
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[Int]]
       }
       override lazy val supplied = { (name: String) =>
-        assertVerified
+        assertVerified()
         rootConfig.builder.isSupplied(getPrefixedName(name))
       }
     }
@@ -274,7 +274,7 @@ abstract class ScallopConfBase(
       (implicit conv: ValueConverter[Map[String,A]]): Map[String, A] = {
     editBuilder(_.props(name, descr, keyName, valueName, hidden)(conv))
     new LazyMap({
-      assertVerified
+      assertVerified()
       rootConfig.builder.apply(getPrefixedName(name.toString)).asInstanceOf[Map[String, A]]
     })
   }
@@ -288,7 +288,7 @@ abstract class ScallopConfBase(
       (implicit conv: ValueConverter[Map[String,A]]): Map[String, A] = {
     editBuilder(_.propsLong(name, descr, keyName, valueName, hidden)(conv))
     new LazyMap({
-      assertVerified
+      assertVerified()
       rootConfig.builder.apply(getPrefixedName(name)).asInstanceOf[Map[String, A]]
     })
   }
@@ -316,11 +316,11 @@ abstract class ScallopConfBase(
     editBuilder(_.trailArg(resolvedName, required, descr, () => default, validate, hidden)(conv))
     new ScallopOption[A](() => resolvedName) {
       override lazy val fn = { (name: String) =>
-        assertVerified
+        assertVerified()
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[A]]
       }
       override lazy val supplied = { (name: String) =>
-        assertVerified
+        assertVerified()
         rootConfig.builder.isSupplied(getPrefixedName(name))
       }
     }
@@ -354,11 +354,11 @@ abstract class ScallopConfBase(
 
     new ScallopOption[Long](() => resolvedName) {
       override lazy val fn = { (name: String) =>
-        assertVerified
+        assertVerified()
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[Long]]
       }
       override lazy val supplied = { (name: String) =>
-        assertVerified
+        assertVerified()
         rootConfig.builder.isSupplied(getPrefixedName(name))
       }
     }
@@ -397,11 +397,11 @@ abstract class ScallopConfBase(
     editBuilder(_.toggle(resolvedName, () => default, short, noshort, prefix, descrYes, descrNo, hidden))
     new ScallopOption[Boolean](() => resolvedName) {
       override lazy val fn = { (name: String) =>
-        assertVerified
+        assertVerified()
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[Boolean]]
       }
       override lazy val supplied = { (name: String) =>
-        assertVerified
+        assertVerified()
         rootConfig.builder.isSupplied(getPrefixedName(name))
       }
     }
@@ -432,7 +432,7 @@ abstract class ScallopConfBase(
       subConfig <- subconfigs.find(_.builder == subBuilder)
     } {
       subConfig.editBuilder(_.args(builder.getSubcommandArgs))
-      subConfig.runValidations
+      subConfig.runValidations()
     }
   }
 
@@ -454,15 +454,17 @@ abstract class ScallopConfBase(
   protected def onError(e: Throwable): Unit = e match {
     case r: ScallopResult if !throwError.value => r match {
       case Help("") =>
-        builder.printHelp
+        builder.printHelp()
         Compat.exit(0)
       case Help(subname) =>
-        builder.findSubbuilder(subname).get.printHelp
+        builder.findSubbuilder(subname).get.printHelp()
         Compat.exit(0)
       case Version =>
         builder.vers.foreach(println)
         Compat.exit(0)
       case ScallopException(message) => errorMessageHandler(message)
+      // following should never match, but just in case
+      case other: exceptions.ScallopException => errorMessageHandler(other.getMessage)
     }
     case e => throw e
   }
@@ -771,17 +773,17 @@ abstract class ScallopConfBase(
     * @return a list of all options in the builder, and corresponding values for them.
     */
   def summary = {
-    assertVerified
+    assertVerified()
     builder.summary
   }
 
   def filteredSummary(blurred: Set[String]) = {
-    assertVerified
+    assertVerified()
     builder.filteredSummary(blurred: Set[String])
   }
 
   /** Prints help message (with version, banner, option usage and footer) to stdout. */
-  def printHelp() = builder.printHelp
+  def printHelp() = builder.printHelp()
 
   /** Add a version string to option builder.
     *
@@ -836,8 +838,8 @@ abstract class ScallopConfBase(
   }
 
   def verify(): Unit = {
-    verifyConf
-    verifyBuilder
+    verifyConf()
+    verifyBuilder()
   }
 
 }
