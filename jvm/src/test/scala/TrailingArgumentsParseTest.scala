@@ -9,14 +9,14 @@ class TrailingArgumentsParseTest extends AnyFunSuite with Matchers with UsefulMa
   throwError.value = true
 
   test ("non-required trailing option after flag") {
-    val conf = new ScallopConf(Seq("-a")) {
+    object Conf extends ScallopConf(Seq("-a")) {
       val apple = opt[Boolean]("apple")
       val banana = trailArg[String](required = false)
 
       verify()
     }
-    conf.apple.toOption shouldBe Some(true)
-    conf.banana.toOption shouldBe None
+    Conf.apple.toOption shouldBe Some(true)
+    Conf.banana.toOption shouldBe None
   }
 
   test ("proper error message on trailing file option failure") {

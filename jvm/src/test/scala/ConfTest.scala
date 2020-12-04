@@ -5,6 +5,12 @@ import org.scalatest.matchers.should.Matchers
 import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
+/*
+  to test only this suite:
+
+  sbt 'testOnly org.rogach.scallop.ConfTest'
+
+ */
 class ConfTest extends AnyFunSuite with Matchers with UsefulMatchers with CapturingTest {
   throwError.value = true
 
@@ -60,7 +66,7 @@ class ConfTest extends AnyFunSuite with Matchers with UsefulMatchers with Captur
       verify()
     }
     val (out, err) = captureOutput {
-      Conf.builder.printHelp
+      Conf.builder.printHelp()
     }
 
     out shouldBe """test 1.2.3 (c) 2012 Mr Placeholder
@@ -531,60 +537,60 @@ For all other tricks, consult the documentation!
   }
 
   test ("default value of option should be lazily evaluated") {
-    val conf = new ScallopConf(Seq("-a", "4")) {
+    object Conf extends ScallopConf(Seq("-a", "4")) {
       val apples = opt[Int](default = { sys.error("boom"); None })
       verify()
     }
-    conf.apples() should equal (4)
+    Conf.apples() should equal (4)
   }
 
   test ("default value of trailing arg should be lazily evaluated") {
-    val conf = new ScallopConf(Seq("4")) {
+    object Conf extends ScallopConf(Seq("4")) {
       val apples = trailArg[Int](default = { sys.error("boom"); None })
       verify()
     }
-    conf.apples() should equal (4)
+    Conf.apples() should equal (4)
   }
 
   test ("if no arguments provided for list option, default should be returned") {
-    val conf = new ScallopConf(Seq()) {
+    object Conf extends ScallopConf(Seq()) {
       val apples = opt[List[Int]](default = Some(List(1)))
       verify()
     }
-    conf.apples() should equal (List(1))
+    Conf.apples() should equal (List(1))
   }
 
   test ("empty tally") {
-    val conf = new ScallopConf(Seq()) {
+    object Conf extends ScallopConf(Seq()) {
       val apples = tally()
       verify()
     }
-    conf.apples() should equal (0)
-    conf.apples.isSupplied should equal (false)
+    Conf.apples() should equal (0)
+    Conf.apples.isSupplied should equal (false)
   }
 
   test ("one-arg tally") {
-    val conf = new ScallopConf(Seq("-a")) {
+    object Conf extends ScallopConf(Seq("-a")) {
       val apples = tally()
       verify()
     }
-    conf.apples() should equal (1)
+    Conf.apples() should equal (1)
   }
 
   test ("two-arg tally") {
-    val conf = new ScallopConf(Seq("-a", "-a")) {
+    object Conf extends ScallopConf(Seq("-a", "-a")) {
       val apples = tally()
       verify()
     }
-    conf.apples() should equal (2)
+    Conf.apples() should equal (2)
   }
 
   test ("collapsed two-arg tally") {
-    val conf = new ScallopConf(Seq("-aa")) {
+    object Conf extends ScallopConf(Seq("-aa")) {
       val apples = tally()
       verify()
     }
-    conf.apples() should equal (2)
+    Conf.apples() should equal (2)
   }
 
   test ("tally no-args") {
@@ -598,29 +604,29 @@ For all other tricks, consult the documentation!
   }
 
   test ("empty list arg before empty trailing option") {
-    val conf = new ScallopConf(Seq("-a")) {
+    object Conf extends ScallopConf(Seq("-a")) {
       val apples = opt[List[String]](default = Some(Nil))
       verify()
     }
-    conf.apples() ==== List()
+    Conf.apples() ==== List()
   }
 
   test ("multiple list option before normal option should keep ordering") {
-    val conf = new ScallopConf(Seq("-l", "1", "-l", "2", "-o", "3")) {
+    object Conf extends ScallopConf(Seq("-l", "1", "-l", "2", "-o", "3")) {
       val l = opt[List[String]]()
       val o = opt[Int]()
       verify()
     }
-    conf.l() ==== List("1","2")
+    Conf.l() ==== List("1","2")
   }
 
   test ("multiple list option before optional trail arg should keep ordering") {
-    val conf = new ScallopConf(Seq("-l", "1", "-l", "2", "--", "0")) {
+    object Conf extends ScallopConf(Seq("-l", "1", "-l", "2", "--", "0")) {
       val l = opt[List[String]]()
       val t = trailArg[Int](required = false)
       verify()
     }
-    conf.l() ==== List("1","2")
+    Conf.l() ==== List("1","2")
   }
 
   test ("verification on subconfigs") {
@@ -720,41 +726,41 @@ For all other tricks, consult the documentation!
   }
 
   test ("--arg=value option style") {
-    val conf = new ScallopConf(Seq("--apples=42")) {
+    object Conf extends ScallopConf(Seq("--apples=42")) {
       val apples = opt[Int]()
       verify()
     }
 
-    conf.apples() shouldBe 42
+    Conf.apples() shouldBe 42
   }
 
   test ("pass arguments that start with dash") {
-    val conf = new ScallopConf(Seq("--apples=-1")) {
+    object Conf extends ScallopConf(Seq("--apples=-1")) {
       val apples = opt[Int]()
       verify()
     }
 
-    conf.apples() shouldBe (-1)
+    Conf.apples() shouldBe (-1)
   }
 
   test ("pass list of arguments in --arg=value option style") {
-    val conf = new ScallopConf(Seq("--apples=-1", "--apples=-2")) {
+    object Conf extends ScallopConf(Seq("--apples=-1", "--apples=-2")) {
       val apples = opt[List[Int]]()
       verify()
     }
 
-    conf.apples() shouldBe List(-1, -2)
+    Conf.apples() shouldBe List(-1, -2)
   }
 
   test ("handle trailing args in conjunction with --arg=value option style") {
-    val conf = new ScallopConf(Seq("--apples=-1", "basket")) {
+    object Conf extends ScallopConf(Seq("--apples=-1", "basket")) {
       val apples = opt[Int]()
       val stuff = trailArg[String]()
       verify()
     }
 
-    conf.apples() shouldBe (-1)
-    conf.stuff() shouldBe "basket"
+    Conf.apples() shouldBe (-1)
+    Conf.stuff() shouldBe "basket"
   }
 
   test ("accessing unverified builder from default option value resolver") {
@@ -789,15 +795,15 @@ For all other tricks, consult the documentation!
   }
 
   test ("isSupplied on transformed option with guessed option name") {
-    val config = new ScallopConf(Seq("-i", "5")) {
+    object Config extends ScallopConf(Seq("-i", "5")) {
       val index = opt[Int]().map(_-1)
       verify()
     }
-    config.index.isSupplied shouldEqual true
+    Config.index.isSupplied shouldEqual true
   }
 
   test ("isSupplied on transformed option with guessed option name inside validation") {
-    val config = new ScallopConf(Seq("-i", "5", "-l", "10")) {
+    object Config extends ScallopConf(Seq("-i", "5", "-l", "10")) {
       val index = opt[Int]().map(_-1)
       val length = opt[Int]()
       addValidation {
@@ -807,15 +813,15 @@ For all other tricks, consult the documentation!
       }
       verify()
     }
-    config.index.isSupplied shouldEqual true
+    Config.index.isSupplied shouldEqual true
   }
 
   test ("negative number in trailing arguments") {
-    val config = new ScallopConf(Seq("-1234")) {
+    object Config extends ScallopConf(Seq("-1234")) {
       val value = trailArg[Int]()
       verify()
     }
-    config.value() shouldEqual -1234
+    Config.value() shouldEqual -1234
   }
 
 }

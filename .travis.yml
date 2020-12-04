@@ -1,12 +1,15 @@
+dist: xenial
+
 language: scala
+
 scala:
-  - 2.10.7
   - 2.11.12
-  - 2.12.8
-  - 2.13.0
+  - 2.12.12
+  - 2.13.4
+  - 3.0.0-M2
+
 jdk:
   - openjdk8
-before_script:
-  - sudo chmod +x /usr/local/bin/sbt
+
 script:
-  - sbt "++${TRAVIS_SCALA_VERSION}!" scallopJVM/test
+  - sbt "++${TRAVIS_SCALA_VERSION}" scallopJVM/test scallopJS/test scallopNative/test

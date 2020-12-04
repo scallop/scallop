@@ -90,7 +90,7 @@ case class Scallop(
   /** Parse the argument into list of options and their arguments. */
   private def parse(args: CSeq[String]): ParseResult = {
     subbuilders.filter(s => args.contains(s._1)).sortBy(s => args.indexOf(s._1)).headOption match {
-      case Some((name, sub)) => ParseResult(parse(Nil, args.takeWhile(name!=).toList), Some(name), args.dropWhile(name!=).drop(1).toList)
+      case Some((name, sub)) => ParseResult(parse(Nil, args.takeWhile(name != _).toList), Some(name), args.dropWhile(name != _).drop(1).toList)
       case None => ParseResult(parse(Nil, args.toList))
     }
   }
@@ -436,7 +436,7 @@ case class Scallop(
     */
   def findSubbuilder(name: String): Option[Scallop] = {
     if (name.contains('\u0000')) {
-      val (firstSub, rest) = name.span('\u0000'!=)
+      val (firstSub, rest) = name.span('\u0000' != _)
       subbuilders.find(_._1 == firstSub).flatMap(_._2.findSubbuilder(rest.tail))
     } else subbuilders.find(_._1 == name).map(_._2)
   }
@@ -516,7 +516,7 @@ case class Scallop(
         .find(_._1 == subc).map(_._2)
         .filter { subBuilder =>
           subbuilders.filter(_._2 == subBuilder)
-          .exists(_._1 == name.takeWhile('\u0000'!=))
+          .exists(_._1 == name.takeWhile('\u0000' != _))
         }
         .map { subBuilder =>
           subBuilder.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\u0000'!=).drop(1))

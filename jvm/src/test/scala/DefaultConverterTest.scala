@@ -10,7 +10,7 @@ class DurationConverterTest extends AnyFunSuite with UsefulMatchers {
   throwError.value = true
 
   test("convert to Duration") {
-    def getcf(args: Seq[String]) = new ScallopConf(args) {
+    case class getcf(args0: Seq[String]) extends ScallopConf(args0) {
       val foo = opt[Duration]()
       verify()
     }
@@ -29,7 +29,7 @@ class FiniteDurationConverterTest extends AnyFunSuite with UsefulMatchers {
   throwError.value = true
 
   test("convert to Duration") {
-    def getcf(args: Seq[String]) = new ScallopConf(args) {
+    case class getcf(args0: Seq[String]) extends ScallopConf(args0) {
       val foo = opt[FiniteDuration]()
       verify()
     }

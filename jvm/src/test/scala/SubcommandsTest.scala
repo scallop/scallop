@@ -23,7 +23,7 @@ class SubcommandsTest extends UsefulMatchers {
   test ("conf") {
     object Conf extends ScallopConf(Seq("-a", "tree", "-b")) {
       val apples = opt[Boolean]("apples")
-      val tree = new Subcommand("tree") {
+      object tree extends Subcommand("tree") {
         val bananas = opt[Boolean]("bananas")
       }
       addSubcommand(tree)
@@ -41,7 +41,7 @@ class SubcommandsTest extends UsefulMatchers {
   test ("options are not supplied") {
     object Conf extends ScallopConf(Seq()) {
       val apples = opt[Boolean]("apples")
-      val tree = new Subcommand("tree") {
+      object tree extends Subcommand("tree") {
         val bananas = opt[Boolean]("bananas")
       }
       addSubcommand(tree)
@@ -54,12 +54,12 @@ class SubcommandsTest extends UsefulMatchers {
 
   test ("two nested configs") {
     object Conf extends ScallopConf(Seq("palm","-b")) {
-      val tree = new Subcommand("tree") {
+      object tree extends Subcommand("tree") {
         val apples = opt[Boolean]("apples")
       }
       addSubcommand(tree)
 
-      val palm = new Subcommand("palm") {
+      object palm extends Subcommand("palm") {
         val bananas = opt[Boolean]("bananas")
       }
       addSubcommand(palm)
@@ -79,10 +79,10 @@ class SubcommandsTest extends UsefulMatchers {
 
   test ("4-level nested subcommands") {
     object Conf extends ScallopConf(Seq("sub1", "sub2", "sub3", "sub4", "win!")) {
-      val sub1 = new Subcommand("sub1") {
-        val sub2 = new Subcommand("sub2") {
-          val sub3 = new Subcommand("sub3") {
-            val sub4 = new Subcommand("sub4") {
+      object sub1 extends Subcommand("sub1") {
+        object sub2 extends Subcommand("sub2") {
+          object sub3 extends Subcommand("sub3") {
+            object sub4 extends Subcommand("sub4") {
               val opts = trailArg[List[String]]()
             }
             addSubcommand(sub4)
@@ -101,7 +101,7 @@ class SubcommandsTest extends UsefulMatchers {
 
   test ("equal names in two subcommands") {
     object Conf extends ScallopConf(Seq("tree","-a")) {
-      val tree = new Subcommand("tree") {
+      object tree extends Subcommand("tree") {
         val apples = opt[Boolean]("apples")
       }
       addSubcommand(tree)
@@ -118,7 +118,7 @@ class SubcommandsTest extends UsefulMatchers {
 
   test ("codependency, inside subcommand, success") {
     object Conf extends ScallopConf(Seq("tree", "-a", "-b")) {
-      val tree = new Subcommand("tree") {
+      object tree extends Subcommand("tree") {
         val apples = opt[Boolean]("apples")
         val bananas = opt[Boolean]("bananas")
         codependent(apples, bananas)
@@ -149,7 +149,7 @@ class SubcommandsTest extends UsefulMatchers {
   test ("codependency, across confs, success") {
     object Conf extends ScallopConf(Seq("-a", "tree", "-b")) {
       val apples = opt[Boolean]("apples")
-      val tree = new Subcommand("tree") {
+      object tree extends Subcommand("tree") {
         val bananas = opt[Boolean]("bananas")
       }
       addSubcommand(tree)
@@ -166,7 +166,7 @@ class SubcommandsTest extends UsefulMatchers {
     expectException(ValidationFailure("Either all or none of the following options should be supplied, because they are co-dependent: apples, bananas")) {
       new ScallopConf(Seq("-a", "tree")) {
         val apples = opt[Boolean]("apples")
-        val tree = new Subcommand("tree") {
+        object tree extends Subcommand("tree") {
           val bananas = opt[Boolean]("bananas")
         }
         addSubcommand(tree)
@@ -180,7 +180,7 @@ class SubcommandsTest extends UsefulMatchers {
 
   test ("no-option subcommands") {
     object Conf extends ScallopConf(Seq("tree")) {
-      val tree = new Subcommand("tree") {()}
+      val tree = new Subcommand("tree") {}
       addSubcommand(tree)
 
       verify()
@@ -190,7 +190,7 @@ class SubcommandsTest extends UsefulMatchers {
 
   test ("isSupplied, if there are no selected subcommands") {
     object Conf extends ScallopConf(Nil) {
-      val tree = new Subcommand("tree") {
+      object tree extends Subcommand("tree") {
         val apples = opt[Int]("apples")
       }
       addSubcommand(tree)
@@ -207,7 +207,7 @@ class SubcommandsTest extends UsefulMatchers {
       }
       addSubcommand(tree)
 
-      val palm = new Subcommand("palm") {
+      object palm extends Subcommand("palm") {
         val bananas = opt[Int]("bananas")
       }
       addSubcommand(palm)
@@ -219,10 +219,10 @@ class SubcommandsTest extends UsefulMatchers {
 
   test ("subcommand name as parameter to other subcommand") {
     object Conf extends ScallopConf(Seq("help", "tree")) {
-      val tree = new Subcommand("tree") {()}
+      val tree = new Subcommand("tree") {}
       addSubcommand(tree)
 
-      val help = new Subcommand("help")  {
+      object help extends Subcommand("help")  {
         val command = trailArg[String]()
       }
       addSubcommand(help)
@@ -234,7 +234,7 @@ class SubcommandsTest extends UsefulMatchers {
 
   test ("properties on subcommand") {
     object Conf extends ScallopConf(Seq("sub", "-Dkey1=value1")) {
-      val sub = new Subcommand("sub") {
+      object sub extends Subcommand("sub") {
         val properties = props[String]('D')
       }
       addSubcommand(sub)
@@ -245,20 +245,20 @@ class SubcommandsTest extends UsefulMatchers {
   }
 
   test ("subcommand name guessing") {
-    val conf = new ScallopConf(Seq("tree", "--apples", "42")) {
-      val tree = new Subcommand("tree") {
+    object Conf extends ScallopConf(Seq("tree", "--apples", "42")) {
+      object tree extends Subcommand("tree") {
         val apples = opt[Int]()
       }
       addSubcommand(tree)
 
       verify()
     }
-    conf.tree.apples.toOption shouldBe Some(42)
+    Conf.tree.apples.toOption shouldBe Some(42)
   }
 
   test ("isSupplied on subcommand options - true") {
-    val conf = new ScallopConf(Seq("tree", "--apples")) {
-      val tree = new Subcommand("tree") {
+    object Conf extends ScallopConf(Seq("tree", "--apples")) {
+      object tree extends Subcommand("tree") {
         val apples = opt[Boolean]()
       }
       addSubcommand(tree)
@@ -266,12 +266,12 @@ class SubcommandsTest extends UsefulMatchers {
       verify()
     }
 
-    conf.tree.apples.isSupplied shouldBe true
+    Conf.tree.apples.isSupplied shouldBe true
   }
 
   test ("isSupplied on subcommand options - false") {
-    val conf = new ScallopConf(Seq("tree")) {
-      val tree = new Subcommand("tree") {
+    object Conf extends ScallopConf(Seq("tree")) {
+      object tree extends Subcommand("tree") {
         val apples = opt[Boolean]()
       }
       addSubcommand(tree)
@@ -279,12 +279,12 @@ class SubcommandsTest extends UsefulMatchers {
       verify()
     }
 
-    conf.tree.apples.isSupplied shouldBe false
+    Conf.tree.apples.isSupplied shouldBe false
   }
 
   test ("subcommand aliases") {
     object Conf extends ScallopConf(Seq("apple", "-c", "42")) {
-      val fruit = new Subcommand("fruit", "apple", "banana") {
+      object fruit extends Subcommand("fruit", "apple", "banana") {
         val count = opt[Int]()
       }
       addSubcommand(fruit)
@@ -299,7 +299,7 @@ class SubcommandsTest extends UsefulMatchers {
 
   test ("require subcommand to be present - successfull case") {
     object Conf extends ScallopConf(Seq("fruit", "-c", "42")) {
-      val fruit = new Subcommand("fruit") {
+      object fruit extends Subcommand("fruit") {
         val count = opt[Int]()
       }
       addSubcommand(fruit)
@@ -328,8 +328,8 @@ class SubcommandsTest extends UsefulMatchers {
 
   test ("require several nested subcommands to be present - successfull case") {
     object Conf extends ScallopConf(Seq("fruit", "pick", "-c", "42")) {
-      val fruit = new Subcommand("fruit") {
-        val pick = new Subcommand("pick") {
+      object fruit extends Subcommand("fruit") {
+        object pick extends Subcommand("pick") {
           val count = opt[Int]()
         }
         addSubcommand(pick)

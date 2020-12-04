@@ -6,7 +6,7 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
   throwError.value = true
 
   test ("optional value - flatMap way") {
-    def getcf(args: Seq[String]) = new ScallopConf(args) {
+    case class getcf(args0: Seq[String]) extends ScallopConf(args0) {
       val foo = opt[Option[String]]()(stringListConverter.flatMap {
         case Nil => Right(None)
         case v :: Nil => Right(Option(Option(v)))
@@ -33,7 +33,7 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
     import org.rogach.scallop.exceptions.WrongOptionFormat
 
     def d(s: String) = new SimpleDateFormat("yyyy-MM-dd").parse(s)
-    def getcf(args: Seq[String]) = new ScallopConf(args) {
+    case class getcf(args0: Seq[String]) extends ScallopConf(args0) {
       implicit def dateConverter: ValueConverter[Date] = singleArgConverter[Date](new SimpleDateFormat("yyyyMMdd").parse(_))
 
       val from = opt[Date]("from")
@@ -54,36 +54,36 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
   }
 
   test("optDefault - no call") {
-    val conf = new ScallopConf() {
+    object Conf extends ScallopConf() {
       val apples = opt[Int]()(optDefault(5))
 
       verify()
     }
-    conf.apples.toOption ==== None
-    conf.apples.isSupplied ==== false
+    Conf.apples.toOption ==== None
+    Conf.apples.isSupplied ==== false
   }
   test("optDefault - empty call") {
-    val conf = new ScallopConf(Seq("-a")) {
+    object Conf extends ScallopConf(Seq("-a")) {
       val apples = opt[Int]()(optDefault(5))
 
       verify()
     }
-    conf.apples.toOption ==== Some(5)
-    conf.apples.isSupplied ==== true
+    Conf.apples.toOption ==== Some(5)
+    Conf.apples.isSupplied ==== true
   }
   test("optDefault - arg provided") {
-    val conf = new ScallopConf(Seq("-a", "7")) {
+    object Conf extends ScallopConf(Seq("-a", "7")) {
       val apples = opt[Int]()(optDefault(5))
 
       verify()
     }
-    conf.apples.toOption ==== Some(7)
-    conf.apples.isSupplied ==== true
+    Conf.apples.toOption ==== Some(7)
+    Conf.apples.isSupplied ==== true
   }
 
   test ("value converter is only called once when option is retrieved multiple times") {
     var callCount = 0
-    val conf = new ScallopConf(Seq("-a", "1")) {
+    object Conf extends ScallopConf(Seq("-a", "1")) {
       val apples = opt[Int]()(singleArgConverter { str =>
         callCount += 1
         str.toInt + 2
@@ -92,8 +92,8 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
 
       verify()
     }
-    conf.apples.toOption shouldBe Some(3)
-    conf.apples.toOption shouldBe Some(3)
+    Conf.apples.toOption shouldBe Some(3)
+    Conf.apples.toOption shouldBe Some(3)
     callCount shouldBe 1
   }
 

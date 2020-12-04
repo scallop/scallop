@@ -10,11 +10,11 @@ class ToggleOptionTest extends AnyFunSuite with Matchers {
   throwError.value = true
 
   test ("short name") {
-    val conf = new ScallopConf(Seq("-e")) {
+    object Conf extends ScallopConf(Seq("-e")) {
       val answer = toggle(name = "tgl-option", short = 'e', default = Some(false))
       verify()
     }
-    conf.answer() shouldBe true
+    Conf.answer() shouldBe true
   }
 
   test("unknown option") {
