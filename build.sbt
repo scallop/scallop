@@ -67,7 +67,10 @@ lazy val commonSettings = Seq(
   },
   publishMavenStyle := true,
   publishArtifact in Test := false,
-  scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/scallop/scallop/blob/develop/€{FILE_PATH}.scala"),
+  scalacOptions in (Compile, doc) ++= {
+    if (isDotty.value) Nil
+    else Opts.doc.sourceUrl("https://github.com/scallop/scallop/blob/develop/€{FILE_PATH}.scala")
+  },
   parallelExecution in Test := false,
   siteSubdirName in SiteScaladoc := "",
   git.remoteRepo := "git@github.com:scallop/scallop.git"
@@ -117,9 +120,4 @@ lazy val scallop =
     libraryDependencies ++= Seq(
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
     ),
-    // there is a strange bug "java.lang.IllegalArgumentException: malformed version: 0.6.17"
-    // when trying to test under Scala 2.12
-    Test / test := {
-      if (scalaVersion.value.startsWith("2.12")) () else (Test / test).value
-    },
   )
