@@ -12,4 +12,4 @@ jdk:
   - openjdk8
 
 script:
-  - sbt "++${TRAVIS_SCALA_VERSION}" scallopJVM/test scallopJS/test scallopNative/test
+  - sbt "++${TRAVIS_SCALA_VERSION}" scallopJVM/test scallopJS/test
