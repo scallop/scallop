@@ -90,112 +90,170 @@ case class Scallop(
   /** Parse the argument into list of options and their arguments. */
   private def parse(args: CSeq[String]): ParseResult = {
     subbuilders.filter(s => args.contains(s._1)).sortBy(s => args.indexOf(s._1)).headOption match {
-      case Some((name, sub)) => ParseResult(parse(Nil, args.takeWhile(name!=).toList), Some(name), args.dropWhile(name!=).drop(1).toList)
-      case None => ParseResult(parse(Nil, args.toList))
+      case Some((name, sub)) =>
+        ParseResult(
+          parse(Nil, args.takeWhile(name!=).toList, Nil),
+          Some(name),
+          args.dropWhile(name!=).drop(1).toList
+        )
+      case None =>
+        ParseResult(parse(Nil, args.toList, Nil))
     }
   }
   @annotation.tailrec
-  private def parse(acc: Parsed, args: List[String]): Parsed = {
-    def goParseRest(args: List[String], opt: Option[(String, CliOption)]): Parsed = {
-      def parseRest = {
-        val trailingOptions =
-          opt.map(o => (o._2, o._1, true)).toList :::
-          opts.filter(_.isPositional).map(o => (o, "", o.required))
-        val trailingConverters = trailingOptions.map {
-          case (opt, invocation, required) => (opt.converter, invocation, required)
-        }
+  private def parse(
+    acc: Parsed,
+    args: List[String],
+    leadingArgsAcc: List[String]
+  ): Parsed = {
 
-        val res = TrailingArgumentsParser.parse(args.toList, trailingConverters)
-        res match {
+    def goParseRest(
+      leadingArgs: List[String],
+      lastMultiArgOption: Option[(CliOption, String)],
+      trailingArgs: List[String]
+    ): Parsed = {
+      def parseRest() = {
+        val trailingOptions = opts.filter(_.isPositional)
+
+        val result = TrailingArgumentsParser.parse(
+          leadingArgs,
+          lastMultiArgOption,
+          trailingArgs,
+          trailingOptions
+        )
+        result match {
           case TrailingArgumentsParser.ParseResult(_, _, excess) if excess.nonEmpty =>
             throw ExcessArguments(excess)
 
-          case TrailingArgumentsParser.ParseResult(result, _, _) if result.exists(_.isLeft) =>
-            trailingOptions.zip(result).find(_._2.isLeft).get match {
-              case ((option, _, _), Left((message, args))) =>
-                if (option.required && (message == "not enough arguments"))
-                  throw RequiredOptionNotFound(option.name)
-                else
-                  throw WrongOptionFormat(option.name, args.mkString(" "), message)
-              case _ => throw MajorInternalException()
-            }
-
           case TrailingArgumentsParser.ParseResult(result, _, _) =>
-            trailingOptions.zip(result).flatMap {
-              case ((option, invocation, required), Right(args)) =>
-                if (args.nonEmpty || required) {
-                  List((option, (invocation, args)))
-                } else Nil
+            result.find(_._3.isLeft) match {
+              case None =>
+                result.flatMap {
+                  case (option, invocation, Right(args)) =>
+                    if (args.nonEmpty || option.required) {
+                      List((option, (invocation, args)))
+                    } else {
+                      Nil
+                    }
+                  case _ => throw MajorInternalException()
+                }
+              case Some((option, _, Left((message, args)))) =>
+                if (option.required && (message == "not enough arguments")) {
+                  throw RequiredOptionNotFound(option.name)
+                } else {
+                  throw WrongOptionFormat(option.name, args.mkString(" "), message)
+                }
               case _ => throw MajorInternalException()
             }
         }
       }
 
-      opt match {
-        case Some((invoc, o)) =>
-          // short-circuit parsing when there are no trailing args - to get better error messages
-          o.converter.argType match {
-            case ArgType.FLAG   =>
-              (o, (invoc, Nil)) :: goParseRest(args, None)
+      lastMultiArgOption match {
+        case Some((option, invocation)) =>
+          option.converter.argType match {
+            // handle simple option types immediately to avoid going into trailing args parsing with extra options
+            case ArgType.FLAG =>
+              (option, (invocation, Nil)) :: goParseRest(leadingArgs, None, trailingArgs)
             case ArgType.SINGLE =>
-              if (args.size > 0) {
-                (o, (invoc, args.take(1).toList)) :: goParseRest(args.tail, None)
+              if (trailingArgs.size > 0) {
+                (option, (invocation, trailingArgs.take(1).toList)) :: goParseRest(leadingArgs, None, trailingArgs.tail)
               } else {
-                throw new WrongOptionFormat(o.name, args.mkString, "you should provide exactly one argument")
+                throw new WrongOptionFormat(option.name, trailingArgs.mkString, "you should provide exactly one argument")
               }
-            case ArgType.LIST if args.isEmpty => List(o -> ((invoc, Nil)))
-            case ArgType.LIST => parseRest
+            // short-circuit parsing when there are no trailing args - to get better error messages
+            case ArgType.LIST if trailingArgs.isEmpty =>
+              List(option -> ((invocation, Nil)))
+            case ArgType.LIST => parseRest()
           }
-        case None => parseRest
+        case None => parseRest()
       }
     }
 
-    if (args.isEmpty) acc.reverse
-    else if (isOptionName(args.head) && args.head != "--") {
+    if (args.isEmpty) {
+      if (leadingArgsAcc.isEmpty) {
+        acc.reverse
+      } else {
+        // only trailing args left - proceed to trailing args parsing
+        acc.reverse ::: goParseRest(Nil, None, leadingArgsAcc.reverse ::: removeFirstTrailingArgsSeparator(args))
+      }
+    } else if (args.head == "--") {
+      // separator overrides any options that may follow, all remaining arguments go into trailing arguments
+      acc.reverse ::: goParseRest(leadingArgsAcc.reverse, None, args.tail)
+    } else if (isOptionName(args.head)) {
       if (args.head.startsWith("--")) {
         opts.find(_.longNames.exists(name => args.head.startsWith("--" + name + "="))) match {
 
-          // pase --arg=value option style
+          // parse --arg=value option style
           case Some(opt) =>
             val (invocation, arg) = args.head.drop(2).span('=' != _)
-            parse(acc = (opt, (invocation, List(arg.drop(1)))) :: acc, args = args.tail)
+            parse(
+              acc = (opt, (invocation, List(arg.drop(1)))) :: acc,
+              args = args.tail,
+              leadingArgsAcc = leadingArgsAcc
+            )
 
-          // parse usual --arg value... option style
+          // parse --arg value... option style
           case None =>
-            val optName = args.head.drop(2)
-            val opt =
-              opts.find(_.longNames.contains(optName))
-              .orElse(if (optName == "help") Some(getHelpOption) else None)
-              .orElse(if (optName == "version") getVersionOption else None)
-              .getOrElse(throw new UnknownOption(optName))
-            val (before, after) = args.tail.span(isArgument)
-            if (after.isEmpty) {
-              // get the converter, proceed to trailing args parsing
-              acc.reverse ::: goParseRest(args.tail, Some((args.head.drop(2),opt)))
+            val optionName = args.head.drop(2)
+            val option =
+              opts.find(_.longNames.contains(optionName))
+              .orElse(if (optionName == "help") Some(getHelpOption) else None)
+              .orElse(if (optionName == "version") getVersionOption else None)
+              .getOrElse(throw new UnknownOption(optionName))
+            val (matchedArgs, remainingArgs) =
+              option.converter.argType match {
+                case ArgType.FLAG => (Nil, args.tail)
+                case ArgType.SINGLE => (args.tail.take(1), args.tail.drop(1))
+                case ArgType.LIST => args.tail.span(isArgument)
+              }
+
+            if (remainingArgs.isEmpty) {
+              // proceed to trailing args parsing
+              acc.reverse ::: goParseRest(leadingArgsAcc.reverse, Some((option, args.head.drop(2))), args.tail)
             } else {
-              parse( acc = (opt -> ((args.head.drop(2), before.toList))) :: acc,
-                     args = after)
+              parse(
+                acc = (option -> ((args.head.drop(2), matchedArgs.toList))) :: acc,
+                args = remainingArgs,
+                leadingArgsAcc = leadingArgsAcc
+              )
             }
         }
       } else {
         if (args.head.size == 2) {
-          val opt = getOptionWithShortName(args.head(1)) getOrElse
+          val option = getOptionWithShortName(args.head(1)) getOrElse
                     (throw new UnknownOption(args.head.drop(1)))
-          val (before, after) = args.tail.span(isArgument)
-          if (after.isEmpty) {
-            // get the converter, proceed to trailing args parsing
-            acc.reverse ::: goParseRest(args.tail, Some((args.head.drop(1), opt)))
+          val (matchedArgs, remainingArgs) =
+            option.converter.argType match {
+              case ArgType.FLAG => (Nil, args.tail)
+              case ArgType.SINGLE => (args.tail.take(1), args.tail.drop(1))
+              case ArgType.LIST => args.tail.span(isArgument)
+            }
+
+          if (remainingArgs.isEmpty) {
+            // proceed to trailing args parsing
+            acc.reverse ::: goParseRest(leadingArgsAcc.reverse, Some((option, args.head.drop(1))), args.tail)
           } else {
-            parse( acc = (opt -> ((args.head.drop(1), before.toList))) :: acc,
-                   args = after)
+            parse(
+              acc = (option -> ((args.head.drop(1), matchedArgs.toList))) :: acc,
+              args = remainingArgs,
+              leadingArgsAcc = leadingArgsAcc
+            )
           }
         } else {
-          val opt = getOptionWithShortName(args.head(1)) getOrElse
+          val option = getOptionWithShortName(args.head(1)) getOrElse
                     (throw new UnknownOption(args.head(1).toString))
-          if (opt.converter.argType != ArgType.FLAG) {
-            parse(acc, args.head.take(2) :: args.head.drop(2) :: args.tail)
+          if (option.converter.argType != ArgType.FLAG) {
+            parse(
+              acc = acc,
+              args = args.head.take(2) :: args.head.drop(2) :: args.tail,
+              leadingArgsAcc = leadingArgsAcc
+            )
           } else {
-            parse(acc, args.head.take(2) :: ("-" + args.head.drop(2)) :: args.tail)
+            parse(
+              acc = acc,
+              args = args.head.take(2) :: ("-" + args.head.drop(2)) :: args.tail,
+              leadingArgsAcc = leadingArgsAcc
+            )
           }
         }
       }
@@ -205,15 +263,26 @@ case class Scallop(
       opts.filter(_.isInstanceOf[NumberArgOption]).drop(alreadyMatchedNumbers).headOption match {
         case Some(opt) =>
           val num = args.head.drop(1)
-          parse(acc = (opt, (num, List(num))) :: acc, args = args.tail)
+          parse(
+            acc = (opt, (num, List(num))) :: acc,
+            args = args.tail,
+            leadingArgsAcc = leadingArgsAcc
+          )
         case None =>
-          // only trailing args are left - proceed to trailing args parsing
-          acc.reverse ::: goParseRest(args, None)
+          parse(
+            acc,
+            args = args.tail,
+            leadingArgsAcc = args.head :: leadingArgsAcc
+          )
       }
     } else {
-      // only trailing args left - proceed to trailing args parsing
-      val trailArgs = if (args.head == "--") args.tail else args
-      acc.reverse ::: goParseRest(trailArgs, None)
+      // args.head is not an option, so it is a "leading trailing argument":
+      // trailing argument that may be followed by some options
+      parse(
+        acc,
+        args = args.tail,
+        leadingArgsAcc = args.head :: leadingArgsAcc
+      )
     }
   }
 
@@ -249,6 +318,10 @@ case class Scallop(
   /** Tests whether this string contains option parameter, not option call. */
   private def isArgument(s: String) = !isOptionName(s)
 
+  private def removeFirstTrailingArgsSeparator(args: List[String]): List[String] = {
+    val (argsBeforeSeparator, argsAfterSeparator) = args.span("--" != _)
+    argsBeforeSeparator ::: argsAfterSeparator.drop(1)
+  }
 
   /** Add a new option definition to this builder.
     *

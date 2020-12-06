@@ -588,7 +588,7 @@ For all other tricks, consult the documentation!
   }
 
   test ("tally no-args") {
-    expectException(WrongOptionFormat("apples", "stuff", "this option doesn't need arguments")) {
+    expectException(ExcessArguments(List("stuff"))) {
       val conf = new ScallopConf(Seq("-a", "stuff", "--verbose")) {
         val apples = tally()
         val verbose = opt[Boolean]()
