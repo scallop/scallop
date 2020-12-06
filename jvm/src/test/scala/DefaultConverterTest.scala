@@ -9,7 +9,7 @@ import scala.concurrent.duration._
 class DurationConverterTest extends AnyFunSuite with UsefulMatchers {
   throwError.value = true
 
-  test("convert to Duration") {
+  test ("convert to Duration") {
     def getcf(args: Seq[String]) = new ScallopConf(args) {
       val foo = opt[Duration]()
       verify()
@@ -28,7 +28,7 @@ class DurationConverterTest extends AnyFunSuite with UsefulMatchers {
 class FiniteDurationConverterTest extends AnyFunSuite with UsefulMatchers {
   throwError.value = true
 
-  test("convert to Duration") {
+  test ("convert to Duration") {
     def getcf(args: Seq[String]) = new ScallopConf(args) {
       val foo = opt[FiniteDuration]()
       verify()

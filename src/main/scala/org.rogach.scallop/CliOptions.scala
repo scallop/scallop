@@ -51,17 +51,17 @@ case class HelpInfo(
 )
 
 case class SimpleOption(
-    name: String,
-    short: Option[Char],
-    descr: String,
-    required: Boolean,
-    converter: ValueConverter[_],
-    default: () => Option[Any],
-    validator: (Any) => Boolean,
-    argName: String,
-    hidden: Boolean,
-    noshort: Boolean)
-  extends CliOption {
+  name: String,
+  short: Option[Char],
+  descr: String,
+  required: Boolean,
+  converter: ValueConverter[_],
+  default: () => Option[Any],
+  validator: (Any) => Boolean,
+  argName: String,
+  hidden: Boolean,
+  noshort: Boolean
+) extends CliOption {
 
   def isPositional = false
   def longNames = List(name)
@@ -80,14 +80,14 @@ case class SimpleOption(
 }
 
 case class PropertyOption(
-    name: String,
-    short: Char,
-    descr: String,
-    converter: ValueConverter[_],
-    keyName: String,
-    valueName: String,
-    hidden: Boolean)
-  extends CliOption {
+  name: String,
+  short: Char,
+  descr: String,
+  converter: ValueConverter[_],
+  keyName: String,
+  valueName: String,
+  hidden: Boolean
+) extends CliOption {
 
   def isPositional = false
   def longNames = Nil
@@ -104,13 +104,13 @@ case class PropertyOption(
 }
 
 case class LongNamedPropertyOption(
-    name: String,
-    descr: String,
-    converter: ValueConverter[_],
-    keyName: String,
-    valueName: String,
-    hidden: Boolean)
-  extends CliOption {
+  name: String,
+  descr: String,
+  converter: ValueConverter[_],
+  keyName: String,
+  valueName: String,
+  hidden: Boolean
+) extends CliOption {
 
   def isPositional = false
   def longNames = List(name)
@@ -127,14 +127,14 @@ case class LongNamedPropertyOption(
 }
 
 case class TrailingArgsOption(
-    name: String,
-    required: Boolean,
-    descr: String,
-    converter: ValueConverter[_],
-    validator: (Any) => Boolean,
-    default: () => Option[Any],
-    hidden: Boolean)
-  extends CliOption {
+  name: String,
+  required: Boolean,
+  descr: String,
+  converter: ValueConverter[_],
+  validator: (Any) => Boolean,
+  default: () => Option[Any],
+  hidden: Boolean
+) extends CliOption {
 
   def isPositional = true
   def longNames = Nil
@@ -148,14 +148,14 @@ case class TrailingArgsOption(
 }
 
 case class NumberArgOption(
-    name: String,
-    required: Boolean,
-    descr: String,
-    converter: ValueConverter[Long],
-    validator: (Any) => Boolean,
-    default: () => Option[Long],
-    hidden: Boolean)
-  extends CliOption {
+  name: String,
+  required: Boolean,
+  descr: String,
+  converter: ValueConverter[Long],
+  validator: (Any) => Boolean,
+  default: () => Option[Long],
+  hidden: Boolean
+) extends CliOption {
 
   def isPositional = false
   def longNames = Nil
@@ -169,15 +169,15 @@ case class NumberArgOption(
 }
 
 case class ToggleOption(
-    name: String,
-    default: () => Option[Boolean],
-    short: Option[Char],
-    noshort: Boolean,
-    prefix: String,
-    descrYes: String,
-    descrNo: String,
-    hidden: Boolean)
-  extends CliOption {
+  name: String,
+  default: () => Option[Boolean],
+  short: Option[Char],
+  noshort: Boolean,
+  prefix: String,
+  descrYes: String,
+  descrNo: String,
+  hidden: Boolean
+) extends CliOption {
 
   def descr = ""
   def isPositional = false

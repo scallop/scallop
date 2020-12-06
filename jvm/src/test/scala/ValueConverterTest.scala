@@ -26,7 +26,7 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
   }
 
   /** https://github.com/Rogach/scallop/issues/57 */
-  test("issue#57: WrongOptionFormat expected and no NoSuchElementException") {
+  test ("issue#57: WrongOptionFormat expected and no NoSuchElementException") {
     import java.text.SimpleDateFormat
     import java.util.{Date, GregorianCalendar}
     import java.util.Calendar._
@@ -53,7 +53,7 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
     }
   }
 
-  test("optDefault - no call") {
+  test ("optDefault - no call") {
     val conf = new ScallopConf() {
       val apples = opt[Int]()(optDefault(5))
 
@@ -62,7 +62,7 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
     conf.apples.toOption ==== None
     conf.apples.isSupplied ==== false
   }
-  test("optDefault - empty call") {
+  test ("optDefault - empty call") {
     val conf = new ScallopConf(Seq("-a")) {
       val apples = opt[Int]()(optDefault(5))
 
@@ -71,7 +71,7 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
     conf.apples.toOption ==== Some(5)
     conf.apples.isSupplied ==== true
   }
-  test("optDefault - arg provided") {
+  test ("optDefault - arg provided") {
     val conf = new ScallopConf(Seq("-a", "7")) {
       val apples = opt[Int]()(optDefault(5))
 

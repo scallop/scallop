@@ -7,7 +7,7 @@ import org.rogach.scallop.exceptions._
 class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
   throwError.value = true
 
-  test("dependsOnAny - success, option is not provided") {
+  test ("dependsOnAny - success, option is not provided") {
     new ScallopConf(List()){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
@@ -17,7 +17,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
       verify()
     }
   }
-  test("dependsOnAny - failure, option is provided, but dependency is not ") {
+  test ("dependsOnAny - failure, option is provided, but dependency is not ") {
     expectException(ValidationFailure("When specifying 'apples', at least one of the following options must be provided: bananas, coconuts")) {
       new ScallopConf(List("-a", "1")){
         val apples = opt[Int]("apples")
@@ -29,7 +29,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
       }
     }
   }
-  test("dependsOnAny - success, option and dependency are provided") {
+  test ("dependsOnAny - success, option and dependency are provided") {
     new ScallopConf(List("-a","1","-b","2")){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
@@ -39,7 +39,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
       verify()
     }
   }
-  test("dependsOnAny - success, option and two dependencies are provided") {
+  test ("dependsOnAny - success, option and two dependencies are provided") {
     new ScallopConf(List("-a","1","-b","2","-c","3")){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
@@ -50,7 +50,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
     }
   }
 
-  test("dependsOnAll - success, option is not provided") {
+  test ("dependsOnAll - success, option is not provided") {
      new ScallopConf(List()){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
@@ -60,7 +60,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
       verify()
     }
   }
-  test("dependsOnAll - failure, option is provided, but no dependencies") {
+  test ("dependsOnAll - failure, option is provided, but no dependencies") {
     expectException(ValidationFailure("When specifying 'apples', all of the following options must also be provided: bananas, coconuts")) {
       new ScallopConf(List("-a", "1")){
         val apples = opt[Int]("apples")
@@ -72,7 +72,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
       }
     }
   }
-  test("dependsOnAll - failure, only one dependency is provided") {
+  test ("dependsOnAll - failure, only one dependency is provided") {
     expectException(ValidationFailure("When specifying 'apples', all of the following options must also be provided: bananas, coconuts")) {
       new ScallopConf(List("-a","1","-b","2")){
         val apples = opt[Int]("apples")
@@ -85,7 +85,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
     }
   }
 
-  test("dependsOnAll - success, option and two dependencies are provided") {
+  test ("dependsOnAll - success, option and two dependencies are provided") {
     new ScallopConf(List("-a","1","-b","2","-c","3")){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
@@ -96,7 +96,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
     }
   }
 
-  test("conflicts - success, no options are provided") {
+  test ("conflicts - success, no options are provided") {
     new ScallopConf(List()){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
@@ -107,7 +107,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
     }
   }
 
-  test("conflicts - success, only one option is provided") {
+  test ("conflicts - success, only one option is provided") {
     new ScallopConf(List("-a", "1")){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
@@ -117,7 +117,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
     }
   }
 
-  test("conflicts - failure, both options are provided") {
+  test ("conflicts - failure, both options are provided") {
     expectException(ValidationFailure("Option 'apples' conflicts with option 'bananas'")) {
       new ScallopConf(List("-a","1","-b","2")){
         val apples = opt[Int]("apples")
@@ -129,7 +129,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
     }
   }
 
-  test("requireAtLeastOne - failure, nothing is provided") {
+  test ("requireAtLeastOne - failure, nothing is provided") {
     expectException(ValidationFailure("There should be at least one of the following options: apples, bananas")) {
       new ScallopConf(List()){
         val apples = opt[Int]("apples")
@@ -141,7 +141,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
     }
   }
 
-  test("requireAtLeastOne - success, one is provided") {
+  test ("requireAtLeastOne - success, one is provided") {
     new ScallopConf(List("-b","2")){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
@@ -151,7 +151,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
     }
   }
 
-  test("requireAtLeastOne - success, all are provided") {
+  test ("requireAtLeastOne - success, all are provided") {
     new ScallopConf(List("-a","1","-b","2")){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
@@ -161,7 +161,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
     }
   }
 
-  test("requireOne - failure, no options are provided") {
+  test ("requireOne - failure, no options are provided") {
     expectException(ValidationFailure("There should be exactly one of the following options: apples, bananas")) {
       new ScallopConf(List()){
         val apples = opt[Int]("apples")
@@ -173,7 +173,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
     }
   }
 
-  test("requireOne - success, one is provided") {
+  test ("requireOne - success, one is provided") {
     new ScallopConf(List("-a", "1")){
       val apples = opt[Int]("apples")
       val bananas = opt[Int]("bananas")
@@ -183,7 +183,7 @@ class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
     }
   }
 
-  test("requireOne - failure, both options are provided") {
+  test ("requireOne - failure, both options are provided") {
     expectException(ValidationFailure("There should be exactly one of the following options: apples, bananas")) {
       new ScallopConf(List("-a","1","-b","2")){
         val apples = opt[Int]("apples")

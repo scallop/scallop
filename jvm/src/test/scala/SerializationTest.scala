@@ -12,7 +12,7 @@ class TestConf(args: List[String]) extends ScallopConf(args) with Serialization 
 class SerializationTest extends AnyFunSuite with Matchers with UsefulMatchers {
   throwError.value = true
 
-  test("simple ScallopConf serialization") {
+  test ("simple ScallopConf serialization") {
     val conf = new TestConf(List("-a","3"))
 
     val bos = new ByteArrayOutputStream()

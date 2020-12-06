@@ -266,16 +266,17 @@ case class Scallop(
     * @param hidden Hides description of this option from help (this can be useful for debugging options)
     */
   def opt[A](
-      name: String,
-      short: Char = '\u0000',
-      descr: String = "",
-      default: () => Option[A] = () => None,
-      validate: A => Boolean = ((_:A) => true),
-      required: Boolean = false,
-      argName: String = "arg",
-      hidden: Boolean = false,
-      noshort: Boolean = noshort)
-      (implicit conv: ValueConverter[A]): Scallop = {
+    name: String,
+    short: Char = '\u0000',
+    descr: String = "",
+    default: () => Option[A] = () => None,
+    validate: A => Boolean = ((_:A) => true),
+    required: Boolean = false,
+    argName: String = "arg",
+    hidden: Boolean = false,
+    noshort: Boolean = noshort
+  )(implicit conv: ValueConverter[A]): Scallop = {
+
     if (name.head.isDigit) throw new IllegalOptionParameters(Util.format("First character of the option name must not be a digit: %s", name))
     val defaultA =
       if (conv == flagConverter)
@@ -286,16 +287,18 @@ case class Scallop(
       else default
     val eShort = if (short == '\u0000' || noshort) None else Some(short)
     val validator = { (a:Any) => validate(a.asInstanceOf[A]) }
-    this.copy(opts = opts :+ SimpleOption(name,
-                                          eShort,
-                                          descr,
-                                          required,
-                                          conv,
-                                          defaultA,
-                                          validator,
-                                          argName,
-                                          hidden,
-                                          noshort))
+    this.copy(opts = opts :+ SimpleOption(
+      name,
+      eShort,
+      descr,
+      required,
+      conv,
+      defaultA,
+      validator,
+      argName,
+      hidden,
+      noshort
+    ))
   }
 
   /** Add new property option definition to this builder.
@@ -306,27 +309,39 @@ case class Scallop(
     * @param valueName Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to "value".
     */
   def props[A](
-      name: Char,
-      descr: String = "",
-      keyName: String = "key",
-      valueName: String = "value",
-      hidden: Boolean = false)
-      (implicit conv: ValueConverter[Map[String,A]]): Scallop =
-    this.copy(opts = opts :+ PropertyOption(name.toString, name, descr, conv, keyName, valueName, hidden))
+    name: Char,
+    descr: String = "",
+    keyName: String = "key",
+    valueName: String = "value",
+    hidden: Boolean = false
+  )(implicit conv: ValueConverter[Map[String,A]]): Scallop = {
+    this.copy(opts = opts :+ PropertyOption(
+      name.toString,
+      name,
+      descr,
+      conv,
+      keyName,
+      valueName,
+      hidden
+    ))
+  }
 
   def propsLong[A](
-      name: String,
-      descr: String = "",
-      keyName: String = "key",
-      valueName: String = "value",
-      hidden: Boolean = false)
-      (implicit conv: ValueConverter[Map[String,A]]): Scallop =
-    this.copy(opts = opts :+ LongNamedPropertyOption(name,
-                                                     descr,
-                                                     conv,
-                                                     keyName,
-                                                     valueName,
-                                                     hidden))
+    name: String,
+    descr: String = "",
+    keyName: String = "key",
+    valueName: String = "value",
+    hidden: Boolean = false
+  )(implicit conv: ValueConverter[Map[String,A]]): Scallop = {
+    this.copy(opts = opts :+ LongNamedPropertyOption(
+      name,
+      descr,
+      conv,
+      keyName,
+      valueName,
+      hidden
+    ))
+  }
 
   /** Add new trailing argument definition to this builder.
     *
@@ -337,13 +352,14 @@ case class Scallop(
     * @param validate The function, that validates the parsed value
     */
   def trailArg[A](
-      name: String,
-      required: Boolean = true,
-      descr: String = "",
-      default: () => Option[A] = () => None,
-      validate: A => Boolean = ((_:A) => true),
-      hidden: Boolean = false)
-      (implicit conv: ValueConverter[A]): Scallop = {
+    name: String,
+    required: Boolean = true,
+    descr: String = "",
+    default: () => Option[A] = () => None,
+    validate: A => Boolean = ((_:A) => true),
+    hidden: Boolean = false
+  )(implicit conv: ValueConverter[A]): Scallop = {
+
     val defaultA =
       if (conv == flagConverter)
         { () =>
@@ -352,13 +368,15 @@ case class Scallop(
         }
       else default
     val validator = { (a:Any) => validate(a.asInstanceOf[A]) }
-    this.copy(opts = opts :+ TrailingArgsOption(name,
-                                                required,
-                                                descr,
-                                                conv,
-                                                validator,
-                                                defaultA,
-                                                hidden))
+    this.copy(opts = opts :+ TrailingArgsOption(
+      name,
+      required,
+      descr,
+      conv,
+      validator,
+      defaultA,
+      hidden
+    ))
   }
 
   /** Add new number argument definition to this builder.
@@ -371,13 +389,13 @@ case class Scallop(
     * @param hidden If set to true then this option will not be present in auto-generated help.
     */
   def number(
-      name: String,
-      required: Boolean = false,
-      descr: String = "",
-      default: () => Option[Long] = () => None,
-      validate: Long => Boolean = ((_:Long) => true),
-      hidden: Boolean = false)
-      (implicit conv: ValueConverter[Long]): Scallop = {
+    name: String,
+    required: Boolean = false,
+    descr: String = "",
+    default: () => Option[Long] = () => None,
+    validate: Long => Boolean = ((_:Long) => true),
+    hidden: Boolean = false
+  )(implicit conv: ValueConverter[Long]): Scallop = {
 
     val validator = { (a: Any) => validate(a.asInstanceOf[Long]) }
     this.copy(opts = opts :+ NumberArgOption(
@@ -404,23 +422,27 @@ case class Scallop(
     * @param hidden If set to true, then this option will not be present in auto-generated help.
     */
   def toggle(
-      name: String,
-      default: () => Option[Boolean] = () => None,
-      short: Char = '\u0000',
-      noshort: Boolean = noshort,
-      prefix: String = "no",
-      descrYes: String = "",
-      descrNo: String = "",
-      hidden: Boolean = false) = {
+    name: String,
+    default: () => Option[Boolean] = () => None,
+    short: Char = '\u0000',
+    noshort: Boolean = noshort,
+    prefix: String = "no",
+    descrYes: String = "",
+    descrNo: String = "",
+    hidden: Boolean = false
+  ) = {
+
     val eShort = if (short == '\u0000' || noshort) None else Some(short)
-    this.copy(opts = opts :+ ToggleOption(name,
-                                          default,
-                                          eShort,
-                                          noshort,
-                                          prefix,
-                                          descrYes,
-                                          descrNo,
-                                          hidden))
+    this.copy(opts = opts :+ ToggleOption(
+      name,
+      default,
+      eShort,
+      noshort,
+      prefix,
+      descrYes,
+      descrNo,
+      hidden
+    ))
   }
 
   /** Adds a subbuilder (subcommand) to this builder.

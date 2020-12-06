@@ -5,7 +5,7 @@ import org.scalatest.matchers.should.Matchers
 
 class NoshortDefaultValueTest extends UsefulMatchers with CapturingTest with Matchers with Inspectors {
 
-  test("noshort default value via ScallopConf") {
+  test ("noshort default value via ScallopConf") {
 
     case class NoshortConf(initialNoshort: Boolean, reassignedNoshort: Boolean) extends ScallopConf(List("-a", "x", "-b", "x", "-c", "-d")) {
       noshort = initialNoshort // for all subsequent options, set global default for noshort to initialNoshort
@@ -34,7 +34,7 @@ class NoshortDefaultValueTest extends UsefulMatchers with CapturingTest with Mat
     }}
   }
 
-  test("noshort default value via Scallop") {
+  test ("noshort default value via Scallop") {
     forAll(List(false, true)) { noshort => {
       val conf = Scallop(Seq("-a", "x", "-b"), noshort = noshort)
         .opt[String]("a1")

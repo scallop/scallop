@@ -15,17 +15,17 @@ class MapCodependenceTest extends AnyFunSuite with UsefulMatchers {
     verify()
   }
 
-  test("failing codependency including unsupplied map") {
+  test ("failing codependency including unsupplied map") {
     expectException(ValidationFailure("Either all or none of the following options should be supplied, because they are co-dependent: apples, bananas")) {
       new TestConf(Seq("--apples"))
     }
   }
 
-  test("succeeding codependency including supplied map") {
+  test ("succeeding codependency including supplied map") {
     new TestConf(Seq("--apples", "--bananas", "zoop=zop"))
   }
 
-  test("succeeding codependency including unsupplied map") {
+  test ("succeeding codependency including unsupplied map") {
     new TestConf(Seq.empty)
   }
 

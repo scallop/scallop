@@ -13,8 +13,8 @@ class OptionNameGuessing extends UsefulMatchers {
 
       verify()
     }
-    Conf.appleso() should equal (1)
-    Conf.bananaso.toOption should equal (None)
+    Conf.appleso() shouldBe 1
+    Conf.bananaso.toOption shouldBe None
   }
 
   test ("shadowing with derived option") {
@@ -24,10 +24,10 @@ class OptionNameGuessing extends UsefulMatchers {
 
       verify()
     }
-    Conf.apples() should equal (1)
-    Conf.applesPlus() should equal (3)
-    Conf.apples.isSupplied shouldEqual true
-    Conf.applesPlus.isSupplied shouldEqual true
+    Conf.apples() shouldBe 1
+    Conf.applesPlus() shouldBe 3
+    Conf.apples.isSupplied shouldBe true
+    Conf.applesPlus.isSupplied shouldBe true
   }
 
   test ("tricky") {
@@ -40,10 +40,10 @@ class OptionNameGuessing extends UsefulMatchers {
 
       verify()
     }
-    Conf.appleso() should equal (1)
-    Conf.applesPlus() should equal (3)
-    Conf.bananaso.toOption should equal (None)
-    Conf.aaa.toOption should equal (None)
+    Conf.appleso() shouldBe 1
+    Conf.applesPlus() shouldBe 3
+    Conf.bananaso.toOption shouldBe None
+    Conf.aaa.toOption shouldBe None
   }
 
   test ("camelCase convert") {
@@ -52,7 +52,7 @@ class OptionNameGuessing extends UsefulMatchers {
 
       verify()
     }
-    Conf.appleTreeo() should equal (1)
+    Conf.appleTreeo() shouldBe 1
   }
 
   test ("guessing in subcommands") {
@@ -64,7 +64,7 @@ class OptionNameGuessing extends UsefulMatchers {
 
       verify()
     }
-    Conf.tree.apples() should equal (3)
+    Conf.tree.apples() shouldBe 3
   }
 
   test ("replacing of the name in mapped ScallopOptions") {
@@ -73,7 +73,7 @@ class OptionNameGuessing extends UsefulMatchers {
 
       verify()
     }
-    Conf.xs.toOption ==== Some(1)
+    Conf.xs.toOption shouldBe Some(1)
   }
 
   test ("replacing of the name in doubly mapped ScallopOptions") {
@@ -82,10 +82,10 @@ class OptionNameGuessing extends UsefulMatchers {
 
       verify()
     }
-    Conf.xs.toOption ==== Some("1")
+    Conf.xs.toOption shouldBe Some("1")
   }
 
-  test("trailArg name guessing") {
+  test ("trailArg name guessing") {
     object Conf extends ScallopConf(List("1", "foo", "bar", "baz", "bippy")) {
       val trailing1 = trailArg[Int]()
       val trailing2 = trailArg[List[String]]()
@@ -98,7 +98,7 @@ class OptionNameGuessing extends UsefulMatchers {
     Conf.trailing2.toOption should be (Some(List("foo", "bar", "baz", "bippy")))
   }
 
-  test("toggle name guessing") {
+  test ("toggle name guessing") {
     object Conf extends ScallopConf(List("--foo", "--nobippy", "-s")) {
       val foo = toggle()
       val zoop = toggle()
@@ -107,16 +107,16 @@ class OptionNameGuessing extends UsefulMatchers {
 
       verify()
     }
-    Conf.foo.name should be ("foo")
-    Conf.zoop.name should be ("zoop")
-    Conf.bippy.name should be ("bippy")
-    Conf.foo.toOption should be (Some(true))
-    Conf.zoop.toOption should be (None)
-    Conf.bippy.toOption should be (Some(false))
-    Conf.scooby.toOption should be (Some(true))
+    Conf.foo.name shouldBe "foo"
+    Conf.zoop.name shouldBe "zoop"
+    Conf.bippy.name shouldBe "bippy"
+    Conf.foo.toOption shouldBe Some(true)
+    Conf.zoop.toOption shouldBe None
+    Conf.bippy.toOption shouldBe Some(false)
+    Conf.scooby.toOption shouldBe Some(true)
   }
 
-  test("decode special symbols") {
+  test ("decode special symbols") {
     object Conf extends ScallopConf(List()) {
       val `source-folder` = opt[String]()
       verify()
