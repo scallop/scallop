@@ -1,13 +1,17 @@
 import sbtcrossproject.crossProject
 
+val snapshotVersion = sys.env.get("SNAPSHOT_VERSION")
+
 lazy val commonSettings = Seq(
   organization := "org.rogach",
   name := "scallop",
   version := {
+    snapshotVersion.getOrElse {
     val versionRegexp = """[0-9]+\.[0-9]+\.[0-9]+""".r
-    val libraryDependenciesString =
-      scala.io.Source.fromFile("README.md").getLines.filter(_.contains("libraryDependencies")).mkString
-    versionRegexp.findFirstIn(libraryDependenciesString).get
+      val libraryDependenciesString =
+        scala.io.Source.fromFile("README.md").getLines.filter(_.contains("libraryDependencies")).mkString
+        versionRegexp.findFirstIn(libraryDependenciesString).get
+    }
   },
   scalaVersion := "2.13.2",
   crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.11", "2.13.2", "0.27.0-RC1"),
@@ -51,11 +55,11 @@ lazy val commonSettings = Seq(
   ),
   pomIncludeRepository := { x => false },
   publishTo := {
-    val snapshot = false
-    if (snapshot)
+    if (snapshotVersion.isDefined) {
       Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
-    else
+    } else {
       Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
+    }
   },
   publishMavenStyle := true,
   publishArtifact in Test := false,
