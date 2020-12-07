@@ -53,7 +53,7 @@ class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
 
 object Main {
   def main(args: Array[String]) {
-    val conf = new Conf(args)  // Note: This line also works for "object Main extends App"
+    val conf = new Conf(args)
     println("apples are: " + conf.apples())
   }
 }
