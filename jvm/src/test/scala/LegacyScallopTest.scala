@@ -2,7 +2,6 @@ package org.rogach.scallop
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import reflect.runtime.universe._
 
 class LegacyScallopTest extends AnyFunSuite with Matchers with CapturingTest {
 
@@ -433,7 +432,6 @@ For all other tricks, consult the documentation!
           case Nil => Right(None) // no person found
           case _ => Left("wrong arguments format") // error when parsing
         }
-      val tag = typeTag[Person] // some magic to make typing work
       val argType = org.rogach.scallop.ArgType.LIST
     }
     val opts = Scallop(List("--person", "Pete", "123-45"))
