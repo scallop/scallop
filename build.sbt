@@ -1,4 +1,8 @@
-import sbtcrossproject.crossProject
+lazy val scalaVersionsJS  = Seq("2.13.4", "2.12.12", "2.11.12")
+lazy val scalaVersionsJVM = "3.0.0-M2" +: scalaVersionsJS
+lazy val scalaVersionsSN  = Seq("2.11.12")
+
+lazy val scalaTestVersion = "3.2.3"
 
 val snapshotVersion = sys.env.get("SNAPSHOT_VERSION")
 
@@ -7,30 +11,34 @@ lazy val commonSettings = Seq(
   name := "scallop",
   version := {
     snapshotVersion.getOrElse {
-    val versionRegexp = """[0-9]+\.[0-9]+\.[0-9]+""".r
-      val libraryDependenciesString =
-        scala.io.Source.fromFile("README.md").getLines.filter(_.contains("libraryDependencies")).mkString
-        versionRegexp.findFirstIn(libraryDependenciesString).get
+      val versionRegexp = """[0-9]+\.[0-9]+\.[0-9]+""".r
+      val libraryDependenciesString: String = {
+        val io = scala.io.Source.fromFile("README.md")
+        try {
+          io.getLines.filter(_.contains("libraryDependencies")).mkString
+        } finally {
+          io.close()
+        }
+      }
+      versionRegexp.findFirstIn(libraryDependenciesString).get
     }
   },
-  scalaVersion := "2.13.2",
-  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.11", "2.13.2", "0.27.0-RC1"),
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
     "-feature",
     "-language:postfixOps,reflectiveCalls,existentials,implicitConversions",
-    "-Xlint"
+    "-Xlint",
   ),
   unmanagedSourceDirectories in Compile += {
     val base = baseDirectory.value.getParentFile / "src" / "main"
     CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((0, _)) =>
-        base / s"scala-2.13+"
+      case Some((3, _)) =>
+        base / "scala-2.13+"
       case Some((2, v)) if v >= 13 =>
-        base / s"scala-2.13+"
+        base / "scala-2.13+"
       case _ =>
-        base / s"scala-2.13-"
+        base / "scala-2.13-"
     }
   },
   licenses := Seq(
@@ -63,7 +71,10 @@ lazy val commonSettings = Seq(
   },
   publishMavenStyle := true,
   publishArtifact in Test := false,
-  scalacOptions in (Compile, doc) ++= Opts.doc.sourceUrl("https://github.com/scallop/scallop/blob/develop/€{FILE_PATH}.scala"),
+  scalacOptions in (Compile, doc) ++= {
+    if (isDotty.value) Nil
+    else Opts.doc.sourceUrl("https://github.com/scallop/scallop/blob/develop/€{FILE_PATH}.scala")
+  },
   parallelExecution in Test := false,
   siteSubdirName in SiteScaladoc := "",
   git.remoteRepo := "git@github.com:scallop/scallop.git"
@@ -71,7 +82,7 @@ lazy val commonSettings = Seq(
 
 lazy val scallop =
   crossProject(JVMPlatform, NativePlatform, JSPlatform)
-  .crossType(new sbtcrossproject.CrossType {
+  .crossType(new sbtcrossproject.CrossType { // like CrossType.Full, but with shared sources in root
     def projectDir(crossBase: File, projectType: String): File =
       crossBase / projectType
     def projectDir(crossBase: File, platform: sbtcrossproject.Platform): File =
@@ -84,12 +95,14 @@ lazy val scallop =
   .enablePlugins(SiteScaladocPlugin, GhpagesPlugin)
   .configure(_.enablePlugins(spray.boilerplate.BoilerplatePlugin))
   .jvmSettings(
+    crossScalaVersions  := scalaVersionsJVM,
+    scalaVersion        := scalaVersionsJVM.head,
     libraryDependencies ++= {
       if (scalaVersion.value.startsWith("0")) {
         Seq()
       } else {
         Seq(
-          "org.scalatest" %%% "scalatest" % "3.1.1" % Test
+          "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
         )
       }
     },
@@ -102,11 +115,13 @@ lazy val scallop =
     scalacOptions in Test -= "-Xlint"
   )
   .nativeSettings(
-    scalaVersion := "2.11.12",
-    crossScalaVersions := Seq("2.11.12")
+    crossScalaVersions := scalaVersionsSN,
+    scalaVersion       := scalaVersionsSN.head,
   )
   .jsSettings(
+    crossScalaVersions := scalaVersionsJS,
+    scalaVersion       := scalaVersionsJS.head,
     libraryDependencies ++= Seq(
-      "org.scalatest" %%% "scalatest" % "3.1.1" % Test
-    )
+      "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
+    ),
   )

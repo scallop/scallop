@@ -9,19 +9,19 @@ class NumberOptionTest extends AnyFunSuite with Matchers with CapturingTest with
   throwError.value = true
 
   test ("number option") {
-    val conf = new ScallopConf(Seq("-42")) {
+    object Conf extends ScallopConf(Seq("-42")) {
       val answer = number()
       verify()
     }
-    conf.answer() shouldBe 42
+    Conf.answer() shouldBe 42
   }
 
   test ("required number option provided") {
-    val conf = new ScallopConf(Seq("-42")) {
+    object Conf extends ScallopConf(Seq("-42")) {
       val answer = number(required = true)
       verify()
     }
-    conf.answer.toOption shouldBe Some(42)
+    Conf.answer.toOption shouldBe Some(42)
   }
 
   test ("required number option not provided") {
@@ -34,15 +34,15 @@ class NumberOptionTest extends AnyFunSuite with Matchers with CapturingTest with
   }
 
   test ("multiple number options") {
-    val conf = new ScallopConf(Seq("-1", "-2", "-3")) {
+    object Conf extends ScallopConf(Seq("-1", "-2", "-3")) {
       val first = number()
       val second = number()
       val third = number()
       verify()
     }
-    conf.first() shouldBe 1
-    conf.second() shouldBe 2
-    conf.third() shouldBe 3
+    Conf.first() shouldBe 1
+    Conf.second() shouldBe 2
+    Conf.third() shouldBe 3
   }
 
   test ("number option validation success") {

@@ -6,7 +6,7 @@ import java.nio.file.{InvalidPathException,Path,Paths}
 
 package object scallop extends DefaultConverters {
   implicit val fileConverter: ValueConverter[File] =
-    singleArgConverter(new File(_))
+    singleArgConverter(new File(_), PartialFunction.empty)  // Note: important to provide default arg (Dotty)
   implicit val fileListConverter: ValueConverter[List[File]] =
     listArgConverter(new File(_))
   implicit val pathConverter: ValueConverter[Path] = singleArgConverter[Path](Paths.get(_), {

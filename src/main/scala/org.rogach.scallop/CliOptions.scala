@@ -69,7 +69,7 @@ case class SimpleOption(
   def requiredShortNames = if (noshort) Nil else short.toList
 
   def argLine(sh: List[Char]): String = {
-    (List(sh.map("-" +), List("--" + name)).flatten.mkString(", ") + "  " + converter.argFormat(argName)).trim
+    (List(sh.map("-" + _), List("--" + name)).flatten.mkString(", ") + "  " + converter.argFormat(argName)).trim
   }
   def helpInfo(sh: List[Char]) = List(HelpInfo(
     argLine(sh),
@@ -217,7 +217,7 @@ case class ToggleOption(
 
   def argLine(sh: List[Char]): String = throw new MajorInternalException
   def helpInfo(sh: List[Char]) = List(
-    HelpInfo((sh.map("-" +) ++ List("--" + name) mkString ", "), descrYes, () => None),
+    HelpInfo((sh.map("-" + _) ++ List("--" + name) mkString ", "), descrYes, () => None),
     HelpInfo(("--" + prefix + name), descrNo, () => None)
   )
 

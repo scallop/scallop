@@ -22,7 +22,7 @@ trait DefaultConverters {
   def singleArgConverter[A](
     conv: String => A,
     handler: PartialFunction[Throwable, Either[String, Option[A]]] = PartialFunction.empty
-  ) = new ValueConverter[A] {
+  ): ValueConverter[A] = new ValueConverter[A] {
     def parse(s: List[(String, List[String])]) = {
       s match {
         case (_, i :: Nil) :: Nil =>
@@ -37,16 +37,18 @@ trait DefaultConverters {
   }
 
   // for some reason direct usages of singleArgConverter sometimes fail to compile under Dotty 0.27.0-RC1
-  // this wrapper "fixes" the issue
+  // this wrapper "fixes" the issue.
+  // __Note:__ this was due to package object scallop using the default argument for java.io.File first;
+  // Explicit handler is now defined, and this method should be superfluous.
   def singleArgConverter2[A](
     conv: String => A,
     handler: PartialFunction[Throwable, Either[String, Option[A]]] = PartialFunction.empty
-  ) = singleArgConverter(conv, handler)
+  ): ValueConverter[A] = singleArgConverter(conv, handler)
 
   implicit val charConverter: ValueConverter[Char] =
-    singleArgConverter2[Char](_.head)
+    singleArgConverter2[Char](_.head, PartialFunction.empty)
   implicit val stringConverter: ValueConverter[String] =
-    singleArgConverter2[String](identity)
+    singleArgConverter2[String](identity, PartialFunction.empty)
 
   /** Handler function for numeric types which expects a NumberFormatException and prints a more
     * helpful error message.
@@ -74,12 +76,12 @@ trait DefaultConverters {
     singleArgConverter(BigDecimal(_), numberHandler("decimal"))
   implicit val durationConverter: ValueConverter[Duration] =
     singleArgConverter2(Duration(_))
-  implicit val finiteDurationConverter: ValueConverter[FiniteDuration] = singleArgConverter2[FiniteDuration] { arg =>
+  implicit val finiteDurationConverter: ValueConverter[FiniteDuration] = singleArgConverter2[FiniteDuration]({ arg =>
     Duration(arg) match {
       case d: FiniteDuration => d
       case d => throw new IllegalArgumentException(s"'$d' is not a FiniteDuration.")
     }
-  }
+  }, PartialFunction.empty)
 
   def listArgConverter[A](conv: String => A) = new ValueConverter[List[A]] {
     def parse(s:List[(String, List[String])]) = {

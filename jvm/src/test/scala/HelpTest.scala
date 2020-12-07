@@ -221,7 +221,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         }
         addSubcommand(peach)
 
-        val submarine = new Subcommand("submarine") {()}
+        val submarine = new Subcommand("submarine") {}
         addSubcommand(submarine)
 
         verify()
@@ -485,52 +485,52 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
   test ("implicit short option name should override help printing") {
     val exits = trapExit {
-      val conf = new ScallopConf(Seq("-h")) {
+      object Conf extends ScallopConf(Seq("-h")) {
         val hard = opt[Boolean]()
         verify()
       }
-      conf.hard() shouldEqual true
+      Conf.hard() shouldEqual true
     }
     exits.size shouldEqual 0
   }
 
   test ("implicit short option name should override version printing") {
     val exits = trapExit {
-      val conf = new ScallopConf(Seq("-v")) {
+      object Conf extends ScallopConf(Seq("-v")) {
         val verbose = opt[Boolean]()
         version("1.0")
         verify()
       }
-      conf.verbose() shouldEqual true
+      Conf.verbose() shouldEqual true
     }
     exits.size shouldEqual 0
   }
 
   test ("implicit short option name in subcommand should override help printing") {
     val exits = trapExit {
-      val config = new ScallopConf(Seq("cmd", "-h")) {
-        val cmd = new Subcommand("cmd") {
+      object Config extends ScallopConf(Seq("cmd", "-h")) {
+        object cmd extends Subcommand("cmd") {
           val hard = opt[Boolean]()
         }
         addSubcommand(cmd)
         verify()
       }
-      config.cmd.hard() shouldEqual true
+      Config.cmd.hard() shouldEqual true
     }
     exits.size shouldEqual 0
   }
 
   test ("implicit short option name in subcommand should override version printing") {
     val exits = trapExit {
-      val config = new ScallopConf(Seq("cmd", "-v")) {
+      object Config extends ScallopConf(Seq("cmd", "-v")) {
         version("Version 1.0")
-        val cmd = new Subcommand("cmd") {
+        object cmd extends Subcommand("cmd") {
           val verbose = opt[Boolean]()
         }
         addSubcommand(cmd)
         verify()
       }
-      config.cmd.verbose() shouldEqual true
+      Config.cmd.verbose() shouldEqual true
     }
     exits.size shouldEqual 0
   }

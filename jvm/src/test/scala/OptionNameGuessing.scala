@@ -57,7 +57,7 @@ class OptionNameGuessing extends UsefulMatchers {
 
   test ("guessing in subcommands") {
     object Conf extends ScallopConf(Seq("tree", "--apples", "3")) {
-      val tree = new Subcommand("tree") {
+      object tree extends Subcommand("tree") {
         val apples = opt[Int]()
       }
       addSubcommand(tree)
