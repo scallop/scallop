@@ -2,7 +2,7 @@ package org.rogach.scallop
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import java.io.{Serializable, ByteArrayOutputStream, ByteArrayInputStream, ObjectOutputStream, ObjectInputStream}
+import java.io.{ByteArrayOutputStream, ByteArrayInputStream, ObjectOutputStream, ObjectInputStream}
 
 class TestConf(args: List[String]) extends ScallopConf(args) with Serialization {
   val apples = opt[Int]("apples")

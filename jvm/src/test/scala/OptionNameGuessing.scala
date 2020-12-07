@@ -1,8 +1,5 @@
 package org.rogach.scallop
 
-import org.rogach.scallop._
-import org.rogach.scallop.exceptions._
-
 class OptionNameGuessing extends UsefulMatchers {
   throwError.value = true
 

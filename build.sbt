@@ -32,8 +32,11 @@ lazy val commonSettings = Seq(
     "-unchecked",
     "-feature",
     "-language:postfixOps,reflectiveCalls,existentials,implicitConversions",
-    "-Xlint",
   ),
+  scalacOptions ++= {
+    if (isDotty.value) Nil
+    else Seq("-Xlint")
+  },
   unmanagedSourceDirectories in Compile += {
     val base = baseDirectory.value.getParentFile / "src" / "main"
     CrossVersion.partialVersion(scalaVersion.value) match {
@@ -101,22 +104,15 @@ lazy val scallop =
   .jvmSettings(
     crossScalaVersions  := scalaVersionsJVM,
     scalaVersion        := scalaVersionsJVM.head,
-    libraryDependencies ++= {
-      if (scalaVersion.value.startsWith("0")) {
-        Seq()
-      } else {
-        Seq(
-          "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
-        )
-      }
-    },
+    libraryDependencies ++= Seq(
+      "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
+    ),
     // fix for paths to source files in scaladoc
     doc in Compile := {
       import sys.process._
       Seq("bash","-c",""" for x in $(find jvm/target/scala-2.13/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
       (doc in Compile).value
     },
-    scalacOptions in Test -= "-Xlint",
   )
   .nativeSettings(
     crossScalaVersions := scalaVersionsSN,

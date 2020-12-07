@@ -1,8 +1,6 @@
 package org.rogach.scallop
 
 import org.scalatest.funsuite.AnyFunSuite
-import org.rogach.scallop._
-import org.rogach.scallop.exceptions._
 
 class CustomErrorMessageHandlerTest extends AnyFunSuite with UsefulMatchers {
   throwError.value = false

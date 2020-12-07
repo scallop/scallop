@@ -2,7 +2,6 @@ package org.rogach.scallop
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
 class TrailingArgumentsParseTest extends AnyFunSuite with Matchers with UsefulMatchers {
@@ -45,14 +44,14 @@ class TrailingArgumentsParseTest extends AnyFunSuite with Matchers with UsefulMa
   }
 
   test ("non-required trailing option after flag") {
-    object Conf extends ScallopConf(Seq("-a")) {
+    object conf extends ScallopConf(Seq("-a")) {
       val apple = opt[Boolean]("apple")
       val banana = trailArg[String](required = false)
 
       verify()
     }
-    Conf.apple.toOption shouldBe Some(true)
-    Conf.banana.toOption shouldBe None
+    conf.apple.toOption shouldBe Some(true)
+    conf.banana.toOption shouldBe None
   }
 
   test ("proper error message on trailing file option failure") {

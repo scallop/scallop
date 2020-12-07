@@ -2,7 +2,6 @@ package org.rogach.scallop
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
 
 /*
@@ -595,11 +594,12 @@ For all other tricks, consult the documentation!
 
   test ("tally no-args") {
     expectException(ExcessArguments(List("stuff"))) {
-      val conf = new ScallopConf(Seq("-a", "stuff", "--verbose")) {
+      object Conf extends ScallopConf(Seq("-a", "stuff", "--verbose")) {
         val apples = tally()
         val verbose = opt[Boolean]()
         verify()
       }
+      Conf
     }
   }
 
@@ -631,21 +631,22 @@ For all other tricks, consult the documentation!
 
   test ("verification on subconfigs") {
     expectException(WrongOptionFormat("apples", "b", "bad Int value")) {
-      val conf = new ScallopConf(Seq("tree", "-a", "b")) {
-        val tree = new Subcommand("tree") {
+      object Conf extends ScallopConf(Seq("tree", "-a", "b")) {
+        object tree extends Subcommand("tree") {
           val apples = opt[Int]()
         }
         addSubcommand(tree)
 
         verify()
       }
+      Conf
     }
   }
 
   test ("validation failure on subconfigs") {
     expectException(ValidationFailure("tree: a + b must be < 3")) {
-      val conf = new ScallopConf(Seq("tree", "-a", "1", "-b", "5")) {
-        val tree = new Subcommand("tree") {
+      object Conf extends ScallopConf(Seq("tree", "-a", "1", "-b", "5")) {
+        object tree extends Subcommand("tree") {
           val apples = opt[Int]()
           val bananas = opt[Int]()
           validate(apples, bananas) { (a, b) =>
@@ -657,13 +658,14 @@ For all other tricks, consult the documentation!
 
         verify()
       }
+      Conf
     }
   }
 
   test ("validation failure on nested subconfigs") {
     expectException(ValidationFailure("branch: a + b must be < 3")) {
-      val conf = new ScallopConf(Seq("tree", "branch", "-a", "1", "-b", "5")) {
-        val tree = new Subcommand("tree") {
+      object Conf extends ScallopConf(Seq("tree", "branch", "-a", "1", "-b", "5")) {
+        object tree extends Subcommand("tree") {
           val branch = new Subcommand("branch") {
             val apples = opt[Int]()
             val bananas = opt[Int]()
@@ -678,13 +680,14 @@ For all other tricks, consult the documentation!
 
         verify()
       }
+      Conf
     }
   }
 
   test ("validationOpt failure on subconfigs") {
     expectException(ValidationFailure("both a and b must be supplied")) {
-      val conf = new ScallopConf(Seq("tree", "-a", "1")) {
-        val tree = new Subcommand("tree") {
+      object Conf extends ScallopConf(Seq("tree", "-a", "1")) {
+        object tree extends Subcommand("tree") {
           val apples = opt[Int]()
           val bananas = opt[Int]()
           validateOpt(apples, bananas) {
@@ -696,6 +699,7 @@ For all other tricks, consult the documentation!
 
         verify()
       }
+      Conf
     }
   }
 
@@ -765,7 +769,7 @@ For all other tricks, consult the documentation!
 
   test ("accessing unverified builder from default option value resolver") {
     intercept[Help] {
-      class Conf (arguments: Seq[String]) extends ScallopConf(arguments) {
+      class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
         appendDefaultToDescription = true
         val protocol = opt[String](default = Some("http"))
         val port = opt[Int](default = protocol() match {
@@ -776,6 +780,7 @@ For all other tricks, consult the documentation!
       }
 
       val conf = new Conf(Seq("--help"))
+      conf.port() // to suppress "never used" warning
     }
   }
 

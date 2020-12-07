@@ -2,14 +2,12 @@ package org.rogach.scallop
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import org.rogach.scallop._
-import org.rogach.scallop.exceptions._
 
 class LoadTest extends AnyFunSuite with Matchers {
 
   ignore ("trail options") {
     val start = System.currentTimeMillis
-    val opts = Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3"))
+    Scallop(List("-Ekey1=value1", "key2=value2", "key3=value3"))
       .props[String]('E')
       .trailArg[String]("first list name")
       .trailArg[List[Int]]("first list values")

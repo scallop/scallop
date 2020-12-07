@@ -6,7 +6,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
   test ("help printing") {
     val (out, err) = captureOutput {
       val exits = trapExit {
-        new ScallopConf(List("--help")) {
+        object Conf extends ScallopConf(List("--help")) {
           version("0.1.2")
           banner("some rubbish")
           footer("and some more")
@@ -34,6 +34,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
           verify()
         }
+        Conf
       }
       exits.size should equal (1)
     }
@@ -67,7 +68,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
   test ("subcommand description in output") {
     val (out, err) = captureOutput {
       val exits = trapExit {
-        new ScallopConf(List("--help")) {
+        object Conf extends ScallopConf(List("--help")) {
           version("0.1.2")
           val apples = opt[Int]("apples", descr = "fresh apples!")
 
@@ -79,6 +80,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
           verify()
         }
+        Conf
       }
       exits.size should equal (1)
     }
@@ -111,11 +113,12 @@ class HelpTest extends UsefulMatchers with CapturingTest {
   test ("version printing") {
     val (out, err) = captureOutput {
       val exits = trapExit {
-        new ScallopConf(List("--version")) {
+        object Conf extends ScallopConf(List("--version")) {
           version("0.1.2")
           val apples = opt[Int]("apples")
           verify()
         }
+        Conf
       }
       exits.size should equal (1)
     }
@@ -126,11 +129,12 @@ class HelpTest extends UsefulMatchers with CapturingTest {
   test ("version printing (short argument)") {
     val (out, err) = captureOutput {
       val exits = trapExit {
-        new ScallopConf(List("-v")) {
+        object Conf extends ScallopConf(List("-v")) {
           version("0.1.2")
           val apples = opt[Int]("apples")
           verify()
         }
+        Conf
       }
       exits.size should equal (1)
     }
@@ -141,10 +145,11 @@ class HelpTest extends UsefulMatchers with CapturingTest {
   test ("help printing (short argument)") {
     captureOutput {
       val exits = trapExit {
-        new ScallopConf(List("-h")) {
+        object Conf extends ScallopConf(List("-h")) {
           val apples = opt[Int]("apples")
           verify()
         }
+        Conf
       }
       exits.size should equal (1)
     }
@@ -153,7 +158,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
   test ("help for subcommand") {
     val (out, err, exits) = captureOutputAndExits {
-      new ScallopConf(Seq("tree", "--help")) {
+      object Conf extends ScallopConf(Seq("tree", "--help")) {
         val tree = new Subcommand("tree") {
           banner("Planting a tree")
           val apples = opt[Int](descr = "how many apples?")
@@ -164,6 +169,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
         verify()
       }
+      Conf
     }
 
     exits ==== List(0)
@@ -181,7 +187,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
   test ("help for subcommand two levels deep") {
     val (out, err, exits) = captureOutputAndExits {
-      new ScallopConf(Seq("tree", "peach", "--help")) {
+      object Conf extends ScallopConf(Seq("tree", "peach", "--help")) {
         val tree = new Subcommand("tree") {
           val peach = new Subcommand("peach") {
             val apples = opt[Int](descr = "how many apples?")
@@ -192,6 +198,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
         verify()
       }
+      Conf
     }
 
     exits ==== List(0)
@@ -205,7 +212,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
   test ("short format for subcommands help") {
     val (out, _, _) = captureOutputAndExits {
-      new ScallopConf(Seq("--help")) {
+      object Conf extends ScallopConf(Seq("--help")) {
         banner("Planting a tree.")
         shortSubcommandsHelp()
         val bananas = opt[Int]("bananas")
@@ -226,6 +233,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
         verify()
       }
+      Conf
     }
 
     out ====
@@ -297,11 +305,12 @@ class HelpTest extends UsefulMatchers with CapturingTest {
   test ("user-provided help option works with short-named argument") {
     val (out, err) = captureOutput {
       val exits = trapExit {
-        new ScallopConf(Seq("-?")) {
+        object Conf extends ScallopConf(Seq("-?")) {
           val help = opt[Boolean]("help", short = '?', descr = "custom help descr")
 
           verify()
         }
+        Conf
       }
       exits.size ==== 1
     }

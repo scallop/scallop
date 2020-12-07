@@ -1,7 +1,5 @@
 package org.rogach.scallop
 
-import org.rogach.scallop.exceptions._
-
 class StrangeTest extends UsefulMatchers with CapturingTest {
   throwError.value = false
 
@@ -32,12 +30,13 @@ class StrangeTest extends UsefulMatchers with CapturingTest {
   test ("changing printed program name") {
     overrideColorOutput.withValue(Some(false)) {
       val (out, err, exits) = captureOutputAndExits {
-        new ScallopConf(Seq()) {
+        object Conf extends ScallopConf(Seq()) {
           val apples = trailArg[Int]("beans")
           printedName = "beans"
 
           verify()
         }
+        Conf
       }
       exits ==== List(1)
       out ==== ""

@@ -1,9 +1,6 @@
 package org.rogach.scallop
 
-import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import org.rogach.scallop._
-import org.rogach.scallop.exceptions._
 
 class DefaultNames extends UsefulMatchers with CapturingTest with Matchers {
 

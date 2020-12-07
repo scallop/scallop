@@ -2,9 +2,7 @@ package org.rogach.scallop
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import org.rogach.scallop._
 import org.rogach.scallop.exceptions._
-
 
 class ToggleOptionTest extends AnyFunSuite with Matchers {
   throwError.value = true
@@ -19,10 +17,11 @@ class ToggleOptionTest extends AnyFunSuite with Matchers {
 
   test ("unknown option") {
     assertThrows[UnknownOption] {
-      val conf = new ScallopConf(Seq("-t")) {
+      object Conf extends ScallopConf(Seq("-t")) {
         val answer = toggle(name = "tgl-option", short = 'e', default = Some(false))
         verify()
       }
+      Conf
     }
   }
 

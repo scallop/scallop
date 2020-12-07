@@ -28,11 +28,9 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
   /** https://github.com/Rogach/scallop/issues/57 */
   test ("issue#57: WrongOptionFormat expected and no NoSuchElementException") {
     import java.text.SimpleDateFormat
-    import java.util.{Date, GregorianCalendar}
-    import java.util.Calendar._
+    import java.util.Date
     import org.rogach.scallop.exceptions.WrongOptionFormat
 
-    def d(s: String) = new SimpleDateFormat("yyyy-MM-dd").parse(s)
     case class getcf(args0: Seq[String]) extends ScallopConf(args0) {
       implicit def dateConverter: ValueConverter[Date] = singleArgConverter[Date](new SimpleDateFormat("yyyyMMdd").parse(_))
 

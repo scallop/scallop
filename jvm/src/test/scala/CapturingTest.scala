@@ -8,8 +8,6 @@ import java.security.Permission
 trait CapturingTest {
   /** Captures all output from the *fn* block into two strings - (stdout, stderr). */
   def captureOutput(fn: => Unit):(String,String) = {
-    val normalOut = Console.out
-    val normalErr = Console.err
     val streamOut = new ByteArrayOutputStream()
     val streamErr = new ByteArrayOutputStream()
     Console.withOut(streamOut) {
