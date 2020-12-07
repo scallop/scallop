@@ -36,19 +36,10 @@ trait DefaultConverters {
     val argType = ArgType.SINGLE
   }
 
-  // for some reason direct usages of singleArgConverter sometimes fail to compile under Dotty 0.27.0-RC1
-  // this wrapper "fixes" the issue.
-  // __Note:__ this was due to package object scallop using the default argument for java.io.File first;
-  // Explicit handler is now defined, and this method should be superfluous.
-  def singleArgConverter2[A](
-    conv: String => A,
-    handler: PartialFunction[Throwable, Either[String, Option[A]]] = PartialFunction.empty
-  ): ValueConverter[A] = singleArgConverter(conv, handler)
-
   implicit val charConverter: ValueConverter[Char] =
-    singleArgConverter2[Char](_.head, PartialFunction.empty)
+    singleArgConverter[Char](_.head, PartialFunction.empty)
   implicit val stringConverter: ValueConverter[String] =
-    singleArgConverter2[String](identity, PartialFunction.empty)
+    singleArgConverter[String](identity, PartialFunction.empty)
 
   /** Handler function for numeric types which expects a NumberFormatException and prints a more
     * helpful error message.
@@ -75,8 +66,8 @@ trait DefaultConverters {
   implicit val bigDecimalConverter: ValueConverter[BigDecimal] =
     singleArgConverter(BigDecimal(_), numberHandler("decimal"))
   implicit val durationConverter: ValueConverter[Duration] =
-    singleArgConverter2(Duration(_))
-  implicit val finiteDurationConverter: ValueConverter[FiniteDuration] = singleArgConverter2[FiniteDuration]({ arg =>
+    singleArgConverter(Duration(_))
+  implicit val finiteDurationConverter: ValueConverter[FiniteDuration] = singleArgConverter[FiniteDuration]({ arg =>
     Duration(arg) match {
       case d: FiniteDuration => d
       case d => throw new IllegalArgumentException(s"'$d' is not a FiniteDuration.")
