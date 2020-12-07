@@ -3,8 +3,8 @@ Scallop
 
 [![Build Status](https://api.travis-ci.org/scallop/scallop.svg?branch=develop)](https://travis-ci.org/scallop/scallop)
 
-A simple command-line arguments parsing library for Scala, written in spirit of Ruby's [Trollop](http://manageiq.github.io/trollop/).
-Cross-built for Scala 2.11, 2.12, 2.13, Dotty, supports Scala Native and Scala JS.
+A simple command-line arguments parsing library for Scala.
+Cross-built for Scala 3.0, 2.13, 2.12, 2.11, 2.10, supports Scala Native and Scala JS.
 
 Scallop supports:
 
