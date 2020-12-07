@@ -15,7 +15,7 @@ class ScallopHelpFormatter {
   }
 
   protected def getOptionsHelp(s: Scallop): String = {
-    Formatter format (
+    Formatter.format(
       getOptionLines(s) flatMap {
         case None => List(None)
         case Some(o) => o.helpInfo(s.getOptionShortNames(o)).map(Some(_))
@@ -68,7 +68,7 @@ class ScallopHelpFormatter {
     if (trailOpts.isEmpty) {
       ""
     } else {
-      val trailHelp = Formatter format (
+      val trailHelp = Formatter.format(
         trailOpts flatMap (_.helpInfo(Nil)) map (Some(_)),
         s.helpWidth,
         needToAppendDefaultToDescription(s)
