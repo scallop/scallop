@@ -12,5 +12,6 @@ object NativeTests {
         """  -a, --apples  <arg>
           |  -h, --help            Show help message""".stripMargin
     )
+    println("\u001b[0;32m" + "native test success" + "\u001b[0m")
   }
 }
