@@ -1,6 +1,7 @@
 package org.rogach.scallop
 
 import org.scalatest.funsuite.AnyFunSuite
+import org.rogach.scallop.exceptions._
 
 class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
   throwError.value = true
@@ -46,7 +47,7 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
       verify()
     }
 
-    expectException(WrongOptionFormat("from", "201305xx", "wrong arguments format")) {
+    expectException(WrongOptionFormat("from", "201305xx", "java.text.ParseException: Unparseable date: \"201305xx\"")) {
       getcf(List("-f", "201305xx", "-t", "20130515")).from()
     }
   }
@@ -93,6 +94,28 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
     Conf.apples.toOption shouldBe Some(3)
     Conf.apples.toOption shouldBe Some(3)
     callCount shouldBe 1
+  }
+
+  test ("ValueConverter.map catches errors thrown from transformation function") {
+    val stringToIntConverter = implicitly[ValueConverter[String]].map(_.toInt)
+    expectException(WrongOptionFormat("apples", "x", "java.lang.NumberFormatException: For input string: \"x\"")) {
+      object Conf extends ScallopConf(Seq("-a", "x")) {
+        val apples = opt[Int]()(stringToIntConverter)
+        verify()
+      }
+      Conf
+    }
+  }
+
+  test ("ValueConverter.flatMap catches errors thrown from transformation function") {
+    val stringToIntConverter = implicitly[ValueConverter[String]].flatMap(i => Right(Some(i.toInt)))
+    expectException(WrongOptionFormat("apples", "x", "java.lang.NumberFormatException: For input string: \"x\"")) {
+      object Conf extends ScallopConf(Seq("-a", "x")) {
+        val apples = opt[Int]()(stringToIntConverter)
+        verify()
+      }
+      Conf
+    }
   }
 
 }

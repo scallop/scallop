@@ -364,7 +364,7 @@ class SubcommandsTest extends UsefulMatchers {
 
   test ("sharing arguments with inheritance") {
     class Conf(args: Seq[String]) extends ScallopConf(args) {
-      trait B { _: ScallopConf => // <<< NB: otherwise you will get Option identifier 'o' is not unique (calls `opt` on the parent class `Conf` twice)
+      trait B { this: ScallopConf => // <<< NB: otherwise you will get Option identifier 'o' is not unique (calls `opt` on the parent class `Conf` twice)
         val o = opt[Boolean](name = "o")
       }
       object c1 extends Subcommand("c1") with B

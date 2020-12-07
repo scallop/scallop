@@ -27,7 +27,7 @@ trait DefaultConverters {
       s match {
         case (_, i :: Nil) :: Nil =>
           Try(Right(Some(conv(i)))).recover(handler).recover({
-            case _: Exception => Left("wrong arguments format")
+            case e: Exception => Left(e.toString)
           }).get
         case Nil => Right(None)
         case _ => Left("you should provide exactly one argument for this option")
@@ -80,8 +80,8 @@ trait DefaultConverters {
         val l = s.map(_._2).flatten.map(i => conv(i))
         if (l.isEmpty) Right(None)
         else Right(Some(l))
-      } catch { case _: Exception =>
-        Left("wrong arguments format")
+      } catch { case e: Exception =>
+        Left(e.toString)
       }
     }
     val argType = ArgType.LIST

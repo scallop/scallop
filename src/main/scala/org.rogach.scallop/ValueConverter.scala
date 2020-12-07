@@ -1,5 +1,7 @@
 package org.rogach.scallop
 
+import scala.util.Try
+
 /** Converter from list of plain strings to something meaningful. */
 trait ValueConverter[A] { parent =>
 
@@ -37,9 +39,12 @@ trait ValueConverter[A] { parent =>
     * }}}
     */
   def map[B](fn: A => B) = new ValueConverter[B] { child =>
-    def parse(s: List[(String,List[String])]) =
+    def parse(s: List[(String, List[String])]) =
       parent.parse(s) match {
-        case Right(parseResult) => Right(parseResult.map(fn))
+        case Right(parseResult) =>
+          Try(Right(parseResult.map(fn)))
+            .recover({ case e: Exception => Left(e.toString) })
+            .get
         case Left(msg) => Left(msg)
       }
     val argType = parent.argType
@@ -47,10 +52,12 @@ trait ValueConverter[A] { parent =>
 
   def flatMap[B](fn: A => Either[String, Option[B]]) =
     new ValueConverter[B] { child =>
-      def parse(s: List[(String,List[String])]) =
+      def parse(s: List[(String, List[String])]) =
         parent.parse(s) match {
           case Right(Some(parseResult)) =>
-            fn(parseResult)
+            Try(fn(parseResult))
+              .recover({ case e: Exception => Left(e.toString) })
+              .get
           case Right(None) => Right(None)
           case Left(msg) => Left(msg)
         }

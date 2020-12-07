@@ -19,7 +19,7 @@ class DurationConverterTest extends AnyFunSuite with UsefulMatchers {
     getcf(List("-f", "Inf")).foo.toOption ==== Some(Duration.Inf)
     getcf(List("-f", "MinusInf")).foo.toOption ==== Some(Duration.MinusInf)
 
-    expectException(WrongOptionFormat("foo", "bar", "wrong arguments format")) {
+    expectException(WrongOptionFormat("foo", "bar", "java.lang.NumberFormatException: format error bar")) {
       getcf(List("-f", "bar")).foo.toOption ==== Some(Duration.MinusInf)
     }
   }
@@ -36,11 +36,11 @@ class FiniteDurationConverterTest extends AnyFunSuite with UsefulMatchers {
 
     getcf(List("-f", "1 minute")).foo.toOption ==== Some(1.minute)
 
-    expectException(WrongOptionFormat("foo", "Inf", "wrong arguments format")) {
+    expectException(WrongOptionFormat("foo", "Inf", "java.lang.IllegalArgumentException: 'Duration.Inf' is not a FiniteDuration.")) {
       getcf(List("-f", "Inf")).foo.toOption ==== Some(Duration.Inf)
     }
 
-    expectException(WrongOptionFormat("foo", "bar", "wrong arguments format")) {
+    expectException(WrongOptionFormat("foo", "bar", "java.lang.NumberFormatException: format error bar")) {
       getcf(List("-f", "bar")).foo.toOption ==== Some(Duration.MinusInf)
     }
   }

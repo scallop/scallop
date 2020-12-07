@@ -6,6 +6,7 @@ class Isolated extends UsefulMatchers with CapturingTest {
 
   test ("i") {
     object Conf extends ScallopConf(Seq()) {
+      val apples = opt[Int]()
       verify()
     }
     Conf.args shouldBe Seq()

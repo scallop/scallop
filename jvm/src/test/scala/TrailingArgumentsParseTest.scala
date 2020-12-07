@@ -274,7 +274,7 @@ class TrailingArgumentsParseTest extends AnyFunSuite with Matchers with UsefulMa
   }
 
   test ("trailing args: error if provided after multi-arg option and not at the end of the argument list") {
-    expectException(WrongOptionFormat("apples", "42 gamma", "wrong arguments format")) {
+    expectException(WrongOptionFormat("apples", "42 gamma", "java.lang.NumberFormatException: For input string: \"gamma\"")) {
       object conf extends ScallopConf(Seq("-a", "42", "gamma", "-b")) {
         val apples = opt[List[Int]]()
         val bananas = opt[Boolean]()

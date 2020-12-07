@@ -122,7 +122,7 @@ class ErrorsTest extends AnyFunSuite with Matchers with UsefulMatchers {
   }
 
   test ("subcommand parse failure") {
-    expectException(WrongOptionFormat("apples", "a", "wrong arguments format")) {
+    expectException(WrongOptionFormat("apples", "a", "java.lang.NumberFormatException: For input string: \"a\"")) {
       new ScallopConf(Seq("tree", "a")) {
         val tree = new Subcommand("tree") {
           val apples = trailArg[List[Int]]()
