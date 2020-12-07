@@ -6,6 +6,10 @@ lazy val scalaTestVersion = "3.2.3"
 
 val snapshotVersion = sys.env.get("SNAPSHOT_VERSION")
 
+// To prevent double-testing and double-publishing when using "+" operator in SBT
+// https://www.scala-sbt.org/1.x/docs/Cross-Build.html#Cross+building+a+project+statefully
+crossScalaVersions := Nil
+
 lazy val commonSettings = Seq(
   organization := "org.rogach",
   name := "scallop",
@@ -77,7 +81,7 @@ lazy val commonSettings = Seq(
   },
   parallelExecution in Test := false,
   siteSubdirName in SiteScaladoc := "",
-  git.remoteRepo := "git@github.com:scallop/scallop.git"
+  git.remoteRepo := "git@github.com:scallop/scallop.git",
 )
 
 lazy val scallop =
@@ -112,11 +116,16 @@ lazy val scallop =
       Seq("bash","-c",""" for x in $(find jvm/target/scala-2.13/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
       (doc in Compile).value
     },
-    scalacOptions in Test -= "-Xlint"
+    scalacOptions in Test -= "-Xlint",
   )
   .nativeSettings(
     crossScalaVersions := scalaVersionsSN,
     scalaVersion       := scalaVersionsSN.head,
+    // ScalaTest currently doesn't work with Scala Native (see for example: https://github.com/scala-native/scala-native/issues/1930)
+    // thus we will disable testing temporarily and wait until Scala Native releases stable 0.4 version and ScalaTest
+    // will publish binaries for that version.
+    // Until that time we have can do a crude test by calling scallopNative/test:run
+    test := {}
   )
   .jsSettings(
     crossScalaVersions := scalaVersionsJS,

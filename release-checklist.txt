@@ -2,14 +2,11 @@ Release
 =======
 * Bump the version (in README.md).
 
-* Test the changes:
-sbt "++2.11.12 scallopNative/test:run" "++2.12.11 scallopJS/test" "++2.13.2 scallopJS/test" "++2.10.7 scallopJVM/test" "++2.11.12 scallopJVM/test" "++2.12.11 scallopJVM/test" "++2.13.2 scallopJVM/test"
-
-* Publish artifacts:
-sbt "++2.11.12 scallopNative/publishSigned" "++2.12.11 scallopJS/publishSigned" "++2.13.2 scallopJS/publishSigned" "++2.10.7 scallopJVM/publishSigned" "++2.11.12 scallopJVM/publishSigned" "++2.12.11 scallopJVM/publishSigned" "++2.13.2 scallopJVM/publishSigned" "++0.27.0-RC1 scallopJVM/publishSigned"
+* Test the changes: sbt "+test" "+scallopNative/test:run"
+* Publish artifacts: sbt "+publishSigned"
 * Commit the changes.
 * Tag the release (in develop branch).
 * Close the release in Nexus UI.
 * Push latest version to github. (push --all; push --tags)
-* Update API docs (jvm/ghpages-push-site).
+* Update API docs (scallopJVM/ghpagesPushSite).
 * Draft a release in Github ui.
