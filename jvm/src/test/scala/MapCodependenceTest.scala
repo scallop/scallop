@@ -1,10 +1,8 @@
 package org.rogach.scallop
 
-import org.scalatest.funsuite.AnyFunSuite
 import org.rogach.scallop.exceptions._
 
-class MapCodependenceTest extends AnyFunSuite with UsefulMatchers {
-  throwError.value = true
+class MapCodependenceTest extends ScallopTestBase {
 
   class TestConf(args: Seq[String]) extends ScallopConf(args) {
     val apples = opt[Boolean]("apples")

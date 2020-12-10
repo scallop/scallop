@@ -1,11 +1,8 @@
 package org.rogach.scallop
 
-import org.scalatest.funsuite.AnyFunSuite
 import org.rogach.scallop.exceptions._
 
-class OptionDependenciesTest extends AnyFunSuite with UsefulMatchers {
-  throwError.value = true
-
+class OptionDependenciesTest extends ScallopTestBase {
   test ("dependsOnAny - success, option is not provided") {
     new ScallopConf(List()){
       val apples = opt[Int]("apples")

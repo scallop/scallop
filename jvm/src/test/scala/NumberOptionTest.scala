@@ -1,11 +1,8 @@
 package org.rogach.scallop
 
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.matchers.should.Matchers
 import org.rogach.scallop.exceptions._
 
-class NumberOptionTest extends AnyFunSuite with Matchers with CapturingTest with UsefulMatchers {
-  throwError.value = true
+class NumberOptionTest extends ScallopTestBase {
 
   test ("number option") {
     object Conf extends ScallopConf(Seq("-42")) {

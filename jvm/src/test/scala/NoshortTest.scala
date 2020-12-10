@@ -1,11 +1,20 @@
 package org.rogach.scallop
 
 import org.scalatest.Inspectors
-import org.scalatest.matchers.should.Matchers
 
-class NoshortDefaultValueTest extends UsefulMatchers with CapturingTest with Matchers with Inspectors {
+class NoshortTest extends ScallopTestBase with Inspectors {
 
-  test ("noshort default value via ScallopConf") {
+  test ("possibly-colliding options") {
+    object Conf extends ScallopConf(Seq("-b", "1")) {
+      val bananas = opt[Int]("bananas", noshort = true)
+      val bags = opt[Int]("bags")
+      verify()
+    }
+    Conf.bananas.toOption shouldBe None
+    Conf.bags.toOption shouldBe Some(1)
+  }
+
+  test ("noshort default value") {
 
     case class NoshortConf(initialNoshort: Boolean, reassignedNoshort: Boolean) extends ScallopConf(List("-a", "x", "-b", "x", "-c", "-d")) {
       noshort = initialNoshort // for all subsequent options, set global default for noshort to initialNoshort
@@ -34,19 +43,4 @@ class NoshortDefaultValueTest extends UsefulMatchers with CapturingTest with Mat
     }}
   }
 
-  test ("noshort default value via Scallop") {
-    forAll(List(false, true)) { noshort => {
-      val conf = Scallop(Seq("-a", "x", "-b"), noshort = noshort)
-        .opt[String]("a1")
-        .opt[String]("a2", noshort = false)
-        .toggle("b1")
-        .toggle("b2", noshort = false)
-        .verify
-
-      conf.isSupplied("a1") shouldBe !noshort
-      conf.isSupplied("a2") shouldBe noshort
-      conf.isSupplied("b1") shouldBe !noshort
-      conf.isSupplied("b2") shouldBe noshort
-    }}
-  }
 }

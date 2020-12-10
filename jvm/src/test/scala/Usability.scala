@@ -2,8 +2,7 @@ package org.rogach.scallop
 
 import exceptions._
 
-class Usability extends UsefulMatchers {
-  throwError.value = true
+class Usability extends ScallopTestBase {
 
   test ("printing error message for single argument") {
     expectException(WrongOptionFormat("apples", "asdf", "bad Int value")) {

@@ -1,11 +1,8 @@
 package org.rogach.scallop
 
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.matchers.should.Matchers
 import org.rogach.scallop.exceptions._
 
-class ToggleOptionTest extends AnyFunSuite with Matchers {
-  throwError.value = true
+class ToggleOptionTest extends ScallopTestBase {
 
   test ("short name") {
     object Conf extends ScallopConf(Seq("-e")) {
@@ -25,5 +22,49 @@ class ToggleOptionTest extends AnyFunSuite with Matchers {
     }
   }
 
+  test ("positive, long") {
+    object Conf extends ScallopConf(Seq("--verbose")) {
+      val verbose = toggle("verbose")
+      verify()
+    }
+    Conf.verbose() should equal (true)
+    Conf.verbose.isSupplied should equal (true)
+  }
+
+  test ("negative, long") {
+    object Conf extends ScallopConf(Seq("--noverbose")) {
+      val verbose = toggle("verbose")
+      verify()
+    }
+    Conf.verbose() should equal (false)
+    Conf.verbose.isSupplied should equal (true)
+  }
+
+  test ("short name 2") {
+    object Conf extends ScallopConf(Seq("-v")) {
+      val verbose = toggle("verbose")
+      verify()
+    }
+    Conf.verbose() should equal (true)
+    Conf.verbose.isSupplied should equal (true)
+  }
+
+  test ("not supplied") {
+    object Conf extends ScallopConf(Seq()) {
+      val verbose = toggle("verbose")
+      verify()
+    }
+    Conf.verbose.toOption should equal (None)
+    Conf.verbose.isSupplied should equal (false)
+  }
+
+  test ("not supplied, with default") {
+    object Conf extends ScallopConf(Seq()) {
+      val verbose = toggle("verbose", default = Some(true))
+      verify()
+    }
+    Conf.verbose.toOption should equal (Some(true))
+    Conf.verbose.isSupplied should equal (false)
+  }
 
 }

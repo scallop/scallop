@@ -1,16 +1,19 @@
 package org.rogach.scallop
 
-import org.scalatest.Assertion
+import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-trait UsefulMatchers extends AnyFunSuite with Matchers {
-  abstract class GoodEquals[A](val a: A) {
-    def ====[B](b: B): Assertion
+trait ScallopTestBase extends AnyFunSuite with Matchers with CapturingTest with BeforeAndAfter {
+
+  protected def getThrowErrorValue: Boolean = true
+
+  before {
+    throwError.value = getThrowErrorValue
   }
 
-  implicit def toGoodEquals[A](a0: A): GoodEquals[A] = new GoodEquals[A](a0) {
-    def ====[B](b: B) = a should equal (b)
+  after {
+    throwError.value = false
   }
 
   def expectException(ex: Throwable)(fn: => Any): Unit = {
@@ -18,9 +21,10 @@ trait UsefulMatchers extends AnyFunSuite with Matchers {
       fn
     } catch {
       case e: Throwable =>
-        e ==== ex
+        e shouldBe ex
         return
     }
     assert(false, "expected exception " + ex + ", none thrown")
   }
+
 }

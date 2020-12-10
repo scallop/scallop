@@ -1,11 +1,8 @@
 package org.rogach.scallop
 
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.matchers.should.Matchers
 import org.rogach.scallop.exceptions._
 
-class ChoiceOptionsTest extends AnyFunSuite with Matchers with UsefulMatchers {
-  throwError.value = true
+class ChoiceOptionsTest extends ScallopTestBase {
 
   test ("choice option") {
     class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
@@ -14,7 +11,7 @@ class ChoiceOptionsTest extends AnyFunSuite with Matchers with UsefulMatchers {
     }
 
     val conf = new Conf(Seq("--letter", "alpha"))
-    conf.letter() shouldEqual "alpha"
+    conf.letter() shouldBe "alpha"
   }
 
   test ("wrong choice option argument") {
@@ -27,6 +24,5 @@ class ChoiceOptionsTest extends AnyFunSuite with Matchers with UsefulMatchers {
       new Conf(Seq("--letter", "alph"))
     }
   }
-
 
 }

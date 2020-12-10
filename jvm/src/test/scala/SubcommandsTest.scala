@@ -2,21 +2,7 @@ package org.rogach.scallop
 
 import org.rogach.scallop.exceptions._
 
-class SubcommandsTest extends UsefulMatchers {
-  throwError.value = true
-
-  test ("builder") {
-    val sub = Scallop()
-      .opt[Boolean]("bananas")
-    val opts = Scallop()
-      .opt[Boolean]("apples")
-      .addSubBuilder(Seq("tree"),sub)
-      .args(Seq("-a","tree","-b"))
-      .verify
-    opts.get("apples") should equal (Some(true))
-    opts.get("tree\u0000bananas") should equal (Some(true))
-    opts.getSubcommandName should equal (Some("tree"))
-  }
+class SubcommandsTest extends ScallopTestBase {
 
   test ("conf") {
     object Conf extends ScallopConf(Seq("-a", "tree", "-b")) {
@@ -29,11 +15,11 @@ class SubcommandsTest extends UsefulMatchers {
       verify()
     }
     Conf.apples() should equal (true)
-    Conf.apples.isSupplied ==== true
-    Conf.subcommand ==== Some(Conf.tree)
-    Conf.subcommands ==== List(Conf.tree)
+    Conf.apples.isSupplied shouldBe true
+    Conf.subcommand shouldBe Some(Conf.tree)
+    Conf.subcommands shouldBe List(Conf.tree)
     Conf.tree.bananas() should equal (true)
-    Conf.tree.bananas.isSupplied ==== true
+    Conf.tree.bananas.isSupplied shouldBe true
   }
 
   test ("options are not supplied") {
@@ -46,8 +32,8 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.apples.isSupplied ==== false
-    Conf.tree.bananas.isSupplied ==== false
+    Conf.apples.isSupplied shouldBe false
+    Conf.tree.bananas.isSupplied shouldBe false
   }
 
   test ("two nested configs") {
@@ -64,15 +50,15 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.subcommand ==== Some(Conf.palm)
-    Conf.palm.bananas() ==== true
-    Conf.palm.bananas.isSupplied ==== true
+    Conf.subcommand shouldBe Some(Conf.palm)
+    Conf.palm.bananas() shouldBe true
+    Conf.palm.bananas.isSupplied shouldBe true
     // pattern matching on subcommands
     (Conf.subcommand match {
       case Some(Conf.tree) => false
       case Some(Conf.palm) => true
       case _ => false
-    }) ==== true
+    }) shouldBe true
   }
 
   test ("4-level nested subcommands") {
@@ -93,8 +79,8 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.subcommands ==== List(Conf.sub1, Conf.sub1.sub2, Conf.sub1.sub2.sub3, Conf.sub1.sub2.sub3.sub4)
-    Conf.sub1.sub2.sub3.sub4.opts() ==== List("win!")
+    Conf.subcommands shouldBe List(Conf.sub1, Conf.sub1.sub2, Conf.sub1.sub2.sub3, Conf.sub1.sub2.sub3.sub4)
+    Conf.sub1.sub2.sub3.sub4.opts() shouldBe List("win!")
   }
 
   test ("equal names in two subcommands") {
@@ -111,7 +97,7 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.tree.apples() ==== true
+    Conf.tree.apples() shouldBe true
   }
 
   test ("codependency, inside subcommand, success") {
@@ -125,8 +111,8 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.tree.apples() ==== true
-    Conf.tree.bananas() ==== true
+    Conf.tree.apples() shouldBe true
+    Conf.tree.bananas() shouldBe true
   }
 
   test ("codependency, inside subcommand, failure") {
@@ -156,8 +142,8 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.apples() ==== true
-    Conf.tree.bananas() ==== true
+    Conf.apples() shouldBe true
+    Conf.tree.bananas() shouldBe true
   }
 
   test ("codependency, across confs, failure") {
@@ -183,7 +169,7 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.subcommand ==== Some(Conf.tree)
+    Conf.subcommand shouldBe Some(Conf.tree)
   }
 
   test ("isSupplied, if there are no selected subcommands") {
@@ -195,7 +181,7 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.tree.apples.isSupplied ==== false
+    Conf.tree.apples.isSupplied shouldBe false
   }
 
   test ("isSupplied, for other subcommand") {
@@ -212,7 +198,7 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.palm.bananas.isSupplied ==== false
+    Conf.palm.bananas.isSupplied shouldBe false
   }
 
   test ("subcommand name as parameter to other subcommand") {
@@ -227,7 +213,7 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.help.command() ==== "tree"
+    Conf.help.command() shouldBe "tree"
   }
 
   test ("properties on subcommand") {
@@ -239,7 +225,7 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.sub.properties ==== Map("key1" -> "value1")
+    Conf.sub.properties shouldBe Map("key1" -> "value1")
   }
 
   test ("subcommand name guessing") {
@@ -289,10 +275,10 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.subcommand ==== Some(Conf.fruit)
-    Conf.subcommands ==== List(Conf.fruit)
-    Conf.fruit.count() shouldEqual 42
-    Conf.fruit.count.isSupplied ==== true
+    Conf.subcommand shouldBe Some(Conf.fruit)
+    Conf.subcommands shouldBe List(Conf.fruit)
+    Conf.fruit.count() shouldBe 42
+    Conf.fruit.count.isSupplied shouldBe true
   }
 
   test ("require subcommand to be present - successfull case") {
@@ -305,8 +291,8 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.subcommand ==== Some(Conf.fruit)
-    Conf.fruit.count() shouldEqual 42
+    Conf.subcommand shouldBe Some(Conf.fruit)
+    Conf.fruit.count() shouldBe 42
   }
 
   test ("require subcommand to be present - error case") {
@@ -338,9 +324,9 @@ class SubcommandsTest extends UsefulMatchers {
 
       verify()
     }
-    Conf.subcommand ==== Some(Conf.fruit)
-    Conf.subcommands ==== List(Conf.fruit, Conf.fruit.pick)
-    Conf.fruit.pick.count() shouldEqual 42
+    Conf.subcommand shouldBe Some(Conf.fruit)
+    Conf.subcommands shouldBe List(Conf.fruit, Conf.fruit.pick)
+    Conf.fruit.pick.count() shouldBe 42
   }
 
   test ("require several nested subcommands to be present - error case") {
@@ -377,5 +363,80 @@ class SubcommandsTest extends UsefulMatchers {
     new Conf(Seq("c1", "-o")).c1.o() shouldBe true
     new Conf(Seq("c2", "-o")).c2.o() shouldBe true
   }
+
+  test ("verification on subcommands") {
+    expectException(WrongOptionFormat("apples", "b", "bad Int value")) {
+      object Conf extends ScallopConf(Seq("tree", "-a", "b")) {
+        object tree extends Subcommand("tree") {
+          val apples = opt[Int]()
+        }
+        addSubcommand(tree)
+
+        verify()
+      }
+      Conf
+    }
+  }
+
+  test ("validation failure on subcommands") {
+    expectException(ValidationFailure("tree: a + b must be < 3")) {
+      object Conf extends ScallopConf(Seq("tree", "-a", "1", "-b", "5")) {
+        object tree extends Subcommand("tree") {
+          val apples = opt[Int]()
+          val bananas = opt[Int]()
+          validate(apples, bananas) { (a, b) =>
+            if (a + b >= 3) Left("tree: a + b must be < 3")
+            else Right(())
+          }
+        }
+        addSubcommand(tree)
+
+        verify()
+      }
+      Conf
+    }
+  }
+
+  test ("validation failure on nested subcommands") {
+    expectException(ValidationFailure("branch: a + b must be < 3")) {
+      object Conf extends ScallopConf(Seq("tree", "branch", "-a", "1", "-b", "5")) {
+        object tree extends Subcommand("tree") {
+          val branch = new Subcommand("branch") {
+            val apples = opt[Int]()
+            val bananas = opt[Int]()
+            validate(apples, bananas) { (a, b) =>
+              if (a + b >= 3) Left("branch: a + b must be < 3")
+              else Right(())
+            }
+          }
+          addSubcommand(branch)
+        }
+        addSubcommand(tree)
+
+        verify()
+      }
+      Conf
+    }
+  }
+
+  test ("validationOpt failure on subconfigs") {
+    expectException(ValidationFailure("both a and b must be supplied")) {
+      object Conf extends ScallopConf(Seq("tree", "-a", "1")) {
+        object tree extends Subcommand("tree") {
+          val apples = opt[Int]()
+          val bananas = opt[Int]()
+          validateOpt(apples, bananas) {
+            case (Some(a), Some(b)) => Right(())
+            case _ => Left("both a and b must be supplied")
+          }
+        }
+        addSubcommand(tree)
+
+        verify()
+      }
+      Conf
+    }
+  }
+
 
 }

@@ -1,9 +1,7 @@
 package org.rogach.scallop
 
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.matchers.should.Matchers
+class FormatterTest extends ScallopTestBase {
 
-class FormatterTest extends AnyFunSuite with Matchers {
   test ("exact wrapping") {
     // Two lines' worth of dots, two dots to start (one dot should be at the very end of the line).
     val dots = ".." +: Seq.fill(79)(".")
@@ -48,7 +46,7 @@ class FormatterTest extends AnyFunSuite with Matchers {
       line should have length(20)
     }
     // Note the trailing spaces on the first line.
-    formatted shouldEqual "  -a, --apple   * * \n                * * "
+    formatted shouldBe "  -a, --apple   * * \n                * * "
   }
 
   test ("long-only argument formatting") {

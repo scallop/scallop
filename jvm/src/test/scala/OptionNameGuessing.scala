@@ -1,7 +1,6 @@
 package org.rogach.scallop
 
-class OptionNameGuessing extends UsefulMatchers {
-  throwError.value = true
+class OptionNameGuessing extends ScallopTestBase {
 
   test ("simple") {
     object Conf extends ScallopConf(Seq("-a", "1")) {

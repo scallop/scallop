@@ -1,68 +1,18 @@
 package org.rogach.scallop
 
-class HelpTest extends UsefulMatchers with CapturingTest {
-  throwError.value = false
+class HelpTest extends ScallopTestBase {
 
-  test ("help printing") {
-    val (out, err) = captureOutput {
-      val exits = trapExit {
-        object Conf extends ScallopConf(List("--help")) {
-          version("0.1.2")
-          banner("some rubbish")
-          footer("and some more")
-          val apples = opt[Int]("apples", descr = "fresh apples!", default = Some(3))
-          val verbose = toggle("verbose", descrYes = "very verbose", descrNo = "turn off")
+  override def getThrowErrorValue = false
 
-          val tree = new Subcommand("tree") {
-            val branches = opt[Int]("branches", descr = "how many branches?")
-            val trail = trailArg[String]("trail", descr = "Which trail do you choose?")
-          }
-          addSubcommand(tree)
-
-          val peach = new Subcommand("peach") {
-            banner("plant the fruit-bearing peach tree")
-            val peaches = opt[Int]("peaches", descr = "how many peaches?")
-            footer("Latin name: Prunus persica\n")
-          }
-          addSubcommand(peach)
-
-          val palm = new Subcommand("palm", "palm-tree") {
-            val leaves = opt[Int]("leaves", descr = "how many leaves?")
-            val hiddenTrail = trailArg[String]("secret", descr = "secret trailing arg", hidden = true)
-          }
-          addSubcommand(palm)
-
-          verify()
-        }
-        Conf
-      }
-      exits.size should equal (1)
+  test ("help formatting - simple example") {
+    object Conf extends ScallopConf(Seq()) {
+      version("")
+      val apples = opt[Int]("apples")
+      verify()
     }
-    out should equal ("""0.1.2
-                        |some rubbish
-                        |  -a, --apples  <arg>   fresh apples!
-                        |  -v, --verbose         very verbose
-                        |      --noverbose       turn off
-                        |  -h, --help            Show help message
-                        |      --version         Show version of this program
-                        |
-                        |Subcommand: tree
-                        |  -b, --branches  <arg>   how many branches?
-                        |  -h, --help              Show help message
-                        |
-                        | trailing arguments:
-                        |  trail (required)   Which trail do you choose?
-                        |Subcommand: peach
-                        |plant the fruit-bearing peach tree
-                        |  -p, --peaches  <arg>   how many peaches?
-                        |  -h, --help             Show help message
-                        |Latin name: Prunus persica
-                        |
-                        |Subcommand: palm (alias: palm-tree)
-                        |  -l, --leaves  <arg>   how many leaves?
-                        |  -h, --help            Show help message
-                        |and some more
-                        |""".stripMargin)
+    Conf.getHelpString() shouldBe """  -a, --apples  <arg>
+                                    |  -h, --help            Show help message
+                                    |  -v, --version         Show version of this program""".stripMargin
   }
 
   test ("subcommand description in output") {
@@ -96,18 +46,22 @@ class HelpTest extends UsefulMatchers with CapturingTest {
   }
 
   test ("help wrapping") {
-    val opts = Scallop()
-      .version("")
-      .opt[Boolean]("apples", descr = "********* ********* ********* ********* ********* *********")
-    opts.setHelpWidth(80).help should equal ("""  -a, --apples    ********* ********* ********* ********* ********* *********
-                                               |  -h, --help      Show help message
-                                               |  -v, --version   Show version of this program""".stripMargin)
-    opts.setHelpWidth(40).help should equal ("""  -a, --apples    ********* *********
-                                               |                  ********* *********
-                                               |                  ********* *********
-                                               |  -h, --help      Show help message
-                                               |  -v, --version   Show version of this
-                                               |                  program""".stripMargin)
+    class Conf(newHelpWidth: Int) extends ScallopConf(Seq()) {
+      version("")
+      helpWidth(newHelpWidth)
+      val apples = opt[Boolean]("apples", descr = "********* ********* ********* ********* ********* *********")
+      verify()
+    }
+
+    new Conf(80).getHelpString() shouldBe """  -a, --apples    ********* ********* ********* ********* ********* *********
+                                            |  -h, --help      Show help message
+                                            |  -v, --version   Show version of this program""".stripMargin
+    new Conf(40).getHelpString() shouldBe """  -a, --apples    ********* *********
+                                            |                  ********* *********
+                                            |                  ********* *********
+                                            |  -h, --help      Show help message
+                                            |  -v, --version   Show version of this
+                                            |                  program""".stripMargin
   }
 
   test ("version printing") {
@@ -172,9 +126,9 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       Conf
     }
 
-    exits ==== List(0)
-    err ==== ""
-    out ====
+    exits shouldBe List(0)
+    err shouldBe ""
+    out shouldBe
      """Planting a tree
        |  -a, --apples  <arg>   how many apples?
        |  -h, --help            Show help message
@@ -201,9 +155,9 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       Conf
     }
 
-    exits ==== List(0)
-    err ==== ""
-    out ====
+    exits shouldBe List(0)
+    err shouldBe ""
+    out shouldBe
      """  -a, --apples  <arg>   how many apples?
        |  -h, --help            Show help message
        |""".stripMargin
@@ -236,7 +190,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       Conf
     }
 
-    out ====
+    out shouldBe
       """Planting a tree.
         |  -b, --bananas  <arg>
         |  -h, --help             Show help message
@@ -258,7 +212,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
       verify()
     }
-    Conf.builder.help ====
+    Conf.builder.help shouldBe
       """  -b, --bananas  <arg>      amount of bananas
         |  -a, --apples  <arg>       amount of apples
         |
@@ -281,7 +235,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
       verify()
     }
-    Conf.plant.builder.help ====
+    Conf.plant.builder.help shouldBe
       """  -b, --bananas  <arg>      amount of bananas
         |  -a, --apples  <arg>       amount of apples
         |
@@ -297,7 +251,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
       verify()
     }
-    Conf.builder.help ====
+    Conf.builder.help shouldBe
       """      --help      custom help descr
         |      --version   custom version descr""".stripMargin
   }
@@ -312,9 +266,9 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         }
         Conf
       }
-      exits.size ==== 1
+      exits.size shouldBe 1
     }
-    out ====
+    out shouldBe
       """  -?, --help   custom help descr
         |""".stripMargin
   }
@@ -375,7 +329,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       val apples = opt[Int](descr = "amount of apples", default = Some(42))
       verify()
     }
-    Conf.builder.help ====
+    Conf.builder.help shouldBe
       """  -a, --apples  <arg>   amount of apples (default = 42)
         |  -h, --help            Show help message""".stripMargin
   }
@@ -393,7 +347,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       }
     }
 
-    out ====
+    out shouldBe
      """  -h, --help   Show help message
        |
        |Subcommand: tree
@@ -416,7 +370,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
       }
     }
 
-    out ====
+    out shouldBe
      """  -a, --apples  <arg>   how many apples? (default = 42)
        |  -h, --help            Show help message
        |""".stripMargin
@@ -431,7 +385,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     val (out, _, _) = captureOutputAndExits {
       conf.printHelp()
     }
-    out ====
+    out shouldBe
       """
         |""".stripMargin
   }
@@ -447,7 +401,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
     val (out, _, _) = captureOutputAndExits {
       conf.printHelp()
     }
-    out ====
+    out shouldBe
       """  -h, --help   Show help message
         |
         |Subcommand: sub
@@ -467,7 +421,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
       verify()
     }
-    conf.builder.help ====
+    conf.builder.help shouldBe
       """  -h, --help   Show help message
         |
         |Command: tree
@@ -485,7 +439,7 @@ class HelpTest extends UsefulMatchers with CapturingTest {
 
       verify()
     }
-    conf.builder.help ====
+    conf.builder.help shouldBe
       """  -h, --help   Show help message
         |
         | arguments:
@@ -498,9 +452,9 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         val hard = opt[Boolean]()
         verify()
       }
-      Conf.hard() shouldEqual true
+      Conf.hard() shouldBe true
     }
-    exits.size shouldEqual 0
+    exits.size shouldBe 0
   }
 
   test ("implicit short option name should override version printing") {
@@ -510,9 +464,9 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         version("1.0")
         verify()
       }
-      Conf.verbose() shouldEqual true
+      Conf.verbose() shouldBe true
     }
-    exits.size shouldEqual 0
+    exits.size shouldBe 0
   }
 
   test ("implicit short option name in subcommand should override help printing") {
@@ -524,9 +478,9 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         addSubcommand(cmd)
         verify()
       }
-      Config.cmd.hard() shouldEqual true
+      Config.cmd.hard() shouldBe true
     }
-    exits.size shouldEqual 0
+    exits.size shouldBe 0
   }
 
   test ("implicit short option name in subcommand should override version printing") {
@@ -539,9 +493,18 @@ class HelpTest extends UsefulMatchers with CapturingTest {
         addSubcommand(cmd)
         verify()
       }
-      Config.cmd.verbose() shouldEqual true
+      Config.cmd.verbose() shouldBe true
     }
-    exits.size shouldEqual 0
+    exits.size shouldBe 0
+  }
+
+  test ("help formatter wrapping test") {
+    val text = Formatter.wrap("supress all output, including output from scripts (stderr from scripts is still printed)".split(" ").toSeq, 76)
+    val expected = (List(
+      "supress all output, including output from scripts (stderr from scripts is ",
+      "still printed) "
+    ))
+    text shouldBe expected
   }
 
 }

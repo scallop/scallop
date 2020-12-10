@@ -1,10 +1,8 @@
 package org.rogach.scallop
 
-import org.scalatest.funsuite.AnyFunSuite
 import org.rogach.scallop.exceptions._
 
-class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
-  throwError.value = true
+class ValueConverterTest extends ScallopTestBase {
 
   test ("optional value - flatMap way") {
     case class getcf(args0: Seq[String]) extends ScallopConf(args0) {
@@ -16,14 +14,14 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
       verify()
     }
     val conf1 = getcf(Nil)
-    conf1.foo.toOption ==== None
+    conf1.foo.toOption shouldBe None
 
     val conf2 = getcf(List("-f"))
     // bad corner case - flatMap doesn't apply when previous converter returned None
-    conf2.foo.toOption ==== None
+    conf2.foo.toOption shouldBe None
 
     val conf3 = getcf(List("-f", "bar"))
-    conf3.foo.toOption ==== Some(Some("bar"))
+    conf3.foo.toOption shouldBe Some(Some("bar"))
   }
 
   /** https://github.com/Rogach/scallop/issues/57 */
@@ -58,8 +56,8 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
 
       verify()
     }
-    Conf.apples.toOption ==== None
-    Conf.apples.isSupplied ==== false
+    Conf.apples.toOption shouldBe None
+    Conf.apples.isSupplied shouldBe false
   }
   test ("optDefault - empty call") {
     object Conf extends ScallopConf(Seq("-a")) {
@@ -67,8 +65,8 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
 
       verify()
     }
-    Conf.apples.toOption ==== Some(5)
-    Conf.apples.isSupplied ==== true
+    Conf.apples.toOption shouldBe Some(5)
+    Conf.apples.isSupplied shouldBe true
   }
   test ("optDefault - arg provided") {
     object Conf extends ScallopConf(Seq("-a", "7")) {
@@ -76,8 +74,8 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
 
       verify()
     }
-    Conf.apples.toOption ==== Some(7)
-    Conf.apples.isSupplied ==== true
+    Conf.apples.toOption shouldBe Some(7)
+    Conf.apples.isSupplied shouldBe true
   }
 
   test ("value converter is only called once when option is retrieved multiple times") {
@@ -116,6 +114,27 @@ class ValueConverterTest extends AnyFunSuite with UsefulMatchers {
       }
       Conf
     }
+  }
+
+  case class Person(name:String, phone:String)
+  test ("custom converter example") {
+    val personConverter = new ValueConverter[Person] {
+      val nameRgx = """([A-Za-z]*)""".r
+      val phoneRgx = """([0-9\-]*)""".r
+      def parse(s:List[(String, List[String])]):Either[String,Option[Person]] =
+        s match {
+          case (_, nameRgx(name) :: phoneRgx(phone) :: Nil) :: Nil =>
+            Right(Some(Person(name,phone))) // successfully found our person
+          case Nil => Right(None) // no person found
+          case _ => Left("wrong arguments format") // error when parsing
+        }
+      val argType = org.rogach.scallop.ArgType.LIST
+    }
+    object Conf extends ScallopConf(List("--person", "Pete", "123-45")) {
+      val person = opt[Person]("person")(personConverter)
+      verify()
+    }
+    Conf.person() shouldBe Person("Pete", "123-45")
   }
 
 }

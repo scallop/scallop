@@ -782,6 +782,9 @@ abstract class ScallopConfBase(
     builder.filteredSummary(blurred: Set[String])
   }
 
+  /** Get generated help contents as a string. */
+  def getHelpString(): String = builder.help
+
   /** Prints help message (with version, banner, option usage and footer) to stdout. */
   def printHelp() = builder.printHelp()
 
