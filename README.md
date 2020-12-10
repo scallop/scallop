@@ -77,14 +77,14 @@ Scallop supports quite powerful matching on trailing arguments. For example:
 object Conf extends ScallopConf(
        List("-Ekey1=value1", "key2=value2", "key3=value3",
             "first", "1","2","3","second","4","5","6")) {
-  val props = props[String]('E')
+  val properties = props[String]('E')
   val firstListName = trailArg[String]()
   val firstList = trailArg[List[Int]]()
   val secondListName = trailArg[String]()
   val secondList = trailArg[List[Double]]()
   verify()
 }
-Conf.props("key1") should equal (Some("value1"))
+Conf.properties("key1") should equal (Some("value1"))
 Conf.firstListName() should equal ("first")
 Conf.secondListName() should equal ("second")
 Conf.firstList() should equal (List(1,2,3))

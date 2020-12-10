@@ -107,7 +107,7 @@ class ScallopHelpFormatter {
     getSubcommandsWithNames(s)
     .map { case (sub, names) =>
       getSubcommandHelp(sub, subcommandPrefix, names)
-    }.mkString("\n")
+    }.mkString("\n\n")
   }
 
   protected def getSubcommandsWithNames(s: Scallop): List[(Scallop, List[String])] = {

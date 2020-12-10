@@ -81,6 +81,7 @@ Subcommand: tree
 
  trailing arguments:
   tree name (required)   tree name
+
 Subcommand: palm
   -h, --height  <arg>   how tall should the palm be?
       --help            Show help message
@@ -112,7 +113,7 @@ For all other tricks, consult the documentation!
           val peach = new Subcommand("peach") {
             banner("plant the fruit-bearing peach tree")
             val peaches = opt[Int]("peaches", descr = "how many peaches?")
-            footer("Latin name: Prunus persica\n")
+            footer("Latin name: Prunus persica")
           }
           addSubcommand(peach)
 
@@ -142,6 +143,7 @@ For all other tricks, consult the documentation!
                         |
                         | trailing arguments:
                         |  trail (required)   Which trail do you choose?
+                        |
                         |Subcommand: peach
                         |plant the fruit-bearing peach tree
                         |  -p, --peaches  <arg>   how many peaches?

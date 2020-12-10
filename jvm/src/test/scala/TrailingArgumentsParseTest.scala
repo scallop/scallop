@@ -91,7 +91,7 @@ class TrailingArgumentsParseTest extends ScallopTestBase {
   }
 
   test ("trailing arg after two other options") {
-    object Conf extends ScallopConf(Seq("-d", "--num-limbs", "1", "Pidgeon")) {
+    object Conf extends ScallopConf(Seq("-d", "--num-limbs", "1", "Pigeon")) {
       val donkey = opt[Boolean]("donkey")
       val numLimbs = opt[Int]("num-limbs")
       val petName = trailArg[String]("pet-name")
@@ -99,7 +99,7 @@ class TrailingArgumentsParseTest extends ScallopTestBase {
     }
     Conf.donkey() shouldBe true
     Conf.numLimbs() shouldBe 1
-    Conf.petName() shouldBe "Pidgeon"
+    Conf.petName() shouldBe "Pigeon"
   }
 
   test ("trailing arg after single property argument") {
