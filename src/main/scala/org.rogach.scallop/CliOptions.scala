@@ -78,7 +78,7 @@ case class SimpleOption(
     () => (if (converter == flagConverter) None else default().map(_.toString))
   ))
 
-  override def toString = String.format("SimpleOption(%s)", name)
+  override def toString = Util.format("SimpleOption(%s)", name)
 }
 
 case class PropertyOption(
@@ -104,7 +104,7 @@ case class PropertyOption(
 
   def helpInfo(sh: List[Char]) = List(HelpInfo(argLine(sh), descr, () => None))
 
-  override def toString = String.format("PropertyOption(%s)", name)
+  override def toString = Util.format("PropertyOption(%s)", name)
 }
 
 case class LongNamedPropertyOption(
@@ -129,7 +129,7 @@ case class LongNamedPropertyOption(
 
   def helpInfo(sh: List[Char]) = List(HelpInfo(argLine(sh), descr, () => None))
 
-  override def toString = String.format("LongNamedPropertyOption(%s)", name)
+  override def toString = Util.format("LongNamedPropertyOption(%s)", name)
 }
 
 case class TrailingArgsOption(
@@ -152,7 +152,7 @@ case class TrailingArgsOption(
 
   def helpInfo(sh: List[Char]) = List(HelpInfo(argLine(sh), descr, () => default().map(_.toString)))
 
-  override def toString = String.format("TrailingArgsOption(%s)", name)
+  override def toString = Util.format("TrailingArgsOption(%s)", name)
 }
 
 case class NumberArgOption(
@@ -175,7 +175,7 @@ case class NumberArgOption(
 
   def helpInfo(sh: List[Char]) = List(HelpInfo(argLine(sh), descr, () => default().map(_.toString)))
 
-  override def toString = String.format("NumberArgOption(%s)", name)
+  override def toString = Util.format("NumberArgOption(%s)", name)
 }
 
 case class ToggleOption(
@@ -221,5 +221,5 @@ case class ToggleOption(
     HelpInfo(("--" + prefix + name), descrNo, () => None)
   )
 
-  override def toString = String.format("ToggleOption(%s)", name)
+  override def toString = Util.format("ToggleOption(%s)", name)
 }

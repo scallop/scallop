@@ -1,6 +1,7 @@
 package org.rogach.scallop
 
 object Util {
+  /** Use instead of java.lang.String.format, because it is not supported on Scala Native */
   def format(formatString: String, args: Any*): String = {
     val s = new StringBuilder
     var si = 0
