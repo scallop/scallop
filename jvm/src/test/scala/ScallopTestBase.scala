@@ -6,10 +6,8 @@ import org.scalatest.matchers.should.Matchers
 
 trait ScallopTestBase extends AnyFunSuite with Matchers with CapturingTest with BeforeAndAfter {
 
-  protected def getThrowErrorValue: Boolean = true
-
   before {
-    throwError.value = getThrowErrorValue
+    throwError.value = true
   }
 
   after {

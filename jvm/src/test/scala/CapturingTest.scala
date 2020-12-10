@@ -7,7 +7,7 @@ import java.security.Permission
 
 trait CapturingTest {
   /** Captures all output from the *fn* block into two strings - (stdout, stderr). */
-  def captureOutput(fn: => Unit):(String,String) = {
+  def captureOutput(fn: => Unit): (String, String) = {
     val streamOut = new ByteArrayOutputStream()
     val streamErr = new ByteArrayOutputStream()
     Console.withOut(streamOut) {
@@ -19,7 +19,7 @@ trait CapturingTest {
   }
 
   /** Supresses exit in *fn* block. Returns list of exit statuses that were attempted. */
-  def trapExit(fn: => Unit):List[Int] = {
+  def trapExit(fn: => Unit): List[Int] = {
     @volatile var statuses = List[Int]()
     val normalSM = System.getSecurityManager
     object SM extends SecurityManager {
@@ -31,7 +31,9 @@ trait CapturingTest {
     }
     System.setSecurityManager(SM)
     try {
-      fn
+      throwError.withValue(false) {
+        fn
+      }
     } catch {
       case e:SecurityException =>
     }

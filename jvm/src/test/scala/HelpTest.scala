@@ -2,8 +2,6 @@ package org.rogach.scallop
 
 class HelpTest extends ScallopTestBase {
 
-  override def getThrowErrorValue = false
-
   test ("help formatting - simple example") {
     object Conf extends ScallopConf(Seq()) {
       version("")

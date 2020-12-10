@@ -8,8 +8,6 @@ package org.rogach.scallop
  */
 class ComplexTests extends ScallopTestBase {
 
-  override def getThrowErrorValue = false
-
   test ("full example") {
     object Conf extends ScallopConf(List("-c","3","-E","fruit=apple","7.2")) {
       // all options that are applicable to builder (like description, default, etc)
