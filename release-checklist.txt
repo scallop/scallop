@@ -1,12 +1,12 @@
 Release
 =======
 * Bump the version (in README.md).
-
+* Format the version release notes (in CHANGELOG.md).
 * Test the changes: sbt "+test" "+scallopNative/test:run"
 * Publish artifacts: sbt "+publishSigned"
 * Commit the changes.
-* Tag the release (in develop branch).
+* Tag the release.
 * Close the release in Nexus UI.
 * Push latest version to github. (push --all; push --tags)
 * Update API docs (scallopJVM/ghpagesPushSite).
-* Draft a release in Github ui.
+* Draft a release in Github UI (copy from CHANGELOG.md).
