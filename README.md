@@ -84,11 +84,11 @@ object Conf extends ScallopConf(
   val secondList = trailArg[List[Double]]()
   verify()
 }
-Conf.properties("key1") should equal (Some("value1"))
-Conf.firstListName() should equal ("first")
-Conf.secondListName() should equal ("second")
-Conf.firstList() should equal (List(1,2,3))
-Conf.secondList() should equal (List[Double](4,5,6))
+Conf.properties("key1") shouldBe "value1"
+Conf.firstListName() shouldBe "first"
+Conf.secondListName() shouldBe "second"
+Conf.firstList() shouldBe List(1,2,3)
+Conf.secondList() shouldBe List[Double](4,5,6)
 ```
 
 In this case, Scallop's backtracking parser is clever enough to distinguish the boundaries of the arguments lists.
@@ -97,10 +97,10 @@ Also, Scallop supports parsing of subcommands. Not only subcommands, but nested 
 
 ```scala
 object Conf extends ScallopConf(Seq("sub1", "sub2", "sub3", "sub4", "win!")) {
-  val sub1 = new Subcommand("sub1") {
-    val sub2 = new Subcommand("sub2") {
-      val sub3 = new Subcommand("sub3") {
-        val sub4 = new Subcommand("sub4") {
+  object sub1 extends Subcommand("sub1") {
+    object sub2 extends Subcommand("sub2") {
+      object sub3 extends Subcommand("sub3") {
+        object sub4 extends Subcommand("sub4") {
           val opts = trailArg[List[String]]()
         }
         addSubcommand(sub4)
@@ -112,8 +112,8 @@ object Conf extends ScallopConf(Seq("sub1", "sub2", "sub3", "sub4", "win!")) {
   addSubcommand(sub1)
   verify()
 }
-Conf.subcommands should equal (List(Conf.sub1, Conf.sub1.sub2, Conf.sub1.sub2.sub3, Conf.sub1.sub2.sub3.sub4))
-Conf.sub1.sub2.sub3.sub4.opts() should equal (List("win!"))
+Conf.subcommands shouldBe List(Conf.sub1, Conf.sub1.sub2, Conf.sub1.sub2.sub3, Conf.sub1.sub2.sub3.sub4)
+Conf.sub1.sub2.sub3.sub4.opts() shouldBe List("win!")
 ```
 
 Thanks
