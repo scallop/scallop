@@ -53,7 +53,7 @@ abstract class ScallopConf(
         .replace("$at", "@")
 
       // the old, generated version of name, without prefixes from parent builders
-      val shortGenName = '\t' +: opt.name.reverse.takeWhile('\t'!=).reverse
+      val shortGenName = '\t' +: opt.name.reverse.takeWhile(_ != '\t').reverse
 
       opt.cliOption match {
         case Some(cliOption) if cliOption.name == shortGenName =>

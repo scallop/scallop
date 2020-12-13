@@ -31,7 +31,7 @@ lazy val commonSettings = Seq(
     "-deprecation",
     "-unchecked",
     "-feature",
-    "-language:postfixOps,reflectiveCalls,existentials,implicitConversions",
+    "-language:reflectiveCalls,existentials,implicitConversions",
   ),
   scalacOptions ++= {
     if (isDotty.value) Nil

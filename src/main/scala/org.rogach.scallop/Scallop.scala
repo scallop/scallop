@@ -424,7 +424,7 @@ case class Scallop(
           .exists(_._1 == name.takeWhile('\u0000' != _))
         }
         .map { subBuilder =>
-          subBuilder.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\u0000'!=).drop(1))
+          subBuilder.args(parsed.subcommandArgs).isSupplied(name.dropWhile('\u0000' != _).drop(1))
         }.getOrElse(false) // only current subcommand can have supplied arguments
       }.getOrElse(false) // no subcommands, so their options are definitely not supplied
     } else {
@@ -444,7 +444,7 @@ case class Scallop(
   def get(name: String): Option[Any] = {
     if (name.contains('\u0000')) {
       // delegating to subbuilder
-      subbuilders.find(_._1 == name.takeWhile('\u0000'!=)).map(_._2.args(parsed.subcommandArgs).get(name.dropWhile('\u0000'!=).drop(1)))
+      subbuilders.find(_._1 == name.takeWhile('\u0000' != _)).map(_._2.args(parsed.subcommandArgs).get(name.dropWhile('\u0000' != _).drop(1)))
         .getOrElse(throw new UnknownOption(name.replace("\u0000",".")))
     } else {
       opts.find(_.name == name).map { opt =>

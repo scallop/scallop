@@ -16,7 +16,7 @@ class OptionNameGuessing extends ScallopTestBase {
   test ("shadowing with derived option") {
     object Conf extends ScallopConf(Seq("--apples", "1")) {
       val apples = opt[Int]()
-      val applesPlus = apples.map(2+)
+      val applesPlus = apples.map(_+2)
 
       verify()
     }
@@ -29,7 +29,7 @@ class OptionNameGuessing extends ScallopTestBase {
   test ("tricky") {
     object Conf extends ScallopConf(Seq("-a", "1")) {
       val appleso = opt[Int]()
-      val applesPlus = appleso.map(2+)
+      val applesPlus = appleso.map(_+2)
       lazy val applesVal = appleso()
       val bananaso = opt[Int]()
       val aaa = opt[Int]()
@@ -65,7 +65,7 @@ class OptionNameGuessing extends ScallopTestBase {
 
   test ("replacing of the name in mapped ScallopOptions") {
     object Conf extends ScallopConf(Nil) {
-      val xs = opt[Int](default = Some(0)) map (1+)
+      val xs = opt[Int](default = Some(0)).map(_+1)
 
       verify()
     }
@@ -74,7 +74,7 @@ class OptionNameGuessing extends ScallopTestBase {
 
   test ("replacing of the name in doubly mapped ScallopOptions") {
     object Conf extends ScallopConf(Nil) {
-      val xs = opt[Int](default = Some(0)) map (1+) map (_.toString)
+      val xs = opt[Int](default = Some(0)).map(_+1).map(_.toString)
 
       verify()
     }
@@ -88,10 +88,10 @@ class OptionNameGuessing extends ScallopTestBase {
 
       verify()
     }
-    Conf.trailing1.name should be ("trailing1")
-    Conf.trailing2.name should be ("trailing2")
-    Conf.trailing1.toOption should be (Some(1))
-    Conf.trailing2.toOption should be (Some(List("foo", "bar", "baz", "bippy")))
+    Conf.trailing1.name shouldBe "trailing1"
+    Conf.trailing2.name shouldBe "trailing2"
+    Conf.trailing1.toOption shouldBe Some(1)
+    Conf.trailing2.toOption shouldBe Some(List("foo", "bar", "baz", "bippy"))
   }
 
   test ("toggle name guessing") {

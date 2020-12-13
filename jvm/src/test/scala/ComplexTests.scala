@@ -13,8 +13,8 @@ class ComplexTests extends ScallopTestBase {
       // all options that are applicable to builder (like description, default, etc)
       // are applicable here as well
       val count:ScallopOption[Int] = opt[Int]("count", descr = "count the trees", required = true)
-                    .map(1+) // also here work all standard Option methods -
-                             // evaluation is deferred to after option construcnion
+                    .map(_+1) // also here work all standard Option methods -
+                              // evaluation is deferred to after option construcnion
       val properties = props[String]('E')
       // types (:ScallopOption[Double]) can be omitted, here just for clarity
       val size:ScallopOption[Double] = trailArg[Double](required = false)

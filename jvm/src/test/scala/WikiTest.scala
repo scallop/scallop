@@ -161,7 +161,7 @@ class WikiTest extends ScallopTestBase {
   }
 
   test ("Custom converters") {
-    case class Person(name:String, phone:String)
+    case class Person(name: String, phone: String)
 
     val personConverter = new ValueConverter[Person] {
       val nameRgx = """([A-Za-z]*)""".r
