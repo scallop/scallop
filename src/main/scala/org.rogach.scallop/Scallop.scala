@@ -4,7 +4,6 @@ import org.rogach.scallop.exceptions._
 
 import scala.collection.{Seq => CSeq}
 
-/** The creator and god of all parsers :) */
 private[scallop] object Scallop {
 
   /** Create the new parser with some arguments already inserted.
@@ -49,7 +48,8 @@ private[scallop] object Scallop {
   *
   * @param args Arguments to parse.
   * @param opts Options definitions.
-  * @param mainOpts Names of options, that are to be printed first in the help printout
+  * @param mainOptions options that are to be printed first in the help printout
+  * @param optionGroups list of option groups with headers and included options
   * @param vers Version string to display in help.
   * @param bann Banner (summary of this program and command-line usage) to display in help.
   * @param foot Footer - displayed after options.
@@ -64,7 +64,8 @@ private[scallop] object Scallop {
 case class Scallop(
   args: CSeq[String] = Nil,
   opts: List[CliOption] = Nil,
-  mainOpts: List[String] = Nil,
+  mainOptions: List[CliOption] = Nil,
+  optionGroups: List[(String, Seq[CliOption])] = Nil,
   vers: Option[String] = None,
   bann: Option[String] = None,
   foot: Option[String] = None,
@@ -323,199 +324,8 @@ case class Scallop(
     argsBeforeSeparator ::: argsAfterSeparator.drop(1)
   }
 
-  /** Add a new option definition to this builder.
-    *
-    * @param name Name for new option, used as long option name in parsing, and for option identification.
-    * @param short Overload the char that will be used as short option name.
-                   Defaults to first character of the name.
-    * @param descr Description for this option, for help description.
-    * @param default Default value to use if option is not found in input arguments
-                     (if you provide this, you can omit the type on method).
-    * @param required Is this option required? Defaults to false.
-    * @param argName The name for this ortion argument, as it will appear in help. Defaults to "arg".
-    * @param noshort If set to true, then this option does not have any short name.
-    * @param conv The converter for this option. Usually found implicitly.
-    * @param validate The function, that validates the parsed value
-    * @param hidden Hides description of this option from help (this can be useful for debugging options)
-    */
-  def opt[A](
-    name: String,
-    short: Char = '\u0000',
-    descr: String = "",
-    default: () => Option[A] = () => None,
-    validate: A => Boolean = ((_:A) => true),
-    required: Boolean = false,
-    argName: String = "arg",
-    hidden: Boolean = false,
-    noshort: Boolean = noshort
-  )(implicit conv: ValueConverter[A]): Scallop = {
-
-    if (name.head.isDigit) throw new IllegalOptionParameters(Util.format("First character of the option name must not be a digit: %s", name))
-    val defaultA =
-      if (conv == flagConverter)
-        { () =>
-          if (default() == Some(true)) Some(true)
-          else Some(false)
-        }
-      else default
-    val eShort = if (short == '\u0000' || noshort) None else Some(short)
-    val validator = { (a:Any) => validate(a.asInstanceOf[A]) }
-    this.copy(opts = opts :+ SimpleOption(
-      name,
-      eShort,
-      descr,
-      required,
-      conv,
-      defaultA,
-      validator,
-      argName,
-      hidden,
-      noshort
-    ))
-  }
-
-  /** Add new property option definition to this builder.
-    *
-    * @param name Char, that will be used as prefix for property arguments.
-    * @param descr Description for this property option, for help description.
-    * @param keyName Name for 'key' part of this option arg name, as it will appear in help option definition. Defaults to "key".
-    * @param valueName Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to "value".
-    */
-  def props[A](
-    name: Char,
-    descr: String = "",
-    keyName: String = "key",
-    valueName: String = "value",
-    hidden: Boolean = false
-  )(implicit conv: ValueConverter[Map[String,A]]): Scallop = {
-    this.copy(opts = opts :+ PropertyOption(
-      name.toString,
-      name,
-      descr,
-      conv,
-      keyName,
-      valueName,
-      hidden
-    ))
-  }
-
-  def propsLong[A](
-    name: String,
-    descr: String = "",
-    keyName: String = "key",
-    valueName: String = "value",
-    hidden: Boolean = false
-  )(implicit conv: ValueConverter[Map[String,A]]): Scallop = {
-    this.copy(opts = opts :+ LongNamedPropertyOption(
-      name,
-      descr,
-      conv,
-      keyName,
-      valueName,
-      hidden
-    ))
-  }
-
-  /** Add new trailing argument definition to this builder.
-    *
-    * @param name Name for new definition, used for identification.
-    * @param required Is this trailing argument required? Defaults to true.
-    * @param descr Description for this option, for help text.
-    * @param default If this argument is not required and not found in the argument list, use this value.
-    * @param validate The function, that validates the parsed value
-    */
-  def trailArg[A](
-    name: String,
-    required: Boolean = true,
-    descr: String = "",
-    default: () => Option[A] = () => None,
-    validate: A => Boolean = ((_:A) => true),
-    hidden: Boolean = false
-  )(implicit conv: ValueConverter[A]): Scallop = {
-
-    val defaultA =
-      if (conv == flagConverter)
-        { () =>
-          if (default() == Some(true)) Some(true)
-          else Some(false)
-        }
-      else default
-    val validator = { (a:Any) => validate(a.asInstanceOf[A]) }
-    this.copy(opts = opts :+ TrailingArgsOption(
-      name,
-      required,
-      descr,
-      conv,
-      validator,
-      defaultA,
-      hidden
-    ))
-  }
-
-  /** Add new number argument definition to this builder.
-    *
-    * @param name Name for new definition, used for identification.
-    * @param required Is this trailing argument required? Defaults to true.
-    * @param descr Description for this option, for help text.
-    * @param default If this argument is not required and not found in the argument list, use this value.
-    * @param validate The function that validates the parsed value.
-    * @param hidden If set to true then this option will not be present in auto-generated help.
-    */
-  def number(
-    name: String,
-    required: Boolean = false,
-    descr: String = "",
-    default: () => Option[Long] = () => None,
-    validate: Long => Boolean = ((_:Long) => true),
-    hidden: Boolean = false
-  )(implicit conv: ValueConverter[Long]): Scallop = {
-
-    val validator = { (a: Any) => validate(a.asInstanceOf[Long]) }
-    this.copy(opts = opts :+ NumberArgOption(
-      name,
-      required,
-      descr,
-      conv,
-      validator,
-      default,
-      hidden
-    ))
-  }
-
-  /** Add new toggle option definition to this builer.
-    *
-    * @param name  Name for new definition, used for identification.
-    * @param default Default value
-    * @param short Name for short form of this option
-    * @param noshort If set to true, then this option will not have any short name.
-    * @param prefix Prefix to name of the option, that will be used for "negative" version of the
-                    option.
-    * @param descrYes Description for positive variant of this option.
-    * @param descrNo Description for negative variant of this option.
-    * @param hidden If set to true, then this option will not be present in auto-generated help.
-    */
-  def toggle(
-    name: String,
-    default: () => Option[Boolean] = () => None,
-    short: Char = '\u0000',
-    noshort: Boolean = noshort,
-    prefix: String = "no",
-    descrYes: String = "",
-    descrNo: String = "",
-    hidden: Boolean = false
-  ) = {
-
-    val eShort = if (short == '\u0000' || noshort) None else Some(short)
-    this.copy(opts = opts :+ ToggleOption(
-      name,
-      default,
-      eShort,
-      noshort,
-      prefix,
-      descrYes,
-      descrNo,
-      hidden
-    ))
+  def appendOption(option: CliOption): Scallop = {
+    this.copy(opts = opts :+ option)
   }
 
   /** Adds a subbuilder (subcommand) to this builder.

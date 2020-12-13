@@ -200,48 +200,6 @@ class HelpTest extends ScallopTestBase {
         |""".stripMargin
   }
 
-  test ("splitting commands list into 'main' and 'other' options") {
-    object Conf extends ScallopConf(Nil) {
-      mainOptions = Seq(bananas, apples)
-      val apples     = opt[Int](descr = "amount of apples")
-      val bananas    = opt[Int](descr = "amount of bananas")
-      val coconuts   = opt[Int](descr = "amount of coconuts")
-      val dewberries = opt[Int](descr = "amount of dewberries")
-
-      verify()
-    }
-    Conf.builder.help shouldBe
-      """  -b, --bananas  <arg>      amount of bananas
-        |  -a, --apples  <arg>       amount of apples
-        |
-        |  -c, --coconuts  <arg>     amount of coconuts
-        |  -d, --dewberries  <arg>   amount of dewberries
-        |  -h, --help                Show help message""".stripMargin
-  }
-
-  test ("splitting commands list into 'main' and 'other' options (in subcommands)") {
-    object Conf extends ScallopConf(Nil) {
-      val plant = new Subcommand("plant") {
-        mainOptions = Seq(bananas, apples)
-        val apples     = opt[Int](descr = "amount of apples")
-        val bananas    = opt[Int](descr = "amount of bananas")
-        val coconuts   = opt[Int](descr = "amount of coconuts")
-        val dewberries = opt[Int](descr = "amount of dewberries")
-
-      }
-      addSubcommand(plant)
-
-      verify()
-    }
-    Conf.plant.builder.help shouldBe
-      """  -b, --bananas  <arg>      amount of bananas
-        |  -a, --apples  <arg>       amount of apples
-        |
-        |  -c, --coconuts  <arg>     amount of coconuts
-        |  -d, --dewberries  <arg>   amount of dewberries
-        |  -h, --help                Show help message""".stripMargin
-  }
-
   test ("user-provided help & version option takes precedence over hardcoded one") {
     object Conf extends ScallopConf(Nil) {
       val help = opt[Boolean](noshort = true, descr = "custom help descr")

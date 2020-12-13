@@ -120,4 +120,15 @@ class OptionNameGuessing extends ScallopTestBase {
     Conf.`source-folder`.name shouldBe "source-folder"
   }
 
+  test ("option groups") {
+    object Conf extends ScallopConf(List("--foo", "--bar")) {
+      val g = group()
+      val foo = opt[Boolean](group = g)
+      val bar = opt[Boolean]()
+      verify()
+    }
+    Conf.foo() shouldBe true
+    Conf.bar() shouldBe true
+  }
+
 }

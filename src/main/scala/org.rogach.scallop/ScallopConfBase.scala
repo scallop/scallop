@@ -2,10 +2,10 @@ package org.rogach.scallop
 
 import java.io.File
 import java.nio.file.{Files, Path}
+import scala.collection.{Seq => CSeq}
+import scala.collection.mutable.ArrayBuffer
 
 import org.rogach.scallop.exceptions._
-
-import scala.collection.{Seq => CSeq}
 
 class Subcommand(commandNameAndAliases: String*) extends ScallopConf(Nil, commandNameAndAliases) {
   /** Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled. */
@@ -49,9 +49,9 @@ abstract class ScallopConfBase(
     editBuilder(_.addSubBuilder(conf.commandNameAndAliases, conf.builder))
   }
 
-  var builder = Scallop(args)
+  private[scallop] var builder = Scallop(args)
 
-  def editBuilder(fn: Scallop => Scallop): Unit = {
+  private[scallop] def editBuilder(fn: Scallop => Scallop): Unit = {
     builder = fn(builder)
   }
 
@@ -121,7 +121,7 @@ abstract class ScallopConfBase(
 
   var verified = false
 
-  /** Add a new option definition to this config and get a holder for the value.
+  /** Add a new simple option definition to this config.
     *
     * @param name Name for new option, used as long option name in parsing, and for option identification.
     * @param short Overload the char that will be used as short option name. Defaults to first character of the name.
@@ -129,21 +129,24 @@ abstract class ScallopConfBase(
     * @param default Default value to use if option is not found in input arguments (if you provide this, you can omit the type on method).
     * @param required Is this option required? Defaults to false.
     * @param argName The name for this option argument, as it will appear in help. Defaults to "arg".
+    * @param hidden Hides description of this option from help (this can be useful for debugging options)
     * @param noshort If set to true, then this option does not have any short name.
+    * @param group Option group to add this option to.
     * @param conv The converter for this option. Usually found implicitly.
-    * @return A holder for parsed value
+    * @returns ScallopOption, container for the parsed option value.
     */
   def opt[A](
-      name: String = null,
-      short: Char = '\u0000',
-      descr: String = "",
-      default: => Option[A] = None,
-      validate: A => Boolean = (_:A) => true,
-      required: Boolean = false,
-      argName: String = "arg",
-      hidden: Boolean = false,
-      noshort: Boolean = noshort)
-      (implicit conv:ValueConverter[A]): ScallopOption[A] = {
+    name: String = null,
+    short: Char = '\u0000',
+    descr: String = "",
+    default: => Option[A] = None,
+    validate: A => Boolean = (_:A) => true,
+    required: Boolean = false,
+    argName: String = "arg",
+    hidden: Boolean = false,
+    noshort: Boolean = builder.noshort,
+    group: ScallopOptionGroup = null
+  )(implicit conv:ValueConverter[A]): ScallopOption[A] = {
 
     // guessing name, if needed
     val resolvedName =
@@ -154,8 +157,38 @@ abstract class ScallopConfBase(
         else throw new IllegalArgumentException("You should supply a name for your option!")
       else name
 
-    editBuilder(_.opt(resolvedName, short, descr, () => default, validate, required, argName, hidden, noshort)(conv))
-    new ScallopOption[A](() => resolvedName) {
+    if (resolvedName.head.isDigit) {
+      throw new IllegalOptionParameters(Util.format("First character of the option name must not be a digit: %s", resolvedName))
+    }
+
+    val defaultA =
+      if (conv == flagConverter)
+        { () =>
+          if (default == Some(true)) Some(true)
+          else Some(false)
+        }
+      else () => default
+
+    val optionDescriptor = SimpleOption(
+      name = resolvedName,
+      short = if (short == '\u0000' || noshort) None else Some(short),
+      descr = descr,
+      required = required,
+      converter = conv,
+      default = defaultA,
+      validator = { (a:Any) => validate(a.asInstanceOf[A]) },
+      argName = argName,
+      hidden = hidden,
+      noshort = noshort
+    )
+
+    if (group != null) {
+      group.options.append(optionDescriptor)
+    }
+
+    editBuilder(_.appendOption(optionDescriptor))
+
+    new ScallopOption[A](() => resolvedName, Some(optionDescriptor)) {
       override lazy val fn = { (name: String) =>
         assertVerified()
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[A]]
@@ -167,7 +200,9 @@ abstract class ScallopConfBase(
     }
   }
 
-  /** Add a new option definition to this config and get a holder for the value.
+  /** Add a new choice option definition to this config.
+    *
+    * This option takes a single string argument and restricts values to a list of possible choices.
     *
     * @param choices List of possible argument values
     * @param name Name for new option, used as long option name in parsing, and for option identification.
@@ -178,7 +213,8 @@ abstract class ScallopConfBase(
     * @param argName The name for this option argument, as it will appear in help. Defaults to "arg".
     * @param hidden If set to true, then this option will be hidden from generated help output.
     * @param noshort If set to true, then this option does not have any short name.
-    * @return A holder for parsed value
+    * @param group Option group to add this option to.
+    * @returns ScallopOption, container for the parsed option value.
     */
   def choice(
     choices: Seq[String],
@@ -189,7 +225,8 @@ abstract class ScallopConfBase(
     required: Boolean = false,
     argName: String = "arg",
     hidden: Boolean = false,
-    noshort: Boolean = noshort
+    noshort: Boolean = noshort,
+    group: ScallopOptionGroup = null
   ): ScallopOption[String] = {
     this.opt[String](
       name = name,
@@ -199,7 +236,8 @@ abstract class ScallopConfBase(
       required = required,
       argName = argName,
       hidden = hidden,
-      noshort = noshort
+      noshort = noshort,
+      group = group
     )(new ValueConverter[String] {
       def parse(s: List[(String, List[String])]) = {
         s match {
@@ -217,23 +255,27 @@ abstract class ScallopConfBase(
     })
   }
 
-  private var _mainOptions: () => Seq[String] = () => Nil
-  /** Options, that are to be printed first in the help printout */
-  def mainOptions = _mainOptions()
-  /** Set options, that are to be printed first in the help printout */
-  def mainOptions_=(newMainOptions: => Seq[ScallopOption[_]]) = {
-    val prefix = getPrefix
-    _mainOptions = () => {
-      newMainOptions.map(_.name.stripPrefix(prefix))
-    }
-  }
-
+  /** Add a new tally option definition to this config.
+    *
+    * Tally options count how many times the option was provided on the command line.
+    * E.g., `-vvv` will be countet as `3`.
+    *
+    * @param name Name for new option, used as long option name in parsing, and for option identification.
+    * @param short Overload the char that will be used as short option name. Defaults to first character of the name.
+    * @param descr Description for this option, for help description.
+    * @param hidden If set to true, then this option will be hidden from generated help output.
+    * @param noshort If set to true, then this option does not have any short name.
+    * @param group Option group to add this option to.
+    * @returns ScallopOption, container for the parsed option value.
+    */
   def tally(
-      name: String = null,
-      short: Char = '\u0000',
-      descr: String = "",
-      hidden: Boolean = false,
-      noshort: Boolean = noshort): ScallopOption[Int] = {
+    name: String = null,
+    short: Char = '\u0000',
+    descr: String = "",
+    hidden: Boolean = false,
+    noshort: Boolean = builder.noshort,
+    group: ScallopOptionGroup = null
+  ): ScallopOption[Int] = {
 
     // guessing name, if needed
     val resolvedName =
@@ -242,10 +284,26 @@ abstract class ScallopConfBase(
         else throw new IllegalArgumentException("You should supply a name for your option!")
       else name
 
-    editBuilder(
-      _.opt[Int](resolvedName, short, descr, () => Some(0), _ => true,
-                 false, "", hidden, noshort)(tallyConverter))
-    new ScallopOption[Int](() => resolvedName) {
+    val optionDescriptor = SimpleOption(
+      name = resolvedName,
+      short = if (short == '\u0000' || noshort) None else Some(short),
+      descr = descr,
+      required = false,
+      converter = tallyConverter,
+      default = () => Some(0),
+      validator = _ => true,
+      argName = "",
+      hidden = hidden,
+      noshort = noshort
+    )
+
+    if (group != null) {
+      group.options.append(optionDescriptor)
+    }
+
+    editBuilder(_.appendOption(optionDescriptor))
+
+    new ScallopOption[Int](() => resolvedName, Some(optionDescriptor)) {
       override lazy val fn = { (name: String) =>
         assertVerified()
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[Int]]
@@ -257,44 +315,94 @@ abstract class ScallopConfBase(
     }
   }
 
-  /** Add new property option definition to this config object, and get a handle for option retreiving.
+  /** Add new property option definition to this config object.
     *
-    * @param name Char, that will be used as prefix for property arguments.
+    * This option will parse arguments like `-Dkey=value` or `-D key1=value1 key2=value2`.
+    *
+    * @param name Character that will be used as prefix for property arguments.
     * @param descr Description for this property option, for help description.
     * @param keyName Name for 'key' part of this option arg name, as it will appear in help option definition. Defaults to "key".
     * @param valueName Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to "value".
-    * @return A holder for retreival of the values.
+    * @param hidden If set to true, then this option will be hidden from generated help output.
+    * @param group Option group to add this option to.
+    * @returns ScallopOption, container for the parsed option value.
     */
   def props[A](
-      name: Char = 'D',
-      descr: String = "",
-      keyName: String = "key",
-      valueName: String = "value",
-      hidden: Boolean = false)
-      (implicit conv: ValueConverter[Map[String,A]]): Map[String, A] = {
-    editBuilder(_.props(name, descr, keyName, valueName, hidden)(conv))
+    name: Char = 'D',
+    descr: String = "",
+    keyName: String = "key",
+    valueName: String = "value",
+    hidden: Boolean = false,
+    group: ScallopOptionGroup = null
+  )(implicit conv: ValueConverter[Map[String,A]]): LazyMap[String, A] = {
+
+    val optionDescriptor = PropertyOption(
+      name = name.toString,
+      short = name,
+      descr = descr,
+      converter = conv,
+      keyName = keyName,
+      valueName = valueName,
+      hidden = hidden
+    )
+
+    if (group != null) {
+      group.options.append(optionDescriptor)
+    }
+
+    editBuilder(_.appendOption(optionDescriptor))
+
     new LazyMap({
       assertVerified()
       rootConfig.builder.apply(getPrefixedName(name.toString)).asInstanceOf[Map[String, A]]
-    })
+    }, Some(optionDescriptor))
   }
 
+
+  /** Add new property option definition to this config object.
+    *
+    * This option will parse arguments like `--Props key1=value1 key2=value2`.
+    *
+    * @param name Name for new option, used as long option name in parsing, and for option identification.
+    * @param descr Description for this property option, for help description.
+    * @param keyName Name for 'key' part of this option arg name, as it will appear in help option definition. Defaults to "key".
+    * @param valueName Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to "value".
+    * @param hidden If set to true, then this option will be hidden from generated help output.
+    * @param group Option group to add this option to.
+    * @returns ScallopOption, container for the parsed option value.
+    */
   def propsLong[A](
-      name: String = "Props",
-      descr: String = "",
-      keyName: String = "key",
-      valueName: String = "value",
-      hidden: Boolean = false)
-      (implicit conv: ValueConverter[Map[String,A]]): Map[String, A] = {
-    editBuilder(_.propsLong(name, descr, keyName, valueName, hidden)(conv))
+    name: String = "Props",
+    descr: String = "",
+    keyName: String = "key",
+    valueName: String = "value",
+    hidden: Boolean = false,
+    group: ScallopOptionGroup = null
+  )(implicit conv: ValueConverter[Map[String,A]]): Map[String, A] = {
+
+    val optionDescriptor = LongNamedPropertyOption(
+      name = name,
+      descr = descr,
+      converter = conv,
+      keyName = keyName,
+      valueName = valueName,
+      hidden = hidden
+    )
+
+    if (group != null) {
+      group.options.append(optionDescriptor)
+    }
+
+    editBuilder(_.appendOption(optionDescriptor))
+
     new LazyMap({
       assertVerified()
       rootConfig.builder.apply(getPrefixedName(name)).asInstanceOf[Map[String, A]]
-    })
+    }, Some(optionDescriptor))
   }
 
 
-  /** Add new trailing argument definition to this config, and get a holder for it's value.
+  /** Add new trailing argument definition to this config.
     *
     * @param name Name for new definition, used for identification.
     * @param descr Description for this option, for help text.
@@ -302,19 +410,46 @@ abstract class ScallopConfBase(
     * @param required Is this trailing argument required? Defaults to true.
     * @param default If this argument is not required and not found in the argument list, use this value.
     * @param hidden If set to true then this option will not be present in auto-generated help.
+    * @param group Option group to add this option to.
+    * @returns ScallopOption, container for the parsed option value.
     */
   def trailArg[A](
-      name: String = null,
-      descr: String = "",
-      validate: A => Boolean = (_:A) => true,
-      required: Boolean = true,
-      default: => Option[A] = None,
-      hidden: Boolean = false)
-      (implicit conv:ValueConverter[A]): ScallopOption[A] = {
-    val resolvedName =
-      if (name == null) genName() else name
-    editBuilder(_.trailArg(resolvedName, required, descr, () => default, validate, hidden)(conv))
-    new ScallopOption[A](() => resolvedName) {
+    name: String = null,
+    descr: String = "",
+    validate: A => Boolean = (_:A) => true,
+    required: Boolean = true,
+    default: => Option[A] = None,
+    hidden: Boolean = false,
+    group: ScallopOptionGroup = null
+  )(implicit conv:ValueConverter[A]): ScallopOption[A] = {
+
+    val resolvedName = if (name == null) genName() else name
+
+    val defaultA =
+      if (conv == flagConverter)
+        { () =>
+          if (default == Some(true)) Some(true)
+          else Some(false)
+        }
+      else () => default
+
+    val optionDescriptor = TrailingArgsOption(
+      name = resolvedName,
+      required = required,
+      descr = descr,
+      converter = conv,
+      validator = { (a:Any) => validate(a.asInstanceOf[A]) },
+      default = defaultA,
+      hidden = hidden
+    )
+
+    if (group != null) {
+      group.options.append(optionDescriptor)
+    }
+
+    editBuilder(_.appendOption(optionDescriptor))
+
+    new ScallopOption[A](() => resolvedName, Some(optionDescriptor)) {
       override lazy val fn = { (name: String) =>
         assertVerified()
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[A]]
@@ -334,15 +469,18 @@ abstract class ScallopConfBase(
     * @param default If this argument is not required and not found in the argument list, use this value.
     * @param validate The function that validates the parsed value.
     * @param hidden If set to true then this option will not be present in auto-generated help.
+    * @param group Option group to add this option to.
+    * @returns ScallopOption, container for the parsed option value.
     */
   def number(
-      name: String = null,
-      descr: String = "",
-      validate: Long => Boolean = (_:Long) => true,
-      required: Boolean = false,
-      default: => Option[Long] = None,
-      hidden: Boolean = false)
-      (implicit conv: ValueConverter[Long]): ScallopOption[Long] = {
+    name: String = null,
+    descr: String = "",
+    validate: Long => Boolean = (_:Long) => true,
+    required: Boolean = false,
+    default: => Option[Long] = None,
+    hidden: Boolean = false,
+    group: ScallopOptionGroup = null
+  )(implicit conv: ValueConverter[Long]): ScallopOption[Long] = {
 
     val resolvedName =
       if (name == null) {
@@ -350,9 +488,23 @@ abstract class ScallopConfBase(
         else throw new IllegalArgumentException("You should supply a name for your number option!")
       } else name
 
-    editBuilder(_.number(resolvedName, required, descr, () => default, validate, hidden)(conv))
+    val optionDescriptor = NumberArgOption(
+      name = resolvedName,
+      required = required,
+      descr = descr,
+      converter = conv,
+      validator = { (a: Any) => validate(a.asInstanceOf[Long]) },
+      default = () => default,
+      hidden = hidden
+    )
 
-    new ScallopOption[Long](() => resolvedName) {
+    if (group != null) {
+      group.options.append(optionDescriptor)
+    }
+
+    editBuilder(_.appendOption(optionDescriptor))
+
+    new ScallopOption[Long](() => resolvedName, Some(optionDescriptor)) {
       override lazy val fn = { (name: String) =>
         assertVerified()
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[Long]]
@@ -366,7 +518,7 @@ abstract class ScallopConfBase(
 
   /** Add new toggle option definition to this config, and get a holder for it's value.
     *
-    * Toggle options are just glorified flag options. For example, if you will ask for a
+    * Toggle options are just glorified flag options. For example, if you create a
     * toggle option with name "verbose", it will be invocable in three ways -
     * "--verbose", "--noverbose", "-v".
     *
@@ -379,23 +531,45 @@ abstract class ScallopConfBase(
     * @param descrYes Description for positive variant of this option.
     * @param descrNo Description for negative variant of this option.
     * @param hidden If set to true, then this option will not be present in auto-generated help.
+    * @param group Option group to add this option to.
+    * @returns ScallopOption, container for the parsed option value.
     */
   def toggle(
-              name: String = null,
-              default: => Option[Boolean] = None,
-              short: Char = '\u0000',
-              noshort: Boolean = noshort,
-              prefix: String = "no",
-              descrYes: String = "",
-              descrNo: String = "",
-              hidden: Boolean = false): ScallopOption[Boolean] = {
+    name: String = null,
+    default: => Option[Boolean] = None,
+    short: Char = '\u0000',
+    noshort: Boolean = noshort,
+    prefix: String = "no",
+    descrYes: String = "",
+    descrNo: String = "",
+    hidden: Boolean = false,
+    group: ScallopOptionGroup = null
+  ): ScallopOption[Boolean] = {
+
     val resolvedName =
       if (name == null) {
         if (_guessOptionName) genName()
         else throw new IllegalArgumentException("You should supply a name for your toggle!")
       } else name
-    editBuilder(_.toggle(resolvedName, () => default, short, noshort, prefix, descrYes, descrNo, hidden))
-    new ScallopOption[Boolean](() => resolvedName) {
+
+    val optionDescriptor = ToggleOption(
+      resolvedName,
+      default = () => default,
+      short = if (short == '\u0000' || noshort) None else Some(short),
+      noshort = noshort,
+      prefix = prefix,
+      descrYes = descrYes,
+      descrNo = descrNo,
+      hidden = hidden
+    )
+
+    if (group != null) {
+      group.options.append(optionDescriptor)
+    }
+
+    editBuilder(_.appendOption(optionDescriptor))
+
+    new ScallopOption[Boolean](() => resolvedName, Some(optionDescriptor)) {
       override lazy val fn = { (name: String) =>
         assertVerified()
         rootConfig.builder.get(getPrefixedName(name)).asInstanceOf[Option[Boolean]]
@@ -406,6 +580,30 @@ abstract class ScallopConfBase(
       }
     }
   }
+
+
+  private var _mainOptions: () => Seq[CliOption] = () => Nil
+  /** Options, that are to be printed first in the help printout */
+  def mainOptions = _mainOptions()
+  /** Set options, that are to be printed first in the help printout */
+  @deprecated(
+    "Use option groups instead, for example see https://github.com/scallop/scallop/wiki/Help-information-printing#option-groups",
+    since = "Scallop 4.0.0"
+  )
+  def mainOptions_=(newMainOptions: => Seq[ScallopOption[_]]) = {
+    _mainOptions = () => {
+      newMainOptions.flatMap(_.cliOption)
+    }
+  }
+
+  private val optionGroups: ArrayBuffer[ScallopOptionGroup] = new ArrayBuffer()
+  /** Create and return a new option group */
+  def group(header: String = ""): ScallopOptionGroup = {
+    val newGroup = new ScallopOptionGroup(header)
+    optionGroups.append(newGroup)
+    newGroup
+  }
+
 
   /** Verify that this config object is properly configured. */
   private[scallop] def verifyBuilder(): Unit = {
@@ -824,6 +1022,14 @@ abstract class ScallopConfBase(
   }
 
   def verifyConf(): Unit = {
+    // pass option groups into the builder
+    editBuilder(_.copy(
+      mainOptions = _mainOptions().toList,
+      optionGroups = optionGroups.toList.map { g =>
+        (g.header, g.options.toSeq)
+      }
+    ))
+
     if (_guessOptionName) {
       performOptionNameGuessing()
     }
@@ -835,9 +1041,6 @@ abstract class ScallopConfBase(
         throw new OptionNameGuessingUnsupported()
       }
     }
-
-    // now, when we fixed option names, we can push mainOptions into the builder
-    editBuilder(_.copy(mainOpts = _mainOptions().toList))
   }
 
   def verify(): Unit = {
@@ -847,6 +1050,6 @@ abstract class ScallopConfBase(
 
 }
 
-/** Convenience variable to permit testing. */
+/** Convenience variables to permit testing. */
 object throwError extends util.DynamicVariable[Boolean](false)
 object overrideColorOutput extends util.DynamicVariable[Option[Boolean]](None)

@@ -16,9 +16,9 @@ object Util {
               val i = f.toString.toInt - 1
               formatString.charAt(si + 3) match {
                 case 's' =>
-                  s.append(args(i).toString)
+                  s.append(String.valueOf(args(i)))
                 case 'd' =>
-                  s.append(args(i).toString)
+                  s.append(String.valueOf(args(i)))
                 case _ =>
                   new java.util.MissingFormatArgumentException(formatString.substring(si, 4))
               }
@@ -29,9 +29,9 @@ object Util {
           } else {
             f match {
               case 's' =>
-                s.append(args(ai).toString)
+                s.append(String.valueOf(args(ai)))
               case 'd' =>
-                s.append(args(ai).toString)
+                s.append(String.valueOf(args(ai)))
               case _ =>
                 new java.util.MissingFormatArgumentException("%" + f)
             }

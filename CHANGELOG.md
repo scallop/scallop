@@ -5,11 +5,12 @@
 - `singleArgConverter2` was removed;
 - `ArgType.V` is now sealed abstract class;
 - behavior change: Scallop now supports trailing arguments before options, thus `--opt1 optArg1 trailArg1 --opt2` will now be parsed instead of throwing an error;
+- `ScallopHelpFormatter.getOptionLines` (and similar methods) now returns `List[Either[String, CliOption]]` instead of `List[Option[CliOption]]`;
 ## Features
-- Scallop now supports trailing arguments before (or between) options, see #147;
+- added support for trailing arguments before (or between) options, see #147;
 - added cross-compilation for Scala 3.0.0-M2, see #215 and #216 (@Sciss);
+- added support for option ordering in help output via option groups, see #196;
 ## Bugfixes
-## Changes
 ## Other
 
 # v3.5.1

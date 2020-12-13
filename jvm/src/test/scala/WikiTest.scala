@@ -300,22 +300,30 @@ part of git suite
     exits shouldBe List(0)
   }
 
-  test ("Help information printing: main options") {
+  test ("Help information printing: option groups") {
     class Conf(args: Seq[String]) extends ScallopConf(args) {
-      mainOptions = Seq(bananas, apples)
-      val apples     = opt[Int](descr = "amount of apples")
-      val bananas    = opt[Int](descr = "amount of bananas")
-      val coconuts   = opt[Int](descr = "amount of coconuts")
-      val dewberries = opt[Int](descr = "amount of dewberries")
+      val primaryFruits = group("Primary fruits:")
+      val bananas    = opt[Int](descr = "amount of bananas", group = primaryFruits)
+      val apples     = opt[Int](descr = "amount of apples", group = primaryFruits)
+
+      val secondaryFruits = group(header = "Secondary fruits:")
+      val coconuts   = opt[Int](descr = "amount of coconuts", group = secondaryFruits)
+      val dewberries = opt[Int](descr = "amount of dewberries", group = secondaryFruits)
+
+      val zucchini = opt[Int](descr = "amount of zucchini")
       verify()
     }
 
     val expectedHelpText = """
+ Primary fruits:
   -b, --bananas  <arg>      amount of bananas
   -a, --apples  <arg>       amount of apples
 
+ Secondary fruits:
   -c, --coconuts  <arg>     amount of coconuts
   -d, --dewberries  <arg>   amount of dewberries
+
+  -z, --zucchini  <arg>     amount of zucchini
   -h, --help                Show help message
 """.stripPrefix("\n")
 

@@ -26,7 +26,7 @@ class FormatterTest extends ScallopTestBase {
 
   test ("exactly-fitting argument formatting") {
     val args = List(
-      Some(HelpInfo("-a, --apples", "* * * *", () => None))
+      Right(HelpInfo("-a, --apples", "* * * *", () => None))
     )
     val formatted = Formatter.format(args, Some(20), false)
     formatted.split("\n").foreach { line =>
@@ -38,7 +38,7 @@ class FormatterTest extends ScallopTestBase {
 
   test ("almost-exactly fitting argument formatting") {
     val args = List(
-      Some(HelpInfo("-a, --apple", "* * * *", () => None))
+      Right(HelpInfo("-a, --apple", "* * * *", () => None))
     )
     val formatted = Formatter.format(args, Some(20), false)
     // Should format with a trailing whitespace to exactly 20 chars.
@@ -51,7 +51,7 @@ class FormatterTest extends ScallopTestBase {
 
   test ("long-only argument formatting") {
     val args = List(
-      Some(HelpInfo("--apples", "* * * *", () => None))
+      Right(HelpInfo("--apples", "* * * *", () => None))
     )
     val formatted = Formatter.format(args, Some(20), false)
     formatted.split("\n").foreach { line =>

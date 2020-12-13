@@ -6,8 +6,13 @@ package org.rogach.scallop
   * and evaluates the value only as the last resort.
   * @param nm Name for the option
   * @param _transformCount Count of .map, .filter, etc. operations applied to this option
+  * @param cliOption option descriptor (names, converters, validatiors, etc.)
   */
-abstract class ScallopOption[A](nm: () => String, val _transformCount: Int = 0) { opt =>
+abstract class ScallopOption[A](
+  nm: () => String,
+  private[scallop] val cliOption: Option[CliOption],
+  val _transformCount: Int = 0
+) extends ScallopOptionBase { opt =>
 
   private[scallop] var _name: () => String = nm
 
@@ -36,7 +41,7 @@ abstract class ScallopOption[A](nm: () => String, val _transformCount: Int = 0) 
   def isSupplied = supplied(name)
 
   private def mapResult[B](transformer: Option[A] => Option[B]) =
-    new ScallopOption[B](() => name, _transformCount + 1) {
+    new ScallopOption[B](() => name, cliOption, _transformCount + 1) {
       override lazy val fn = opt.fn andThen transformer
       override lazy val supplied = opt.supplied
     }

@@ -2,31 +2,35 @@ package org.rogach.scallop
 
 object Formatter {
 
-  /** Distance between argument line description column */
-  private val COLUMN_PADDING = 3
-  private val DEFAULT_WIDTH = 80
-  private val INDENT = 2
+  /** Distance between option name and description column */
+  private val ColumnPadding = 3
+  private val DefaultWidth = 80
+  private val Indent = 2
 
   /** Accepts a list of Option(argument line, option description, optional default value). If None, empty line
     * is inserted.
     * Also accepts optional width, to which the result must be formatted.
     */
-  def format(s: List[Option[HelpInfo]], width: Option[Int], appendDefault: Boolean): String = {
-    val neededWidth = width getOrElse DEFAULT_WIDTH
+  def format(s: List[Either[String, HelpInfo]], width: Option[Int], appendDefault: Boolean): String = {
+    val neededWidth = width.getOrElse(DefaultWidth)
+    val helpInfos = s.flatMap {
+      case Left(_) => None
+      case Right(helpInfo) => Some(helpInfo)
+    }
     val argWidth =
-      if (s.isEmpty || s.head.isEmpty) 0
-      else s.map(_.map(_.argLine).getOrElse("")).map(a => if (a.startsWith("--")) "    " + a else a).map(_.size).max
+      if (helpInfos.isEmpty) 0
+      else helpInfos.map(_.argLine).map(a => if (a.startsWith("--")) "    " + a else a).map(_.size).max
     s.flatMap {
-      case Some(HelpInfo(arg, descr, defVal)) =>
+      case Left(s) => // insert line as-is
+        List(s)
+      case Right(HelpInfo(arg, descr, defVal)) =>
         val argPadding = " " * (if (arg.trim.startsWith("--")) 4 else 0)
         val text = wrap(
           descr.split(" ").toSeq ++
             (if (appendDefault) defVal().map(v => Util.format("(default = %s)", v)).toList else Nil),
-          neededWidth - argWidth - COLUMN_PADDING - INDENT
-        ).map(l => " " * (argWidth + COLUMN_PADDING + INDENT) + l)
-        (" " * INDENT + argPadding + arg + text.head.drop(arg.size + argPadding.size + INDENT)) :: text.tail
-      case None => // insert empty line
-        List("")
+          neededWidth - argWidth - ColumnPadding - Indent
+        ).map(l => " " * (argWidth + ColumnPadding + Indent) + l)
+        (" " * Indent + argPadding + arg + text.head.drop(arg.size + argPadding.size + Indent)) :: text.tail
     }.mkString("\n")
   }
 

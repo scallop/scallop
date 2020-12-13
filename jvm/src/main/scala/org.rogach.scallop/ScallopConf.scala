@@ -29,7 +29,7 @@ abstract class ScallopConf(
       .filter(_._2.name.contains("\t"))
       .sortBy(-_._2._transformCount)
 
-    val nameMap = methodsAndOptions.map { case (m, opt) =>
+    val optionMap = methodsAndOptions.reverse.flatMap { case (m, opt) =>
       val newName =
         m.getName
         .flatMap(c => if (c.isUpper) Seq('-', c.toLower) else Seq(c))
@@ -54,24 +54,27 @@ abstract class ScallopConf(
 
       // the old, generated version of name, without prefixes from parent builders
       val shortGenName = '\t' +: opt.name.reverse.takeWhile('\t'!=).reverse
-      (opt.name, (shortGenName, newName))
-    }.toMap
 
-    methodsAndOptions.foreach { case (m, opt) =>
-      val (shortGenName, newName) = nameMap(opt.name)
-      editBuilder(e => e.copy(opts = e.opts.map { o =>
-        if (o.name == shortGenName) {
-          o match {
+      opt.cliOption match {
+        case Some(cliOption) if cliOption.name == shortGenName =>
+          opt._name = () => newName
+          Some((cliOption, cliOption match {
             case o: SimpleOption => o.copy(name = newName)
             case o: TrailingArgsOption => o.copy(name = newName)
             case o: ToggleOption => o.copy(name = newName)
             case o: NumberArgOption => o.copy(name = newName)
-            case _ => o
-          }
-        } else o
-      }))
-      opt._name = () => newName
-    }
+            case _ => cliOption
+          }))
+        case _ =>
+          Nil
+      }
+    }.toMap
+
+    editBuilder(e => e.copy(
+      opts = e.opts.map(o => optionMap.getOrElse(o, o)),
+      mainOptions = e.mainOptions.map(o => optionMap.getOrElse(o, o)),
+      optionGroups = e.optionGroups.map(t => t.copy(_2 = t._2.map(o => optionMap.getOrElse(o, o))))
+    ))
   }
 
   errorMessageHandler = { message =>

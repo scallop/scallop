@@ -1,8 +1,11 @@
 package org.rogach.scallop
 
-/** A class, that lazily encapsulates a map inside.
+/** A class that lazily encapsulates a map inside.
   */
-class LazyMap[A,+B](under: => Map[A,B]) extends Map[A,B] {
+class LazyMap[A,+B](
+  under: => Map[A,B],
+  private[scallop] val cliOption: Option[CliOption]
+) extends Map[A,B] with ScallopOptionBase {
   private[this] lazy val m = under
   def get(key: A) = m.get(key)
   def iterator = m.iterator

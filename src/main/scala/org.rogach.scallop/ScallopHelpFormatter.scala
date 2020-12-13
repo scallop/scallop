@@ -16,51 +16,62 @@ class ScallopHelpFormatter {
 
   protected def getOptionsHelp(s: Scallop): String = {
     Formatter.format(
-      getOptionLines(s) flatMap {
-        case None => List(None)
-        case Some(o) => o.helpInfo(s.getOptionShortNames(o)).map(Some(_))
+      getOptionLines(s).flatMap {
+        case Left(s) => List(Left(s))
+        case Right(o) => o.helpInfo(s.getOptionShortNames(o)).map(Right(_))
       },
       s.helpWidth,
       needToAppendDefaultToDescription(s)
     )
   }
 
-  protected def getOptionLines(s: Scallop): List[Option[CliOption]] = {
-    getMainOptionLines(s) ++
-    getNormalOptionLines(s) ++
-    getHelpLine(s) ++
-    getVersionLine(s)
+  protected def getOptionLines(s: Scallop): List[Either[String, CliOption]] = {
+    joinWithEmptyLineSeparator(List(
+      getMainOptionLines(s),
+      getOptionGroupsLines(s),
+      getNormalOptionLines(s) ++ getHelpLine(s) ++ getVersionLine(s)
+    ))
   }
 
-  protected def getMainOptionLines(s: Scallop): List[Option[CliOption]] = {
-    s.mainOpts.map(mo => s.opts.find(_.name == mo)) ++
-    // insert empty line before other options if main options are defined
-    (if (s.mainOpts.nonEmpty) List(None) else Nil)
+  protected def getMainOptionLines(s: Scallop): List[Either[String, CliOption]] = {
+    s.mainOptions.map(Right(_))
   }
 
-  protected def getNormalOptionLines(s: Scallop): List[Option[CliOption]] = {
+  protected def getOptionGroupsLines(s: Scallop): List[Either[String, CliOption]] = {
+    joinWithEmptyLineSeparator(s.optionGroups.map { case (header, options) =>
+      List(header).filter(_.nonEmpty).map(h => Left(" " + h)) ++ options.map(Right(_))
+    })
+  }
+
+  protected def getNormalOptionLines(s: Scallop): List[Either[String, CliOption]] = {
+    val optionsInGroups: Set[CliOption] = s.mainOptions.toSet ++ s.optionGroups.flatMap(_._2)
+
     s.opts
     .filter(!_.isPositional)
     .filter(!_.hidden)
-    .filter(o => s.mainOpts.forall(o.name!=))
+    .filter(o => !optionsInGroups.contains(o))
     .filter(o => o.name != "help" && o.name != "version")
     .sortBy(_.name.toLowerCase)
-    .map(o => Some(o))
+    .map(o => Right(o))
   }
 
-  protected def getHelpLine(s: Scallop): List[Option[CliOption]] = {
+  protected def getHelpLine(s: Scallop): List[Either[String, CliOption]] = {
     val helpOption =
       s.opts.find(_.name == "help")
       .getOrElse(s.getHelpOption)
-    if (helpOption.hidden) Nil else List(Some(helpOption))
+    if (helpOption.hidden) Nil
+    else List(Right(helpOption))
   }
 
-  protected def getVersionLine(s: Scallop): List[Option[CliOption]] = {
+  protected def getVersionLine(s: Scallop): List[Either[String, CliOption]] = {
     val versionOption =
       s.opts.find(_.name == "version")
       .orElse(s.vers.flatMap(_ => s.getVersionOption))
       .filterNot(_.hidden)
-    if (versionOption.isDefined) List(versionOption) else Nil
+    versionOption match {
+      case None => Nil
+      case Some(o) => List(Right(o))
+    }
   }
 
   protected def getTrailingArgsHelp(s: Scallop): String = {
@@ -69,7 +80,7 @@ class ScallopHelpFormatter {
       ""
     } else {
       val trailHelp = Formatter.format(
-        trailOpts flatMap (_.helpInfo(Nil)) map (Some(_)),
+        trailOpts.flatMap(_.helpInfo(Nil)).map(Right(_)),
         s.helpWidth,
         needToAppendDefaultToDescription(s)
       )
@@ -151,5 +162,19 @@ class ScallopHelpFormatter {
 
   def getChoiceHelpText(description: String, choices: Seq[String]): String =
     Seq(description, "Choices:", choices.mkString(", ")).filter(_.nonEmpty).mkString(" ")
+
+
+  private def joinWithEmptyLineSeparator(optionLists: List[List[Either[String, CliOption]]]): List[Either[String, CliOption]] = {
+    optionLists match {
+      case first :: second :: rest =>
+        if (first.nonEmpty && second.nonEmpty) {
+          joinWithEmptyLineSeparator((first ::: List(Left("")) ::: second) :: rest)
+        } else {
+          joinWithEmptyLineSeparator((first ::: second) :: rest)
+        }
+      case _ =>
+        optionLists.flatten
+    }
+  }
 
 }
