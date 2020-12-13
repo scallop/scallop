@@ -44,23 +44,7 @@ private[scallop] object Scallop {
     )
 }
 
-/** The main builder class.
-  *
-  * @param args Arguments to parse.
-  * @param opts Options definitions.
-  * @param mainOptions options that are to be printed first in the help printout
-  * @param optionGroups list of option groups with headers and included options
-  * @param vers Version string to display in help.
-  * @param bann Banner (summary of this program and command-line usage) to display in help.
-  * @param foot Footer - displayed after options.
-  * @param descr Short description - used for subcommands
-  * @param helpWidth Width, to which the help output will be formatted (note that banner, footer, version and description are not affected!)
-  * @param shortSubcommandsHelp If true, then help output from this builder wouldn't list full help for subcommands, only short description
-  * @param appendDefaultToDescription If true, then append auto-generated text about default option value to option descriptions
-  * @param noshort If true, then do not generate short names for options by default unless overridden per option by providing its noshort parameter
-  * @param helpFormatter help formatter in this builder
-  * @param subbuilders subcommands in this builder
-  */
+/** Internal configuration builder. */
 case class Scallop(
   args: CSeq[String] = Nil,
   opts: List[CliOption] = Nil,
@@ -569,14 +553,14 @@ case class Scallop(
     Util.format("Scallop(%s)", args.mkString(", ")) + "\n" + filteredSummary(Set.empty)
   }
 
-  /** Get summary of current parser state + blurring the values of parameters provided.
+  /** Get summary of current parser state, hididng values for some of the options.
+    * Useful if you log the summary and want to avoid storing sensitive information
+    * in the logs (like passwords)
     *
-    * @param blurred names of arguments that should be hidden.
-    *
-    * Returns a list of all options in the builder, and corresponding values for them
-    * with eventually blurred values.
+    * @param blurred names of the options that should be hidden.
+    * @return a list of all options in the builder
     */
-  def filteredSummary(blurred:Set[String]): String = {
+  def filteredSummary(blurred: Set[String]): String = {
     lazy val hide = "************"
     opts.map { o =>
       Util.format(

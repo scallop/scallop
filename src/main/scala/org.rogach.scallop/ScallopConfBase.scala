@@ -7,6 +7,7 @@ import scala.collection.mutable.ArrayBuffer
 
 import org.rogach.scallop.exceptions._
 
+/** Base class for CLI subcommands. */
 class Subcommand(commandNameAndAliases: String*) extends ScallopConf(Nil, commandNameAndAliases) {
   /** Short description for this subcommand. Used if parent command has shortSubcommandsHelp enabled. */
   def descr(d: String): Unit = {
@@ -14,6 +15,7 @@ class Subcommand(commandNameAndAliases: String*) extends ScallopConf(Nil, comman
   }
 }
 
+/** Contains non-platform-specific functionality of ScallopConf. */
 abstract class ScallopConfBase(
   val args: CSeq[String] = Nil,
   protected val commandNameAndAliases: Seq[String] = Nil
@@ -60,21 +62,25 @@ abstract class ScallopConfBase(
   protected def optionNameGuessingSupported: Boolean
   protected def performOptionNameGuessing(): Unit
 
+  /** If set to true, scallop would append auto-generated text about default option value
+    * to option descriptions. */
   def appendDefaultToDescription = builder.appendDefaultToDescription
-
   /** If set to true, scallop would append auto-generated text about default option value
     * to option descriptions. */
   def appendDefaultToDescription_=(v: Boolean): Unit = {
     editBuilder(_.copy(appendDefaultToDescription = v))
   }
 
+  /** Get current custom help formatter. */
   def helpFormatter = builder.helpFormatter
-  /** Set custom help formatter.
-    */
+  /** Set custom help formatter. */
   def helpFormatter_=(formatter: ScallopHelpFormatter) = {
     editBuilder(_.copy(helpFormatter = formatter))
   }
 
+  /** If set to true, then do not generate short names for subsequently defined options by default.
+    * Only applied if a subsequent option definition does not explicitly provide its noshort-parameter.
+    */
   def noshort = builder.noshort
 
   /** If set to true, then do not generate short names for subsequently defined options by default.
@@ -119,21 +125,22 @@ abstract class ScallopConfBase(
 
   private def getPrefixedName(name: String) = getPrefix + name
 
-  var verified = false
+  private[scallop] var verified = false
 
   /** Add a new simple option definition to this config.
     *
     * @param name Name for new option, used as long option name in parsing, and for option identification.
-    * @param short Overload the char that will be used as short option name. Defaults to first character of the name.
-    * @param descr Description for this option, for help description.
+    * @param short By default, the first character of option name is used for short option name. You can override it by specifying the required character (`short = 'c'`).
+    * @param descr Description for the option. Will be printed in help message, carefully formatted to the output width (80 characters by default).
     * @param default Default value to use if option is not found in input arguments (if you provide this, you can omit the type on method).
+    * @param validate The function that validates the parsed value.
     * @param required Is this option required? Defaults to false.
     * @param argName The name for this option argument, as it will appear in help. Defaults to "arg".
-    * @param hidden Hides description of this option from help (this can be useful for debugging options)
+    * @param hidden Hides description of this option from help (this can be useful for debugging options).
     * @param noshort If set to true, then this option does not have any short name.
     * @param group Option group to add this option to.
     * @param conv The converter for this option. Usually found implicitly.
-    * @returns ScallopOption, container for the parsed option value.
+    * @return ScallopOption, container for the parsed option value.
     */
   def opt[A](
     name: String = null,
@@ -204,7 +211,7 @@ abstract class ScallopConfBase(
     *
     * This option takes a single string argument and restricts values to a list of possible choices.
     *
-    * @param choices List of possible argument values
+    * @param choices List of possible argument values.
     * @param name Name for new option, used as long option name in parsing, and for option identification.
     * @param short Overload the char that will be used as short option name. Defaults to first character of the name.
     * @param descr Description for this option, for help description.
@@ -214,7 +221,8 @@ abstract class ScallopConfBase(
     * @param hidden If set to true, then this option will be hidden from generated help output.
     * @param noshort If set to true, then this option does not have any short name.
     * @param group Option group to add this option to.
-    * @returns ScallopOption, container for the parsed option value.
+    * @param conv The converter for this option. Usually found implicitly.
+    * @return ScallopOption, container for the parsed option value.
     */
   def choice(
     choices: Seq[String],
@@ -266,7 +274,7 @@ abstract class ScallopConfBase(
     * @param hidden If set to true, then this option will be hidden from generated help output.
     * @param noshort If set to true, then this option does not have any short name.
     * @param group Option group to add this option to.
-    * @returns ScallopOption, container for the parsed option value.
+    * @return ScallopOption, container for the parsed option value.
     */
   def tally(
     name: String = null,
@@ -325,7 +333,8 @@ abstract class ScallopConfBase(
     * @param valueName Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to "value".
     * @param hidden If set to true, then this option will be hidden from generated help output.
     * @param group Option group to add this option to.
-    * @returns ScallopOption, container for the parsed option value.
+    * @param conv The converter for this option. Usually found implicitly.
+    * @return ScallopOption, container for the parsed option value.
     */
   def props[A](
     name: Char = 'D',
@@ -369,7 +378,8 @@ abstract class ScallopConfBase(
     * @param valueName Name for 'value' part of this option arg name, as it will appear in help option definition. Defaults to "value".
     * @param hidden If set to true, then this option will be hidden from generated help output.
     * @param group Option group to add this option to.
-    * @returns ScallopOption, container for the parsed option value.
+    * @param conv The converter for this option. Usually found implicitly.
+    * @return ScallopOption, container for the parsed option value.
     */
   def propsLong[A](
     name: String = "Props",
@@ -411,7 +421,8 @@ abstract class ScallopConfBase(
     * @param default If this argument is not required and not found in the argument list, use this value.
     * @param hidden If set to true then this option will not be present in auto-generated help.
     * @param group Option group to add this option to.
-    * @returns ScallopOption, container for the parsed option value.
+    * @param conv The converter for this option. Usually found implicitly.
+    * @return ScallopOption, container for the parsed option value.
     */
   def trailArg[A](
     name: String = null,
@@ -463,6 +474,8 @@ abstract class ScallopConfBase(
 
   /** Add new number argument definition to this config and get a holder for it's value.
     *
+    * Parses arguments like `-1` or `-3` (like GNU tail, for example).
+    *
     * @param name Name for new definition, used for identification.
     * @param required Is this trailing argument required? Defaults to true.
     * @param descr Description for this option, for help text.
@@ -470,7 +483,8 @@ abstract class ScallopConfBase(
     * @param validate The function that validates the parsed value.
     * @param hidden If set to true then this option will not be present in auto-generated help.
     * @param group Option group to add this option to.
-    * @returns ScallopOption, container for the parsed option value.
+    * @param conv The converter for this option. Usually found implicitly.
+    * @return ScallopOption, container for the parsed option value.
     */
   def number(
     name: String = null,
@@ -526,13 +540,12 @@ abstract class ScallopConfBase(
     * @param default default value for this option
     * @param short Overload the char that will be used as short option name. Defaults to first character of the name.
     * @param noshort If set to true, then this option will not have any short name.
-    * @param prefix Prefix to name of the option, that will be used for "negative" version of the
-                    option.
+    * @param prefix Prefix to name of the option, that will be used for "negative" version of the option.
     * @param descrYes Description for positive variant of this option.
     * @param descrNo Description for negative variant of this option.
     * @param hidden If set to true, then this option will not be present in auto-generated help.
     * @param group Option group to add this option to.
-    * @returns ScallopOption, container for the parsed option value.
+    * @return ScallopOption, container for the parsed option value.
     */
   def toggle(
     name: String = null,
@@ -681,8 +694,7 @@ abstract class ScallopConfBase(
     validations :+= (() => fn)
   }
 
-  /** In the verify stage, if opt was supplied, checks that at least one of the options in list are also supplied.
-    *
+  /** Add a check that at least one of the options in the list was supplied if `opt` was supplied.
     * @param opt option, that depends on any of options in list
     * @param list list of dependencies (at least one will need to be present)
     */
@@ -695,9 +707,8 @@ abstract class ScallopConfBase(
     } else Right(())
   }
 
-  /** In the verify stage, if opt was supplied, checks that all of the options in list are also supplied.
-    *
-    * @param opt option, that depends on all of options in list
+  /** Add a check that all of the options in the list were also supplied if `opt` was supplied.
+    * @param opt option that depends on all of options in list
     * @param list list of dependencies (all will need to be present)
     */
   def dependsOnAll(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
@@ -709,9 +720,8 @@ abstract class ScallopConfBase(
     } else Right(())
   }
 
-  /** In the verify stage, if opt was supplied, checks that all of the options in list are not supplied.
-    *
-    * @param opt option, that conflicts with all of options in list
+  /** Add a check that none of the options in the list were supplied if `opt` was supplied.
+    * @param opt option that conflicts with all of options in list
     * @param list list of dependencies (all will need to be absent)
     */
   def conflicts(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
@@ -721,8 +731,7 @@ abstract class ScallopConfBase(
     } else Right(())
   }
 
-  /** In the verify stage, checks that at least one option in the list is supplied.
-    *
+  /** Add a check that at least one of the options is supplied.
     * @param list list of options (at least one must be present)
     */
   def requireAtLeastOne(list: ScallopOption[_]*) = addValidation {
@@ -734,8 +743,7 @@ abstract class ScallopConfBase(
     } else Right(())
   }
 
-  /** In the verify stage, checks that one, and only one, option in the list is supplied.
-    *
+  /** Add a check that at one and only one option in the list is supplied.
     * @param list list of conflicting options (exactly one must be present)
     */
   def requireOne(list: ScallopOption[_]*) = addValidation {
@@ -747,8 +755,7 @@ abstract class ScallopConfBase(
     } else Right(())
   }
 
-  /** In the verify stage, checks that only one or zero of the provided options have values supplied in arguments.
-    *
+  /** Add a check that only one or zero of the provided options have values supplied in arguments.
     * @param list list of mutually exclusive options
     */
   def mutuallyExclusive(list: ScallopOption[_]*) = addValidation {
@@ -760,8 +767,7 @@ abstract class ScallopConfBase(
     } else Right(())
   }
 
-  /** In the verify stage, checks that either all or none of the provided options have values supplied in arguments.
-    *
+  /** Add a check that either all or none of the provided options have values supplied in arguments.
     * @param list list of codependent options
     */
   def codependent(list: ScallopOption[_]*) = addValidation {
@@ -774,8 +780,9 @@ abstract class ScallopConfBase(
     } else Right(())
   }
 
-  /** In the verify stage, checks that either all or none of the provided options
+  /** Add a check that either all or none of the provided options
     * have values defined (either supplied in arguments or got from defaults).
+    * @param list list of options
     */
   def allDefinedOrUndefined(list: ScallopOption[_]*) = addValidation {
     val c = list.count(_.toOption.isDefined)
@@ -787,7 +794,7 @@ abstract class ScallopConfBase(
     } else Right(())
   }
 
-  /** In the verify stage, check that file with supplied name exists. */
+  /** Validate that file exists. */
   def validateFileExists(fileOption: ScallopOption[File]) = addValidation {
     fileOption.toOption.fold[Either[String,Unit]](Right(())) { file =>
       if (!file.exists) {
@@ -798,6 +805,7 @@ abstract class ScallopConfBase(
     }
   }
 
+  /** Validate that file does not exists. */
   def validateFileDoesNotExist(fileOption: ScallopOption[File]) = addValidation {
     fileOption.toOption
       .map(file => {
@@ -807,6 +815,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Validate that file argument is directory. */
   def validateFileIsDirectory(fileOption: ScallopOption[File]) = addValidation {
     fileOption.toOption
       .map(file => {
@@ -816,6 +825,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Validate that file is not a directory. */
   def validateFileIsFile(fileOption: ScallopOption[File]) = addValidation {
     fileOption.toOption
       .map(file => {
@@ -825,6 +835,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Validate that all the files in the arguments to multi-arg option exist. */
   def validateFilesExist(filesOption: ScallopOption[List[File]]) = addValidation {
     filesOption.toOption
       .map(files => {
@@ -835,6 +846,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Validate that all the files in the arguments to multi-arg option do not exist. */
   def validateFilesDoNotExist(filesOption: ScallopOption[List[File]]) = addValidation {
     filesOption.toOption
       .map(files => {
@@ -845,6 +857,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Validate that all the files in the arguments to multi-arg option are directories. */
   def validateFilesIsDirectory(filesOption: ScallopOption[List[File]]) = addValidation {
     filesOption.toOption
       .map(files => {
@@ -855,6 +868,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Validate that all the files in the arguments to multi-arg option are not directories. */
   def validateFilesIsFile(filesOption: ScallopOption[List[File]]) = addValidation {
     filesOption.toOption
       .map(files => {
@@ -865,7 +879,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
-  /** In the verify stage, check that file with the supplied path exists. */
+  /** Validate that path points to the existing file. */
   def validatePathExists(pathOption: ScallopOption[Path]) = addValidation {
     pathOption.toOption.fold[Either[String,Unit]](Right(())) { path =>
       if (!path.toFile.exists) {
@@ -876,6 +890,7 @@ abstract class ScallopConfBase(
     }
   }
 
+  /** Validate that path does not point to the existing file. */
   def validatePathDoesNotExist(pathOption: ScallopOption[Path]): Unit = addValidation {
     pathOption.toOption
       .map {
@@ -885,6 +900,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Validate that path points to a directory. */
   def validatePathIsDirectory(pathOption: ScallopOption[Path]): Unit = addValidation {
     pathOption.toOption
       .map {
@@ -894,6 +910,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Validate that path points to a file (not directory). */
   def validatePathIsFile(pathOption: ScallopOption[Path]): Unit = addValidation {
     pathOption.toOption
       .map {
@@ -903,6 +920,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Validate that path target exists. */
   def validatePathsExists(pathsOption: ScallopOption[List[Path]]): Unit = addValidation {
     pathsOption.toOption
       .map(paths => {
@@ -917,6 +935,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Validate that path target does not exist. */
   def validatePathsDoesNotExist(pathsOption: ScallopOption[List[Path]]): Unit = addValidation {
     pathsOption.toOption
       .map(paths => {
@@ -931,6 +950,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Validate that paths targets exist. */
   def validatePathsIsDirectory(pathsOption: ScallopOption[List[Path]]): Unit = addValidation {
     pathsOption.toOption
       .map(paths => {
@@ -945,6 +965,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Validate that all paths targets are files (not directories). */
   def validatePathsIsFile(pathsOption: ScallopOption[List[Path]]): Unit = addValidation {
     pathsOption.toOption
       .map(paths => {
@@ -959,6 +980,7 @@ abstract class ScallopConfBase(
       .getOrElse(Right(()))
   }
 
+  /** Require subcommand to be provided (validation will fail if no subcommand was provided on the command line). */
   def requireSubcommand() = addValidation {
     if (subcommand.isEmpty) Left("Subcommand required")
     else Right(())
@@ -975,7 +997,14 @@ abstract class ScallopConfBase(
     builder.summary
   }
 
-  def filteredSummary(blurred: Set[String]) = {
+  /** Get summary of current parser state, hididng values for some of the options.
+    * Useful if you log the summary and want to avoid storing sensitive information
+    * in the logs (like passwords)
+    *
+    * @param blurred names of the options that should be hidden.
+    * @return a list of all options in the builder
+    */
+  def filteredSummary(blurred: Set[String]): String = {
     assertVerified()
     builder.filteredSummary(blurred: Set[String])
   }
@@ -1017,11 +1046,16 @@ abstract class ScallopConfBase(
     editBuilder(_.setHelpWidth(w))
   }
 
-  def shortSubcommandsHelp(v: Boolean = true): Unit = {
-    editBuilder(_.copy(shortSubcommandsHelp = v))
+  /** If set to true, do not output subcommand options in the help output for the main program
+    * (only output short subcommand description in such cases).
+    * Full help for subcommand options can still be accessed via `program subcommand-name --help`.
+    * @param enable enable short format for subcommand help
+    */
+  def shortSubcommandsHelp(enable: Boolean = true): Unit = {
+    editBuilder(_.copy(shortSubcommandsHelp = enable))
   }
 
-  def verifyConf(): Unit = {
+  private[scallop] def verifyConf(): Unit = {
     // pass option groups into the builder
     editBuilder(_.copy(
       mainOptions = _mainOptions().toList,
@@ -1043,6 +1077,10 @@ abstract class ScallopConfBase(
     }
   }
 
+  /** Verify this configuration - parse the arguments, convert option values, run validations.
+    * This method MUST be called at the end of all options definitions, attempts to access
+    * option values before it is called will result in runtime exception.
+    */
   def verify(): Unit = {
     verifyConf()
     verifyBuilder()
@@ -1050,6 +1088,6 @@ abstract class ScallopConfBase(
 
 }
 
-/** Convenience variables to permit testing. */
+/* Convenience variables to permit testing. */
 object throwError extends util.DynamicVariable[Boolean](false)
 object overrideColorOutput extends util.DynamicVariable[Option[Boolean]](None)

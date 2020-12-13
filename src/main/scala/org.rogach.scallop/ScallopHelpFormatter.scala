@@ -1,5 +1,8 @@
 package org.rogach.scallop
 
+/** Used by ScallopConf.helpFormatter to create help output. Users of the library
+  * can override chosen (or all) methods to tweak help output to their requirements.
+  */
 class ScallopHelpFormatter {
 
   def formatHelp(s: Scallop, subcommandPrefix: String): String = {

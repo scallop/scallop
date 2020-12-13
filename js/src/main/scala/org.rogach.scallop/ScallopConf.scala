@@ -2,6 +2,7 @@ package org.rogach.scallop
 
 import scala.collection.{Seq => CSeq}
 
+/** Base class for CLI parsers. */
 abstract class ScallopConf(
   args: CSeq[String] = Nil,
   commandNameAndAliases: Seq[String] = Nil

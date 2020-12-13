@@ -5,6 +5,10 @@ import org.rogach.scallop.exceptions.GenericScallopException
 import scala.util.Try
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
+/** This trait contains various predefined converters for common use-cases.
+  * org.rogach.scallop package object inherits from this trait, thus you can
+  * get all the converters simply by importing `org.rogach.scallop._`.
+  */
 trait DefaultConverters {
   implicit val flagConverter: ValueConverter[Boolean] = new ValueConverter[Boolean] {
     def parse(s: List[(String, List[String])]) = s match {
@@ -15,9 +19,10 @@ trait DefaultConverters {
     val argType = ArgType.FLAG
   }
 
-  /** Create a converter for an argument with a single value.
-    * @param conv the conversion function to use, which may throw an exception on error
-    * @param handler an error handler function for writing custom error messages
+  /** Creates a converter for an option with a single argument.
+    * @param conv The conversion function to use. May throw an exception on error.
+    * @param handler An error handler function for writing custom error messages.
+    * @return A ValueConverter instance.
     */
   def singleArgConverter[A](
     conv: String => A,
@@ -74,8 +79,12 @@ trait DefaultConverters {
     }
   }, PartialFunction.empty)
 
-  def listArgConverter[A](conv: String => A) = new ValueConverter[List[A]] {
-    def parse(s:List[(String, List[String])]) = {
+  /** Creates a converter for an option which accepts multiple arguments.
+    * @param conv The conversion function to use on each argument. May throw an exception on error.
+    * @return A ValueConverter instance.
+    */
+  def listArgConverter[A](conv: String => A): ValueConverter[List[A]] = new ValueConverter[List[A]] {
+    def parse(s: List[(String, List[String])]) = {
       try {
         val l = s.map(_._2).flatten.map(i => conv(i))
         if (l.isEmpty) Right(None)
@@ -101,8 +110,14 @@ trait DefaultConverters {
   implicit val stringListConverter: ValueConverter[List[String]] =
     listArgConverter[String](identity)
 
-  def propsConverter[A](conv: ValueConverter[A]): ValueConverter[Map[String,A]] = new ValueConverter[Map[String,A]] {
-    def parse(s:List[(String, List[String])]) = {
+  /** Creates a converter for a property option.
+    * @param conv The converter function to use on each value. May throw an exception on error.
+    * @return A ValueConverter instance.
+    */
+  def propsConverter[A](
+    conv: ValueConverter[A]
+  ): ValueConverter[Map[String,A]] = new ValueConverter[Map[String,A]] {
+    def parse(s: List[(String, List[String])]) = {
       try {
         Right {
           val pairs = s.map(_._2).flatten.map(_.trim).filter("," != _).flatMap(_.split("(?<!\\\\),")).map(_.replace("\\,", ","))
@@ -120,8 +135,8 @@ trait DefaultConverters {
           if (m.nonEmpty) Some(m)
           else None
         }
-      } catch { case _: Exception =>
-        Left("wrong arguments format")
+      } catch { case e: Exception =>
+        Left(e.toString)
       }
     }
     val argType = ArgType.LIST
@@ -135,6 +150,7 @@ trait DefaultConverters {
   implicit val charPropsConverter: ValueConverter[Map[String, Char]] = propsConverter[Char](charConverter)
   implicit val stringPropsConverter: ValueConverter[Map[String, String]] = propsConverter[String](stringConverter)
 
+  /** Converter for a tally option, used in ScallopConf.tally */
   val tallyConverter = new ValueConverter[Int] {
     def parse(s: List[(String, List[String])]) = {
       if (s.exists(_._2.nonEmpty)) Left("this option doesn't need arguments")
@@ -144,7 +160,13 @@ trait DefaultConverters {
     val argType = ArgType.FLAG
   }
 
-  def optDefault[A](default: A)(implicit conv: ValueConverter[A]) =
+  /** Creates a converter for an option with single optional argument
+    * (it will parse both `--opt` and `--opt arg` command lines).
+    * @param default The default value to use if argument wasn't provided.
+    * @param conv Converter instance to use if argument was provided.
+    * @return A ValueConverter instance.
+    */
+  def optDefault[A](default: A)(implicit conv: ValueConverter[A]): ValueConverter[A] =
     new ValueConverter[A] {
       def parse(s: List[(String, List[String])]) = {
         s match {

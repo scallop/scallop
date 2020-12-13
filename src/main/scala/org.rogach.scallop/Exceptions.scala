@@ -5,9 +5,9 @@ import org.rogach.scallop.Util
 /** Parent trait for all not-positive results that can be resulted from this library (including help and exits) */
 sealed trait ScallopResult
 
-/** Thrown when user requested help output (via "--help") */
+/** Thrown when user requested help output (via "--help"). */
 case class Help(command: String) extends Exception with ScallopResult
-/** Thrown when user requested version printout (via "--version") */
+/** Thrown when user requested version printout (via "--version"). */
 case object Version extends Exception with ScallopResult
 /** Extractor object, for matching on both Help and Version results. */
 object Exit {
@@ -30,11 +30,11 @@ object ScallopException {
 /** Thrown when option name guessing fails on one of the options. */
 case class OptionNameGuessingFailure()
   extends ScallopException("Failed to guess option name for one of the options")
-/** Thrown when option name guessing is not available on the platform (currently JS and Native) */
+/** Thrown when option name guessing is not available on the platform (currently JS and Native). */
 case class OptionNameGuessingUnsupported()
   extends ScallopException("Option name guessing is unsupported, please provide option name explicitly. More info: https://github.com/scallop/scallop/wiki/Native-and-JS")
 
-/** Thrown when user provides excess arguments that can't be matched by trailing arg options */
+/** Thrown when user provides excess arguments that can't be matched by trailing arg options. */
 case class ExcessArguments(args: Seq[String])
   extends ScallopException(Util.format("Excess arguments provided: '%s'", args.mkString(" ")))
 
@@ -62,8 +62,7 @@ case class RequiredOptionNotFound(name: String)
 case class IncompleteBuildException()
   extends ScallopException("It seems you tried to get option value before you constructed all options (maybe you forgot to call .verify method?). Please, move all extraction of values to after 'verify' method in ScallopConf.")
 
-/** Thrown when user tried to create an option with some illegal parameters
-    - for example, with digit as the first character in opton name. */
+/** Thrown when user tried to create an option with some illegal parameters - for example, with digit as the first character in opton name. */
 case class IllegalOptionParameters(mess:String) extends ScallopException(mess)
 
 /** Thrown when the validation failed on some option. */
@@ -74,4 +73,5 @@ case class ValidationFailure(mess: String) extends ScallopException(mess)
     file a bug on project page! */
 case class MajorInternalException() extends ScallopException("Oi, something went awfully wrong. Please report a bug to the developer of the library!")
 
+/** Exception class for cases which didn't fit into other exception classes. */
 case class GenericScallopException(msg: String) extends ScallopException(msg)

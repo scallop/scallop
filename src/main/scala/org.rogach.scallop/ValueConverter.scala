@@ -35,7 +35,7 @@ trait ValueConverter[A] { parent =>
   /** Maps the converter to another value:
     *
     * {{{
-    * intConverter.map(2 +) // and you get a "biased converter"
+    * intConverter.map(_+2) // and you get a "biased converter"
     * }}}
     */
   def map[B](fn: A => B) = new ValueConverter[B] { child =>
@@ -50,6 +50,10 @@ trait ValueConverter[A] { parent =>
     val argType = parent.argType
   }
 
+  /** Map the converter to another value. This method is different from .map
+    * because it can return an error (without resorting to exceptions, returning Left(msg))
+    * or can filter out unsupported values (by returning Right(None)).
+    */
   def flatMap[B](fn: A => Either[String, Option[B]]) =
     new ValueConverter[B] { child =>
       def parse(s: List[(String, List[String])]) =

@@ -1,5 +1,6 @@
 package org.rogach.scallop
 
+/** Base class for CLI parsers. */
 abstract class ScallopConf(
   args: Seq[String] = Nil,
   commandNameAndAliases: Seq[String] = Nil
