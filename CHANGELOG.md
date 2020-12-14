@@ -1,19 +1,20 @@
 # Upcoming release
 
-## BREAKING CHANGES
-- `singleArgConverter` and `listArgConverter` now include exception text if provided handler didn't catch the exception;
-- `singleArgConverter2` was removed;
-- `ArgType.V` is now sealed abstract class;
-- behavior change: Scallop now supports trailing arguments before options, thus `--opt1 optArg1 trailArg1 --opt2` will now be parsed instead of throwing an error;
-- `ScallopHelpFormatter.getOptionLines` (and similar methods) now returns `List[Either[String, CliOption]]` instead of `List[Option[CliOption]]`;
-- behavior change: Scallop now handles single and double quotes in a shell-like fashion when reading options from stdin or file;
 ## Features
+## Bugfixes
+## Other
+
+# v4.0.0
+- BREAKING: `singleArgConverter` and `listArgConverter` now include exception text if provided handler didn't catch the exception;
+- BREAKING: `singleArgConverter2` was removed;
+- BREAKING: `ArgType.V` is now sealed abstract class;
+- BREAKING: `ScallopHelpFormatter.getOptionLines` (and similar methods) now return `List[Either[String, CliOption]]` instead of `List[Option[CliOption]]`;
+- BREAKING: behavior change: Scallop now supports trailing arguments before options, thus `--opt1 optArg1 trailArg1 --opt2` will now be parsed instead of throwing an error;
+- BREAKING: behavior change: Scallop now handles single and double quotes in a shell-like fashion when reading options from stdin or file;
 - added support for trailing arguments before (or between) options, see #147;
 - added cross-compilation for Scala 3.0.0-M2, see #215 and #216 (@Sciss);
 - added support for option ordering in help output via option groups, see #196;
 - handle single and double quoted strings when reading options from stdin or file, allows for using arguments with spaces in such cases;
-## Bugfixes
-## Other
 
 # v3.5.1
 - added path list converter, see #212 (@danielyli);
