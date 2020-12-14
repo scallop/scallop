@@ -1,0 +1,5 @@
+ --foo="A \"B\" C"
+'--bar=42'
+--baz'=1 2' --coo
+ '1 5'
+--escaped'-'single'-'quote 'A'"'"'B'

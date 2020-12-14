@@ -19,7 +19,7 @@ object Exit {
 }
 
 /** Parent class for all exceptions thrown from this library. */
-abstract class ScallopException(val message:String) extends Exception(message) with ScallopResult
+abstract class ScallopException(val message: String) extends Exception(message) with ScallopResult
 /** Extractor object, for matching on all exceptions. */
 object ScallopException {
   def unapply(e: ScallopException): Option[String] = {
@@ -63,10 +63,13 @@ case class IncompleteBuildException()
   extends ScallopException("It seems you tried to get option value before you constructed all options (maybe you forgot to call .verify method?). Please, move all extraction of values to after 'verify' method in ScallopConf.")
 
 /** Thrown when user tried to create an option with some illegal parameters - for example, with digit as the first character in opton name. */
-case class IllegalOptionParameters(mess:String) extends ScallopException(mess)
+case class IllegalOptionParameters(mess: String) extends ScallopException(mess)
 
 /** Thrown when the validation failed on some option. */
 case class ValidationFailure(mess: String) extends ScallopException(mess)
+
+/** Thrown when option reader failed to read options from stdin or file. */
+case class OptionReaderFailure(mess: String) extends ScallopException(mess)
 
 /** This is a special case of exception - the one you should never see.
     If you actually saw it, there is a sure bug lurking somewhere. In such cases, please
