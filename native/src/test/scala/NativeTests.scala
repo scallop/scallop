@@ -2,13 +2,13 @@ package org.rogach.scallop
 
 object NativeTests {
   def main(args: Array[String]): Unit = {
-    val conf = new ScallopConf(List("-a", "3")) {
+    object Conf extends ScallopConf(List("-a", "3")) {
       val apples = opt[Int]("apples")
       verify()
     }
-    assert(conf.apples() == 3)
+    assert(Conf.apples() == 3)
     assert(
-      conf.builder.help ==
+      Conf.builder.help ==
         """  -a, --apples  <arg>
           |  -h, --help            Show help message""".stripMargin
     )
