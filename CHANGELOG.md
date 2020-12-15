@@ -2,8 +2,10 @@
 
 ## Features
 ## Bugfixes
-- fix: make ScallopConf.builder accessible again;
 ## Other
+
+# v4.0.1
+- fix: make ScallopConf.builder accessible again;
 
 # v4.0.0
 - BREAKING: `singleArgConverter` and `listArgConverter` now include exception text if provided handler didn't catch the exception;
