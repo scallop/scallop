@@ -51,7 +51,8 @@ abstract class ScallopConfBase(
     editBuilder(_.addSubBuilder(conf.commandNameAndAliases, conf.builder))
   }
 
-  private[scallop] var builder = Scallop(args)
+  /** Internal immutable builder for options setup. */
+  var builder = Scallop(args)
 
   private[scallop] def editBuilder(fn: Scallop => Scallop): Unit = {
     builder = fn(builder)

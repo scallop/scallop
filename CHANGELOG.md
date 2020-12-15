@@ -2,6 +2,7 @@
 
 ## Features
 ## Bugfixes
+- fix: make ScallopConf.builder accessible again;
 ## Other
 
 # v4.0.0
