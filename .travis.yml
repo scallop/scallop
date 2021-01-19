@@ -4,9 +4,9 @@ language: scala
 
 scala:
   - 2.11.12
-  - 2.12.12
+  - 2.12.13
   - 2.13.4
-  - 3.0.0-M2
+  - 3.0.0-M3
 
 jdk:
   - openjdk8
