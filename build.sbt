@@ -130,7 +130,3 @@ lazy val scallop =
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
     ),
   )
-
-// sbt-github-actions configuration
-
-ThisBuild / githubWorkflowPublishTargetBranches := Seq()
