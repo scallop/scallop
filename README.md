@@ -1,7 +1,7 @@
 Scallop
 ========
 
-[![Build Status](https://api.travis-ci.org/scallop/scallop.svg?branch=develop)](https://travis-ci.org/scallop/scallop)
+[![Build Status](https://img.shields.io/github/workflow/status/scallop/scallop/Continuous%20Integration)](https://github.com/scallop/scallop/actions?query=workflow%3A%22Continuous+Integration%22)
 
 A simple command-line arguments parsing library for Scala.
 Cross-built for Scala 3.0, 2.13, 2.12, 2.11, 2.10, supports Scala Native and Scala JS.
