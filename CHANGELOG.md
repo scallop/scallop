@@ -4,6 +4,11 @@
 ## Bugfixes
 ## Other
 
+# v4.0.2
+- fix: do not throw "excess arguments" error if there is only one multi-arg option (#224);
+- upgrade Scala Native dependency to 0.4, see #225 (@vhiairrassary);
+- handle single and double quoted strings when reading options from file in Scala Native;
+
 # v4.0.1
 - fix: make ScallopConf.builder accessible again;
 
