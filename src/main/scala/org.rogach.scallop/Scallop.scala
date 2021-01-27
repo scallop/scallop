@@ -100,35 +100,42 @@ case class Scallop(
       def parseRest() = {
         val trailingOptions = opts.filter(_.isPositional)
 
-        val result = TrailingArgumentsParser.parse(
-          leadingArgs,
-          lastMultiArgOption,
-          trailingArgs,
-          trailingOptions
-        )
-        result match {
-          case TrailingArgumentsParser.ParseResult(_, _, excess) if excess.nonEmpty =>
-            throw ExcessArguments(excess)
+        (lastMultiArgOption, trailingOptions) match {
+          case (None, singleTrailingOption :: Nil) if singleTrailingOption.converter.argType == ArgType.LIST =>
+            List((singleTrailingOption, ("", leadingArgs ++ trailingArgs)))
+          case (Some((singleOption, invocation)), Nil) if leadingArgs.isEmpty && singleOption.converter.argType == ArgType.LIST =>
+            List((singleOption, (invocation, trailingArgs)))
+          case _ =>
+            val result = TrailingArgumentsParser.parse(
+              leadingArgs,
+              lastMultiArgOption,
+              trailingArgs,
+              trailingOptions
+            )
+            result match {
+              case TrailingArgumentsParser.ParseResult(_, _, excess) if excess.nonEmpty =>
+                throw ExcessArguments(excess)
 
-          case TrailingArgumentsParser.ParseResult(result, _, _) =>
-            result.find(_._3.isLeft) match {
-              case None =>
-                result.flatMap {
-                  case (option, invocation, Right(args)) =>
-                    if (args.nonEmpty || option.required) {
-                      List((option, (invocation, args)))
+              case TrailingArgumentsParser.ParseResult(result, _, _) =>
+                result.find(_._3.isLeft) match {
+                  case None =>
+                    result.flatMap {
+                      case (option, invocation, Right(args)) =>
+                        if (args.nonEmpty || option.required) {
+                          List((option, (invocation, args)))
+                        } else {
+                          Nil
+                        }
+                      case _ => throw MajorInternalException()
+                    }
+                  case Some((option, _, Left((message, args)))) =>
+                    if (option.required && (message == "not enough arguments")) {
+                      throw RequiredOptionNotFound(option.name)
                     } else {
-                      Nil
+                      throw WrongOptionFormat(option.name, args.mkString(" "), message)
                     }
                   case _ => throw MajorInternalException()
                 }
-              case Some((option, _, Left((message, args)))) =>
-                if (option.required && (message == "not enough arguments")) {
-                  throw RequiredOptionNotFound(option.name)
-                } else {
-                  throw WrongOptionFormat(option.name, args.mkString(" "), message)
-                }
-              case _ => throw MajorInternalException()
             }
         }
       }

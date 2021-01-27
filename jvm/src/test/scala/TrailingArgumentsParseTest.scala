@@ -237,4 +237,14 @@ class TrailingArgumentsParseTest extends ScallopTestBase {
     Config.value() shouldBe -1234
   }
 
+  test ("do not throw excess arguments error if there is only one multiple-arg trailing option") {
+    intercept[WrongOptionFormat] {
+      object Conf extends ScallopConf(Seq("1", "x")) {
+        val apples = trailArg[List[Int]]("apples")
+        verify()
+      }
+      Conf.apples() shouldBe List(1, 2)
+    }
+  }
+
 }

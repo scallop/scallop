@@ -1,5 +1,7 @@
 package org.rogach.scallop
 
+import org.rogach.scallop.exceptions._
+
 class MultipleArgumentOptionTest extends ScallopTestBase {
 
   test ("list of strings, one argument") {
@@ -75,6 +77,16 @@ class MultipleArgumentOptionTest extends ScallopTestBase {
       verify()
     }
     Conf.l() shouldBe List("1","2")
+  }
+
+  test ("do not throw excess arguments error if there is only one multiple-arg option") {
+    intercept[WrongOptionFormat] {
+      object Conf extends ScallopConf(Seq("-a", "1", "x")) {
+        val apples = opt[List[Int]]()
+        verify()
+      }
+      Conf.apples() shouldBe List(1, 2)
+    }
   }
 
 }
