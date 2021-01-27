@@ -1,8 +1,8 @@
 lazy val scalaVersionsJVM = Seq("3.0.0-M3", "2.13.4", "2.12.13", "2.11.12", "2.10.7")
-lazy val scalaVersionsSN  = Seq("2.11.12")
+lazy val scalaVersionsSN  = Seq("2.13.4", "2.12.13", "2.11.12")
 lazy val scalaVersionsJS  = Seq("2.13.4", "2.12.13", "2.11.12")
 
-lazy val scalaTestVersion = "3.2.3"
+lazy val scalaTestVersion = "3.2.4-M1"
 
 val snapshotVersion = sys.env.get("SNAPSHOT_VERSION")
 
@@ -117,11 +117,9 @@ lazy val scallop =
   .nativeSettings(
     crossScalaVersions := scalaVersionsSN,
     scalaVersion       := scalaVersionsSN.head,
-    // ScalaTest currently doesn't work with Scala Native (see for example: https://github.com/scala-native/scala-native/issues/1930)
-    // thus we will disable testing temporarily and wait until Scala Native releases stable 0.4 version and ScalaTest
-    // will publish binaries for that version.
-    // Until that time we have can do a crude test by calling scallopNative/test:run
-    test := {}
+    libraryDependencies ++= Seq(
+      "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
+    ),
   )
   .jsSettings(
     crossScalaVersions := scalaVersionsJS,
