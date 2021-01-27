@@ -41,4 +41,4 @@ jobs:
           sudo apt-get install libunwind-dev libre2-dev libgc-dev
 
       - name: Build project
-        run: sbt +test +scallopNative/test:run
+        run: sbt +test

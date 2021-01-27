@@ -2,7 +2,7 @@ Release
 =======
 * Bump the version (in README.md).
 * Format the version release notes (in CHANGELOG.md).
-* Test the changes: sbt "+test" "+scallopNative/test:run"
+* Test the changes: sbt "+test"
 * Publish artifacts: sbt "+publishSigned"
 * Commit the changes.
 * Tag the release.
