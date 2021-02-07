@@ -33,6 +33,11 @@ case class OptionNameGuessingFailure()
 /** Thrown when option name guessing is not available on the platform (currently JS and Native). */
 case class OptionNameGuessingUnsupported()
   extends ScallopException("Option name guessing is unsupported, please provide option name explicitly. More info: https://github.com/scallop/scallop/wiki/Native-and-JS")
+/** Wrapper exception for cases when internal reflective mechanics fail */
+case class OptionNameGuessingException(cause: Exception)
+    extends ScallopException("Option name guessing experienced internal failure (more information can be found in the .cause of this exception)") {
+  this.initCause(cause)
+}
 
 /** Thrown when user provides excess arguments that can't be matched by trailing arg options. */
 case class ExcessArguments(args: Seq[String])
