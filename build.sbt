@@ -1,8 +1,8 @@
-lazy val scalaVersionsJVM = Seq("3.0.0-RC1", "2.13.4", "2.12.13", "2.11.12", "2.10.7")
-lazy val scalaVersionsSN  = Seq("2.13.4", "2.12.13", "2.11.12")
-lazy val scalaVersionsJS  = Seq("2.13.4", "2.12.13", "2.11.12")
+lazy val scalaVersionsJVM = Seq("3.0.0", "2.13.6", "2.12.13", "2.11.12", "2.10.7")
+lazy val scalaVersionsSN  = Seq("2.13.6", "2.12.13", "2.11.12")
+lazy val scalaVersionsJS  = Seq("3.0.0", "2.13.6", "2.12.13", "2.11.12")
 
-lazy val scalaTestVersion = "3.2.6"
+lazy val scalaTestVersion = "3.2.9"
 
 val snapshotVersion = sys.env.get("SNAPSHOT_VERSION")
 
@@ -34,7 +34,7 @@ lazy val commonSettings = Seq(
     "-language:existentials,implicitConversions",
   ),
   scalacOptions ++= {
-    if (isDotty.value) Nil
+    if (scalaVersion.value.startsWith("3.")) Nil
     else Seq("-Xlint")
   },
   unmanagedSourceDirectories in Compile += {
@@ -79,7 +79,7 @@ lazy val commonSettings = Seq(
   publishMavenStyle := true,
   publishArtifact in Test := false,
   scalacOptions in (Compile, doc) ++= {
-    if (isDotty.value) Nil
+    if (scalaVersion.value.startsWith("3.")) Nil
     else Opts.doc.sourceUrl("https://github.com/scallop/scallop/blob/develop/€{FILE_PATH}.scala")
   },
   parallelExecution in Test := false,
