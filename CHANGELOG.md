@@ -5,7 +5,7 @@
 ## Other
 
 # v4.0.3
-- add support for Scala 3
+- add support for Scala 3 (#230 by @vhiairrassary);
 - call setAccessible(true) when performing option name guessing (#226);
 
 # v4.0.2
