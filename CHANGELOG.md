@@ -4,6 +4,10 @@
 ## Bugfixes
 ## Other
 
+# v4.0.3
+- add support for Scala 3
+- call setAccessible(true) when performing option name guessing (#226);
+
 # v4.0.2
 - fix: do not throw "excess arguments" error if there is only one multi-arg option (#224);
 - upgrade Scala Native dependency to 0.4, see #225 (@vhiairrassary);
