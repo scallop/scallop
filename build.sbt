@@ -15,7 +15,7 @@ lazy val commonSettings = Seq(
   name := "scallop",
   version := {
     snapshotVersion.getOrElse {
-      val versionRegexp = """[0-9]+\.[0-9]+\.[0-9]+""".r
+      val versionRegexp = """\d+\.\d+\.\d+(-[^"]+)?""".r
       val libraryDependenciesString: String = {
         val io = scala.io.Source.fromFile("README.md")
         try {

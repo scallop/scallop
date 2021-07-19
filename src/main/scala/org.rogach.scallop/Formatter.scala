@@ -25,12 +25,25 @@ object Formatter {
         List(s)
       case Right(HelpInfo(arg, descr, defVal)) =>
         val argPadding = " " * (if (arg.trim.startsWith("--")) 4 else 0)
-        val text = wrap(
-          descr.split(" ").toSeq ++
-            (if (appendDefault) defVal().map(v => Util.format("(default = %s)", v)).toList else Nil),
-          neededWidth - argWidth - ColumnPadding - Indent
-        ).map(l => " " * (argWidth + ColumnPadding + Indent) + l)
-        (" " * Indent + argPadding + arg + text.head.drop(arg.size + argPadding.size + Indent)) :: text.tail
+        val splitDescr = (if (descr.nonEmpty) descr.split("\n").toList else Nil).map(_.split(" ").toList)
+        val dfltList = if (appendDefault) defVal().map(v => Util.format("(default = %s)", v)) else None
+        val joinedDescrs =
+          splitDescr match {
+            case head :: Nil => // If there is a single line, attempt to place dflt at the end of the line
+              (head ++ dfltList) :: Nil
+            case _ => // Otherwise, put dflt on its own line
+              splitDescr ++ dfltList.map(_ :: Nil)
+          }
+        val totalIndent = argWidth + ColumnPadding + Indent
+        val text =
+          joinedDescrs
+            .flatMap(wrap(_, neededWidth - totalIndent))
+            .map(l => " " * totalIndent + l)
+        val argStr = " " * Indent + argPadding + arg
+        text match {
+          case head :: tail => (argStr + head.drop(arg.size + argPadding.size + Indent)) :: tail
+          case Nil => argStr :: Nil
+        }
     }.mkString("\n")
   }
 

@@ -4,6 +4,19 @@
 ## Bugfixes
 ## Other
 
+# v4.0.4
+- Align opt descrs with '\n' (#231 by @Kalin-Rudnicki);
+- Previous:
+  ```
+    -o, --output-dir  <arg>         Directory to output generated files
+  (In same tree structure as inputDir)
+  ```
+- Now:
+  ```
+    -o, --output-dir  <arg>         Directory to output generated files
+                                    (In same tree structure as inputDir)
+  ```
+
 # v4.0.3
 - add support for Scala 3 (#230 by @vhiairrassary);
 - call setAccessible(true) when performing option name guessing (#226);
