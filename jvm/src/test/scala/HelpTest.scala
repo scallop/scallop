@@ -62,6 +62,71 @@ class HelpTest extends ScallopTestBase {
                                             |                  program""".stripMargin
   }
 
+  test ("help descr with '\\n'") {
+    class Conf(newHelpWidth: Int, appendDefaults: Boolean) extends ScallopConf(Seq()) {
+      version("")
+      helpWidth(newHelpWidth)
+      this.appendDefaultToDescription = appendDefaults
+      val arg1 = opt[String](descr = "********* ********* ********* ********* *********", default = Some("arg1"))
+      val arg2 = opt[String](descr = "********* ********* ********* ********* *********\n********* ********* ********* ********* *********", default = Some("arg2"))
+      val arg3 = opt[String](default = Some("arg3"))
+      val arg4 = opt[String]()
+      verify()
+    }
+
+    new Conf(100, true).getHelpString() shouldBe {
+      """  -a, --arg1  <arg>   ********* ********* ********* ********* ********* (default = arg1)
+        |      --arg2  <arg>   ********* ********* ********* ********* *********
+        |                      ********* ********* ********* ********* *********
+        |                      (default = arg2)
+        |      --arg3  <arg>   (default = arg3)
+        |      --arg4  <arg>
+        |  -h, --help          Show help message
+        |  -v, --version       Show version of this program""".stripMargin
+    }
+    new Conf(50, true).getHelpString() shouldBe {
+      """  -a, --arg1  <arg>   ********* *********
+        |                      ********* *********
+        |                      ********* (default = arg1)
+        |      --arg2  <arg>   ********* *********
+        |                      ********* *********
+        |                      *********
+        |                      ********* *********
+        |                      ********* *********
+        |                      *********
+        |                      (default = arg2)
+        |      --arg3  <arg>   (default = arg3)
+        |      --arg4  <arg>
+        |  -h, --help          Show help message
+        |  -v, --version       Show version of this program""".stripMargin
+    }
+
+    new Conf(100, false).getHelpString() shouldBe {
+      """  -a, --arg1  <arg>   ********* ********* ********* ********* *********
+        |      --arg2  <arg>   ********* ********* ********* ********* *********
+        |                      ********* ********* ********* ********* *********
+        |      --arg3  <arg>
+        |      --arg4  <arg>
+        |  -h, --help          Show help message
+        |  -v, --version       Show version of this program""".stripMargin
+    }
+    new Conf(50, false).getHelpString() shouldBe {
+      """  -a, --arg1  <arg>   ********* *********
+        |                      ********* *********
+        |                      *********
+        |      --arg2  <arg>   ********* *********
+        |                      ********* *********
+        |                      *********
+        |                      ********* *********
+        |                      ********* *********
+        |                      *********
+        |      --arg3  <arg>
+        |      --arg4  <arg>
+        |  -h, --help          Show help message
+        |  -v, --version       Show version of this program""".stripMargin
+    }
+  }
+
   test ("version printing") {
     val (out, err) = captureOutput {
       val exits = trapExit {
