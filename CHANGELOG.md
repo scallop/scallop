@@ -4,6 +4,9 @@
 ## Bugfixes
 ## Other
 
+# v4.1.0
+- allow toggle options to be marked as "required" (#234);
+
 # v4.0.4
 - Align opt descrs with '\n' (#231 by @Kalin-Rudnicki);
 - Previous:
