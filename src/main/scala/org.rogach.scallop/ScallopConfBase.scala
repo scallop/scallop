@@ -544,6 +544,7 @@ abstract class ScallopConfBase(
     * @param prefix Prefix to name of the option, that will be used for "negative" version of the option.
     * @param descrYes Description for positive variant of this option.
     * @param descrNo Description for negative variant of this option.
+    * @param required Is this option required? Defaults to false.
     * @param hidden If set to true, then this option will not be present in auto-generated help.
     * @param group Option group to add this option to.
     * @return ScallopOption, container for the parsed option value.
@@ -556,6 +557,7 @@ abstract class ScallopConfBase(
     prefix: String = "no",
     descrYes: String = "",
     descrNo: String = "",
+    required: Boolean = false,
     hidden: Boolean = false,
     group: ScallopOptionGroup = null
   ): ScallopOption[Boolean] = {
@@ -574,6 +576,7 @@ abstract class ScallopConfBase(
       prefix = prefix,
       descrYes = descrYes,
       descrNo = descrNo,
+      required = required,
       hidden = hidden
     )
 

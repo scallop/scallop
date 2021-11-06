@@ -237,6 +237,7 @@ case class NumberArgOption(
   * @param prefix Prefix to name of the option, that will be used for "negative" version of the option.
   * @param descrYes Description for positive variant of this option.
   * @param descrNo Description for negative variant of this option.
+  * @param required Is this option required?
   * @param hidden If set to true, then this option will not be present in auto-generated help.
   */
 case class ToggleOption(
@@ -247,13 +248,13 @@ case class ToggleOption(
   prefix: String,
   descrYes: String,
   descrNo: String,
+  required: Boolean,
   hidden: Boolean
 ) extends CliOption {
 
   def descr = ""
   def isPositional = false
   def validator = (a) => true
-  def required = false
 
   def shortNames = if (noshort) Nil else List(short.getOrElse(name.head))
   def requiredShortNames = if (noshort) Nil else short.toList
