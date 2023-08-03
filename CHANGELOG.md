@@ -1,10 +1,12 @@
 # Upcoming release
 
 ## Features
-- BREAKING: `--help` now takes precedence and prints help regardless of its position in the arguments (#239);
-- add `exitHandler`, `stdoutPrintln` and `stderrPrintln` variables to ScallopConf to allow more control over Scallop behavior (#240);
 ## Bugfixes
 ## Other
+
+# v5.0.0
+- BREAKING: behavior change: `--help` now takes precedence and prints help regardless of its position in the arguments (#239);
+- add `exitHandler`, `stdoutPrintln` and `stderrPrintln` variables to ScallopConf to allow more control over Scallop behavior (#240);
 
 # v4.1.0
 - allow toggle options to be marked as "required" (#234);
