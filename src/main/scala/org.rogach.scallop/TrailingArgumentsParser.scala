@@ -32,7 +32,7 @@ object TrailingArgumentsParser {
   /** Run parse.
     *
     * @param leadingArgs trailing arguments before last multi-arg option (will be Nil if there was no last multi-arg option)
-    * @param lastMultiArgOption option definition and invocation string forthe last multi-arg option (if it was present)
+    * @param lastMultiArgOption option definition and invocation string for the last multi-arg option (if it was present)
     * @param trailingArgs trailing arguments after the last multi-arg option (including arguments to that option if it is present)
     * @param trailingOptions list of trailing option definitions
     */

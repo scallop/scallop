@@ -528,4 +528,89 @@ class HelpTest extends ScallopTestBase {
     text shouldBe expected
   }
 
+  test ("help should be shown if --help is provided as first cli arg") {
+    val (out, err, exits) = captureOutputAndExits {
+      object Conf extends ScallopConf(Seq("--help")) {
+        val apples = opt[Int](descr = "how many apples?")
+        verify()
+      }
+      Conf
+    }
+
+    exits shouldBe List(0)
+    err shouldBe ""
+    out shouldBe
+     """  -a, --apples  <arg>   how many apples?
+       |  -h, --help            Show help message
+       |""".stripMargin
+  }
+
+  test ("help should be shown if -h is provided as first cli arg") {
+    val (out, err, exits) = captureOutputAndExits {
+      object Conf extends ScallopConf(Seq("-h")) {
+        val apples = opt[Int](descr = "how many apples?")
+        verify()
+      }
+      Conf
+    }
+
+    exits shouldBe List(0)
+    err shouldBe ""
+    out shouldBe
+     """  -a, --apples  <arg>   how many apples?
+       |  -h, --help            Show help message
+       |""".stripMargin
+  }
+
+  test ("help message should be shown even if --help is not the first argument") {
+    val (out, err, exits) = captureOutputAndExits {
+      object Conf extends ScallopConf(Seq("--apples", "1", "--help")) {
+        val apples = opt[Int](descr = "how many apples?")
+        verify()
+      }
+      Conf
+    }
+
+    exits shouldBe List(0)
+    err shouldBe ""
+    out shouldBe
+     """  -a, --apples  <arg>   how many apples?
+       |  -h, --help            Show help message
+       |""".stripMargin
+  }
+
+  test ("help message should be shown even if -h is not the first argument") {
+    val (out, err, exits) = captureOutputAndExits {
+      object Conf extends ScallopConf(Seq("--apples", "1", "-h")) {
+        val apples = opt[Int](descr = "how many apples?")
+        verify()
+      }
+      Conf
+    }
+
+    exits shouldBe List(0)
+    err shouldBe ""
+    out shouldBe
+     """  -a, --apples  <arg>   how many apples?
+       |  -h, --help            Show help message
+       |""".stripMargin
+  }
+
+  test ("attempting to pass --help in presense of malformed arguments should still display help") {
+    val (out, err, exits) = captureOutputAndExits {
+      object Conf extends ScallopConf(Seq("--apples", "--help")) {
+        val apples = opt[List[Int]](descr = "how many apples?")
+        verify()
+      }
+      Conf
+    }
+
+    exits shouldBe List(0)
+    err shouldBe ""
+    out shouldBe
+     """  -a, --apples  <arg>...   how many apples?
+       |  -h, --help               Show help message
+       |""".stripMargin
+  }
+
 }

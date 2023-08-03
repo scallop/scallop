@@ -64,7 +64,14 @@ case class Scallop(
 
   var parent: Option[Scallop] = None
 
-  type Parsed = List[(CliOption, (String, List[String]))]
+  case class CliOptionInvocation(
+    opt: CliOption,
+    invocation: String,
+    args: List[String],
+    error: Option[ScallopException] = None
+  )
+
+  type Parsed = List[CliOptionInvocation]
 
   case class ParseResult(
     opts: Parsed = Nil,
@@ -97,14 +104,22 @@ case class Scallop(
       lastMultiArgOption: Option[(CliOption, String)],
       trailingArgs: List[String]
     ): Parsed = {
-      def parseRest() = {
+      def parseRest(): Parsed = {
         val trailingOptions = opts.filter(_.isPositional)
 
         (lastMultiArgOption, trailingOptions) match {
           case (None, singleTrailingOption :: Nil) if singleTrailingOption.converter.argType == ArgType.LIST =>
-            List((singleTrailingOption, ("", leadingArgs ++ trailingArgs)))
+            List(CliOptionInvocation(
+              opt = singleTrailingOption,
+              invocation = "",
+              args = leadingArgs ++ trailingArgs
+            ))
           case (Some((singleOption, invocation)), Nil) if leadingArgs.isEmpty && singleOption.converter.argType == ArgType.LIST =>
-            List((singleOption, (invocation, trailingArgs)))
+            List(CliOptionInvocation(
+              opt = singleOption,
+              invocation = invocation,
+              args = trailingArgs
+            ))
           case _ =>
             val result = TrailingArgumentsParser.parse(
               leadingArgs,
@@ -117,24 +132,33 @@ case class Scallop(
                 throw ExcessArguments(excess)
 
               case TrailingArgumentsParser.ParseResult(result, _, _) =>
-                result.find(_._3.isLeft) match {
-                  case None =>
-                    result.flatMap {
-                      case (option, invocation, Right(args)) =>
-                        if (args.nonEmpty || option.required) {
-                          List((option, (invocation, args)))
-                        } else {
-                          Nil
-                        }
-                      case _ => throw MajorInternalException()
-                    }
-                  case Some((option, _, Left((message, args)))) =>
-                    if (option.required && (message == "not enough arguments")) {
-                      throw RequiredOptionNotFound(option.name)
+                result.flatMap {
+                  case (option, invocation, Right(args)) =>
+                    if (args.nonEmpty || option.required) {
+                      List(CliOptionInvocation(
+                        opt = option,
+                        invocation = invocation,
+                        args = args
+                      ))
                     } else {
-                      throw WrongOptionFormat(option.name, args.mkString(" "), message)
+                      Nil
                     }
-                  case _ => throw MajorInternalException()
+                  case (option, invocation, Left((message, args))) =>
+                    if (option.required && (message == "not enough arguments")) {
+                      List(CliOptionInvocation(
+                        opt = option,
+                        invocation = invocation,
+                        args = args,
+                        error = Some(RequiredOptionNotFound(option.name))
+                      ))
+                    } else {
+                      List(CliOptionInvocation(
+                        opt = option,
+                        invocation = invocation,
+                        args = args,
+                        error = Some(WrongOptionFormat(option.name, args.mkString(" "), message))
+                      ))
+                    }
                 }
             }
         }
@@ -145,16 +169,25 @@ case class Scallop(
           option.converter.argType match {
             // handle simple option types immediately to avoid going into trailing args parsing with extra options
             case ArgType.FLAG =>
-              (option, (invocation, Nil)) :: goParseRest(leadingArgs, None, trailingArgs)
+              CliOptionInvocation(option, invocation, Nil) :: goParseRest(leadingArgs, None, trailingArgs)
             case ArgType.SINGLE =>
               if (trailingArgs.size > 0) {
-                (option, (invocation, trailingArgs.take(1).toList)) :: goParseRest(leadingArgs, None, trailingArgs.tail)
+                CliOptionInvocation(option, invocation, trailingArgs.take(1).toList) :: goParseRest(leadingArgs, None, trailingArgs.tail)
               } else {
-                throw new WrongOptionFormat(option.name, trailingArgs.mkString, "you should provide exactly one argument")
+                List(CliOptionInvocation(
+                  opt = option,
+                  invocation = invocation,
+                  args = trailingArgs,
+                  error = Some(WrongOptionFormat(option.name, trailingArgs.mkString, "you should provide exactly one argument"))
+                ))
               }
             // short-circuit parsing when there are no trailing args - to get better error messages
             case ArgType.LIST if trailingArgs.isEmpty =>
-              List(option -> ((invocation, Nil)))
+              List(CliOptionInvocation(
+                opt = option,
+                invocation = invocation,
+                args = Nil
+              ))
             case ArgType.LIST => parseRest()
           }
         case None => parseRest()
@@ -179,19 +212,19 @@ case class Scallop(
           case Some(opt) =>
             val (invocation, arg) = args.head.drop(2).span('=' != _)
             parse(
-              acc = (opt, (invocation, List(arg.drop(1)))) :: acc,
+              acc = CliOptionInvocation(opt, invocation, List(arg.drop(1))) :: acc,
               args = args.tail,
               leadingArgsAcc = leadingArgsAcc
             )
 
           // parse --arg value... option style
           case None =>
-            val optionName = args.head.drop(2)
+            val invocation = args.head.drop(2)
             val option =
-              opts.find(_.longNames.contains(optionName))
-              .orElse(if (optionName == "help") Some(getHelpOption) else None)
-              .orElse(if (optionName == "version") getVersionOption else None)
-              .getOrElse(throw new UnknownOption(optionName))
+              opts.find(_.longNames.contains(invocation))
+              .orElse(if (invocation == "help") Some(getHelpOption) else None)
+              .orElse(if (invocation == "version") getVersionOption else None)
+              .getOrElse(NonexistentOption)
             val (matchedArgs, remainingArgs) =
               option.converter.argType match {
                 case ArgType.FLAG => (Nil, args.tail)
@@ -199,12 +232,23 @@ case class Scallop(
                 case ArgType.LIST => args.tail.span(isArgument)
               }
 
-            if (remainingArgs.isEmpty) {
+            if (option == NonexistentOption) {
+              val error = Some(UnknownOption(invocation))
+              if (remainingArgs.isEmpty) {
+                (CliOptionInvocation(option, invocation, matchedArgs.toList, error) :: acc).reverse
+              } else {
+                parse(
+                  acc = CliOptionInvocation(option, invocation, matchedArgs.toList, error) :: acc,
+                  args = remainingArgs,
+                  leadingArgsAcc = leadingArgsAcc
+                )
+              }
+            } else if (remainingArgs.isEmpty) {
               // proceed to trailing args parsing
-              acc.reverse ::: goParseRest(leadingArgsAcc.reverse, Some((option, args.head.drop(2))), args.tail)
+              acc.reverse ::: goParseRest(leadingArgsAcc.reverse, Some((option, invocation)), args.tail)
             } else {
               parse(
-                acc = (option -> ((args.head.drop(2), matchedArgs.toList))) :: acc,
+                acc = CliOptionInvocation(option, invocation, matchedArgs.toList) :: acc,
                 args = remainingArgs,
                 leadingArgsAcc = leadingArgsAcc
               )
@@ -212,8 +256,8 @@ case class Scallop(
         }
       } else {
         if (args.head.size == 2) {
-          val option = getOptionWithShortName(args.head(1)) getOrElse
-                    (throw new UnknownOption(args.head.drop(1)))
+          val invocation = args.head.drop(1)
+          val option = getOptionWithShortName(args.head(1)).getOrElse(NonexistentOption)
           val (matchedArgs, remainingArgs) =
             option.converter.argType match {
               case ArgType.FLAG => (Nil, args.tail)
@@ -221,19 +265,29 @@ case class Scallop(
               case ArgType.LIST => args.tail.span(isArgument)
             }
 
-          if (remainingArgs.isEmpty) {
+          if (option == NonexistentOption) {
+            val error = Some(UnknownOption(invocation))
+            if (remainingArgs.isEmpty) {
+              (CliOptionInvocation(option, invocation, matchedArgs.toList, error) :: acc).reverse
+            } else {
+              parse(
+                acc = CliOptionInvocation(option, invocation, matchedArgs.toList, error) :: acc,
+                args = remainingArgs,
+                leadingArgsAcc = leadingArgsAcc
+              )
+            }
+          } else if (remainingArgs.isEmpty) {
             // proceed to trailing args parsing
-            acc.reverse ::: goParseRest(leadingArgsAcc.reverse, Some((option, args.head.drop(1))), args.tail)
+            acc.reverse ::: goParseRest(leadingArgsAcc.reverse, Some((option, invocation)), args.tail)
           } else {
             parse(
-              acc = (option -> ((args.head.drop(1), matchedArgs.toList))) :: acc,
+              acc = CliOptionInvocation(option, invocation, matchedArgs.toList) :: acc,
               args = remainingArgs,
               leadingArgsAcc = leadingArgsAcc
             )
           }
         } else {
-          val option = getOptionWithShortName(args.head(1)) getOrElse
-                    (throw new UnknownOption(args.head(1).toString))
+          val option = getOptionWithShortName(args.head(1)).getOrElse(NonexistentOption)
           if (option.converter.argType != ArgType.FLAG) {
             parse(
               acc = acc,
@@ -251,12 +305,12 @@ case class Scallop(
       }
     } else if (args.head.matches("-[0-9]+")) {
       // parse number-only options
-      val alreadyMatchedNumbers = acc.count(_._1.isInstanceOf[NumberArgOption])
+      val alreadyMatchedNumbers = acc.count(_.opt.isInstanceOf[NumberArgOption])
       opts.filter(_.isInstanceOf[NumberArgOption]).drop(alreadyMatchedNumbers).headOption match {
         case Some(opt) =>
           val num = args.head.drop(1)
           parse(
-            acc = (opt, (num, List(num))) :: acc,
+            acc = CliOptionInvocation(opt, num, List(num)) :: acc,
             args = args.tail,
             leadingArgsAcc = leadingArgsAcc
           )
@@ -420,7 +474,7 @@ case class Scallop(
       }.getOrElse(false) // no subcommands, so their options are definitely not supplied
     } else {
       opts find (_.name == name) map { opt =>
-        val args = parsed.opts.filter(_._1 == opt).map(_._2)
+        val args = parsed.opts.filter(_.opt == opt).map(i => (i.invocation, i.args))
         opt.converter.parseCached(args) match {
           case Right(Some(_)) => true
           case _ => false
@@ -439,7 +493,7 @@ case class Scallop(
         .getOrElse(throw new UnknownOption(name.replace("\u0000",".")))
     } else {
       opts.find(_.name == name).map { opt =>
-        val args = parsed.opts.filter(_._1 == opt).map(_._2)
+        val args = parsed.opts.filter(_.opt == opt).map(i => (i.invocation, i.args))
         opt.converter.parseCached(args) match {
           case Right(parseResult) =>
             parseResult.orElse(opt.default())
@@ -497,29 +551,24 @@ case class Scallop(
     opts flatMap (o => (o.requiredShortNames).distinct) groupBy (a=>a) filter (_._2.size > 1) foreach
       (a => throw new IdenticalOptionNames(Util.format("Short option name '%s' is not unique", a._1)))
 
+    // trigger actual parsing
+    parsed
 
-    val helpOpt = getHelpOption
-    val shortHelpOpt = helpOpt match {
-      case o: SimpleOption => o.short
-      case _ => None
-    }
-    if (args.headOption == Some("--" + helpOpt.name) ||
-        shortHelpOpt.map(s => args.headOption == Some("-" + s)).getOrElse(false)) {
+    if (parsed.opts.exists(_.opt == getHelpOption)) {
       throw Help("")
     }
 
-    getVersionOption.foreach { versionOpt =>
-      val shortVersionOpt = versionOpt match {
-        case o: SimpleOption => o.short
-        case _ => None
-      }
-      if (args.headOption == Some("--" + versionOpt.name) ||
-          shortVersionOpt.map(s => args.headOption == Some("-" + s)).getOrElse(false)) {
-        throw Version
+    parsed.opts.foreach { invocation =>
+      invocation.error.foreach { exception =>
+        throw exception
       }
     }
 
-    parsed
+    getVersionOption.foreach { versionOpt =>
+      if (parsed.opts.headOption.exists(_.opt == versionOpt)) {
+        throw Version
+      }
+    }
 
     // verify subcommand parsing
     parsed.subcommand.map { sn =>
@@ -534,7 +583,7 @@ case class Scallop(
     }
 
     opts foreach { o =>
-      val args = parsed.opts filter (_._1 == o) map (_._2)
+      val args = parsed.opts.filter(_.opt == o).map(i => (i.invocation, i.args))
       val res = o.converter.parseCached(args)
       res match {
         case Left(msg) =>

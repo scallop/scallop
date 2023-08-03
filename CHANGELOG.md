@@ -1,6 +1,7 @@
 # Upcoming release
 
 ## Features
+- BREAKING: `--help` now takes precedence and prints help regardless of its position in the arguments (#239);
 ## Bugfixes
 ## Other
 

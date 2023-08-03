@@ -285,3 +285,20 @@ case class ToggleOption(
 
   override def toString = Util.format("ToggleOption(%s)", name)
 }
+
+/** Nonexistent option - placeholder to be returned from Scallop.parse() with the error */
+private[scallop] case object NonexistentOption extends CliOption {
+  def longNames: List[String] = throw new MajorInternalException()
+  def requiredShortNames: List[Char] = throw new MajorInternalException()
+  def shortNames: List[Char] = throw new MajorInternalException()
+  def isPositional: Boolean = false
+  def converter: ValueConverter[_] = stringListConverter
+  def name: String = throw new MajorInternalException()
+  def descr: String = throw new MajorInternalException()
+  def required: Boolean = false
+  def validator: (Any) => Boolean = (_) => true
+  def default: () => Option[Any] = () => None
+  def hidden: Boolean = true
+  def argLine(sh: List[Char]): String = throw new MajorInternalException()
+  def helpInfo(sh: List[Char]): List[HelpInfo] = throw new MajorInternalException()
+}
