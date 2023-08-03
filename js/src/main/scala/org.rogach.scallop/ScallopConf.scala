@@ -12,8 +12,8 @@ abstract class ScallopConf(
   override protected def performOptionNameGuessing(): Unit = {}
 
   errorMessageHandler = { message =>
-    Console.err.println(Util.format("[%s] Error: %s", printedName, message))
-    Compat.exit(1)
+    stderrPrintln(Util.format("[%s] Error: %s", printedName, message))
+    exitHandler(1)
   }
 
 }

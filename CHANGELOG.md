@@ -2,6 +2,7 @@
 
 ## Features
 - BREAKING: `--help` now takes precedence and prints help regardless of its position in the arguments (#239);
+- add `exitHandler`, `stdoutPrintln` and `stderrPrintln` variables to ScallopConf to allow more control over Scallop behavior (#240);
 ## Bugfixes
 ## Other
 

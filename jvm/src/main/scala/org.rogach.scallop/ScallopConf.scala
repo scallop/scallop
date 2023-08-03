@@ -93,12 +93,12 @@ abstract class ScallopConf(
 
   errorMessageHandler = { message =>
     if (overrideColorOutput.value.getOrElse(System.console() != null)) {
-      Console.err.println(String.format("[\u001b[31m%s\u001b[0m] Error: %s", printedName, message))
+      stderrPrintln(String.format("[\u001b[31m%s\u001b[0m] Error: %s", printedName, message))
     } else {
       // no colors on output
-      Console.err.println(String.format("[%s] Error: %s", printedName, message))
+      stderrPrintln(String.format("[%s] Error: %s", printedName, message))
     }
-    Compat.exit(1)
+    exitHandler(1)
   }
 
 }

@@ -440,12 +440,14 @@ case class Scallop(
     */
   def help: String = helpFormatter.formatHelp(this, "")
 
+  /** Get full help text (with version, banner, option usage and footer) */
+  def getFullHelpString(): String = {
+    Seq(vers, bann, Some(help), foot).flatten.mkString("\n")
+  }
+
   /** Print help message (with version, banner, option usage and footer) to stdout. */
   def printHelp() = {
-    vers foreach println
-    bann foreach println
-    println(help)
-    foot foreach println
+    println(getFullHelpString())
   }
 
   /** Add some more arguments to this builder. They are appended to the end of the original list.

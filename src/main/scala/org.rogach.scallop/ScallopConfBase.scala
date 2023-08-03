@@ -655,12 +655,29 @@ abstract class ScallopConfBase(
   var printedName = "scallop"
 
   /** This function is called with the error message when ScallopException
-    * occurs. By default, this function prints message (prefixed by *printedName*) to stdout,
-    * coloring the output if possible, then calls `sys.exit(1)`.
+    * occurs. By default, this function prints message (prefixed by *printedName*) to stderr,
+    * coloring the output if possible, then calls `exitHandler(1)`.
     *
     * Update this variable with another function if you need to change that behavior.
     */
   var errorMessageHandler: String => Unit = (_) => {}
+
+  /** This function is called with an exit code when Scallop thinks it's time to
+    * terminate. By default this calls sys.exit(exitCode).
+    *
+    * Update this variable with another function if you need to change that behavior.
+    */
+  var exitHandler: Int => Unit = exitCode => Compat.exit(exitCode)
+
+  /** This function is called with a string when Scallop needs to output text to stdout.
+    * Update this variable if you need to redirect stdout output somewhere else.
+    */
+  var stdoutPrintln: String => Unit = string => Console.out.println(string)
+
+  /** This function is called with a string when Scallop needs to output text to stderr.
+    * Update this variable if you need to redirect stderr output somewhere else.
+    */
+  var stderrPrintln: String => Unit = string => Console.err.println(string)
 
   /** This function is called in event of any exception
     * in arguments parsing. By default, it catches only
@@ -669,14 +686,14 @@ abstract class ScallopConfBase(
   protected def onError(e: Throwable): Unit = e match {
     case r: ScallopResult if !throwError.value => r match {
       case Help("") =>
-        builder.printHelp()
-        Compat.exit(0)
+        stdoutPrintln(builder.getFullHelpString())
+        exitHandler(0)
       case Help(subname) =>
-        builder.findSubbuilder(subname).get.printHelp()
-        Compat.exit(0)
+        stdoutPrintln(builder.findSubbuilder(subname).get.getFullHelpString())
+        exitHandler(0)
       case Version =>
-        builder.vers.foreach(println)
-        Compat.exit(0)
+        getVersionString().foreach(stdoutPrintln)
+        exitHandler(0)
       case ScallopException(message) => errorMessageHandler(message)
       // following should never match, but just in case
       case other: exceptions.ScallopException => errorMessageHandler(other.getMessage)
@@ -1015,6 +1032,12 @@ abstract class ScallopConfBase(
 
   /** Get generated help contents as a string. */
   def getHelpString(): String = builder.help
+
+  /** Get full generated help contents (with version, banner, option usage and footer) as a string. */
+  def getFullHelpString(): String = builder.getFullHelpString()
+
+  /** Get version string. */
+  def getVersionString(): Option[String] = builder.vers
 
   /** Prints help message (with version, banner, option usage and footer) to stdout. */
   def printHelp() = builder.printHelp()
