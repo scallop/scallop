@@ -159,6 +159,22 @@ class HelpTest extends ScallopTestBase {
                         |""".stripMargin)
   }
 
+  test("version printing (required trail arg") {
+    val (out, err) = captureOutput {
+      val exits = trapExit {
+        object Conf extends ScallopConf(List("--version")) {
+          version("0.1.2")
+          val trail = trailArg[String]("trail", required = true)
+          verify()
+        }
+        Conf
+      }
+      exits.size should equal(1)
+    }
+    out should equal("""0.1.2
+                       |""".stripMargin)
+  }
+
   test ("help printing (short argument)") {
     captureOutput {
       val exits = trapExit {

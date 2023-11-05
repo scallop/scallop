@@ -560,15 +560,15 @@ case class Scallop(
       throw Help("")
     }
 
-    parsed.opts.foreach { invocation =>
-      invocation.error.foreach { exception =>
-        throw exception
-      }
-    }
-
     getVersionOption.foreach { versionOpt =>
       if (parsed.opts.headOption.exists(_.opt == versionOpt)) {
         throw Version
+      }
+    }
+
+    parsed.opts.foreach { invocation =>
+      invocation.error.foreach { exception =>
+        throw exception
       }
     }
 
