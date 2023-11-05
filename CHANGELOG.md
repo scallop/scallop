@@ -4,6 +4,9 @@
 ## Bugfixes
 ## Other
 
+# v5.0.1
+- `--version` takes precedence over validation of required args, now it works regardless of other arguments (#241);
+
 # v5.0.0
 - BREAKING: behavior change: `--help` now takes precedence and prints help regardless of its position in the arguments (#239);
 - add `exitHandler`, `stdoutPrintln` and `stderrPrintln` variables to ScallopConf to allow more control over Scallop behavior (#240);
