@@ -299,4 +299,63 @@ class OptionDependenciesTest extends ScallopTestBase {
     }
   }
 
+  test ("property dependsOnAny property - validation success") {
+    new ScallopConf(List()) {
+      val propsA = props[String]('A')
+      val propsB = props[String]('B')
+      dependsOnAny(propsA, List(propsB))
+      verify()
+    }
+  }
+
+  test ("property dependsOnAny property - validation failure") {
+    expectException(ValidationFailure("When specifying 'A', at least one of the following options must be provided: B")) {
+      new ScallopConf(List("-Ay=x")) {
+        val propsA = props[String]('A')
+        val propsB = props[String]('B')
+        dependsOnAny(propsA, List(propsB))
+        verify()
+      }
+    }
+  }
+
+  test ("option dependsOnAny property - validation success") {
+    new ScallopConf(List()) {
+      val apples = opt[Boolean]("apples")
+      val propsB = props[String]('B')
+      dependsOnAny(apples, List(propsB))
+      verify()
+    }
+  }
+
+  test ("option dependsOnAny property - validation failure") {
+    expectException(ValidationFailure("When specifying 'apples', at least one of the following options must be provided: B")) {
+      new ScallopConf(List("-a")) {
+        val apples = opt[Boolean]("apples")
+        val propsB = props[String]('B')
+        dependsOnAny(apples, List(propsB))
+        verify()
+      }
+    }
+  }
+
+  test ("property conflicts property - validation success") {
+    new ScallopConf(List("-Ay=x")) {
+      val propsA = props[String]('A')
+      val propsB = props[String]('B')
+      conflicts(propsA, List(propsB))
+      verify()
+    }
+  }
+
+  test ("property conflicts property - validation failure") {
+    expectException(ValidationFailure("Option 'A' conflicts with option 'B'")) {
+      new ScallopConf(List("-Ay=x", "-Ba=1")) {
+        val propsA = props[String]('A')
+        val propsB = props[String]('B')
+        conflicts(propsA, List(propsB))
+        verify()
+      }
+    }
+  }
 }

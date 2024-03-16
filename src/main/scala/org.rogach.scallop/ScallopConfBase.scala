@@ -362,10 +362,18 @@ abstract class ScallopConfBase(
 
     editBuilder(_.appendOption(optionDescriptor))
 
-    new LazyMap({
-      assertVerified()
-      rootConfig.builder.apply(getPrefixedName(name.toString)).asInstanceOf[Map[String, A]]
-    }, Some(optionDescriptor))
+    new LazyMap(
+      under = {
+        assertVerified()
+        rootConfig.builder.apply(getPrefixedName(name.toString)).asInstanceOf[Map[String, A]]
+      },
+      _name = name.toString(),
+      _isSupplied = () => {
+        assertVerified()
+        rootConfig.builder.isSupplied(getPrefixedName(name.toString))
+      },
+      Some(optionDescriptor)
+    )
   }
 
 
@@ -389,7 +397,7 @@ abstract class ScallopConfBase(
     valueName: String = "value",
     hidden: Boolean = false,
     group: ScallopOptionGroup = null
-  )(implicit conv: ValueConverter[Map[String,A]]): Map[String, A] = {
+  )(implicit conv: ValueConverter[Map[String,A]]): LazyMap[String, A] = {
 
     val optionDescriptor = LongNamedPropertyOption(
       name = name,
@@ -406,10 +414,18 @@ abstract class ScallopConfBase(
 
     editBuilder(_.appendOption(optionDescriptor))
 
-    new LazyMap({
-      assertVerified()
-      rootConfig.builder.apply(getPrefixedName(name)).asInstanceOf[Map[String, A]]
-    }, Some(optionDescriptor))
+    new LazyMap(
+      under = {
+        assertVerified()
+        rootConfig.builder.apply(getPrefixedName(name)).asInstanceOf[Map[String, A]]
+      },
+      _name = name,
+      _isSupplied = () => {
+        assertVerified()
+        rootConfig.builder.isSupplied(getPrefixedName(name.toString))
+      },
+      Some(optionDescriptor)
+    )
   }
 
 
@@ -719,7 +735,7 @@ abstract class ScallopConfBase(
     * @param opt option, that depends on any of options in list
     * @param list list of dependencies (at least one will need to be present)
     */
-  def dependsOnAny(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
+  def dependsOnAny(opt: ScallopOptionBase, list: List[ScallopOptionBase]) = addValidation {
     if (opt.isSupplied && !list.exists(_.isSupplied)) {
       Left(Util.format(
         "When specifying '%s', at least one of the following options must be provided: %s",
@@ -732,7 +748,7 @@ abstract class ScallopConfBase(
     * @param opt option that depends on all of options in list
     * @param list list of dependencies (all will need to be present)
     */
-  def dependsOnAll(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
+  def dependsOnAll(opt: ScallopOptionBase, list: List[ScallopOptionBase]) = addValidation {
     if (opt.isSupplied && !list.forall(_.isSupplied)) {
       Left(Util.format(
         "When specifying '%s', all of the following options must also be provided: %s",
@@ -745,7 +761,7 @@ abstract class ScallopConfBase(
     * @param opt option that conflicts with all of options in list
     * @param list list of dependencies (all will need to be absent)
     */
-  def conflicts(opt: ScallopOption[_], list: List[ScallopOption[_]]) = addValidation {
+  def conflicts(opt: ScallopOptionBase, list: List[ScallopOptionBase]) = addValidation {
     if (opt.isSupplied && list.exists(_.isSupplied)) {
       val conflict = list.find(_.isSupplied).get
       Left(Util.format("Option '%s' conflicts with option '%s'", opt.name, conflict.name))
@@ -755,7 +771,7 @@ abstract class ScallopConfBase(
   /** Add a check that at least one of the options is supplied.
     * @param list list of options (at least one must be present)
     */
-  def requireAtLeastOne(list: ScallopOption[_]*) = addValidation {
+  def requireAtLeastOne(list: ScallopOptionBase*) = addValidation {
     if (!list.exists(_.isSupplied)) {
       Left(Util.format(
         "There should be at least one of the following options: %s",
@@ -767,7 +783,7 @@ abstract class ScallopConfBase(
   /** Add a check that at one and only one option in the list is supplied.
     * @param list list of conflicting options (exactly one must be present)
     */
-  def requireOne(list: ScallopOption[_]*) = addValidation {
+  def requireOne(list: ScallopOptionBase*) = addValidation {
     if (list.count(_.isSupplied) != 1) {
       Left(Util.format(
         "There should be exactly one of the following options: %s",
@@ -779,7 +795,7 @@ abstract class ScallopConfBase(
   /** Add a check that only one or zero of the provided options have values supplied in arguments.
     * @param list list of mutually exclusive options
     */
-  def mutuallyExclusive(list: ScallopOption[_]*) = addValidation {
+  def mutuallyExclusive(list: ScallopOptionBase*) = addValidation {
     if (list.count(_.isSupplied) > 1) {
       Left(Util.format(
         "There should be only one or zero of the following options: %s",
@@ -791,7 +807,7 @@ abstract class ScallopConfBase(
   /** Add a check that either all or none of the provided options have values supplied in arguments.
     * @param list list of codependent options
     */
-  def codependent(list: ScallopOption[_]*) = addValidation {
+  def codependent(list: ScallopOptionBase*) = addValidation {
     val c = list.count(_.isSupplied)
     if (c != 0 && c != list.size) {
       Left(Util.format(
