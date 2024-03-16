@@ -4,6 +4,9 @@
 ## Bugfixes
 ## Other
 
+# v5.1.0
+- extend validation functions to support props (#244);
+
 # v5.0.1
 - `--version` takes precedence over validation of required args, now it works regardless of other arguments (#241);
 
