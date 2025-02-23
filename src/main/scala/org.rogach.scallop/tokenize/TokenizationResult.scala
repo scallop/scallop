@@ -1,7 +1,7 @@
 package org.rogach.scallop.tokenize
 
-private[scallop] sealed trait TokenizationResult
+sealed trait TokenizationResult
 
-private[scallop] case class Matched(tokens: Seq[String], rest: StringView) extends TokenizationResult
-private[scallop] case object Failed extends TokenizationResult
-private[scallop] case class EOF(expected: String) extends TokenizationResult
+case class Matched(tokens: Seq[String], rest: StringView) extends TokenizationResult
+case object Failed extends TokenizationResult
+case class EOF(expected: String) extends TokenizationResult

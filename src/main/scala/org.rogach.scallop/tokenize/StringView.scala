@@ -5,7 +5,7 @@ package org.rogach.scallop.tokenize
   *
   * This is needed because since Java 7 String.substring does a full copy instead of sharing the bytes.
   */
-private[scallop] class StringView(underlying: String, offset: Int) {
+class StringView(underlying: String, offset: Int) {
 
   def substring(beginIndex: Int): StringView = {
     new StringView(underlying, offset + beginIndex)
