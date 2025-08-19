@@ -2,8 +2,7 @@ package org.rogach.scallop
 
 import java.io.ByteArrayOutputStream
 import java.io.ByteArrayInputStream
-import java.lang.{System, SecurityManager, SecurityException}
-import java.security.Permission
+import java.lang.System
 
 trait CapturingTest {
   /** Captures all output from the *fn* block into two strings - (stdout, stderr). */
@@ -20,25 +19,18 @@ trait CapturingTest {
 
   /** Supresses exit in *fn* block. Returns list of exit statuses that were attempted. */
   def trapExit(fn: => Unit): List[Int] = {
-    @volatile var statuses = List[Int]()
-    val normalSM = System.getSecurityManager
-    object SM extends SecurityManager {
-      override def checkExit(status:Int): Unit = {
-        statuses ::= status
-        throw new SecurityException
-      }
-      override def checkPermission(p:Permission): Unit = {}
-    }
-    System.setSecurityManager(SM)
+    Compat.exitStatuses = List[Int]()
+    Compat.trapExits = true
     try {
       throwError.withValue(false) {
         fn
       }
     } catch {
-      case e:SecurityException =>
+      case e:RuntimeException if e.getMessage == "trapped exit" =>
     }
-    System.setSecurityManager(normalSM)
-    statuses.reverse
+    val exitStatuses = Compat.exitStatuses.reverse
+    Compat.exitStatuses = List[Int]()
+    exitStatuses
   }
 
   /** Supresses exits in *fn* block, and captures stdout/stderr. */
