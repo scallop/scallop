@@ -73,7 +73,7 @@ lazy val commonSettings = Seq(
     if (snapshotVersion.isDefined) {
       Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
     } else {
-      Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
+      Some("releases" at "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2")
     }
   },
   publishMavenStyle := true,

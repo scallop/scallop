@@ -4,8 +4,11 @@
 ## Bugfixes
 ## Other
 
+# v5.3.0
+* Make TokenizationResult and StringView public (#252 by @Flowdalic);
+
 # v5.2.0
-- Support Scala Native 0.5 (#250);
+- Support Scala Native 0.5 (#250 by @orangepigment);
 
 # v5.1.0
 - extend validation functions to support props (#244);
