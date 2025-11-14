@@ -1,4 +1,4 @@
-lazy val scalaVersionsJVM = Seq("3.3.4", "2.13.15", "2.12.20", "2.11.12", "2.10.7")
+lazy val scalaVersionsJVM = Seq("3.7.4", "2.13.15", "2.12.20", "2.11.12", "2.10.7")
 lazy val scalaVersionsSN  = Seq("2.13.15", "2.12.20")
 lazy val scalaVersionsJS  = Seq("3.3.4", "2.13.15", "2.12.20")
 
