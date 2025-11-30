@@ -4,7 +4,7 @@ Scallop
 [![Build Status](https://img.shields.io/github/actions/workflow/status/scallop/scallop/ci.yml)](https://github.com/scallop/scallop/actions?query=workflow%3A%22Continuous+Integration%22)
 
 A simple command-line arguments parsing library for Scala.
-Cross-built for Scala 3, 2.13, 2.12, 2.11, 2.10, supports Scala Native and Scala JS.
+Cross-built for Scala 3.7+, 2.13, 2.12, 2.11, 2.10, supports Scala Native and Scala JS.
 
 Scallop supports:
 
@@ -27,16 +27,16 @@ Installation
 Add following to your build.sbt:
 
 ```scala
-libraryDependencies += "org.rogach" %% "scallop" % "5.3.0"
+libraryDependencies += "org.rogach" %% "scallop" % "6.0.0"
 ```
 
 For use with Scala Native and Scala.js, use `%%%`:
 
 ```scala
-libraryDependencies += "org.rogach" %%% "scallop" % "5.3.0"
+libraryDependencies += "org.rogach" %%% "scallop" % "6.0.0"
 ```
 
-If you were using `4.x` version or older, please see [migration notes](https://github.com/scallop/scallop/wiki/Migration-notes).
+If you were using `5.x` version or older, please see [migration notes](https://github.com/scallop/scallop/wiki/Migration-notes).
 
 Quick example
 =============

@@ -1,9 +1,8 @@
 # Upcoming release
-* Make ScallopConf.commandNameAndAliases public (#255);
 
-## Features
-## Bugfixes
-## Other
+# v6.0.0
+* BREAKING: for projects on Scala 3 the minimum Scala version is now 3.7 (#256, #257 by @Flowdalic);
+* Make ScallopConf.commandNameAndAliases public (#255);
 
 # v5.3.0
 * Make TokenizationResult and StringView public (#252 by @Flowdalic);
