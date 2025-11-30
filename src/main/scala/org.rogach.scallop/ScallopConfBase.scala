@@ -18,7 +18,7 @@ class Subcommand(commandNameAndAliases: String*) extends ScallopConf(Nil, comman
 /** Contains non-platform-specific functionality of ScallopConf. */
 abstract class ScallopConfBase(
   val args: CSeq[String] = Nil,
-  protected val commandNameAndAliases: Seq[String] = Nil
+  val commandNameAndAliases: Seq[String] = Nil
 ) extends ScallopConfValidations {
 
   /** Pointer to parent ScallopConf */

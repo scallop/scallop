@@ -1,4 +1,5 @@
 # Upcoming release
+* Make ScallopConf.commandNameAndAliases public (#255);
 
 ## Features
 ## Bugfixes
