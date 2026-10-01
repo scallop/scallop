@@ -46,6 +46,60 @@ class OptionDependenciesTest extends ScallopTestBase {
     }
   }
 
+  test ("dependsOnAny value - success, option is not provided") {
+    new ScallopConf(List()){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      val coconuts = opt[Int]("coconuts")
+      dependsOnAny(apples, 1, List(bananas, coconuts))
+
+      verify()
+    }
+  }
+  test ("dependsOnAny value - success, option is provided with a different value") {
+    new ScallopConf(List("-a","2")){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      val coconuts = opt[Int]("coconuts")
+      dependsOnAny(apples, 1, List(bananas, coconuts))
+
+      verify()
+    }
+  }
+  test ("dependsOnAny value - failure, option has the given value, but dependency is not provided") {
+    expectException(ValidationFailure("When specifying 'apples 1', at least one of the following options must be provided: bananas, coconuts")) {
+      new ScallopConf(List("-a", "1")){
+        val apples = opt[Int]("apples")
+        val bananas = opt[Int]("bananas")
+        val coconuts = opt[Int]("coconuts")
+        dependsOnAny(apples, 1, List(bananas, coconuts))
+
+        verify()
+      }
+    }
+  }
+  test ("dependsOnAny value - success, option has the given value and dependency is provided") {
+    new ScallopConf(List("-a","1","-b","2")){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      val coconuts = opt[Int]("coconuts")
+      dependsOnAny(apples, 1, List(bananas, coconuts))
+
+      verify()
+    }
+  }
+  test ("dependsOnAny value - failure, default value activates the check") {
+    expectException(ValidationFailure("When specifying 'apples 1', at least one of the following options must be provided: bananas")) {
+      new ScallopConf(List()){
+        val apples = opt[Int]("apples", default = Some(1))
+        val bananas = opt[Int]("bananas")
+        dependsOnAny(apples, 1, List(bananas))
+
+        verify()
+      }
+    }
+  }
+
   test ("dependsOnAll - success, option is not provided") {
      new ScallopConf(List()){
       val apples = opt[Int]("apples")
@@ -92,6 +146,72 @@ class OptionDependenciesTest extends ScallopTestBase {
     }
   }
 
+  test ("dependsOnAll value - success, option is not provided") {
+    new ScallopConf(List()){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      val coconuts = opt[Int]("coconuts")
+      dependsOnAll(apples, 1, List(bananas, coconuts))
+
+      verify()
+    }
+  }
+  test ("dependsOnAll value - success, option is provided with a different value") {
+    new ScallopConf(List("-a","2")){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      val coconuts = opt[Int]("coconuts")
+      dependsOnAll(apples, 1, List(bananas, coconuts))
+
+      verify()
+    }
+  }
+  test ("dependsOnAll value - failure, option has the given value, but no dependencies") {
+    expectException(ValidationFailure("When specifying 'apples 1', all of the following options must also be provided: bananas, coconuts")) {
+      new ScallopConf(List("-a", "1")){
+        val apples = opt[Int]("apples")
+        val bananas = opt[Int]("bananas")
+        val coconuts = opt[Int]("coconuts")
+        dependsOnAll(apples, 1, List(bananas, coconuts))
+
+        verify()
+      }
+    }
+  }
+  test ("dependsOnAll value - failure, option has the given value, only one dependency is provided") {
+    expectException(ValidationFailure("When specifying 'apples 1', all of the following options must also be provided: bananas, coconuts")) {
+      new ScallopConf(List("-a","1","-b","2")){
+        val apples = opt[Int]("apples")
+        val bananas = opt[Int]("bananas")
+        val coconuts = opt[Int]("coconuts")
+        dependsOnAll(apples, 1, List(bananas, coconuts))
+
+        verify()
+      }
+    }
+  }
+  test ("dependsOnAll value - success, option has the given value and two dependencies are provided") {
+    new ScallopConf(List("-a","1","-b","2","-c","3")){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      val coconuts = opt[Int]("coconuts")
+      dependsOnAll(apples, 1, List(bananas, coconuts))
+
+      verify()
+    }
+  }
+  test ("dependsOnAll value - failure, default value activates the check") {
+    expectException(ValidationFailure("When specifying 'apples 1', all of the following options must also be provided: bananas")) {
+      new ScallopConf(List()){
+        val apples = opt[Int]("apples", default = Some(1))
+        val bananas = opt[Int]("bananas")
+        dependsOnAll(apples, 1, List(bananas))
+
+        verify()
+      }
+    }
+  }
+
   test ("conflicts - success, no options are provided") {
     new ScallopConf(List()){
       val apples = opt[Int]("apples")
@@ -119,6 +239,56 @@ class OptionDependenciesTest extends ScallopTestBase {
         val apples = opt[Int]("apples")
         val bananas = opt[Int]("bananas")
         conflicts(apples, List(bananas))
+
+        verify()
+      }
+    }
+  }
+
+  test ("conflicts value - success, option is not provided, conflicting option is supplied") {
+    new ScallopConf(List("-b","2")){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      conflicts(apples, 1, List(bananas))
+
+      verify()
+    }
+  }
+  test ("conflicts value - success, option has a different value, conflicting option is supplied") {
+    new ScallopConf(List("-a","2","-b","2")){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      conflicts(apples, 1, List(bananas))
+
+      verify()
+    }
+  }
+  test ("conflicts value - success, option has the given value, conflicting option is not supplied") {
+    new ScallopConf(List("-a", "1")){
+      val apples = opt[Int]("apples")
+      val bananas = opt[Int]("bananas")
+      conflicts(apples, 1, List(bananas))
+
+      verify()
+    }
+  }
+  test ("conflicts value - failure, option has the given value and conflicting option is supplied") {
+    expectException(ValidationFailure("Option 'apples 1' conflicts with option 'bananas'")) {
+      new ScallopConf(List("-a","1","-b","2")){
+        val apples = opt[Int]("apples")
+        val bananas = opt[Int]("bananas")
+        conflicts(apples, 1, List(bananas))
+
+        verify()
+      }
+    }
+  }
+  test ("conflicts value - failure, default value activates the check") {
+    expectException(ValidationFailure("Option 'apples 1' conflicts with option 'bananas'")) {
+      new ScallopConf(List("-b","2")){
+        val apples = opt[Int]("apples", default = Some(1))
+        val bananas = opt[Int]("bananas")
+        conflicts(apples, 1, List(bananas))
 
         verify()
       }
