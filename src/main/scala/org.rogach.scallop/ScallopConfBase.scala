@@ -744,6 +744,21 @@ abstract class ScallopConfBase(
     } else Right(())
   }
 
+  /** Add a check that at least one of the options in the list was supplied
+    * if `opt` was set to `value` (either supplied in arguments or resolved from a default value).
+    * @param opt option whose value determines whether this check applies
+    * @param value value of `opt` that activates this check
+    * @param list list of dependencies (at least one will need to be present)
+    */
+  def dependsOnAny[V](opt: ScallopOption[V], value: V, list: List[ScallopOptionBase]) = addValidation {
+    if (opt.toOption.exists(_ == value) && !list.exists(_.isSupplied)) {
+      Left(Util.format(
+        "When specifying '%s %s', at least one of the following options must be provided: %s",
+        opt.name, value, list.map(_.name).mkString(", ")
+      ))
+    } else Right(())
+  }
+
   /** Add a check that all of the options in the list were also supplied if `opt` was supplied.
     * @param opt option that depends on all of options in list
     * @param list list of dependencies (all will need to be present)
@@ -757,6 +772,21 @@ abstract class ScallopConfBase(
     } else Right(())
   }
 
+  /** Add a check that all of the options in the list were supplied
+    * if `opt` was set to `value` (either supplied in arguments or resolved from a default value).
+    * @param opt option whose value determines whether this check applies
+    * @param value value of `opt` that activates this check
+    * @param list list of dependencies (all will need to be present)
+    */
+  def dependsOnAll[V](opt: ScallopOption[V], value: V, list: List[ScallopOptionBase]) = addValidation {
+    if (opt.toOption.exists(_ == value) && !list.forall(_.isSupplied)) {
+      Left(Util.format(
+        "When specifying '%s %s', all of the following options must also be provided: %s",
+        opt.name, value, list.map(_.name).mkString(", ")
+      ))
+    } else Right(())
+  }
+
   /** Add a check that none of the options in the list were supplied if `opt` was supplied.
     * @param opt option that conflicts with all of options in list
     * @param list list of dependencies (all will need to be absent)
@@ -765,6 +795,19 @@ abstract class ScallopConfBase(
     if (opt.isSupplied && list.exists(_.isSupplied)) {
       val conflict = list.find(_.isSupplied).get
       Left(Util.format("Option '%s' conflicts with option '%s'", opt.name, conflict.name))
+    } else Right(())
+  }
+
+  /** Add a check that none of the options in the list were supplied
+    * if `opt` was set to `value` (either supplied in arguments or resolved from a default value).
+    * @param opt option whose value determines whether this check applies
+    * @param value value of `opt` that activates this check
+    * @param list list of dependencies (all will need to be absent)
+    */
+  def conflicts[V](opt: ScallopOption[V], value: V, list: List[ScallopOptionBase]) = addValidation {
+    if (opt.toOption.exists(_ == value) && list.exists(_.isSupplied)) {
+      val conflict = list.find(_.isSupplied).get
+      Left(Util.format("Option '%s %s' conflicts with option '%s'", opt.name, value, conflict.name))
     } else Right(())
   }
 
