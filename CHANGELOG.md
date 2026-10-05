@@ -1,5 +1,8 @@
 # Upcoming release
 
+# v6.0.1
+* Add value-conditional overloads of dependsOnAny, dependsOnAll and conflicts (#259 by @imonteroq);
+
 # v6.0.0
 * BREAKING: for projects on Scala 3 the minimum Scala version is now 3.7 (#256, #257 by @Flowdalic);
 * Make ScallopConf.commandNameAndAliases public (#255);
