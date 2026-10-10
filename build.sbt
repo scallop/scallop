@@ -37,7 +37,7 @@ lazy val commonSettings = Seq(
     if (scalaVersion.value.startsWith("3.")) Nil
     else Seq("-Xlint")
   },
-  unmanagedSourceDirectories in Compile += {
+  Compile / unmanagedSourceDirectories += {
     val base = baseDirectory.value.getParentFile / "src" / "main"
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((3, _)) =>
@@ -58,7 +58,7 @@ lazy val commonSettings = Seq(
       connection = "scm:git:git@github.com:scallop/scallop.git"
     )
   ),
-  boilerplateSource in Compile := baseDirectory.value.getParentFile / "src" / "main" / "boilerplate",
+  Compile / boilerplateSource := baseDirectory.value.getParentFile / "src" / "main" / "boilerplate",
   pomExtra := (
     <developers>
       <developer>
@@ -77,13 +77,13 @@ lazy val commonSettings = Seq(
     }
   },
   publishMavenStyle := true,
-  publishArtifact in Test := false,
-  scalacOptions in (Compile, doc) ++= {
+  Test / publishArtifact := false,
+  Compile / doc / scalacOptions ++= {
     if (scalaVersion.value.startsWith("3.")) Nil
     else Opts.doc.sourceUrl("https://github.com/scallop/scallop/blob/develop/€{FILE_PATH}.scala")
   },
-  parallelExecution in Test := false,
-  siteSubdirName in SiteScaladoc := "",
+  Test / parallelExecution := false,
+  SiteScaladoc / siteSubdirName := "",
   git.remoteRepo := "git@github.com:scallop/scallop.git",
 )
 
@@ -108,10 +108,10 @@ lazy val scallop =
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
     ),
     // fix for paths to source files in scaladoc
-    doc in Compile := {
+    Compile / doc := {
       import sys.process._
       Seq("bash","-c",""" for x in $(find jvm/target/scala-2.13/api/ -type f); do sed -i "s_`pwd`/__" $x; done """).!
-      (doc in Compile).value
+      (Compile / doc).value
     },
   )
   .nativeSettings(
